@@ -1,0 +1,24 @@
+<!ELEMENT Saisons (Saison)+>
+<!ELEMENT Saison ((info)?,(poeme)+)>
+<!ATTLIST Saison id CDATA #REQUIRED>
+<!ATTLIST Saison name CDATA #REQUIRED>
+<!ATTLIST Saison nombre CDATA #REQUIRED>
+<!ELEMENT poeme (titre,date,translation*,(acrostiche)?,(info)?,(longueur-vers)?,(categorie)+,(para)+)>
+<!ATTLIST poeme id CDATA #REQUIRED>
+<!ATTLIST poeme type CDATA #IMPLIED>
+<!ELEMENT date (#PCDATA)>
+<!ELEMENT titre (#PCDATA)>
+<!ELEMENT info (#PCDATA)>
+<!ATTLIST translation lang CDATA #REQUIRED>
+<!ELEMENT translation (#PCDATA)>
+<!ELEMENT categorie (c,(info)?,(sous-cat)*)>
+<!ATTLIST categorie id CDATA #IMPLIED>
+<!ATTLIST sous-cat id CDATA #IMPLIED>
+<!ELEMENT c (#PCDATA)>
+<!ELEMENT sous-cat (#PCDATA)>
+<!ELEMENT acrostiche (#PCDATA|premier|deuxieme)*>
+<!ELEMENT para (vers)+>
+<!ELEMENT vers (#PCDATA)>
+<!ELEMENT premier (#PCDATA)>
+<!ELEMENT deuxieme (#PCDATA)>
+<!ELEMENT poemes_en (poeme)+>
