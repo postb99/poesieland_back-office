@@ -9,6 +9,7 @@
 <!ELEMENT date (#PCDATA)>
 <!ELEMENT titre (#PCDATA)>
 <!ELEMENT info (#PCDATA)>
+<!ELEMENT longueur-vers (#PCDATA)>
 <!ATTLIST translation lang CDATA #REQUIRED>
 <!ELEMENT translation (#PCDATA)>
 <!ELEMENT categorie (c,(info)?,(sous-cat)*)>
