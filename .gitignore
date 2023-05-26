@@ -487,3 +487,8 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# Custom
+# Everything .idea in root folder
+.idea/**
+src/.idea/**
