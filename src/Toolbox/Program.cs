@@ -1,19 +1,21 @@
-﻿using System.Text;
-using System.Xml.Serialization;
-using Microsoft.Extensions.Configuration;
-using Toolbox.Xml;
+﻿using Microsoft.Extensions.Configuration;
+using Toolbox;
 
-var configurationBuilder = new ConfigurationBuilder();
-configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-var configuration = configurationBuilder.Build();
+public class Program
+{
+    private static IConfiguration _configuration;
+    public static void Main(string[] args)
+    {
+        var configurationBuilder = new ConfigurationBuilder();
+        configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        _configuration = configurationBuilder.Build();
 
-var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), configuration["XmlStorageFile"]);
-using var streamReader = new StreamReader(xmlDocPath, Encoding.Latin1);
+        var engine = new Engine(_configuration);
+        engine.Load();
+    }
 
-var xmlSerializer = new XmlSerializer(typeof(Root));
-var content = xmlSerializer.Deserialize(streamReader);
-
-Console.WriteLine(content);
+    
+}
 
 
 

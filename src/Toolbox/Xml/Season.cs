@@ -13,8 +13,11 @@ public class Season
     [XmlAttribute("nombre")]
     public string NumberedName { get; set; }
     
+    [XmlElement("summary")]
+    public string Summary { get; set; }
+    
     [XmlElement("info")]
-    public string Info { get; set; }
+    public string Introduction { get; set; }
     
     [XmlElement("poeme")]
     public List<Poem> Poems { get; set; }

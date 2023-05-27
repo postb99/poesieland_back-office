@@ -16,9 +16,23 @@ public class Poem
     [XmlElement("date")]
     public string TextDate { get; set; }
     
+    [XmlElement("categorie")]
+    public List<Category> Categories { get; set; }
+    
     [XmlElement("longueur-vers")]
     public string LineLength { get; set; }
     
+    [XmlElement("info")]
+    public string Info { get; set; }
+    
+    [XmlElement("acrostiche")]
+    public Acrostiche Acrostiche { get; set; }
+    
     [XmlElement("para")]
     public List<Paragraph> Paragraphs { get; set; }
+
+    public DateTime Date => TextDate.Length == 10
+        ? new DateTime(int.Parse(TextDate.Substring(6)), int.Parse(TextDate.Substring(3, 2)),
+            int.Parse(TextDate.Substring(0, 2)))
+        : new DateTime(int.Parse(TextDate), 1, 1);
 }
