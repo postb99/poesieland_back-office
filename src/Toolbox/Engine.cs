@@ -23,4 +23,8 @@ public class Engine
         var xmlSerializer = new XmlSerializer(typeof(Root));
         Data = xmlSerializer.Deserialize(streamReader) as Root;
     }
+    
+    // Data Quality facts
+    // 9 poems with short date => additional info
+    // 71 poems with category but no subcategory => will have tag but not category?
 }
