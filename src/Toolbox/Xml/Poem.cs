@@ -20,7 +20,7 @@ public class Poem
     public List<Category> Categories { get; set; }
     
     [XmlElement("longueur-vers")]
-    public string LineLength { get; set; }
+    public int? LineLength { get; set; }
     
     [XmlElement("info")]
     public string Info { get; set; }

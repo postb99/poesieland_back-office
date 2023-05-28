@@ -17,7 +17,7 @@ public class Engine
 
     public void Load()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_SCHEMA_FILE]);
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_FILE]);
         using var streamReader = new StreamReader(xmlDocPath, Encoding.Latin1);
 
         var xmlSerializer = new XmlSerializer(typeof(Root));
