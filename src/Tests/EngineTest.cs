@@ -7,7 +7,7 @@ public class EngineTest
     [Fact]
     public void ShouldLoad()
     {
-        var engine = EngineHelper.CreateEngine();
+        var engine = Helpers.CreateEngine();
         engine.Data.Should().NotBeNull();
     }
 }

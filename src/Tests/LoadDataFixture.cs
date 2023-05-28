@@ -9,7 +9,7 @@ public class LoadDataFixture : IDisposable
     public LoadDataFixture()
     {
         // Do "global" initialization here; Only called once.
-        Engine = EngineHelper.CreateEngine();
+        Engine = Helpers.CreateEngine();
     }
 
     public void Dispose()

@@ -26,7 +26,7 @@ public class Poem
     public string Info { get; set; }
     
     [XmlElement("acrostiche")]
-    public Acrostiche Acrostiche { get; set; }
+    public Acrostiche? Acrostiche { get; set; }
     
     [XmlElement("para")]
     public List<Paragraph> Paragraphs { get; set; }

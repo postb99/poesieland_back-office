@@ -3,15 +3,18 @@ using Toolbox;
 
 namespace Tests;
 
-public static class EngineHelper
+public static class Helpers
 {
-    public static Engine CreateEngine(bool load = true)
+    public static IConfiguration GetConfiguration()
     {
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
-        var configuration = configurationBuilder.Build();
+        return configurationBuilder.Build();
+    }
 
-        var engine = new Engine(configuration);
+    public static Engine CreateEngine(bool load = true)
+    {
+        var engine = new Engine(GetConfiguration());
 
         if (load)
         {

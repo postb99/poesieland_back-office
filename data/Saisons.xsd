@@ -37,7 +37,7 @@
     <xs:element name="date">
         <xs:simpleType>
             <xs:restriction base="xs:string">
-                <xs:pattern value="[0-9]{2}\.[0-9]{2}\.[0-9]{4}"/>
+                <xs:pattern value="([0-9]{2}\.[0-9]{2}\.[0-9]{4})|([0-9]{4})"/>
             </xs:restriction>
         </xs:simpleType>
     </xs:element>
