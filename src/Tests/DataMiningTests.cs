@@ -81,4 +81,16 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             streamWriter.WriteLine(Environment.NewLine);
         }
     }
+    
+    [Fact]
+    public void SeasonDatesAndLastPoem()
+    {
+        var seasons = _data.Seasons.ToList();
+        foreach (var season in seasons)
+        {
+            var poems = season.Poems.OrderBy(x => x.Date).ToList();
+            var lastPoem = poems.Last();
+            _testOutputHelper.WriteLine("[{0}]: {1} - {2} ({3})", season.Name, poems[0].TextDate, lastPoem.TextDate, lastPoem.Id);
+        }
+    }
 }

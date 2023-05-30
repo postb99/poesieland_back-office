@@ -2,12 +2,13 @@
 <!--<!DOCTYPE Saison SYSTEM "Saisons.dtd">-->
 <Saisons xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://github.com/Xarkam/poesieland/ns" xsi:noNamespaceSchemaLocation="Saisons.xsd">
 <Saison id="1" name="Premiers élans" nombre="Première">
+<summary>Mes premiers poèmes suivant strictement la versification néoclassique, mais aussi des poèmes plus anciens et remaniés. De 1994 à septembre 1996</summary>
 <info>
-De 1994 à septembre 1996...
-Quand je me suis mise à écrire vers 1992, les mots se sont assemblés, alliant sonorités, 
-certains étant même de vraies petites chansonnettes qui devaient théoriquement être appréciées par mon lapin nain ;-)
-Cette saison comprend mes premiers poèmes suivant strictement la versification néoclassique, apprise courant 1995, 
-mais aussi des poèmes plus anciens et remaniés. Une Saison toute de petites touches... dans un nouveau "moule" qui l'exacerbe.
+Quand je me suis mise à écrire vers 1992, les mots se sont assemblés, alliant sonorités, certains étant même de vraies petites chansonnettes qui devaient théoriquement être appréciées par mon lapin nain ??
+
+Cette saison comprend mes premiers poèmes suivant strictement la versification néoclassique, apprise courant 1995, mais aussi des poèmes plus anciens et remaniés. Une Saison toute de petites touches, dans un nouveau "moule" qui l'exacerbe.
+
+De 1994 à septembre 1996
 </info>
 <poeme id="javaislheur_1" type="sonnet">
 <titre>J'avais l'heur de 
@@ -1162,10 +1163,9 @@ m'asseoir...</titre>
 <vers>Ne savent s'ils diront au jour suivant leur ode.</vers>
 </para></poeme></Saison>
 <Saison id="2" name="Tableaux" nombre="Deuxième">
-<info>De septembre à décembre 1996...
-De l'amour, des éléments naturels, des réflexions...
-cette Saison est toute de petites touches.
-</info><poeme id="evocation_2">
+<summary>De l'amour, des éléments naturels, des réflexions. De septembre à décembre 1996</summary>
+<info>De l'amour, des éléments naturels, des réflexions, cette Saison est toute de petites touches. De septembre à décembre 1996</info>
+<poeme id="evocation_2">
 <titre>Evocation</titre>
 <categorie><c>Portraits</c>
 </categorie>
@@ -2321,9 +2321,8 @@ cette Saison est toute de petites touches.
 <vers>C'est si facile de mourir.</vers>
 </para></poeme></Saison>
 <Saison id="3" name="Vivace" nombre="Troisième">
-<info>De décembre 1996 à mai 1997...
-Ces quelques mois presque exhaltés, avant de connaître d'autres bonheurs...
-</info>
+<summary>Ces quelques mois presque exaltés, avant de connaître d'autres bonheurs. De janvier à mai 1997</summary>
+<info>Ces quelques mois presque exaltés, avant de connaître d'autres bonheurs. De janvier à mai 1997</info>
 <poeme id="soleillevant_3">
 <titre>Soleil levant</titre>
 <categorie><c>Ombres et lumières</c>
@@ -3692,8 +3691,8 @@ Ces quelques mois presque exhaltés, avant de connaître d'autres bonheurs...
 <vers>Parole d'or.</vers>
 </para></poeme></Saison>
 <Saison id="4" name="Rêves" nombre="Quatrième">
-<info>De mai à septembre 1997...
-</info>
+<summary>De mai à septembre 1997</summary>
+<info>De mai à septembre 1997</info>
 <poeme id="saisonfugace_4">
 <titre>Saison fugace</titre>
 <categorie><c>Saisons</c>
@@ -5072,9 +5071,8 @@ Ces quelques mois presque exhaltés, avant de connaître d'autres bonheurs...
 <vers>Le bord du lac s'est envolé !</vers>
 </para></poeme></Saison>
 <Saison id="5" name="Espaces de vie" nombre="Cinquième">
-<info>De septembre 1997 à mars 1998...
-Multiples bonheurs...
-</info>
+<summary>Multiples bonheurs. De septembre 1997 à mars 1998</summary>
+<info>Multiples bonheurs. De septembre 1997 à mars 1998</info>
 <poeme id="eveil_5">
 <titre>Eveil</titre>
 <categorie><c>Attitudes</c>
@@ -6515,9 +6513,8 @@ Multiples bonheurs...
 <vers>De mon innocence décompte.</vers>
 </para></poeme></Saison>
 <Saison id="6" name="Sur le chemin" nombre="Sixième">
-<info>De mars à juin 1998...
-En cherchant sa voie, avec un long regard vers un amour déçu passé...
-</info>
+<summary>En cherchant sa voie, avec un long regard vers un amour déçu passé. De mars à juin 1998</summary>
+<info>En cherchant sa voie, avec un long regard vers un amour déçu passé. De mars à juin 1998</info>
 <poeme id="quetedesens_6">
 <titre>Quête de sens</titre>
 <categorie><c>Philosophie</c>
@@ -7926,7 +7923,8 @@ En cherchant sa voie, avec un long regard vers un amour déçu passé...
 <vers>Endort ce crépuscule.</vers>
 </para></poeme></Saison>
 <Saison id="7" name="Croire" nombre="Septième">
-<info>Juin et juillet 1998... Mois obsédés.</info>
+<summary>Mois obsédés, amour éperdu. Juin et juillet 1998</summary>
+<info>Mois obsédés, amour éperdu. Juin et juillet 1998</info>
 <poeme id="surlestade_7">
 <titre>Sur le stade d'aimer</titre>
 <categorie><c>Désir, amour</c>
@@ -9064,9 +9062,9 @@ Même un seul mot</vers>
 <vers>Il dit présence.</vers>
 </para></poeme></Saison>
 <Saison id="8" name="Reflets perdus" nombre="Huitième">
-<info>De juillet à septembre 1998...
-La fin d'un amour, mais également une période de doute, et quelques "diamants"...
-</info><poeme id="surunair_8">
+<summary>La fin d'un amour, mais également une période de doute, et quelques "diamants". De juillet à septembre 1998</summary>
+<info>La fin d'un amour, mais également une période de doute, et quelques "diamants". De juillet à septembre 1998</info>
+<poeme id="surunair_8">
 <titre>Sur un air</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
@@ -10162,7 +10160,8 @@ La fin d'un amour, mais également une période de doute, et quelques "diamants"..
 <vers>Entend l'écho de prière...</vers>
 </para></poeme></Saison>
 <Saison id="9" name="Souffles" nombre="Neuvième">
-<info>De septembre à décembre 1998... A la recherche de nouvelles inspirations.</info>
+<summary>A la recherche de nouvelles inspirations. De septembre à décembre 1998</summary>
+<info>A la recherche de nouvelles inspirations. De septembre à décembre 1998</info>
 <poeme id="demainlautomne_9">
 <titre>Demain l'automne</titre>
 <categorie><c>Saisons</c>
@@ -11393,9 +11392,8 @@ La fin d'un amour, mais également une période de doute, et quelques "diamants"..
 <para>
 </para></poeme></Saison>
 <Saison id="10" name="Pensées" nombre="Dixième">
-<info>De janvier à mars 1999...
-Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour.
-</info>
+<summary>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour. De janvier à mars 1999</summary>
+<info>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour. De janvier à mars 1999</info>
 <poeme id="surlocean_10">
 <categorie><c>Nature</c>
 <sous-cat>Mer</sous-cat>
@@ -12539,9 +12537,9 @@ comédie musicale "Notre-Dame de Paris")</info>
 <para>
 </para></poeme></Saison>
 <Saison id="11" name="Perceptible" nombre="Onzième">
-<info>De mars à mai 1999...
-Toute d'éclats, cette Saison de printemps...
-</info><poeme id="quando_11">
+<summary>Toute d'éclats, cette Saison de printemps. De mars à mai 1999</summary>
+<info>Toute d'éclats, cette Saison de printemps. De mars à mai 1999</info>
+<poeme id="quando_11">
 <titre>Quando la vita dice</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Vie, espoir</sous-cat>
@@ -13649,9 +13647,9 @@ Toute d'éclats, cette Saison de printemps...
 <vers>Le chant de l'exilé soleil d'un soir si cher...</vers>
 </para></poeme></Saison>
 <Saison id="12" name="Tempo piano" nombre="Douzième">
-<info>De mai à juillet 1999...
-Quelques accords plus vifs, quelques rêves plus doux...
-</info><poeme id="aunomducoeur_12"><date>30.05.1999</date>
+<summary>Quelques accords plus vifs, quelques rêves plus doux. De mai à juillet 1999</summary>
+<info>Quelques accords plus vifs, quelques rêves plus doux. De mai à juillet 1999</info>
+<poeme id="aunomducoeur_12"><date>30.05.1999</date>
 <titre>Au nom du c&#339;ur</titre>
 <categorie><c>Désir, amour</c>
 <sous-cat>Idéal</sous-cat>
@@ -14655,9 +14653,8 @@ Quelques accords plus vifs, quelques rêves plus doux...
 <vers>En une image, ce poème.</vers>
 </para></poeme></Saison>
 <Saison id="13" name="Divina" nombre="Treizième">
-<info>De juillet à novembre 1999...
-D'un lieu de vie à l'autre, retrouver ses repères...
-</info>
+<summary>D'un lieu de vie à l'autre, retrouver ses repères. De juillet à novembre 1999</summary>
+<info>D'un lieu de vie à l'autre, retrouver ses repères. De juillet à novembre 1999</info>
 <poeme id="atoilagloire_13"><date>15.08.1999</date>
 <translation lang="en">toyouglory</translation>
 <titre>A Toi la gloire</titre>
@@ -15822,9 +15819,8 @@ le contenu des paragraphes est inversée.</info>
 <vers>Aura montré nos pas touchants.</vers>
 </para></poeme></Saison>
 <Saison id="14" name="Au long cours" nombre="Quatorzième">
-<info>De novembre 1999 à mars 2001...
-Rares, mais précieux, les moments de cette Saison très variée...
-</info>
+<summary>Rares, mais précieux, les moments de cette Saison très variée. De novembre 1999 à mars 2001</summary>
+<info>Rares, mais précieux, les moments de cette Saison très variée. De novembre 1999 à mars 2001</info>
 <poeme id="saint_14"><titre>Saint</titre>
 <translation lang="en">saint</translation>
 <translation lang="it">santo</translation>
@@ -16935,11 +16931,11 @@ Rares, mais précieux, les moments de cette Saison très variée...
 <vers>Embrasse d'au-delà les saisonnières rimes !</vers>
 </para></poeme></Saison>
 <Saison id="15" name="De place en place" nombre="Quinzième">
-<info>De juillet à décembre 2001...
-Les poèmes qui la conposent sont à présent dans l'ordre chronologique,
+<summary>De ruelle en avenue, de cabane en palace, de lieux rêvés aux lieux vécus. D'avril à décembre 2001</summary>
+<info>Les poèmes qui la conposent sont à présent dans l'ordre chronologique,
 comme mon inspiration flâne de ruelle en avenue,
-de cabane en palace, de lieux rêvés aux lieux vécus...
-Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vie...</info>
+de cabane en palace, de lieux rêvés aux lieux vécus.
+Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vie. D'avril à décembre 2001</info>
 <poeme id="apresledrame_15">
 <translation lang="en">afterthetragedy</translation>
 <date>26.07.2001</date>
@@ -18053,10 +18049,8 @@ d'hiver</titre>
 <vers>La découpe d'un ciel à ses dentelles sombres.</vers>
 </para></poeme></Saison>
 <Saison id="16" name="Plus loin" nombre="Seizième">
-<info>
-De mars 2002 à ce jour...
-Une Saison commencée sur un air de fin, à travers les touches d'un amour qui n'en était plus vraiment un. Puis un renouveau un an après, cet épisode terminé. 
-</info>
+<summary>Sur un air de fin, puis un renouveau. De mars 2002 à ce jour</summary>
+<info>Une Saison commencée sur un air de fin, à travers les touches d'un amour qui n'en était plus vraiment un. Puis un renouveau un an après, cet épisode terminé. De mars 2002 à ce jour</info>
 <poeme id="endormis_16"><date>02.03.2002</date><titre>Endormis</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Sommeil</sous-cat>

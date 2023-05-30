@@ -29,15 +29,15 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
-    public void FindLastSeasonPoem()
+    public void SeasonShouldHaveNotTooLongSummary()
     {
         var seasons = _data.Seasons.ToList();
         foreach (var season in seasons)
         {
-            var poems = season.Poems.OrderBy(x => x.Date).ToList();
-            var lastPoem = poems.Last();
-            _testOutputHelper.WriteLine("[{0}]: {1} - {2} ({3})", season.Name, poems[0].TextDate, lastPoem.TextDate, lastPoem.Id);
+            _testOutputHelper.WriteLine("[{0}]: {1} words (info: {2} words)", season.Name,
+                season.Summary.Split(' ').Length, season.Introduction.Split(' ').Length);
         }
+        seasons.All(x => x.Summary.Split(' ').Length <= 70).Should().BeTrue();
     }
 
     [Fact]
