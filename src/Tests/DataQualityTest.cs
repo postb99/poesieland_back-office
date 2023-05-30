@@ -20,8 +20,24 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     public void SeasonShouldHaveCorrectPoemCount()
     {
         var seasons = _data.Seasons.ToList();
+        foreach (var season in seasons)
+        {
+            _testOutputHelper.WriteLine("[{0}]: {1}", season.Name, season.Poems.Count);
+        }
         seasons.Take(seasons.Count - 1).All(x => x.Poems.Count == 50).Should().BeTrue();
         seasons.Skip(seasons.Count - 1).Single(x => x.Poems.Count <= 50).Should().NotBeNull();
+    }
+
+    [Fact]
+    public void FindLastSeasonPoem()
+    {
+        var seasons = _data.Seasons.ToList();
+        foreach (var season in seasons)
+        {
+            var poems = season.Poems.OrderBy(x => x.Date).ToList();
+            var lastPoem = poems.Last();
+            _testOutputHelper.WriteLine("[{0}]: {1} - {2} ({3})", season.Name, poems[0].TextDate, lastPoem.TextDate, lastPoem.Id);
+        }
     }
 
     [Fact]

@@ -14943,28 +14943,6 @@ D'un lieu de vie à l'autre, retrouver ses repères...
 <vers>Tellement fort je revivrai</vers>
 <vers>En l'éternité cantatrice !</vers>
 <vers></vers>
-</para></poeme><poeme id="saint_13"><titre>Saint</titre>
-<translation lang="en">saint</translation>
-<translation lang="it">santo</translation>
-<categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
-</categorie>
-<date>06.11.1999</date>
-<categorie><c>Portraits</c></categorie>
-<acrostiche>San Bocelli</acrostiche>
-<info>Sublimation religieuse de la vocation du chanteur Andrea Bocelli.</info>
-<para>
-<vers>Sacrifié dans ta chair pour recevoir l'Offrande,</vers>
-<vers>Aux hommes réunir la charité plus grande,</vers>
-<vers>Nous-donnes-tu pourtant plus que ce qui manquait.</vers>
-<vers>Bel Ange qui s'incarne, un sourire coquet</vers>
-<vers>Où la lumière voit l'Amour par chaque geste.</vers>
-<vers>Chuchoté le destin en notre c&#339;ur qui reste</vers>
-<vers>Emerveillé. La coupe où l'esprit communia</vers>
-<vers>Livre le millénaire, une joie unie à</vers>
-<vers>La liberté du vent quand l'espace s'allume,</vers>
-<vers>Ivre, à toi, souverain, multicolore écume.</vers>
-<vers></vers>
 </para></poeme><poeme id="lautunno_13"><date>01.08.1999</date><titre>L'Autunno</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Temps</sous-cat>
@@ -15844,9 +15822,32 @@ le contenu des paragraphes est inversée.</info>
 <vers>Aura montré nos pas touchants.</vers>
 </para></poeme></Saison>
 <Saison id="14" name="Au long cours" nombre="Quatorzième">
-<info>De décembre 1999 à mars 2001...
+<info>De novembre 1999 à mars 2001...
 Rares, mais précieux, les moments de cette Saison très variée...
-</info><poeme id="quandosaroio_14"><date>19.02.2000</date>
+</info>
+<poeme id="saint_14"><titre>Saint</titre>
+<translation lang="en">saint</translation>
+<translation lang="it">santo</translation>
+<categorie><c>Philosophie</c>
+<sous-cat>Spiritualité religieuse</sous-cat>
+</categorie>
+<date>06.11.1999</date>
+<categorie><c>Portraits</c></categorie>
+<acrostiche>San Bocelli</acrostiche>
+<info>Sublimation religieuse de la vocation du chanteur Andrea Bocelli.</info>
+<para>
+<vers>Sacrifié dans ta chair pour recevoir l'Offrande,</vers>
+<vers>Aux hommes réunir la charité plus grande,</vers>
+<vers>Nous-donnes-tu pourtant plus que ce qui manquait.</vers>
+<vers>Bel Ange qui s'incarne, un sourire coquet</vers>
+<vers>Où la lumière voit l'Amour par chaque geste.</vers>
+<vers>Chuchoté le destin en notre c&#339;ur qui reste</vers>
+<vers>Emerveillé. La coupe où l'esprit communia</vers>
+<vers>Livre le millénaire, une joie unie à</vers>
+<vers>La liberté du vent quand l'espace s'allume,</vers>
+<vers>Ivre, à toi, souverain, multicolore écume.</vers>
+<vers></vers>
+</para></poeme><poeme id="quandosaroio_14"><date>19.02.2000</date>
 <titre>Quando sarò io</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Création</sous-cat>
@@ -15912,33 +15913,7 @@ Rares, mais précieux, les moments de cette Saison très variée...
 <vers>Rien, je ne suis d'ailleurs ;</vers>
 <vers>A l'onde andante blême</vers>
 <vers>Irons-nous, orpailleurs ?</vers>
-</para></poeme><poeme id="apresledrame_14">
-<translation lang="en">afterthetragedy</translation>
-<date>26.07.2001</date>
-<info>En mémoire des 113 victimes du crash du Concorde du 25.07.2000.</info>
-<titre>Après le drame</titre>
-<categorie><c>Philosophie</c>
-<sous-cat>Apprentissage</sous-cat>
-</categorie>
-<para>
-<vers>Toutes les femmes sont en noir,</vers>
-<vers>Même la blonde si rieuse,</vers>
-<vers>Elle ne dit mot, soudain pieuse,</vers>
-<vers>Dans ce grand soir, trop calme soir.</vers>
-</para>
-<para>
-<vers>Après le drame, après les larmes</vers>
-<vers>Viennent les temps de l'incertain;</vers>
-<vers>On se découvre un beau matin</vers>
-<vers>Plus de courage et d'autres armes.</vers>
-</para>
-<para>
-<vers>Comme dit l'ombre, on fait son deuil,</vers>
-<vers>Défi du c&#339;ur, erreur technique,</vers>
-<vers>En silence supersonique</vers>
-<vers>L'esprit plane à chaque cercueil.</vers>
-</para>
-</poeme><poeme id="lairdoctobre_14"><date>15.10.2000</date>
+</para></poeme><poeme id="lairdoctobre_14"><date>15.10.2000</date>
 <titre>L'air d'octobre</titre>
 <categorie><c>Saisons</c>
 <sous-cat>Automne</sous-cat>
@@ -16960,11 +16935,38 @@ Rares, mais précieux, les moments de cette Saison très variée...
 <vers>Embrasse d'au-delà les saisonnières rimes !</vers>
 </para></poeme></Saison>
 <Saison id="15" name="De place en place" nombre="Quinzième">
-<info>D'avril 2001 à mars 2002...
+<info>De juillet à décembre 2001...
 Les poèmes qui la conposent sont à présent dans l'ordre chronologique,
 comme mon inspiration flâne de ruelle en avenue,
 de cabane en palace, de lieux rêvés aux lieux vécus...
 Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vie...</info>
+<poeme id="apresledrame_15">
+<translation lang="en">afterthetragedy</translation>
+<date>26.07.2001</date>
+<info>En mémoire des 113 victimes du crash du Concorde du 25.07.2000.</info>
+<titre>Après le drame</titre>
+<categorie><c>Philosophie</c>
+<sous-cat>Apprentissage</sous-cat>
+</categorie>
+<para>
+<vers>Toutes les femmes sont en noir,</vers>
+<vers>Même la blonde si rieuse,</vers>
+<vers>Elle ne dit mot, soudain pieuse,</vers>
+<vers>Dans ce grand soir, trop calme soir.</vers>
+</para>
+<para>
+<vers>Après le drame, après les larmes</vers>
+<vers>Viennent les temps de l'incertain;</vers>
+<vers>On se découvre un beau matin</vers>
+<vers>Plus de courage et d'autres armes.</vers>
+</para>
+<para>
+<vers>Comme dit l'ombre, on fait son deuil,</vers>
+<vers>Défi du c&#339;ur, erreur technique,</vers>
+<vers>En silence supersonique</vers>
+<vers>L'esprit plane à chaque cercueil.</vers>
+</para>
+</poeme>
 <poeme id="leciel_15"><date>09.04.2001</date><titre>Le ciel</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Etre</sous-cat>
@@ -18049,7 +18051,13 @@ d'hiver</titre>
 <vers>Illuminent le blanc de pastel, gris, et d'ombres,</vers>
 <vers>Et le souffle de l'arbre arbore autres pyrées,</vers>
 <vers>La découpe d'un ciel à ses dentelles sombres.</vers>
-</para></poeme><poeme id="endormis_15"><date>02.03.2002</date><titre>Endormis</titre>
+</para></poeme></Saison>
+<Saison id="16" name="Plus loin" nombre="Seizième">
+<info>
+De mars 2002 à ce jour...
+Une Saison commencée sur un air de fin, à travers les touches d'un amour qui n'en était plus vraiment un. Puis un renouveau un an après, cet épisode terminé. 
+</info>
+<poeme id="endormis_16"><date>02.03.2002</date><titre>Endormis</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Sommeil</sous-cat>
 </categorie>
@@ -18066,12 +18074,7 @@ d'hiver</titre>
 <vers>Mirons nos c&#339;urs cachés, et puis d'une alliance</vers>
 <vers>Irisons nos regards, nos doigts de frôlement&#8230;</vers>
 <vers>Si le jour nous unit, berçons-nous de brillance.</vers>
-</para></poeme></Saison>
-<Saison id="16" name="Plus loin" nombre="Seizième">
-<info>
-D'août 2002 à ce jour...
-Une Saison commencée sur un air de fin, à travers les touches d'un amour qui n'en était plus vraiment un. Puis un renouveau un an après, cet épisode terminé. 
-</info>
+</para></poeme>
 <poeme id="coeursamants_16"><date>18.08.2002</date>
 <titre>C&#339;urs amants</titre>
 <categorie><c>Désir, amour</c>
