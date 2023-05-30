@@ -65,11 +65,11 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
-    public void AcrosticheShouldBeConsistent()
+    public void SpecialAcrosticheShouldBeConsistent()
     {
-        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Acrostiche != null).All(x =>
-                !string.IsNullOrEmpty(x.Acrostiche!.Content) || (!string.IsNullOrEmpty(x.Acrostiche.First) &&
-                                                                 !string.IsNullOrEmpty(x.Acrostiche.Second))).Should()
+        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.SpecialAcrostiche != null).All(x =>
+                !string.IsNullOrEmpty(x.SpecialAcrostiche!.First) &&
+                !string.IsNullOrEmpty(x.SpecialAcrostiche.Second)).Should()
             .BeTrue();
     }
 }

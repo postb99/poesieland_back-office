@@ -2,7 +2,7 @@
 
 namespace Toolbox.Xml;
 
-public class Acrostiche
+public class SpecialAcrostiche
 {
     public string Content { get; set; }
     [XmlElement("premier")]

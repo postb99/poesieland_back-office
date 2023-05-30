@@ -28,7 +28,10 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         using var outputFileStream = File.Open("PoemsWithAdditionalData.txt", FileMode.Create);
         using var streamWriter = new StreamWriter(outputFileStream);
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x =>
-            x.Acrostiche != null || !string.IsNullOrEmpty(x.PoemType) || !string.IsNullOrEmpty(x.Info)).ToList();
+            !string.IsNullOrEmpty(x.Acrostiche)
+            || x.SpecialAcrostiche != null
+            || !string.IsNullOrEmpty(x.PoemType)
+            || !string.IsNullOrEmpty(x.Info)).ToList();
 
         foreach (var poem in poems)
         {
@@ -38,14 +41,15 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                 sb.AppendFormat(" [info] {0}", poem.Info);
             if (!string.IsNullOrEmpty(poem.PoemType))
                 sb.AppendFormat(" [type] {0}", poem.PoemType);
-            if (poem.Acrostiche != null)
+            if (!string.IsNullOrEmpty(poem.Acrostiche))
             {
-                if (string.IsNullOrEmpty(poem.Acrostiche!.First))
-                    sb.AppendFormat(" [acrostiche] {0}", poem.Acrostiche.Content);
-                else
-                {
-                    sb.AppendFormat(" [special acrostiche] {0}", poem.Acrostiche.First, poem.Acrostiche.Second);
-                }
+                sb.AppendFormat(" [acrostiche] {0}", poem.Acrostiche);
+            }
+
+            if (poem.SpecialAcrostiche != null)
+            {
+                sb.AppendFormat(" [special acrostiche] {0}/{1}", poem.SpecialAcrostiche.First,
+                    poem.SpecialAcrostiche.Second);
             }
 
             streamWriter.WriteLine(sb.ToString());
