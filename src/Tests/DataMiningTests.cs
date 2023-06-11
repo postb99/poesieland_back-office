@@ -63,7 +63,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         using var streamWriter = new StreamWriter(outputFileStream);
 
         var categories = _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Categories).ToList();
-        
+
         var dic = new Dictionary<string, HashSet<string>>();
 
         foreach (var categoryName in categories.Select(x => x.Name).Distinct())
@@ -99,5 +99,15 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             _testOutputHelper.WriteLine("[{0}]: {1} - {2} ({3})", season.Name, poems[0].TextDate, lastPoem.TextDate,
                 lastPoem.Id);
         }
+    }
+
+    [Fact]
+    public void PoemsWithEmptyVerseInLastParagraph()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Paragraphs.Any(y => y.Verses.Count == 0)).ToList();
+        poems.ForEach(x => _testOutputHelper.WriteLine("[{0}]", x.Id));
+        
+        poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Paragraphs.Last().Verses.Last().Length == 0).ToList();
+        poems.ForEach(x => _testOutputHelper.WriteLine("[{0}]", x.Id));
     }
 }

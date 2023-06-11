@@ -7722,8 +7722,7 @@ m'asseoir...</titre>
 <vers>Et si ton c&#339;ur s'affole</vers>
 <vers>J'en calmerai le pleur...</vers>
 </para>
-<para>
-</para></poeme><poeme id="quandjedistonnom_6">
+</poeme><poeme id="quandjedistonnom_6">
 <titre>Quand je dis ton nom</titre>
 <categorie><c>Amour</c>
 <sous-cat>Amour malheureux</sous-cat>
@@ -9192,6 +9191,7 @@ Même un seul mot</vers>
 </categorie>
 <date>20.07.1998</date>
 <acrostiche>Mon souhait</acrostiche>
+    <para>
 <vers>Menant mes pas vers la fontaine</vers>
 <vers>Ondoyante, fraîche, sereine,</vers>
 <vers>N'y tenant plus je fis trois vœux.</vers>
@@ -9202,6 +9202,7 @@ Même un seul mot</vers>
 <vers>Avant qu'un an soit révolu</vers>
 <vers>Illumine couleur, essence,</vers>
 <vers>Trouble de joie une existence !</vers>
+    </para>
 </poeme><poeme id="jecroisentoi_8">
 <titre>Je crois en toi</titre>
 <categorie><c>Amour</c>
@@ -11370,8 +11371,7 @@ Même un seul mot</vers>
 <vers>Bohémienne, comme ivre :</vers>
 <vers>L'amour dans son essor.</vers>
 </para>
-<para>
-</para></poeme></Saison>
+</poeme></Saison>
 <Saison id="10" name="Pensées" nombre="Dixième">
 <summary>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour. De janvier à mars 1999</summary>
 <info>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour. De janvier à mars 1999</info>
@@ -11409,8 +11409,7 @@ Même un seul mot</vers>
 <vers>Rive d'un continent nacré</vers>
 <vers>En ton c&#339;ur découvert : revivre !</vers>
 </para>
-<para>
-</para></poeme><poeme id="marieprie_10">
+</poeme><poeme id="marieprie_10">
 <titre>Marie, prie pour moi</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -11441,8 +11440,7 @@ Même un seul mot</vers>
 <vers>O la vie en ton sein révélée à l'étoile</vers>
 <vers>Irradie en amour, en subtile bonté !</vers>
 </para>
-<para>
-</para></poeme><poeme id="cathedralebelle_10">
+</poeme><poeme id="cathedralebelle_10">
 <titre>La cathédrale est belle</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -11471,8 +11469,7 @@ Même un seul mot</vers>
 <vers>Libère les âmes impures,</vers>
 <vers>Exauce le monde incertain.</vers>
 </para>
-<para>
-</para></poeme><poeme id="cathedraledelumieres_10">
+</poeme><poeme id="cathedraledelumieres_10">
 <acrostiche><premier>Cathédrale</premier>
 <deuxieme>de lumières</deuxieme></acrostiche>
 <titre>Cathédrale de lumières</titre>
@@ -11502,8 +11499,7 @@ Même un seul mot</vers>
 <vers>Entends-tu les cloches d'or</vers>
 <vers>Sonner l'âme en leur accord ?</vers>
 </para>
-<para>
-</para></poeme><poeme id="priere_10">
+</poeme><poeme id="priere_10">
 <titre>Prière</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -12514,8 +12510,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Ressent les signes plus discrets</vers>
 <vers>Offerts d'invisible prière.</vers>
 </para>
-<para>
-</para></poeme></Saison>
+</poeme></Saison>
 <Saison id="11" name="Perceptible" nombre="Onzième">
 <summary>Toute d'éclats, cette Saison de printemps. De mars à mai 1999</summary>
 <info>Toute d'éclats, cette Saison de printemps. De mars à mai 1999</info>
@@ -14659,7 +14654,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Insinue en nous la gloire de ton rang !</vers>
 <vers>Reine qui confesse un peuple libre et grand,</vers>
 <vers>En notre Cité des deux îles belles !</vers>
-<vers></vers>
 </para></poeme><poeme id="sijeprie_13"><date>28.08.1999</date><titre>Si je prie</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -14676,7 +14670,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Rêves du temps, ta présence console,</vers>
 <vers>Illuminée, ô Vierge: espoir vainqueur...</vers>
 <vers>En cet instant mon âme est-elle sage ou folle ?</vers>
-<vers></vers>
 </para></poeme><poeme id="jevoussalue_13"><date>10.09.1999</date><titre>Je vous salue, amour</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -14705,7 +14698,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>O Jésus, tu nous guides</vers>
 <vers>Unis hier à toujours,</vers>
 <vers>Remplis nos coupes vides! </vers>
-<vers></vers>
 </para></poeme><poeme id="germedespoir_13"><date>19.08.1999</date><titre>Germe d'espoir</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -14751,9 +14743,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Intact, son flux, la rive</vers>
 <vers>Eclate à cette mer...</vers>
 </para>
-<para>
-<vers></vers>
-</para></poeme><poeme id="imageunsensest_13"><date>31.08.1999</date><titre>Image, un sens est</titre>
+</poeme><poeme id="imageunsensest_13"><date>31.08.1999</date><titre>Image, un sens est</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Etre</sous-cat>
 </categorie>
@@ -14779,7 +14769,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Est-ce que le trépas</vers>
 <vers>Saura briser dans l'âme</vers>
 <vers>Toi l'homme, moi la femme ?</vers>
-<vers></vers>
 </para></poeme><poeme id="jiraiparcechemin_13"><date>08.09.1999</date><titre>J'irai par ce chemin</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -14808,7 +14797,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Mon jour bientôt viendra,</vers>
 <vers>Illuminé, prendra</vers>
 <vers>Nos chemins en sandale.</vers>
-<vers></vers>
 </para></poeme><poeme id="prendsmoncoeur_13"><date>11.09.1999</date><titre>Prends mon c&#339;ur</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -14881,7 +14869,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Intime, quand la cloche absolvant, vient donner</vers>
 <vers>Message plus fidèle à l'étoile, lumière...</vers>
 <vers>Anima dans l'éclat élevé de prière.</vers>
-<vers></vers>
 </para></poeme><poeme id="unangelo_13"><date>21.09.1999</date><titre>Un angelo</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Foi</sous-cat>
@@ -14898,7 +14885,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Et le fleuve se mêlent,</vers>
 <vers>La colline, l'amour</vers>
 <vers>Où les voix sont plus belles.</vers>
-<vers></vers>
 </para></poeme><poeme id="giustote_13"><date>02.10.1999</date><titre>Giusto te</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Création</sous-cat>
@@ -14916,7 +14902,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Offert de l'âme créatrice,</vers>
 <vers>Tellement fort je revivrai</vers>
 <vers>En l'éternité cantatrice !</vers>
-<vers></vers>
 </para></poeme><poeme id="lautunno_13"><date>01.08.1999</date><titre>L'Autunno</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Temps</sous-cat>
@@ -14954,7 +14939,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Assemble ses voiles</vers>
 <vers>Rêvant ses étoiles</vers>
 <vers>De gouttes perlé.</vers>
-<vers></vers>
 </para></poeme><poeme id="promenadelapluie_13"><date>10.08.1999</date><titre>Promenade, la pluie</titre>
 <translation lang="en">walkrain</translation>
 <acrostiche><premier>Promenade</premier>
@@ -15010,7 +14994,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Etincellent manège... Un instant... La poussière</vers>
 <vers>Laisse une odeur sans nom, de plumes et de becs,</vers>
 <vers>Auréole plus forte en céleste mystère.</vers>
-<vers></vers>
 </para></poeme><poeme id="lunecitadine_13"><date>26.08.1999</date><titre>Lune citadine</titre>
 <categorie><c>Ombres et lumières</c>
 <sous-cat>Lune</sous-cat>
@@ -15035,7 +15018,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Imaginant ton ombre frêle</vers>
 <vers>Nouée au nuage d'une aile</vers>
 <vers>Extrême... La nuit se fait d'or.</vers>
-<vers></vers>
 </para></poeme><poeme id="fantasia_13"><date>30.08.1999</date><titre>Fantasia</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Sommeil</sous-cat>
@@ -15101,7 +15083,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Onde, un parfum m'y jeta</vers>
 <vers>Vers ce sable, cette flore;</vers>
 <vers>O terra incognita !</vers>
-<vers></vers>
 </para></poeme><poeme id="crescedautunno_13"><date>21.09.1999</date><titre>Cresce d'autunno</titre>
 <categorie><c>Saisons</c>
 <sous-cat>Automne</sous-cat>
@@ -15821,7 +15802,6 @@ le contenu des paragraphes est inversée.</info>
 <vers>Livre le millénaire, une joie unie à</vers>
 <vers>La liberté du vent quand l'espace s'allume,</vers>
 <vers>Ivre, à toi, souverain, multicolore écume.</vers>
-<vers></vers>
 </para></poeme><poeme id="quandosaroio_14"><date>19.02.2000</date>
 <titre>Quando sarò io</titre>
 <categorie><c>Philosophie</c>
@@ -16233,8 +16213,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>En un seul rêve plus stellaire,</vers>
 <vers>Ce bout de roche dans les airs.</vers>
 </para>
-<para>
-</para></poeme><poeme id="lunedunenuit_14"><date>11.11.2000</date>
+</poeme><poeme id="lunedunenuit_14"><date>11.11.2000</date>
 <titre>Lune d'une nuit</titre>
 <categorie><c>Ombres et lumières</c>
 <sous-cat>Lune</sous-cat>
@@ -16549,8 +16528,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>Invécu encore, aura plus de chaleur, temps radieux,</vers>
 <vers>Exquis, debout sous un autre arbre ; en nous, un c&#339;ur résonne.</vers>
 </para>
-<para>
-</para></poeme><poeme id="commejaimais_14"><date>04.01.2001</date>
+</poeme><poeme id="commejaimais_14"><date>04.01.2001</date>
 <titre>Comme j'aimais</titre>
 <categorie><c>Nature</c>
 <sous-cat>Flore</sous-cat>
@@ -17549,8 +17527,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <vers>Gemmes de ce chagrin chassé,</vers>
 <vers>Etreint les lieux d'une ombre fauve.</vers>
 </para>
-<para>
-</para></poeme><poeme id="miroirdombre_15"><date>13.09.2001</date>
+</poeme><poeme id="miroirdombre_15"><date>13.09.2001</date>
 <titre>Miroir d'ombre</titre>
 <translation lang="en">mirrorofshade</translation>
 <categorie><c>Philosophie</c>

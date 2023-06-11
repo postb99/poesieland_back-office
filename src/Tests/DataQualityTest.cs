@@ -79,6 +79,18 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.Categories.Count > 0).Should().BeTrue();
     }
+    
+    [Fact]
+    public void PoemShouldHaveParagraphs()
+    {
+        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).Should().BeTrue();
+    }
+    
+    [Fact]
+    public void ParagraphShouldHaveVerses()
+    {
+        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).Should().BeTrue();
+    }
 
     [Fact]
     public void SpecialAcrosticheShouldBeConsistent()

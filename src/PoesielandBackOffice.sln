@@ -4,6 +4,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Toolbox", "Toolbox\Toolbox.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{4005A9C2-F78D-40E8-8ACD-CC81C10F7C61}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{AE594510-5E9A-4FAB-B5E8-D1579666EBCD}"
+	ProjectSection(SolutionItems) = preProject
+		..\data\Saisons.xml = ..\data\Saisons.xml
+		..\data\Saisons.xsd = ..\data\Saisons.xsd
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

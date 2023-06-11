@@ -10,7 +10,8 @@
     <xs:element name="Saison">
         <xs:complexType>
             <xs:sequence>
-                <xs:element minOccurs="0" ref="info"/>
+                <xs:element ref="summary"/>
+                <xs:element ref="info"/>
                 <xs:element maxOccurs="unbounded" ref="poeme"/>
             </xs:sequence>
             <xs:attribute name="id" use="required"/>
@@ -43,6 +44,7 @@
     </xs:element>
     <xs:element name="titre" type="xs:string"/>
     <xs:element name="longueur-vers" type="xs:integer"/>
+    <xs:element name="summary" type="xs:string"/>
     <xs:element name="info" type="xs:string"/>
     <xs:element name="translation">
         <xs:complexType mixed="true">
