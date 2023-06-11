@@ -8,5 +8,5 @@ public class Category
     public string Name { get; set; }
     
     [XmlElement("sous-cat")]
-    public List<string> SubCategory { get; set; }
+    public List<string> SubCategories { get; set; }
 }

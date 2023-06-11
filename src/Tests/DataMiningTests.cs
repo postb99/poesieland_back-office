@@ -63,17 +63,23 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         using var streamWriter = new StreamWriter(outputFileStream);
 
         var categories = _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Categories).ToList();
-        var dic = new Dictionary<string, List<string>>();
+        
+        var dic = new Dictionary<string, HashSet<string>>();
+
+        foreach (var categoryName in categories.Select(x => x.Name).Distinct())
+        {
+            dic.Add(categoryName, new HashSet<string>());
+        }
+
         foreach (var category in categories)
         {
-            dic.TryAdd(category.Name, new List<string>());
-            dic[category.Name].AddRange(category.SubCategory);
+            category.SubCategories.ForEach(sc => dic[category.Name].Add(sc));
         }
 
         foreach (var categoryName in dic.Keys)
         {
             streamWriter.WriteLine(categoryName);
-            foreach (var subCategory in dic[categoryName].Distinct())
+            foreach (var subCategory in dic[categoryName])
             {
                 streamWriter.WriteLine("  - {0} ", subCategory);
             }
@@ -81,7 +87,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             streamWriter.WriteLine(Environment.NewLine);
         }
     }
-    
+
     [Fact]
     public void SeasonDatesAndLastPoem()
     {
@@ -90,7 +96,8 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         {
             var poems = season.Poems.OrderBy(x => x.Date).ToList();
             var lastPoem = poems.Last();
-            _testOutputHelper.WriteLine("[{0}]: {1} - {2} ({3})", season.Name, poems[0].TextDate, lastPoem.TextDate, lastPoem.Id);
+            _testOutputHelper.WriteLine("[{0}]: {1} - {2} ({3})", season.Name, poems[0].TextDate, lastPoem.TextDate,
+                lastPoem.Id);
         }
     }
 }

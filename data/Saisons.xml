@@ -14,7 +14,7 @@ De 1994 à septembre 1996
 <titre>J'avais l'heur de 
 m'asseoir...</titre>
 <longueur-vers>12</longueur-vers>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>07.12.1995</date>
@@ -38,7 +38,7 @@ m'asseoir...</titre>
 <vers>Refermer en mon c&#339;ur la plaie encor qui bouge.</vers>
 </para></poeme><poeme id="foliedamour_1">
 <titre>Folie d'amour</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <longueur-vers>12</longueur-vers>
@@ -70,7 +70,7 @@ m'asseoir...</titre>
 <vers>Vers le c&#339;ur de celui qui s'éloigne en calèche ?</vers>
 </para></poeme><poeme id="femininmasculin_1">
 <titre>Féminin, masculin</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>25.05.1996</date>
@@ -100,8 +100,8 @@ m'asseoir...</titre>
 </para></poeme><poeme id="andre_1"><date>1994</date>
 <titre>André</titre>
 <longueur-vers>8</longueur-vers>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <info>Reprise en 1995/1996 d'un poème de 1994</info>
 <para><vers>En brume des matins d'automnes,</vers>
@@ -130,8 +130,8 @@ m'asseoir...</titre>
 <vers>Je lui soufflai : "Je t'aime André".</vers>
 </para></poeme><poeme id="villedemesamours_1">
 <titre>Ville de mes amours</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <categorie><c>Ville</c>
 </categorie>
@@ -153,7 +153,7 @@ m'asseoir...</titre>
 <vers>Je vais te dire adieu, ville d'indifférence!</vers>
 </para></poeme><poeme id="amourdevacances_1">
 <titre>Amour de vacances</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>21.08.1996</date>
@@ -174,10 +174,10 @@ m'asseoir...</titre>
 <vers>Au creux de la fin d'août, en mon c&#339;ur baladin.</vers>
 </para></poeme><poeme id="lafemme_1"><date>1994</date>
 <titre>La Femme</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
-<categorie><c>Portrait</c>
+<categorie><c>Portraits</c>
 </categorie>
 <longueur-vers>6</longueur-vers>
 <info>Reprise en 1995/1996 d'un poème de 1994</info>
@@ -212,8 +212,8 @@ m'asseoir...</titre>
 <vers>Mit des reflets subtils.</vers>
 </para></poeme><poeme id="unoceandabime_1">
 <titre>Un océan d'abîme</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>01.09.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -234,7 +234,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="retrouvailles_1">
 <titre>Retrouvailles</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Idéal</sous-cat>
 </categorie>
 <date>29.06.1996</date>
 <longueur-vers>8</longueur-vers>
@@ -260,7 +259,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lemessager_1">
 <titre>Le messager</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>02.04.1995</date>
 <longueur-vers>6</longueur-vers>
@@ -389,7 +388,7 @@ m'asseoir...</titre>
 <categorie><c>Enfance</c>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>11.06.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -412,7 +411,7 @@ m'asseoir...</titre>
 <categorie><c>Enfance</c>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>1994</date>
 <info>Reprise en 1996 d'un poème de 1994</info>
@@ -476,7 +475,7 @@ m'asseoir...</titre>
 <titre>Jardin</titre>
 <categorie><c>Nature</c>
 <sous-cat>Jardin, paysage</sous-cat>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>28.06.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -497,7 +496,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="amitiedenfance_1">
 <titre>Amitié d'enfance</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <categorie><c>Enfance</c>
 </categorie>
@@ -670,7 +668,7 @@ m'asseoir...</titre>
 <categorie><c>Nature</c>
 <sous-cat>Mer</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>13.07.1996</date>
@@ -695,7 +693,7 @@ m'asseoir...</titre>
 <sous-cat>Mer</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>01.11.1995</date>
 <info>Un des rares poèmes en prose...</info>
@@ -802,7 +800,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lethe_1">
 <titre>Le Thé</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>17.06.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -927,7 +925,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="soif_1">
 <titre>Soif</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>31.07.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -1210,7 +1208,7 @@ m'asseoir...</titre>
 <vers>Pour créer le bonheur du fugitif instant.</vers>
 </para></poeme><poeme id="bellevolage_2">
 <titre>Belle volage</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>05.09.1996</date>
@@ -1231,8 +1229,8 @@ m'asseoir...</titre>
 <vers>Et vole ta jeunesse, ô ma blanche hirondelle !</vers>
 </para></poeme><poeme id="passion_2">
 <titre>Passion</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>06.11.1996</date>
 <longueur-vers>6</longueur-vers>
@@ -1299,8 +1297,8 @@ m'asseoir...</titre>
 <vers>Et mon c&#339;ur fut semblable au sang bleu de sa veine.</vers>
 </para></poeme><poeme id="lesamoureux_2">
 <titre>Les Amoureux</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>07.11.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -1365,7 +1363,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="amitie_2">
 <titre>Amitié</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Idéal</sous-cat>
 </categorie>
 <date>13.12.1996</date>
 <longueur-vers>4</longueur-vers>
@@ -1388,7 +1385,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="leparc_2">
 <titre>Le Parc</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
 <sous-cat>Jardin, paysage</sous-cat>
@@ -1414,7 +1410,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="nostalgie_2">
 <titre>Nostalgie</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>23.09.1996</date>
 <longueur-vers>8</longueur-vers>
@@ -1437,7 +1432,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="passevibrant_2">
 <titre>Passé vibrant</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>07.10.1996</date>
 <longueur-vers>6</longueur-vers>
@@ -1541,7 +1535,7 @@ m'asseoir...</titre>
 <sous-cat>Automne</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>13.10.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -1581,7 +1575,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="passage_2">
 <titre>Passage</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <categorie><c>Saisons</c>
 <sous-cat>Automne</sous-cat>
@@ -1624,7 +1618,7 @@ m'asseoir...</titre>
 <sous-cat>Automne</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>03.11.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -1756,7 +1750,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="mimosa_2">
 <titre>Mimosa</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>20.11.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -1794,8 +1788,8 @@ m'asseoir...</titre>
 </para></poeme><poeme id="borddhorizon_2">
 <titre>Bord d'horizon</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <date>11.10.1996</date>
 <longueur-vers>4</longueur-vers>
@@ -1843,7 +1837,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="letempsdesheures_2">
 <titre>Le temps des heures</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <date>22.11.1996</date>
 <longueur-vers>4</longueur-vers>
@@ -1870,7 +1864,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="coucherdesoleil_2">
 <titre>Coucher de soleil</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <date>28.11.1996</date>
 <longueur-vers>8</longueur-vers>
@@ -1889,7 +1883,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lesoleilestailleurs_2">
 <titre>Le soleil est ailleurs</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Révolte</sous-cat></categorie>
@@ -1965,7 +1959,7 @@ m'asseoir...</titre>
 <sous-cat>Automne</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>08.11.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -2013,7 +2007,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="delivrance_2">
 <titre>Délivrance</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>03.10.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -2148,7 +2142,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="pluieindienne_2">
 <titre>Pluie indienne</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
 <sous-cat>Eau douce</sous-cat>
@@ -2250,7 +2244,7 @@ m'asseoir...</titre>
 <sous-cat>Mer</sous-cat>
 </categorie>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <date>20.12.1996</date>
 <longueur-vers>12</longueur-vers>
@@ -2326,7 +2320,7 @@ m'asseoir...</titre>
 <poeme id="soleillevant_3">
 <titre>Soleil levant</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <date>07.02.1997</date>
 <longueur-vers>8</longueur-vers>
@@ -2350,7 +2344,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="calmedusoir_3">
 <titre>Calme du soir</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <date>05.03.1997</date>
 <longueur-vers>9</longueur-vers>
@@ -2596,7 +2590,7 @@ m'asseoir...</titre>
 <vers>De ces chimères clôt l'exode.</vers>
 </para></poeme><poeme id="ladanse_3">
 <titre>La Danse</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
@@ -2659,8 +2653,8 @@ m'asseoir...</titre>
 <vers>Sublime cueilleuse d'étoiles !</vers>
 </para></poeme><poeme id="lamoureuse_3">
 <titre>L'Amoureuse</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>21.02.1997</date>
 <longueur-vers>4</longueur-vers>
@@ -2719,7 +2713,7 @@ m'asseoir...</titre>
 <vers>Bohèmes.</vers>
 </para></poeme><poeme id="courtoisie_3">
 <titre>Courtoisie</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>24.02.1997</date>
@@ -2779,8 +2773,8 @@ m'asseoir...</titre>
 </para></poeme><poeme id="audeladunsourire_3">
 <titre>Au-delà d'un sourire</titre>
 <acrostiche>Au-delà d'un sourire</acrostiche>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <info>Premier acrostiche...</info>
 <date>03.04.1997</date>
@@ -2837,7 +2831,6 @@ m'asseoir...</titre>
 <sous-cat>Temps</sous-cat>
 </categorie>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>02.05.1997</date>
 <longueur-vers>8</longueur-vers>
@@ -2874,7 +2867,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lamitie_3">
 <titre>L'Amitié</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Idéal</sous-cat>
 </categorie>
 <date>21.02.1997</date>
 <longueur-vers>6</longueur-vers>
@@ -3062,7 +3054,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lucidite_3">
 <titre>Lucidité</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>14.02.1997</date>
 <longueur-vers>8</longueur-vers>
@@ -3134,7 +3126,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lespoir_3">
 <titre>L'espoir</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>28.02.1997</date>
 <longueur-vers>8</longueur-vers>
@@ -3182,7 +3174,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="saisonsdenvies_3">
 <titre>Saisons d'envies</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>21.03.1997</date>
 <longueur-vers>6</longueur-vers>
@@ -3300,7 +3292,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="jacinthe_3">
 <titre>Jacinthe</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>22.01.1997</date>
 <longueur-vers>6</longueur-vers>
@@ -3363,7 +3355,7 @@ m'asseoir...</titre>
 <sous-cat>Printemps</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>26.02.1997</date>
 <longueur-vers>12</longueur-vers>
@@ -3494,7 +3486,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="vergerenfleurs_3">
 <titre>Verger en fleurs</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>04.02.1997</date><longueur-vers>8</longueur-vers>
 <para>
@@ -3725,7 +3717,6 @@ m'asseoir...</titre>
 <sous-cat>Eté</sous-cat>
 </categorie>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>10.05.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -3978,8 +3969,8 @@ m'asseoir...</titre>
 <vers>Renaître un c&#339;ur de mai.</vers>
 </para></poeme><poeme id="autantledire_4">
 <titre>Autant le dire</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>03.08.1997</date><longueur-vers>8</longueur-vers>
 <acrostiche>Autant le dire</acrostiche>
@@ -4002,11 +3993,11 @@ m'asseoir...</titre>
 <vers>Et je te quitte quand tu dors.</vers>
 </para></poeme><poeme id="lamouramort_4">
 <titre>L'Amour à mort</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>22.06.1997</date><longueur-vers>8</longueur-vers>
 <para>
@@ -4034,8 +4025,8 @@ m'asseoir...</titre>
 <vers>Sur ton c&#339;ur, mon visage pâle.</vers>
 </para></poeme><poeme id="lamourtendre_4">
 <titre>L'amour tendre</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>10.08.1997</date><longueur-vers>6</longueur-vers>
 <acrostiche>L'amour tendre</acrostiche>
@@ -4058,8 +4049,8 @@ m'asseoir...</titre>
 <vers>Encres de nos amours.</vers>
 </para></poeme><poeme id="jesaistaimer_4">
 <titre>Je sais t'aimer</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>15.08.1997</date><longueur-vers>6</longueur-vers>
 <acrostiche>Je sais t'aimer</acrostiche>
@@ -4082,11 +4073,10 @@ m'asseoir...</titre>
 <vers>Reviens donc à jamais !</vers>
 </para></poeme><poeme id="jaimetevoir_4">
 <titre>J'aime te voir</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
-<categorie><c>Attitudes</c>
-<sous-cat>Portraits</sous-cat>
+<categorie><c>Portraits</c>
 </categorie>
 <date>16.08.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -4114,8 +4104,8 @@ m'asseoir...</titre>
 <vers>Tant la fleur que l'abeille !</vers>
 </para></poeme><poeme id="lamoureternel_4">
 <titre>L'amour... éternel</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>18.08.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -4149,8 +4139,8 @@ m'asseoir...</titre>
 <vers>Pour toujours tu m'aimais.</vers>
 </para></poeme><poeme id="lamante_4">
 <titre>L'Amante</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Ombres et lumières</c>
 <sous-cat>Lune</sous-cat>
@@ -4170,8 +4160,8 @@ m'asseoir...</titre>
 <vers>Et le lever du jour.</vers>
 </para></poeme><poeme id="lebaiser_4">
 <titre>Le Baiser</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
@@ -4197,8 +4187,8 @@ m'asseoir...</titre>
 </para></poeme><poeme id="maisaijesu_4">
 <titre>Mais ai-je su le dire ?</titre>
 <acrostiche>Mais ai-je su le dire ?</acrostiche>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>12.09.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -4226,7 +4216,7 @@ m'asseoir...</titre>
 <vers>En gestes baptismaux !</vers>
 </para></poeme><poeme id="serezvous_4">
 <titre>Serez-vous...</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>11.07.1997</date><longueur-vers>6</longueur-vers>
@@ -4255,7 +4245,7 @@ m'asseoir...</titre>
 <vers>De la félicité !</vers>
 </para></poeme><poeme id="atroptourner_4">
 <titre>A trop tourner</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
@@ -4283,8 +4273,8 @@ m'asseoir...</titre>
 <vers>Rejoins l'orchestre, ivresse bonne !</vers>
 </para></poeme><poeme id="deception_4">
 <titre>Déception</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>06.09.1997</date>
 <longueur-vers>8</longueur-vers>
@@ -4308,7 +4298,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="transparences_4">
 <titre>Transparences</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>07.07.1997</date>
 <longueur-vers>6</longueur-vers>
@@ -4407,7 +4397,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="amie_4">
 <titre>Amie</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Idéal</sous-cat>
 </categorie>
 <date>11.05.1997</date><longueur-vers>8</longueur-vers>
 <para>
@@ -4435,8 +4424,8 @@ m'asseoir...</titre>
 <vers>Vitrail sacré de la rosace.</vers>
 </para></poeme><poeme id="astudejareve_4">
 <titre>As-tu déjà rêvé ?</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>14.08.1997</date><longueur-vers>8</longueur-vers>
 <acrostiche>As-tu déjà rêvé ?</acrostiche>
@@ -4571,7 +4560,7 @@ m'asseoir...</titre>
 <sous-cat>Lune</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>11.09.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -4600,7 +4589,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="vivre_4"><longueur-vers>3</longueur-vers>
 <titre>Vivre</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>16.05.1997</date>
 <para>
@@ -4745,7 +4734,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="soleildumatin_4">
 <titre>Soleil du matin</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <date>23.07.1997</date><longueur-vers>8</longueur-vers>
 <para>
@@ -4768,7 +4757,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="matinales_4">
 <titre>Matinales</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Etre</sous-cat>
@@ -4965,7 +4954,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lapeche_4">
 <titre>La Pêche</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>23.08.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -5042,7 +5031,7 @@ m'asseoir...</titre>
 <categorie><c>Nature</c>
 <sous-cat>Eau douce</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>25.08.1997</date><longueur-vers>8</longueur-vers>
@@ -5104,8 +5093,8 @@ m'asseoir...</titre>
 <vers>Plaisir d'unique sorte !</vers>
 </para></poeme><poeme id="lorageducoeur_5">
 <titre>L'orage du c&#339;ur</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>04.01.1998</date><longueur-vers>12</longueur-vers>
 <para>
@@ -5127,8 +5116,8 @@ m'asseoir...</titre>
 <vers>Au troublant souvenir d'une si folle image.</vers>
 </para></poeme><poeme id="departamant_5">
 <titre>Le Départ de l'Amant</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>19.01.1998</date><longueur-vers>8</longueur-vers>
 <para>
@@ -5150,8 +5139,8 @@ m'asseoir...</titre>
 <vers>Avant de partir, au revoir !</vers>
 </para></poeme><poeme id="jaitropreve_5">
 <titre>J'ai trop rêvé de toi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Création</sous-cat>
@@ -5183,8 +5172,8 @@ m'asseoir...</titre>
 <vers>Irradiés de cette aventure !</vers>
 </para></poeme><poeme id="etreinsdunsourire_5">
 <titre>Etreins d'un sourire, ami</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
@@ -5222,8 +5211,8 @@ m'asseoir...</titre>
 <vers>Irradiés en nuit d'ivresse !</vers>
 </para></poeme><poeme id="paramour_5">
 <titre>Par amour</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>05.02.1998</date><longueur-vers>8</longueur-vers>
 <para>
@@ -5289,8 +5278,8 @@ m'asseoir...</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>15.02.1998</date><longueur-vers>8</longueur-vers>
 <para>
@@ -5319,7 +5308,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="attraverso_5">
 <titre>Attraverso il tuo cuore</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>16.02.1998</date><longueur-vers>8</longueur-vers>
 <acrostiche>Attraverso il tuo cuore</acrostiche>
@@ -5354,8 +5343,8 @@ m'asseoir...</titre>
 <vers>Et découvrir le sens de vivre !</vers>
 </para></poeme><poeme id="tumasdonne_5">
 <titre>Tu m'as donné ton bonheur</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>22.02.1998</date><longueur-vers>7</longueur-vers>
 <acrostiche>Tu m'as donné ton bonheur</acrostiche>
@@ -5391,10 +5380,9 @@ m'asseoir...</titre>
 </para></poeme><poeme id="souvenirdebonheur_5">
 <titre>Souvenir de bonheur</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>17.12.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -5417,7 +5405,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="sijaidusable_5">
 <titre>Si j'ai du sable</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Etre</sous-cat>
@@ -5513,8 +5500,8 @@ m'asseoir...</titre>
 <vers>Entendront-ils le cri du parchemin ?</vers>
 </para></poeme><poeme id="jepartirai_5">
 <titre>Je partirai</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>21.12.1997</date><longueur-vers>8</longueur-vers>
 <para>
@@ -5536,8 +5523,8 @@ m'asseoir...</titre>
 <vers>Car avec toi je partirai !</vers>
 </para></poeme><poeme id="moncoeurestlibre_5">
 <titre>Mon c&#339;ur est libre</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>05.12.1997</date><longueur-vers>8</longueur-vers>
 <acrostiche>Mon c&#339;ur est libre</acrostiche>
@@ -5566,7 +5553,7 @@ m'asseoir...</titre>
 <vers>Et c'est cela qui sut nous plaire !</vers>
 </para></poeme><poeme id="lafievre_5">
 <titre>La fièvre de t'aimer</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>25.12.1997</date><longueur-vers>6</longueur-vers>
@@ -5596,11 +5583,11 @@ m'asseoir...</titre>
 <vers>Ravit l'âme moirée.</vers>
 </para></poeme><poeme id="unaspina_5">
 <titre>Una spina nel cuore</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>21.01.1998</date><longueur-vers>7</longueur-vers>
 <acrostiche>Una spina nel cuore</acrostiche>
@@ -5629,8 +5616,8 @@ m'asseoir...</titre>
 <vers>Et cette douleur intime...</vers>
 </para></poeme><poeme id="lesembruns_5">
 <titre>Les embruns du c&#339;ur</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>21.11.1997</date><longueur-vers>6</longueur-vers>
 <longueur-vers>2</longueur-vers>
@@ -5666,7 +5653,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="larose_5">
 <titre>La Rose</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>05.03.1998</date><longueur-vers>7</longueur-vers>
 <acrostiche>Manger le coeur d'un Eros</acrostiche>
@@ -5702,7 +5689,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="noelestamour_5">
 <titre>Noël est amour</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Idéal</sous-cat>
 </categorie>
 <categorie><c>Saisons</c>
 <sous-cat>Hiver</sous-cat>
@@ -6008,7 +5994,7 @@ m'asseoir...</titre>
 <categorie><c>Portraits</c>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>20.10.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -6161,7 +6147,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lemarron_5">
 <titre>Le Marron</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>20.09.1997</date><longueur-vers>6</longueur-vers>
 <para>
@@ -6279,7 +6265,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="matinceleste_5">
 <titre>Matin céleste</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <date>16.12.1997</date>
 <para>
@@ -6612,7 +6598,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="onmacousu_6">
 <titre>On m'a cousu le c&#339;ur</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>05.04.1998</date>
 <acrostiche>On m'a cousu le c&#339;ur</acrostiche>
@@ -6668,7 +6654,7 @@ m'asseoir...</titre>
 <sous-cat>Animaux</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>20.05.1998</date>
 <para>
@@ -6680,7 +6666,7 @@ m'asseoir...</titre>
 <para>
 <vers>Au mariage des couleurs</vers>
 <vers>Je t'immortalise, fragile</vers>
-<vers>Petit pétale  au creux des fleurs</vers>
+<vers>Petit pétale  au creux des fleurs</vers>
 <vers>Qui murmure un bonheur agile.</vers>
 </para>
 <para>
@@ -6766,7 +6752,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="viemanege_6">
 <titre>La vie est comme un manège</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>26.03.1998</date>
 <acrostiche>La vie est comme un manège</acrostiche>
@@ -6992,7 +6978,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="surpapierglace_6">
 <titre>Sur papier glacé</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <categorie><c>Portraits</c>
 </categorie>
@@ -7040,7 +7025,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="poureffacer_6">
 <titre>Pour effacer</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>07.04.1998</date>
 <para>
@@ -7216,7 +7201,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="tumasconquise_6">
 <titre>Tu m'as conquise</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>18.05.1998</date>
 <para>
@@ -7304,7 +7288,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="unregard_6">
 <titre>Un regard</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>26.04.1998</date>
 <acrostiche>Un regard</acrostiche>
@@ -7358,8 +7341,8 @@ m'asseoir...</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Mouvement</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>29.03.1998</date>
 <acrostiche>L'amor ti vieta</acrostiche>
@@ -7450,7 +7433,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lescerisiersdavril_6">
 <titre>Les Cerisiers d'avril</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>10.04.1998</date>
 <para>
@@ -7479,7 +7462,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="enmai_6">
 <titre>En mai</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>01.05.1998</date>
 <para>
@@ -7558,8 +7541,8 @@ m'asseoir...</titre>
 <vers>Ravi son rire au tien charmé !</vers>
 </para></poeme><poeme id="lalanguedelamour_6">
 <titre>La langue de l'amour</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>13.05.1998</date>
 <acrostiche>La langue de l'amour</acrostiche>
@@ -7618,7 +7601,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="lesecretdelarbre_6">
 <titre>Le secret de l'arbre</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>24.05.1998</date>
 <acrostiche>Le secret de l'arbre</acrostiche>
@@ -7671,7 +7654,6 @@ m'asseoir...</titre>
 </para></poeme><poeme id="nostalgiquedetoi_6">
 <titre>Nostalgique de toi</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>12.03.1998</date>
 <acrostiche>Nostalgique de toi</acrostiche>
@@ -7700,8 +7682,8 @@ m'asseoir...</titre>
 <vers>Image imaginaire à l'ombre d'amitié.</vers>
 </para></poeme><poeme id="toncoeur_6">
 <titre>Ton c&#339;ur</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>08.05.1998</date>
 <para>
@@ -7743,8 +7725,8 @@ m'asseoir...</titre>
 <para>
 </para></poeme><poeme id="quandjedistonnom_6">
 <titre>Quand je dis ton nom</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>27.03.1998</date>
 <acrostiche>Quand je dis ton nom</acrostiche>
@@ -7773,8 +7755,8 @@ m'asseoir...</titre>
 <vers>Meurtri qu'un c&#339;ur émerveillait.</vers>
 </para></poeme><poeme id="jenesaistoublier_6">
 <titre>Je ne sais t'oublier</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>11.05.1998</date>
 <acrostiche>Je ne sais t'oublier</acrostiche>
@@ -7826,8 +7808,8 @@ m'asseoir...</titre>
 <vers>Que pour demeure où je dormais.</vers>
 </para></poeme><poeme id="pourquoirever_6">
 <titre>Pourquoi rêver</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>24.05.1998</date>
 <para>
@@ -7927,8 +7909,8 @@ m'asseoir...</titre>
 <info>Mois obsédés, amour éperdu. Juin et juillet 1998</info>
 <poeme id="surlestade_7">
 <titre>Sur le stade d'aimer</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>04.07.1998</date>
 <acrostiche>Sur le stade d'aimer</acrostiche>
@@ -7951,8 +7933,8 @@ m'asseoir...</titre>
 <vers>Riront larmes au temps vaincues.</vers>
 </para></poeme><poeme id="emeusmoi_7">
 <titre>Emeus-moi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>15.07.1998</date>
 <acrostiche>Emeus-moi</acrostiche>
@@ -8045,8 +8027,8 @@ m'asseoir...</titre>
 <vers>Intime, belle, à l'unisson.</vers>
 </para></poeme><poeme id="unparmidautres_7">
 <titre>Un parmi d'autres</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>06.07.1998</date>
 <acrostiche>Un parmi d'autres</acrostiche>
@@ -8071,7 +8053,6 @@ m'asseoir...</titre>
 <sous-cat>Création</sous-cat>
 </categorie>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <date>17.07.1998</date>
 <acrostiche>Ce jour-là tu disais</acrostiche>
@@ -8100,8 +8081,8 @@ m'asseoir...</titre>
 <vers>Seras-tu d'un adieu le dernier mot du livre ?</vers>
 </para></poeme><poeme id="lamorebreve_7">
 <titre>L'amor è breve sogno</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>05.07.1998</date>
 <acrostiche>L'amor è breve sogno</acrostiche>
@@ -8132,8 +8113,8 @@ m'asseoir...</titre>
 <info>D'après la chanson d'Emma Shapplin</info>
 </poeme><poeme id="daimerlenvie_7">
 <titre>D'aimer l'envie</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Création</sous-cat>
@@ -8155,8 +8136,8 @@ m'asseoir...</titre>
 <vers>En débit d'immédiat présage.</vers>
 </para></poeme><poeme id="jattendslamour_7">
 <titre>J'attends l'amour</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>07.07.1998</date>
 <acrostiche>J'attends l'amour</acrostiche>
@@ -8236,8 +8217,8 @@ m'asseoir...</titre>
 <vers>Sera le plus doux des voyages.</vers>
 </para></poeme><poeme id="jeterlancre_7">
 <titre>Jeter l'ancre de ton départ...</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
 <sous-cat>Mer</sous-cat>
@@ -8339,8 +8320,8 @@ m'asseoir...</titre>
 <vers>Rêve tombé sur le chemin tournant.</vers>
 </para></poeme><poeme id="amantdhier_7">
 <titre>Amant d'hier, de demain</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>14.07.1998</date>
 <acrostiche>Amant d'hier, de demain</acrostiche>
@@ -8382,7 +8363,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="commeunautrereve_7">
 <titre>Comme un autre rêve</titre>
 <categorie><c>Nature</c>
-<sous-cat>mer</sous-cat>
+<sous-cat>Mer</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Etre</sous-cat>
@@ -8408,8 +8389,8 @@ m'asseoir...</titre>
 <vers>En ta lumière s'en allait.</vers>
 </para></poeme><poeme id="lieeatoi_7">
 <titre>Liée à toi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>17.07.1998</date>
 <acrostiche>Liée à toi</acrostiche>
@@ -8427,7 +8408,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="hijodelaluna_7">
 <titre>Hijo de la luna</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>18.07.1998</date>
 <acrostiche>Hijo de la luna</acrostiche>
@@ -8451,10 +8432,10 @@ m'asseoir...</titre>
 </para></poeme><poeme id="acereve_7">
 <titre>A ce rêve</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>18.07.1998</date>
 <acrostiche>A ce rêve tu dis</acrostiche>
@@ -8516,7 +8497,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="jinventerai_7">
 <titre>J'inventerai ma vie</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>07.07.1998</date>
 <acrostiche>J'inventerai ma vie</acrostiche>
@@ -8584,7 +8565,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="aubemuraille_7">
 <titre>Aube muraille</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <date>05.07.1998</date>
 <acrostiche>Aube muraille</acrostiche>
@@ -8632,7 +8613,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="priereamarie_7">
 <titre>Prière à Marie</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>11.07.1998</date>
 <acrostiche>Prière à Marie</acrostiche>
@@ -8694,7 +8675,7 @@ m'asseoir...</titre>
 </para></poeme><poeme id="larosesecret_7">
 <titre>La rose : secret</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Création</sous-cat>
@@ -8740,24 +8721,24 @@ m'asseoir...</titre>
 <date>08.07.1998</date>
 <acrostiche>Courir à perte d'âme</acrostiche>
 <para>
-<vers>Courir  à  perte   d'âme,
-effleurer   l'infini,</vers>
-<vers>Offrir  caresse   au  vent
-ri   d'un  mot   réciproque,</vers>
-<vers>Ululer    les
-couleurs,   trouver
-sans    pinceau   ni</vers>
+<vers>Courir  à  perte   d'âme,
+effleurer   l'infini,</vers>
+<vers>Offrir  caresse   au  vent
+ri   d'un  mot   réciproque,</vers>
+<vers>Ululer    les
+couleurs,   trouver
+sans    pinceau   ni</vers>
 <vers>Rime un roman, nouvelle étreinte d'une
 époque...</vers>
-<vers>Inventer   les  chansons
-d'un  souffle   de  vitrail,</vers>
+<vers>Inventer   les  chansons
+d'un  souffle   de  vitrail,</vers>
 <vers>Rêver que l'on peut vivre au travers de
 naissance</vers>
-<vers>Apprise   d'un
-chemin   menant   loin
-du   bercail :</vers>
-<vers>Perdre   l'âme   à
-courir,  étonner  l'existence.</vers>
+<vers>Apprise   d'un
+chemin   menant   loin
+du   bercail :</vers>
+<vers>Perdre   l'âme   à
+courir,  étonner  l'existence.</vers>
 </para>
 <info>Cet acrostiche très particulier, par jeu, se veut croisé, sur la première lettre
 du poème puis celle de la césure... Courir à p - erte d'âme...</info>
@@ -9139,8 +9120,8 @@ Même un seul mot</vers>
 <vers>Saura charmer soleil d'été.</vers>
 </para></poeme><poeme id="alafolie_8">
 <titre>A la folie</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>27.07.1998</date>
 <acrostiche>A la folie</acrostiche>
@@ -9155,8 +9136,8 @@ Même un seul mot</vers>
 <vers>Encor de vivre en cette image.</vers>
 </para></poeme><poeme id="dunsourire_8">
 <titre>D'un sourire</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>28.07.1998</date>
 <acrostiche>D'un sourire</acrostiche>
@@ -9173,8 +9154,8 @@ Même un seul mot</vers>
 <vers>En moi que ta lèvre caresse ?</vers>
 </para></poeme><poeme id="monamant_8">
 <titre>Mon amant</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>28.07.1998</date>
 <acrostiche>Mon amant</acrostiche>
@@ -9223,8 +9204,8 @@ Même un seul mot</vers>
 <vers>Trouble de joie une existence !</vers>
 </poeme><poeme id="jecroisentoi_8">
 <titre>Je crois en toi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>23.07.1998</date>
 <acrostiche>Je crois en toi</acrostiche>
@@ -9277,8 +9258,8 @@ Même un seul mot</vers>
 <vers>Immortels mots en farandole.</vers>
 </para></poeme><poeme id="adieuanous_8">
 <titre>A Dieu, à nous</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>24.07.1998</date>
 <acrostiche>A Dieu, à nous</acrostiche>
@@ -9295,8 +9276,8 @@ Même un seul mot</vers>
 <vers>serre-moi d'un regard, ô songe qui m'enchante !</vers>
 </para></poeme><poeme id="ilpleut_8">
 <titre>Il pleut sur ta figure...</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>27.07.1998</date>
 <acrostiche>Il pleut sur ta figure...</acrostiche>
@@ -9344,8 +9325,8 @@ Même un seul mot</vers>
 <categorie><c>Philosophie</c>
 <sous-cat>Apprentissage</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>29.07.1998</date>
 <acrostiche>Je ne crois pas...</acrostiche>
@@ -9387,8 +9368,8 @@ Même un seul mot</vers>
 <categorie><c>Philosophie</c>
 <sous-cat>Révolte</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>31.07.1998</date>
 <acrostiche>Quand tu grandis</acrostiche>
@@ -9433,8 +9414,8 @@ Même un seul mot</vers>
 <vers>Soufflé des pages du grand livre.</vers>
 </para></poeme><poeme id="miroirsdetoi_8">
 <titre>Miroirs de toi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>03.08.1998</date>
 <acrostiche>Miroirs de toi</acrostiche>
@@ -9624,7 +9605,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="dislaube_8">
 <titre>Dis l'aube</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
@@ -9812,8 +9793,8 @@ Même un seul mot</vers>
 <vers>Etreinte d'un printemps troublé.</vers>
 </para></poeme><poeme id="elleacru_8">
 <titre>Elle a cru</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>03.09.1998</date>
 <acrostiche>Elle a cru</acrostiche>
@@ -9830,8 +9811,8 @@ Même un seul mot</vers>
 <vers>Unie au parfum qui l'arrose.</vers>
 </para></poeme><poeme id="jecroisenlui_8">
 <titre>Je crois en lui</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>05.09.1998</date>
 <acrostiche>Je crois en lui</acrostiche>
@@ -9854,8 +9835,8 @@ Même un seul mot</vers>
 <vers>Il se traverse sans renier.</vers>
 </para></poeme><poeme id="quandledestin_8">
 <titre>Quand le destin dit...</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>07.09.1998</date>
 <categorie><c>Philosophie</c>
@@ -9909,8 +9890,8 @@ Même un seul mot</vers>
 <vers>Riche d'aimer l'âme est prophète.</vers>
 </para></poeme><poeme id="unebague_8">
 <titre>Une bague</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>12.09.1998</date>
 <acrostiche>Une bague</acrostiche>
@@ -9927,11 +9908,11 @@ Même un seul mot</vers>
 <vers>Entrelaçons alors notre c&#339;ur germinal.</vers>
 </para></poeme><poeme id="offremoi_8">
 <titre>Offre-moi des roses</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>12.09.1998</date>
 <acrostiche>Offre-moi des roses</acrostiche>
@@ -9985,7 +9966,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="liberer_8">
 <titre>Libérer la vie</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>26.07.1998</date>
 <acrostiche>Libérer la vie</acrostiche>
@@ -10012,7 +9993,7 @@ Même un seul mot</vers>
 <sous-cat>Animaux</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>10.08.1998</date>
 <acrostiche>La colombe s'envole</acrostiche>
@@ -10096,7 +10077,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="danstoncoeur_8">
 <titre>Dans ton c&#339;ur, Dieu</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>21.07.1998</date>
 <acrostiche>Dans ton c&#339;ur, Dieu</acrostiche>
@@ -10120,7 +10101,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="diomhachiamato_8">
 <titre>Dio m'ha chiamato</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>19.08.1998</date>
 <acrostiche>Dio m'ha chiamato</acrostiche>
@@ -10143,7 +10124,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="cathedrale_8">
 <titre>Cathédrale</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>01.09.1998</date>
 <acrostiche>Cathédrale</acrostiche>
@@ -10270,7 +10251,7 @@ Même un seul mot</vers>
 <acrostiche>Soleil d'hiver</acrostiche>
 <para>
 <vers>Sur les routes désertes,</vers>
-<vers>"Ohé ! " chante l'hiver,</vers>
+<vers>"Ohé ! " chante l'hiver,</vers>
 <vers>Les lèvres entrouvertes,</vers>
 <vers>Et seul le sapin vert.</vers>
 </para>
@@ -10288,10 +10269,10 @@ Même un seul mot</vers>
 </para></poeme><poeme id="silesroses_9">
 <titre>Si les roses fanent</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>25.11.1998</date>
 <acrostiche>Si les roses fanent</acrostiche>
@@ -10324,7 +10305,7 @@ Même un seul mot</vers>
 <sous-cat>Automne</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>18.09.1998</date>
 <acrostiche>Un jour né déjà mort</acrostiche>
@@ -10444,7 +10425,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="leverdunjour_9">
 <titre>Lever d'un jour</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
 <sous-cat>Mer</sous-cat>
@@ -10508,10 +10489,10 @@ Même un seul mot</vers>
 </para></poeme><poeme id="marchervers_9">
 <titre>Marcher vers la vie</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>10.11.1998</date>
 <acrostiche>Marcher vers la vie</acrostiche>
@@ -10535,7 +10516,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="genese_9">
 <titre>Genèse</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Création</sous-cat>
@@ -10562,7 +10543,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="ange_9">
 <titre>Ange</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>11.11.1998</date>
 <acrostiche>Ange</acrostiche>
@@ -10777,7 +10758,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="noelenchante_9">
 <titre>Noël enchanté</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>16.12.1998</date>
 <acrostiche>Noël enchanté</acrostiche>
@@ -10844,7 +10825,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="sablevie_9">
 <titre>Le sable, la vie</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>10.10.1998</date>
 <acrostiche>Le sable, la vie</acrostiche>
@@ -11063,7 +11044,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="quevivre_9">
 <titre>Que vivre</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <categorie><c>Ombres et lumières</c>
 <sous-cat>Nuit</sous-cat>
@@ -11135,8 +11116,8 @@ Même un seul mot</vers>
 <vers>A l'aube où le mystère absout.</vers>
 </para></poeme><poeme id="reverdetoi_9">
 <titre>Rêver de toi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Création</sous-cat>
@@ -11156,8 +11137,8 @@ Même un seul mot</vers>
 <vers>Illusion brise les Tables.</vers>
 </para></poeme><poeme id="jetattendrai_9">
 <titre>Je t'attendrai</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <acrostiche>Je t'attendrai</acrostiche>
 <categorie><c>Philosophie</c>
@@ -11207,8 +11188,8 @@ Même un seul mot</vers>
 <vers>Rêve sans ciel, transfuge...</vers>
 </para></poeme><poeme id="jairevedetoi_9">
 <titre>J'ai rêvé de toi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>23.10.1998</date>
 <acrostiche>J'ai rêvé de toi</acrostiche>
@@ -11231,8 +11212,8 @@ Même un seul mot</vers>
 <vers>Impatient, mystique !</vers>
 </para></poeme><poeme id="lemasque_9">
 <titre>Le masque</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <date>24.10.1998</date>
 <acrostiche>Le masque</acrostiche>
@@ -11279,7 +11260,7 @@ Même un seul mot</vers>
 <vers>Roule en l'écume, absence...</vers>
 </para></poeme><poeme id="unevierge_9">
 <titre>Une vierge</titre>
-<categorie><c>Désir, amour</c>
+<categorie><c>Amour</c>
 <sous-cat>Femme</sous-cat>
 </categorie>
 <date>31.10.1998</date>
@@ -11356,7 +11337,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="ellevit_9">
 <titre>Elle vit</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>01.12.1998</date>
 <para>
@@ -11399,7 +11380,7 @@ Même un seul mot</vers>
 <sous-cat>Mer</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>03.01.1999</date>
 <acrostiche>Sur l'océan : revivre</acrostiche>
@@ -11432,7 +11413,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="marieprie_10">
 <titre>Marie, prie pour moi</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>04.01.1999</date>
 <acrostiche>Marie, prie pour moi</acrostiche>
@@ -11464,7 +11445,7 @@ Même un seul mot</vers>
 </para></poeme><poeme id="cathedralebelle_10">
 <titre>La cathédrale est belle</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>24.01.1999</date>
 <acrostiche>La cathédrale est belle</acrostiche>
@@ -11496,13 +11477,12 @@ Même un seul mot</vers>
 <deuxieme>de lumières</deuxieme></acrostiche>
 <titre>Cathédrale de lumières</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>16.02.1999</date>
 <para>
 <vers>Cathédrale de lumières,</vers>
-<vers>
-Dans la foi de mes prières</vers>
+<vers>Dans la foi de mes prières</vers>
 <vers>A ton vitrail flamboyant</vers>
 <vers>Espérance en te voyant !</vers>
 <vers>Tu berces douce l'ogive</vers>
@@ -11526,7 +11506,7 @@ Dans la foi de mes prières</vers>
 </para></poeme><poeme id="priere_10">
 <titre>Prière</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>17.02.1999</date>
 <acrostiche>Ave Maria</acrostiche>
@@ -11542,7 +11522,7 @@ Dans la foi de mes prières</vers>
 </para></poeme><poeme id="nonmorro_10">
 <titre>Ave Maria non morro</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>04.03.1999</date>
 <acrostiche>Ave Maria non morro</acrostiche>
@@ -11775,7 +11755,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <sous-cat>Etre</sous-cat>
 </categorie>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <date>18.02.1999</date>
 <para>
@@ -11806,7 +11786,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="liberte_10">
 <titre>Liberté</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>03.03.1999</date>
 <acrostiche>A fleur</acrostiche>
@@ -11820,7 +11800,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="fragilite_10">
 <titre>Fragilité</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>24.03.1999</date>
 <para>
@@ -11843,7 +11823,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="netreajamais_10">
 <titre>N'être à jamais</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>01.01.1998</date>
 <acrostiche>N'être à jamais</acrostiche>
@@ -11913,7 +11893,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="lanuitseleve_10">
 <titre>La nuit se lève</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin de jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <date>26.01.1999</date>
 <acrostiche>La nuit se lève</acrostiche>
@@ -12050,7 +12030,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="celestesoir_10">
 <titre>Céleste soir</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <categorie><c>Ville</c>
 </categorie>
@@ -12217,7 +12197,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <sous-cat>Création</sous-cat>
 </categorie>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <date>20.03.1999</date>
 <titre>Miroirs, mirages</titre>
@@ -12238,8 +12218,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Soumis au temps qui les féconde.</vers>
 </para></poeme><poeme id="quetavolonte_10">
 <titre>Que ta volonté</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>30.12.1998</date>
 <acrostiche>Que ta volonté</acrostiche>
@@ -12278,8 +12258,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Un soir trop tôt, le matin déjà tard...</vers>
 </para></poeme><poeme id="labandon_10">
 <titre>L'Abandon</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>05.02.1999</date>
 <acrostiche>L'Abandon</acrostiche>
@@ -12296,8 +12276,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>N'entends-tu pas ce c&#339;ur, ombre à chaque seconde ?</vers>
 </para></poeme><poeme id="jeublanc_10">
 <titre>Jeu blanc</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>08.02.1999</date>
 <acrostiche>Jeu blanc</acrostiche>
@@ -12314,8 +12294,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Caresse, frisson, jeu de notre intime trace.</vers>
 </para></poeme><poeme id="dechaine_10">
 <titre>Déchaîné</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>09.02.1999</date>
 <acrostiche>Déchaîné</acrostiche>
@@ -12333,7 +12313,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <deuxieme>le bonheur</deuxieme>
 </acrostiche>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>16.02.1999</date>
 <acrostiche>J'ai retrouvé le bonheur</acrostiche>
@@ -12380,8 +12360,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Etreignent : le geste s'envoûte.</vers>
 </para></poeme><poeme id="situpouvais_10">
 <titre>Si tu pouvais</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>03.03.1999</date>
 <para>
@@ -12409,8 +12389,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Ce jour je t'aimerai !</vers>
 </para></poeme><poeme id="ensemble_10">
 <titre>Ensemble</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
@@ -12431,7 +12411,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="amourtheme_10">
 <titre>Amour, thème : éveils</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>16.03.1999</date>
 <acrostiche>Amour, thème : éveils</acrostiche>
@@ -12493,7 +12473,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="coeursmortels_10">
 <titre>C&#339;urs mortels</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>29.03.1999</date>
 <acrostiche>Quando il giorno sarà nostro</acrostiche>
@@ -12542,7 +12522,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <poeme id="quando_11">
 <titre>Quando la vita dice</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 <sous-cat>Temps</sous-cat>
 </categorie>
 <date>30.03.1999</date>
@@ -12593,7 +12573,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="cantique_11">
 <titre>Cantique de vie</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuser</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>16.04.1999</date>
 <acrostiche>Il tuo cantico da la vita</acrostiche>
@@ -12630,7 +12610,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="dieusauveur_11">
 <titre>Dieu, mon Sauveur !</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>17.04.1999</date>
 <acrostiche>Dieu, mon Sauveur !</acrostiche>
@@ -12674,8 +12654,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <sous-cat>Musique, chant</sous-cat>
 </categorie>
 <acrostiche>A tâtons</acrostiche>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <date>20.04.1999</date>
 <para>
@@ -12722,7 +12702,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="audelavoyage_11"><date>07.05.1999</date>
 <titre>Au-delà : voyage</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Au-delà : voyage</acrostiche>
 <para>
@@ -12772,8 +12752,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <sous-cat>Mouvement</sous-cat>
 </categorie>
 <acrostiche>Infinir, s'unir</acrostiche>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <para>
 <vers>Inventeurs, infinissons</vers>
@@ -12798,8 +12778,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <sous-cat>Mouvement</sous-cat>
 </categorie>
 <acrostiche>Danse, amour</acrostiche>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <para>
 <vers>Danse lascive, un corps</vers>
@@ -12816,8 +12796,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme>
 <poeme id="unrendezvous_11"><date>21.05.1999</date>
 <titre> Un rendez-vous</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <acrostiche>Un rendez-vous</acrostiche>
 <para>
@@ -12842,8 +12822,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <categorie><c>Philosophie</c>
 <sous-cat>Temps</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <date>03.04.1999</date>
 <acrostiche>Una pagina si torna</acrostiche>
@@ -13037,7 +13017,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="terre_11">
 <titre>Terre</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <date>27.04.1999</date>
 <acrostiche>O terra</acrostiche>
@@ -13137,7 +13117,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Sur les troncs aux ch&#339;urs troublants.</vers>
 </para></poeme><poeme id="espritmajeur_11"><date>05.05.1999</date>
 <titre>Esprit majeur</titre>
-<categorie><c>Philosophie</c>
+<categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
 </categorie>
 <acrostiche>Esprit majeur</acrostiche>
@@ -13229,7 +13209,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="aveprega_11"><date>17.05.1999</date>
 <titre>Ave Maria prega per me</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Ave Maria prega per me</acrostiche>
 <info>"Ave Maria prie pour moi", d'après une chanson de Pavaroti</info>
@@ -13266,7 +13246,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </categorie>
 <acrostiche>Vive</acrostiche>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <para>
 <vers>Vois cette vie : en son ivresse</vers>
@@ -13370,7 +13350,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="voileblanc_11">
 <titre>Un voile blanc</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>24.04.1999</date>
 <acrostiche>Un voile blanc</acrostiche>
@@ -13461,7 +13441,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <titre>Née ainsi</titre>
 <categorie><c>Nature</c>
 <sous-cat>Jardin, paysage</sous-cat>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <acrostiche>Née ainsi</acrostiche>
 <para>
@@ -13494,7 +13474,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="mainouveau_11">
 <titre>Le mai nouveau</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>30.04.1999</date>
 <acrostiche>Le mai nouveau</acrostiche>
@@ -13521,7 +13501,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="mai_11">
 <titre>Mai</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>01.05.1999</date>
 <acrostiche>Un an de plus</acrostiche>
@@ -13542,7 +13522,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="parfummuguet_11">
 <titre>Parfum muguet</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <date>01.05.1999</date>
 <acrostiche>Parfum muguet</acrostiche>
@@ -13582,7 +13562,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="cieltu_11"><date>07.05.1999</date>
 <titre>Le ciel s'est tu</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin de jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <acrostiche>Le ciel s'est tu</acrostiche>
 <para>
@@ -13601,10 +13581,10 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="parfum_11"><date>10.05.1999</date>
 <titre>Parfum</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin de jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <acrostiche>Le parfum du soir</acrostiche>
 <para>
@@ -13651,8 +13631,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <info>Quelques accords plus vifs, quelques rêves plus doux. De mai à juillet 1999</info>
 <poeme id="aunomducoeur_12"><date>30.05.1999</date>
 <titre>Au nom du c&#339;ur</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <acrostiche>Au nom du c&#339;ur</acrostiche>
 <para>
@@ -13676,8 +13656,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Rêvez nos c&#339;urs, nos corps amis !</vers>
 </para></poeme><poeme id="reveunelarme_12"><date>06.06.1999</date>
 <titre>Rêve, une larme</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <acrostiche>Rêve, une larme</acrostiche>
 <para>
@@ -13699,8 +13679,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Etranger, brisé, veule.</vers>
 </para></poeme><poeme id="baisercadeau_12"><date>06.06.1999</date>
 <titre>Baiser, cadeau</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
@@ -13724,7 +13704,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="leseulparfum_12"><date>07.06.1999</date>
 <titre>Le seul parfum</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Le seul parfum</acrostiche>
 <para>
@@ -13748,8 +13728,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <titre>Il cavalier' d'amore</titre>
 <categorie><c>Portraits</c>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <acrostiche>Il cavalier' d'amore</acrostiche>
 <info>"Le chevalier d'amour" en italien.</info>
@@ -13888,8 +13868,8 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Retrouve, autre, le sien...</vers>
 </para></poeme><poeme id="tesentir_12"><date>22.07.1999</date>
 <titre>Te sentir</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
@@ -13909,7 +13889,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="pelerinage_12"><date>26.05.1999</date>
 <titre>Pèlerinage</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Bijou sacre unions</acrostiche>
 <para>
@@ -13980,7 +13960,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="pregare_12"><date>17.06.1999</date>
 <titre>Pregare, la fede mia</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Pregare, la fede mia</acrostiche>
 <info>"Prier, ma foi" en italien.</info>
@@ -14060,7 +14040,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="stabatmater_12"><date>02.07.1999</date>
 <titre>Stabat Mater</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <categorie><c>Portraits</c>
 </categorie>
@@ -14373,7 +14353,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="aubedelanuit_12"><date>17.07.1999</date>
 <titre>Aube de la nuit</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <acrostiche>Aube de la nuit</acrostiche>
 <para>
@@ -14626,7 +14606,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 </para></poeme><poeme id="tilleuls_12"><date>04.07.1999</date>
 <titre>Tilleuls</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <acrostiche>Tilleuls</acrostiche>
 <para>
@@ -14659,7 +14639,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <translation lang="en">toyouglory</translation>
 <titre>A Toi la gloire</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>A Toi la gloire</acrostiche>
 <para>
@@ -14682,7 +14662,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers></vers>
 </para></poeme><poeme id="sijeprie_13"><date>28.08.1999</date><titre>Si je prie</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Si je prie</acrostiche>
 <para>
@@ -14699,7 +14679,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers></vers>
 </para></poeme><poeme id="jevoussalue_13"><date>10.09.1999</date><titre>Je vous salue, amour</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Je vous salue, amour</acrostiche>
 <para>
@@ -14728,7 +14708,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers></vers>
 </para></poeme><poeme id="germedespoir_13"><date>19.08.1999</date><titre>Germe d'espoir</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Germe d'espoir</acrostiche>
 <para>
@@ -14748,7 +14728,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Offre à nos âmes, plus vivant,</vers>
 <vers>Intime énergie, et devant,</vers>
 <vers>Reine, le souffle de prière.</vers>
-<vers></vers>
 </para></poeme><poeme id="monterlavoie_13"><date>29.08.1999</date><titre>Monter la voie</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
@@ -14803,7 +14782,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers></vers>
 </para></poeme><poeme id="jiraiparcechemin_13"><date>08.09.1999</date><titre>J'irai par ce chemin</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>J'irai par ce chemin</acrostiche>
 <para>
@@ -14832,7 +14811,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers></vers>
 </para></poeme><poeme id="prendsmoncoeur_13"><date>11.09.1999</date><titre>Prends mon c&#339;ur</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Prends mon c&#339;ur</acrostiche>
 <para>
@@ -14854,7 +14833,6 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Echappés bois, encens, or, argent, pierre, cuivre...</vers>
 <vers>Un culte ne sied guère à l'espace promis.</vers>
 <vers>Raisonnable, homme, ciel, vent, fleuve, feu, fourmis.</vers>
-<vers></vers>
 </para></poeme><poeme id="naitrecondamne_13"><date>11.09.1999</date><titre>Naître condamné</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Temps</sous-cat>
@@ -14875,10 +14853,9 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Monte du cimetière, et la terre murmure :</vers>
 <vers>"Nous croyons que le temps sourit au nouveau-né,</vers>
 <vers>Et souvent l'oublions : chacun naît condamné".</vers>
-<vers></vers>
 </para></poeme><poeme id="cantodellanima_13"><date>19.09.1999</date><titre>Canto dell'anima</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
@@ -14907,7 +14884,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers></vers>
 </para></poeme><poeme id="unangelo_13"><date>21.09.1999</date><titre>Un angelo</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Un angelo</acrostiche>
 <para>
@@ -14991,14 +14968,17 @@ comédie musicale "Notre-Dame de Paris")</info>
 <vers>Le soleil trop brûlant plus vieux soudain, plus chaste</vers>
 <vers>Recouvrira le c&#339;ur, et son ombre plus vaste</vers>
 <vers>Amènera... sans bruit porte close au linteau.</vers>
+</para><para>
 <vers>Originelle, odeur s'épanche et puis se livre:</vers>
 <vers>Percé de mille traits le sol brille, son or</vers>
 <vers>Mène le souvenir sans importance encor</vers>
 <vers>Léger réconcilier le ciel à la terre ivre.</vers>
+    </para><para>
 <vers>Entre l'herbe et la fleur l'oiseau dissimulé,</vers>
 <vers>Un merle familier se douche à grands coups d'aile:</vers>
 <vers>Noir, vif, pour vous séduire, ô merlette infidèle !</vers>
 <vers>Invitez la parade à son bec emperlé !</vers>
+    </para><para>
 <vers>Au-delà du jardin les sous-bois sur la mousse</vers>
 <vers>Eveillent l'araignée: un filet sans poisson</vers>
 <vers>Déchire sa finesse aux insectes qui font</vers>
@@ -15130,7 +15110,7 @@ comédie musicale "Notre-Dame de Paris")</info>
 <sous-cat>Mer</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Cresce d'autunno</acrostiche>
 <info>"Croix d'automne" en italien. La correspondance entre les mots de l'acrostiche et
@@ -15191,10 +15171,10 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="horus_13"><date>13.10.1999</date><titre>Horus</titre>
 <categorie><c>Nature</c>
 <sous-cat>Animaux</sous-cat>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>L'amor e tu</acrostiche>
 <info>"L'amour et toi", en portuguais, reprise du titre d'une chanson.</info>
@@ -15304,7 +15284,7 @@ le contenu des paragraphes est inversée.</info>
 <info>"Arc-en-ciel prière" en italien. Inspiré en partie par une chanson d'A. Bocelli : "Ave Maria no morro".</info>
 <categorie>
 <c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <categorie><c>Portraits</c></categorie>
 <para>
@@ -15361,7 +15341,6 @@ le contenu des paragraphes est inversée.</info>
 <translation lang="en">youappearedtomethere</translation>
 <titre>Tu m'apparus là</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <acrostiche>Tu m'apparus là</acrostiche>
 <para>
@@ -15387,7 +15366,7 @@ le contenu des paragraphes est inversée.</info>
 <sous-cat>Ciel</sous-cat>
 </categorie>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <acrostiche>Le ciel sait</acrostiche>
 <para>
@@ -15477,7 +15456,7 @@ le contenu des paragraphes est inversée.</info>
 <sous-cat>Temps</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <acrostiche>Non amor più</acrostiche>
 <info>"Plus d'amour" en italien.</info>
@@ -15494,8 +15473,8 @@ le contenu des paragraphes est inversée.</info>
 <vers>Un parfum fané sans détresse.</vers>
 </para></poeme><poeme id="pluspresplusvrai_13"><date>07.09.1999</date>
 <titre>Plus près, plus vrai</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <acrostiche>Plus près, plus vrai</acrostiche>
 <para>
@@ -15552,7 +15531,7 @@ le contenu des paragraphes est inversée.</info>
 <sous-cat>Automne</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>L'Octobre</acrostiche>
 <para>
@@ -15591,10 +15570,10 @@ le contenu des paragraphes est inversée.</info>
 <translation lang="en">raisingdream</translation>
 <titre>Songe d'un levant</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Songe d'un levant</acrostiche>
 <para><vers>Sur la douceur de mes paupières,</vers>
@@ -15619,7 +15598,7 @@ le contenu des paragraphes est inversée.</info>
 <titre>Don, enfant, vie</titre>
 <categorie><c>Philosophie</c>
 <sous-cat>Apprentissage</sous-cat>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Don, enfant, vie</acrostiche>
 <para>
@@ -15705,7 +15684,7 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="chantersansmot_13"><date>20.08.1999</date>
 <titre>Chanter sans mot</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 <sous-cat>Création</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
@@ -15795,8 +15774,8 @@ le contenu des paragraphes est inversée.</info>
 <vers>Erreurs venant de l'incréable.</vers>
 </para></poeme><poeme id="foi_13"><date>29.10.1999</date>
 <titre>Foi</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <acrostiche>Unico resterà</acrostiche>
 <info>"Unico resterà" : "Unique restera" en italien.</info>
@@ -15825,7 +15804,7 @@ le contenu des paragraphes est inversée.</info>
 <translation lang="en">saint</translation>
 <translation lang="it">santo</translation>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <date>06.11.1999</date>
 <categorie><c>Portraits</c></categorie>
@@ -15853,7 +15832,7 @@ le contenu des paragraphes est inversée.</info>
 <info>"Quand je serai (moi)" en italien.</info>
 <para>
 <vers>Quand la neige aura bercé le vent de mer</vers>
-<vers>Un chant, vieux Fado brillera : la cithare</vers>
+<vers>Un chant, vieux Fado brillera : la cithare</vers>
 <vers>A l'ombre, au moment jouait ce doux-amer</vers>
 <vers>Nocturne troublant... Une absence, une amarre ?</vers>
 </para>
@@ -15865,7 +15844,7 @@ le contenu des paragraphes est inversée.</info>
 </para>
 <para>
 <vers>Rimes du passé, sarments vers l'avenir,</vers>
-<vers>On referme un mot puis l'autre bohème :</vers>
+<vers>On referme un mot puis l'autre bohème :</vers>
 <vers>Intime, l'art vrai ne ment au souvenir,</vers>
 <vers>Or le temps venu dit ce dernier poème.</vers>
 </para></poeme><poeme id="nemoubliez_14"><date>16.04.2000</date>
@@ -15877,7 +15856,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>Ne m'oubliez jamais même si ça vous coûte,</vers>
 <vers>Vous saurez le bonheur tout au bout de la route,</vers>
 <vers>N'oubliez pas le temps des plus beaux sentiments</vers>
-<vers>Quand l'amour disait non, le c&#339;ur disait : tu mens !</vers>
+<vers>Quand l'amour disait non, le c&#339;ur disait : tu mens !</vers>
 <vers>N'oubliez pas la vie en ultime revanche</vers>
 <vers>Et l'ombre de ce soir se fera bien plus blanche.</vers>
 <vers>Ne m'oubliez jamais, marquée en votre chair</vers>
@@ -15906,7 +15885,7 @@ le contenu des paragraphes est inversée.</info>
 </para>
 <para>
 <vers>Et je ne serai même,</vers>
-<vers>Rien, je ne suis d'ailleurs ;</vers>
+<vers>Rien, je ne suis d'ailleurs ;</vers>
 <vers>A l'onde andante blême</vers>
 <vers>Irons-nous, orpailleurs ?</vers>
 </para></poeme><poeme id="lairdoctobre_14"><date>15.10.2000</date>
@@ -15920,7 +15899,7 @@ le contenu des paragraphes est inversée.</info>
 <acrostiche>L'air d'octobre</acrostiche>
 <para>
 <vers>L'automne... apposés ses messages</vers>
-<vers>Assourdis : les brouillards plus blancs</vers>
+<vers>Assourdis : les brouillards plus blancs</vers>
 <vers>Invitent un air, des passages</vers>
 <vers>Ricochés des temps sans élans...</vers>
 </para>
@@ -16004,7 +15983,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>Invitent les inaccomplis</vers>
 <vers>Mirages à joindre l'espace.</vers>
 <vers>Aimais-je revenir ? et passe,</vers>
-<vers>Gloire  du temps, mon c&#339;ur défait</vers>
+<vers>Gloire  du temps, mon c&#339;ur défait</vers>
 <vers>En ces rides d'un air parfait.</vers>
 </para></poeme><poeme id="serenite_14"><date>15.03.2001</date>
 <titre>Sérénité</titre>
@@ -16072,35 +16051,35 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="cestundieu_14"><date>10.11.1999</date>
 <titre>C'est un Dieu...</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Foi</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>C'est un Dieu...</acrostiche>
 <para>
 <vers>C'est un dieu sur la terre</vers>
 <vers>Enchanté de lumière,</vers>
 <vers>Son c&#339;ur donné pour nous</vers>
-<vers>Tremble allégro si doux !</vers>
+<vers>Tremble allégro si doux !</vers>
 <vers>Une prière envoie</vers>
-<vers>Nouvelle vive joie !</vers>
+<vers>Nouvelle vive joie !</vers>
 <vers>Donner pour tout bénir,</vers>
 <vers>Il est né pour venir</vers>
 <vers>Enchanter dans ce monde</vers>
-<vers>Une âme plus féconde !</vers>
+<vers>Une âme plus féconde !</vers>
 </para></poeme><poeme id="alaube_14"><date>17.11.1999</date>
 <titre>A l'aube</titre>
 <categorie><c>Nature</c>
 <sous-cat>Ciel</sous-cat>
 </categorie>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <acrostiche>A l'aube</acrostiche>
 <para>
 <vers>A l'aube un ciel à flots</vers>
-<vers>Libère doux sanglots :</vers>
+<vers>Libère doux sanglots :</vers>
 <vers>A ce soleil si jeune</vers>
-<vers>Une voix répond : je ne</vers>
+<vers>Une voix répond : je ne</vers>
 <vers>Berce que par l'amour</vers>
 <vers>En invisible jour.</vers>
 </para></poeme><poeme id="monchatprefere_14"><date>17.11.1999</date>
@@ -16111,7 +16090,7 @@ le contenu des paragraphes est inversée.</info>
 <acrostiche>Mon chat préféré</acrostiche>
 <para>
 <vers>Mon chat se love et se tortille</vers>
-<vers>Ou soudain saute : une brindille</vers>
+<vers>Ou soudain saute : une brindille</vers>
 <vers>Nouveau jouet dans son jardin...</vers>
 </para>
 <para>
@@ -16126,7 +16105,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>Et le satin de ton passage</vers>
 <vers>Faufilé dans le grand salon...</vers>
 <vers>Est-ce t'avoir trouvé chaton?</vers>
-<vers>Reviens mon chat, mon infidèle !</vers>
+<vers>Reviens mon chat, mon infidèle !</vers>
 <vers>En ton âme quelle hirondelle ?</vers>
 </para></poeme><poeme id="baikal_14"><date>04.01.2000</date>
 <titre>Baïkal</titre>
@@ -16135,14 +16114,14 @@ le contenu des paragraphes est inversée.</info>
 </categorie>
 <acrostiche>Baïkal</acrostiche>
 <para>
-<vers>Bleu marine : la glace ondule en d'immobiles</vers>
+<vers>Bleu marine : la glace ondule en d'immobiles</vers>
 <vers>arcs épurés, murmure en d'infinies fragiles</vers>
 <vers>images. Le salut du lac en cet instant</vers>
 <vers>kermesse de blanc pur, épure sacre un chant</vers>
-<vers>au rêve protégé, lointain de ce voyage ;</vers>
+<vers>au rêve protégé, lointain de ce voyage ;</vers>
 <vers>l'éclat profond d'un monde étrenne un paysage.</vers>
 </para></poeme><poeme id="lairrapsodie_14"><date>24.04.2000</date>
-<titre>L'air : rapsodie</titre>
+<titre>L'air : rapsodie</titre>
 <categorie><c>Nature</c>
 <sous-cat>Jardin, paysage</sous-cat>
 </categorie>
@@ -16152,12 +16131,12 @@ le contenu des paragraphes est inversée.</info>
 <categorie><c>Philosophie</c>
 <sous-cat>Temps</sous-cat>
 </categorie>
-<acrostiche>L'air : rapsodie</acrostiche>
+<acrostiche>L'air : rapsodie</acrostiche>
 <info>D'après le parc de Choisy, Paris.</info>
 <para>
-<vers>Le vieux cèdre au pas immobile égrène les saisons ;</vers>
+<vers>Le vieux cèdre au pas immobile égrène les saisons ;</vers>
 <vers>A ses pieds je me tenais droite où tulipes, pensées</vers>
-<vers>Irisaient d'autrefois le ciel et s'ouvrent les prisons :</vers>
+<vers>Irisaient d'autrefois le ciel et s'ouvrent les prisons :</vers>
 <vers>Rapsodie, ô Printemps fleuri, rapsodies élancées</vers>
 <vers>Reviennent lier ce c&#339;ur tendre en tes bras ivres, verts,</vers>
 <vers>A moi revient le chant perdu, celui si doux du merle</vers>
@@ -16217,7 +16196,7 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="situvois_14"><date>29.08.2000</date>
 <titre>Si tu vois</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Si tu vois</acrostiche>
 <para>
@@ -16244,13 +16223,13 @@ le contenu des paragraphes est inversée.</info>
 </para>
 <para>
 <vers>A mon adieu la lune belle</vers>
-<vers>Salue : un sourire figé;</vers>
+<vers>Salue : un sourire figé;</vers>
 <vers>Juste un bouton, pas de tige et</vers>
 <vers>Un monde à Dieu plus loin, fidèle...</vers>
 </para>
 <para>
 <vers>Pas de brise sur tes monts clairs,</vers>
-<vers>Pas d'océan, pas de prière ;</vers>
+<vers>Pas d'océan, pas de prière ;</vers>
 <vers>En un seul rêve plus stellaire,</vers>
 <vers>Ce bout de roche dans les airs.</vers>
 </para>
@@ -16281,7 +16260,7 @@ le contenu des paragraphes est inversée.</info>
 </para>
 <para>
 <vers>Lignes de vie, à toi dédie</vers>
-<vers>Un monologue dérangé :</vers>
+<vers>Un monologue dérangé :</vers>
 <vers>Nuage fantasque récrie</vers>
 <vers>En ta face un baiser changé.</vers>
 </para></poeme><poeme id="jardinditsvers_14"><date>28.12.2000</date>
@@ -16337,8 +16316,8 @@ le contenu des paragraphes est inversée.</info>
 <vers>Ouvrent l'éternel art de notes et de toile.</vers>
 </para></poeme><poeme id="surlaplage_14"><date>22.02.2001</date>
 <titre>Sur la plage</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <acrostiche>Sur la plage</acrostiche>
 <info>D'après un rêve</info>
@@ -16400,7 +16379,7 @@ le contenu des paragraphes est inversée.</info>
 </vers><vers>Tous les silences à venir
 </vers><vers>Rêvent le temps qu'un jour dérange,
 </vers><vers>Entre tes bras le temps d'un bal.</vers>
-</para><para><vers>Troublé, tu sais ce chant : éclore...</vers>
+</para><para><vers>Troublé, tu sais ce chant : éclore...</vers>
 <vers>En arabesques se colore;</vers>
 <vers>Suave un souffle madrigal.</vers>
 </para>
@@ -16412,7 +16391,7 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="partesgraces_14"><date>28.11.1999</date>
 <titre>Par tes grâces</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Musique, chant</sous-cat>
@@ -16425,27 +16404,27 @@ le contenu des paragraphes est inversée.</info>
 </para>
 <para>
 <vers>Ton souffle élève au fol azur</vers>
-<vers>Espoir d'un monde ; plus réelle</vers>
+<vers>Espoir d'un monde ; plus réelle</vers>
 <vers>Sera la flamme de bonté.</vers>
 </para>
 <para>
-<vers>Guéris du mal ! Ton âme belle</vers>
-<vers>Rêve d'immense charité !</vers>
+<vers>Guéris du mal ! Ton âme belle</vers>
+<vers>Rêve d'immense charité !</vers>
 <vers>Au millénaire, ce symbole,</vers>
 <vers>C&#339;ur après c&#339;ur, tout recueilli,</vers>
 <vers>En tes prières temps s'envole,</vers>
 <vers>Sacré dans l'air, la foi jaillit.</vers>
 </para></poeme><poeme id="jetoffre_14"><date>02.12.1999</date>
 <titre>Je t'offre</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <acrostiche>Je t'offre</acrostiche>
 <para>
 <vers>Je veux donner l'amour</vers>
 <vers>Et sans une réponse...</vers>
 <vers>Timide comme un jour</vers>
-<vers>Ouverte : fleur de ronce ;</vers>
+<vers>Ouverte : fleur de ronce ;</vers>
 <vers>Fragile l'amitié</vers>
 <vers>Frêle parfum, présage</vers>
 <vers>Riche à la vie, entier</vers>
@@ -16453,11 +16432,11 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="resurrection_14"><date>02.01.2000</date>
 <titre>Résurrection</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Résurrection</acrostiche>
 <para>
-<vers>Rare comme  le monde</vers>
+<vers>Rare comme  le monde</vers>
 <vers>Entonne un chant de paix</vers>
 <vers>Sur les rives de l'onde</vers>
 <vers>Un c&#339;ur, je m'en repais.</vers>
@@ -16465,7 +16444,7 @@ le contenu des paragraphes est inversée.</info>
 <para>
 <vers>Rare comme la Terre</vers>
 <vers>Rêve au chant du bonheur,</vers>
-<vers>Entends-tu ce parterre :</vers>
+<vers>Entends-tu ce parterre :</vers>
 <vers>C'est la vie et c'est l'heur.</vers>
 </para>
 <para>
@@ -16479,7 +16458,7 @@ le contenu des paragraphes est inversée.</info>
 <deuxieme>créé</deuxieme></acrostiche>
 <titre>L'air - créé</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <para>
 <vers>Les rhododendrons, boules, blancs,</vers>
@@ -16487,7 +16466,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>Arment de songes les élans</vers>
 <vers>Riches, touffus d'accords prospères.</vers>
 <vers>Irez-vous jusqu'au parc ? l'air doux</vers>
-<vers>Essaime un peu : colorature,</vers>
+<vers>Essaime un peu : colorature,</vers>
 <vers>Reviendrez-vous, reviendrez-vous ?</vers>
 <vers>Essaime un air qui s'enamoure.</vers>
 </para>
@@ -16511,7 +16490,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>En la flamme du cierge...</vers>
 </para>
 <para>
-<vers>Seuls, ils peuvent parler :</vers>
+<vers>Seuls, ils peuvent parler :</vers>
 <vers>Nous aimer, nous détruire</vers>
 <vers>Sera la liberté,</vers>
 <vers>Trouver le sens d'écrire</vers>
@@ -16523,7 +16502,7 @@ le contenu des paragraphes est inversée.</info>
 <sous-cat>Création</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
-<sous-cat>Musique chant</sous-cat>
+<sous-cat>Musique, chant</sous-cat>
 </categorie>
 <acrostiche>Comme un voile</acrostiche>
 <para>
@@ -16554,7 +16533,7 @@ le contenu des paragraphes est inversée.</info>
 <acrostiche>Dire à l'oublié</acrostiche>
 <para>
 <vers>Doucement ces heures fanées étiolent leurs senteurs,</vers>
-<vers>Invisibles sur notre monde ému d'été qui fume :</vers>
+<vers>Invisibles sur notre monde ému d'été qui fume :</vers>
 <vers>Riantes branches, entrelacs joignent leurs vols chanteurs</vers>
 <vers>En ces reflets du vent plus long, blessé du ciel, parfume...</vers>
 </para>
@@ -16566,21 +16545,21 @@ le contenu des paragraphes est inversée.</info>
 </para>
 <para>
 <vers>Bénis, les jours sans autre fois, tendre les mains, adieux</vers>
-<vers>Libres d'un battement secret : je sais que cet automne</vers>
+<vers>Libres d'un battement secret : je sais que cet automne</vers>
 <vers>Invécu encore, aura plus de chaleur, temps radieux,</vers>
-<vers>Exquis, debout sous un autre arbre ; en nous, un c&#339;ur résonne.</vers>
+<vers>Exquis, debout sous un autre arbre ; en nous, un c&#339;ur résonne.</vers>
 </para>
 <para>
 </para></poeme><poeme id="commejaimais_14"><date>04.01.2001</date>
 <titre>Comme j'aimais</titre>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <categorie><c>Saisons</c>
 <sous-cat>Printemps</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <acrostiche>Comme j'aimais</acrostiche>
 <para>
@@ -16602,8 +16581,8 @@ le contenu des paragraphes est inversée.</info>
 <vers>Sa note bleue, amour, tout cet amour autour...</vers>
 </para></poeme><poeme id="viensamant_14"><date>30.01.2001</date>
 <titre>Viens, amant</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
@@ -16626,7 +16605,7 @@ le contenu des paragraphes est inversée.</info>
 <sous-cat>Etre</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <para>
 <vers>Belle, a-t-elle donné son âme,</vers>
@@ -16729,7 +16708,6 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="danstesnuits_14"><date>08.12.1999</date>
 <titre>Dans tes nuits</titre>
 <categorie><c>Amitié</c>
-<sous-cat>Souvenir</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Etre</sous-cat>
@@ -16739,19 +16717,19 @@ le contenu des paragraphes est inversée.</info>
 <vers>Dans chaque nuit je vois ton c&#339;ur,</vers>
 <vers>A chaque jour répond ton âme,</vers>
 <vers>Né d'un partage par ce drame,</vers>
-<vers>Souviens-toi : le rêve vainqueur.</vers>
+<vers>Souviens-toi : le rêve vainqueur.</vers>
 </para>
 <para>
 <vers>Toutes les nuits du monde, étoiles</vers>
 <vers>Ensevelies au fond des yeux,</vers>
-<vers>Souviens-toi : cet été d'adieux</vers>
+<vers>Souviens-toi : cet été d'adieux</vers>
 <vers>Né pour revivre entre les voiles.</vers>
 </para>
 <para>
 <vers>Un monde nous dira son jour</vers>
-<vers>Illuminé : rêve d'un ange,</vers>
+<vers>Illuminé : rêve d'un ange,</vers>
 <vers>Tous les sourires d'un échange,</vers>
-<vers>Souviens-toi : bribes alentour.</vers>
+<vers>Souviens-toi : bribes alentour.</vers>
 </para></poeme><poeme id="lordelalune_14"><date>12.12.1999</date>
 <titre>L'or de la lune bleue</titre>
 <categorie><c>Ombres et lumières</c>
@@ -16772,7 +16750,7 @@ le contenu des paragraphes est inversée.</info>
 </para>
 <para>
 <vers>Un éclat bleu me chasse</vers>
-<vers>N'est-ce la pluie, ô nuit !</vers>
+<vers>N'est-ce la pluie, ô nuit !</vers>
 <vers>En chaque pas s'efface</vers>
 <vers>Bercé, couffin sans bruit.</vers>
 </para>
@@ -16794,7 +16772,7 @@ le contenu des paragraphes est inversée.</info>
 <vers>Invite la flûte sorcière</vers>
 <vers>En ses élixirs. La lumière</vers>
 <vers>Boira le sang versé par c&#339;ur</vers>
-<vers>En sens cible : opère acteur.</vers>
+<vers>En sens cible : opère acteur.</vers>
 </para></poeme><poeme id="lombre_14"><date>07.01.2000</date>
 <titre>L'ombre</titre>
 <categorie><c>Philosophie</c>
@@ -16811,7 +16789,7 @@ le contenu des paragraphes est inversée.</info>
 </para></poeme><poeme id="songedencens_14"><date>23.01.2000</date>
 <titre>Songe d'encens</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Songe d'encens</acrostiche>
 <para>
@@ -16837,7 +16815,7 @@ le contenu des paragraphes est inversée.</info>
 <sous-cat>Ciel</sous-cat>
 </categorie>
 <para>
-<vers>Regarde l'orage au loin :</vers>
+<vers>Regarde l'orage au loin :</vers>
 <vers>Il atteindra le rivage,</vers>
 <vers>Nuée ardente en la page</vers>
 <vers>Andante d'un ciel malin.</vers>
@@ -17040,7 +17018,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <categorie><c>Nature</c>
 <sous-cat>Jardin, paysage</sous-cat>
 </categorie>
-<categorie><c>Saison</c>
+<categorie><c>Saisons</c>
 <sous-cat>Eté</sous-cat>
 </categorie>
 <info>le parc de Choisy, Paris.</info>
@@ -17085,10 +17063,10 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <vers>La terre circonscrite.</vers>
 </para></poeme><poeme id="alma_15"><date>13.06.2001</date><titre>Alma, libera te</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Spiritualité religieuse</sous-cat>
+<sous-cat>Foi</sous-cat>
 </categorie>
 <acrostiche>Alma, libera te</acrostiche>
 <info>"Ame, libère-toi" en italien.</info>
@@ -17210,7 +17188,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <vers>Voici bien venu l'an, voilà nombre des sages.</vers>
 </para></poeme><poeme id="crepuscule_15"><date>23.07.2001</date><titre>Crépuscule</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <acrostiche>Crépuscule</acrostiche>
 <para>
@@ -17251,7 +17229,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <vers>Souffle qui dit le ciel, la mer, tout se sachant.</vers>
 </para></poeme><poeme id="surlaterrela_15"><date>27.07.2001</date><titre>Sur la terre, là</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Etre</sous-cat>
@@ -17279,7 +17257,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <sous-cat>Création</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <acrostiche>Le saut</acrostiche>
 <para><vers>La lune joue entre tes branches fines</vers>
@@ -17410,7 +17388,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <sous-cat>Temps</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
-<sous-cat>Flore, arbres</sous-cat>
+<sous-cat>Flore</sous-cat>
 </categorie>
 <acrostiche>Matin privilège</acrostiche>
 <para>
@@ -17447,7 +17425,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 <vers>Tantôt de fragments s'assembler.</vers>
 </para></poeme><poeme id="nuitdaout_15"><date>26.08.2001</date>
 <titre>Nuit d'août</titre>
-<categorie><c>Saison</c>
+<categorie><c>Saisons</c>
 <sous-cat>Eté</sous-cat>
 </categorie>
 <categorie><c>Ville</c>
@@ -17475,7 +17453,7 @@ Cette saison s'achève alors que l'amour emplit pleinement mon c&#339;ur et ma vi
 </para></poeme><poeme id="jeueclat_15"><date>31.08.2001</date>
 <titre>Jeu - éclat</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <categorie><c>Saisons</c>
 <sous-cat>Eté</sous-cat>
@@ -17662,7 +17640,7 @@ toi, aile</titre>
 <categorie><c>Ville</c>
 </categorie>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Fin du jour</sous-cat>
+<sous-cat>Crépuscule</sous-cat>
 </categorie>
 <acrostiche>Du gris au noir</acrostiche>
 <para>
@@ -17684,10 +17662,10 @@ toi, aile</titre>
 <vers>Riant de mon étoile en ses myriades froides.</vers>
 </para></poeme><poeme id="partoi_15"><date>24.09.2001</date><titre>Par toi</titre>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Par toi</acrostiche>
 <para>
@@ -17726,7 +17704,7 @@ toi, aile</titre>
 </para></poeme><poeme id="acquaviva_15"><date>10.10.2001</date><titre>Acqua viva fra
 le mani</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
 <sous-cat>Eau douce</sous-cat>
@@ -17812,7 +17790,7 @@ le mani</titre>
 <sous-cat>Nuit</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Nos nuits</acrostiche>
 <para>
@@ -17940,8 +17918,8 @@ sens</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <acrostiche>Ballet de sens</acrostiche>
 <para>
@@ -17961,10 +17939,9 @@ sens</titre>
 <vers>En vos yeux je voyais</vers>
 <vers>Neuf vies qui se déchirent,</vers>
 <vers>Son rêve, et m'y noyais.</vers>
-<vers> </vers>
 </para></poeme><poeme id="tracesdeslevres_15"><date>10.11.2001</date><titre>Traces des lèvres</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
@@ -17987,8 +17964,8 @@ sens</titre>
 <vers>Sourit de vous, chaste nouvel émoi.</vers>
 </para></poeme><poeme id="reveeneant_15"><date>14.11.2001</date><titre>Rêvée,
 néant</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <categorie><c>Philosophie</c>
 <sous-cat>Révolte</sous-cat>
@@ -17999,7 +17976,7 @@ néant</titre>
 <vers>Et je me tais mais je pourrais gémir,</vers>
 <vers>Vive, méchante, ayant giflé ton âme.</vers>
 <vers>En jour meilleur je connaîtrai la flamme,</vers>
-<vers>Elle sera plus que tendresse : émoi.</vers>
+<vers>Elle sera plus que tendresse : émoi.</vers>
 </para>
 <para>
 <vers>Ne me regarde ou n'imagine, moi,</vers>
@@ -18009,8 +17986,8 @@ néant</titre>
 <vers>Tisse fils d'un sombre destin taquin.</vers>
 </para></poeme><poeme id="etsilneigeait_15"><date>24.12.2001</date><titre>Et s'il
 neigeait sur...</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <categorie><c>Nature</c>
 <sous-cat>Neige</sous-cat>
@@ -18022,7 +17999,7 @@ neigeait sur...</titre>
 <vers>Sous des lumières liquoreuses,</vers>
 <vers>Intimité de nos atours.</vers>
 <vers>Le blanc recouvrira l'espace</vers>
-<vers>Nouant l'absolu d'un éclat :</vers>
+<vers>Nouant l'absolu d'un éclat :</vers>
 <vers>Etreignons nos c&#339;urs, chance là</vers>
 <vers>Innervée, une heure qui passe</vers>
 <vers>Gémit le monde de demain.</vers>
@@ -18056,14 +18033,14 @@ d'hiver</titre>
 <sous-cat>Sommeil</sous-cat>
 </categorie>
 <acrostiche>Endormis</acrostiche>
-<categorie><c>Désir, amour</c>
-<sous-cat>Idéal</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Romantisme</sous-cat>
 </categorie>
 <para>
 <vers>Endormie en tes bras, au paradis, sommeil</vers>
 <vers>Né d'harmonie, à deux, nous rêvons mêmes rêves</vers>
 <vers>Doux comme une chaleur corporelle au réveil.</vers>
-<vers>Où se cache ta nuit ? Si nos ombres s'enlèvent</vers>
+<vers>Où se cache ta nuit ? Si nos ombres s'enlèvent</vers>
 <vers>Repliées, étendues, céleste froissement,</vers>
 <vers>Mirons nos c&#339;urs cachés, et puis d'une alliance</vers>
 <vers>Irisons nos regards, nos doigts de frôlement&#8230;</vers>
@@ -18071,8 +18048,8 @@ d'hiver</titre>
 </para></poeme>
 <poeme id="coeursamants_16"><date>18.08.2002</date>
 <titre>C&#339;urs amants</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <acrostiche>C&#339;urs amants</acrostiche>
 <para>
@@ -18092,7 +18069,7 @@ d'hiver</titre>
 </para></poeme><poeme id="ohquejetaime_16"><date>19.08.2002</date>
 <titre>Oh que je t'aime</titre>
 <categorie><c>Philosophie</c>
-<sous-cat>Vie, espoir</sous-cat>
+<sous-cat>Espoir</sous-cat>
 </categorie>
 <acrostiche>Oh que je t'aime</acrostiche>
 <para>
@@ -18112,8 +18089,8 @@ d'hiver</titre>
 <categorie><c>Attitudes</c>
 <sous-cat>Toucher</sous-cat>
 </categorie>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <acrostiche>Ta bouche</acrostiche>
 <para>
@@ -18143,8 +18120,8 @@ d'hiver</titre>
 <vers>Suivre maman, fatalité ?</vers>
 </para></poeme><poeme id="enpaillettes_16"><date>03.11.2002</date>
 <titre> En paillettes</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <acrostiche>En paillettes</acrostiche>
 <para>
@@ -18160,8 +18137,8 @@ d'hiver</titre>
 <vers>Silence, heure apaisée, et ma main dans ta main.</vers>
 </para></poeme><poeme id="situdors_16"><date>24.11.2002</date>
 <titre> Si tu dors</titre>
-<categorie><c>Désir, amour</c>
-<sous-cat>Aimé</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Aimé (amant)</sous-cat>
 </categorie>
 <categorie><c>Attitudes</c>
 <sous-cat>Sommeil</sous-cat>
@@ -18207,7 +18184,7 @@ d'hiver</titre>
 <titre>Souffle : matin</titre>
 <date>21.01.2003</date>
 <categorie><c>Ombres et lumières</c>
-<sous-cat>Début du jour</sous-cat>
+<sous-cat>Aube</sous-cat>
 </categorie>
 <para>
 <vers>Sous la lune je marche,</vers>
@@ -18275,8 +18252,8 @@ d'hiver</titre>
 <acrostiche>Je me languis de toi</acrostiche>
 <titre>Je me languis de toi</titre>
 <date>01.02.2003</date>
-<categorie><c>Désir, amour</c>
-<sous-cat>Malheureux</sous-cat>
+<categorie><c>Amour</c>
+<sous-cat>Amour malheureux</sous-cat>
 </categorie>
 <para>
 <vers>Je n'ai l'idée, aimé, que de languir,</vers>
@@ -18489,7 +18466,7 @@ d'hiver</titre>
 <acrostiche>Un soir triste</acrostiche>
 <date>17.01.2004</date>
 <categorie><c>Philosophie</c><sous-cat>Temps</sous-cat></categorie>
-<categorie><c>Lumières</c><sous-cat>Nuit</sous-cat></categorie>
+<categorie><c>Ombres et lumières</c><sous-cat>Nuit</sous-cat></categorie>
 <categorie><c>Ville</c></categorie>
 <para><vers>Un chat miaulait, lointain, gourmandé par son maître,</vers>
 <vers>Nul autre son plus fort ne troublait cet instant,</vers>
@@ -18531,7 +18508,7 @@ d'hiver</titre>
 <acrostiche>Esprit du printemps</acrostiche>
 <date>21.03.2004</date>
 <categorie><c>Saisons</c><sous-cat>Printemps</sous-cat></categorie>
-<categorie><c>Nature</c><sous-cat>Flore, arbres</sous-cat></categorie>
+<categorie><c>Nature</c><sous-cat>Flore</sous-cat></categorie>
 <para><vers>Entre giboulées et lumières</vers>
 <vers>Se révèle, rit dans ses pleurs,</vers>
 <vers>Printemps. Il essouffle les fleurs,</vers>
@@ -18574,7 +18551,7 @@ d'hiver</titre>
 </poeme>
 <poeme id="aumatin_16"><titre>Au matin</titre>
 <date>26.04.2004</date>
-<categorie><c>Lumières</c><sous-cat>Début du jour</sous-cat></categorie>
+<categorie><c>Ombres et lumières</c><sous-cat>Aube</sous-cat></categorie>
 <para><vers>Au matin voiles verts</vers>
 <vers>Des arbres bercent branches.</vers>
 <vers>Au matin, vois les vers</vers>
