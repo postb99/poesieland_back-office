@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using FluentAssertions;
+using Toolbox;
 using Toolbox.Xml;
 using Xunit.Abstractions;
 
@@ -100,4 +101,8 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
                 !string.IsNullOrEmpty(x.SpecialAcrostiche.Second)).Should()
             .BeTrue();
     }
+    
+    // Data Quality facts TODO check this again
+    // 9 poems with short date => additional info
+    // 71 poems with category but no subcategory => will have tag but not category?
 }

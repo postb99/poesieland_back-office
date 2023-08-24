@@ -9,22 +9,35 @@ public class Engine
 {
     private IConfiguration _configuration;
     public Root Data { get; private set; }
+    public XmlSerializer XmlSerializer { get; private set; }
     
     public Engine(IConfiguration configuration)
     {
         _configuration = configuration;
+        XmlSerializer = new XmlSerializer(typeof(Root));
     }
 
     public void Load()
     {
         var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_FILE]);
-        using var streamReader = new StreamReader(xmlDocPath, Encoding.Latin1);
+        using var streamReader = new StreamReader(xmlDocPath, Encoding.GetEncoding(_configuration[Settings.XML_STORAGE_FILE_ENCODING]));
 
-        var xmlSerializer = new XmlSerializer(typeof(Root));
-        Data = xmlSerializer.Deserialize(streamReader) as Root;
+        Data = XmlSerializer.Deserialize(streamReader) as Root;
     }
     
-    // Data Quality facts
-    // 9 poems with short date => additional info
-    // 71 poems with category but no subcategory => will have tag but not category?
+    public Root LoadCleaned()
+    {
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
+        using var streamReader = new StreamReader(xmlDocPath);
+
+       return XmlSerializer.Deserialize(streamReader) as Root;
+    }
+    
+    public void SaveCleaned()
+    {
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
+        using var streamWriter = new StreamWriter(xmlDocPath);
+
+        XmlSerializer.Serialize(streamWriter, Data);
+    }
 }

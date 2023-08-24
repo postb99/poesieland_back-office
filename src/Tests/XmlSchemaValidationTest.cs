@@ -17,11 +17,14 @@ public class XmlSchemaValidationTest
         _testOutputHelper = testOutputHelper;
     }
 
-    [Fact]
-    public void ShouldValidateSchema()
+    [Theory]
+    [InlineData("XmlStorageFile", "Latin1")]
+    [InlineData("XmlStorageCleanedFile", "UTF-8")]
+    public void ShouldValidateSchema(string xmlFileKey, string encoding)
     {
         _errorsCount = 0;
-        new Validator(_testOutputHelper).Validate();
+        new Validator(_testOutputHelper).Validate(xmlFileKey, encoding);
+
         _errorsCount.Should().Be(0);
         // 772 errors because of inconsistent tags order, before cleanup
     }
@@ -35,7 +38,7 @@ public class XmlSchemaValidationTest
             _testOutputHelper = testOutputHelper;
         }
 
-        public void Validate()
+        public void Validate(string xmlFileKey, string encoding)
         {
             var configuration = Helpers.GetConfiguration();
             XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
@@ -44,9 +47,10 @@ public class XmlSchemaValidationTest
             xmlReaderSettings.ValidationType = ValidationType.Schema;
             xmlReaderSettings.ValidationEventHandler += ValidationEventHandler;
 
-            using var streamReader = new StreamReader(configuration[Settings.XML_STORAGE_FILE], Encoding.Latin1);
+            using var streamReader = new StreamReader(configuration[xmlFileKey], Encoding.GetEncoding(encoding));
             using var xmlReader = XmlReader.Create(streamReader, xmlReaderSettings);
 
+            _testOutputHelper.WriteLine($"Validating {configuration[xmlFileKey]}");
             while (xmlReader.Read())
             {
             }
@@ -63,7 +67,7 @@ public class XmlSchemaValidationTest
             {
                 _errorsCount++;
                 _testOutputHelper.WriteLine("ERROR: ");
-                _testOutputHelper.WriteLine(e.Message);
+                _testOutputHelper.WriteLine($"[{e.Exception.LineNumber}] {e.Message}");
             }
         }
     }

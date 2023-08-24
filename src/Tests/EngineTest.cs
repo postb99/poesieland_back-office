@@ -24,10 +24,10 @@ public class EngineTest
     public void ShouldLoadSpecialAcrostiche()
     {
         var engine = Helpers.CreateEngine();
-        var SpecialpoemWithAcrostiche = engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "laircree_14");
-        SpecialpoemWithAcrostiche.Should().NotBeNull();
-        SpecialpoemWithAcrostiche!.SpecialAcrostiche.Should().NotBeNull();
-        SpecialpoemWithAcrostiche!.SpecialAcrostiche!.First.Should().Be("L'air");
-        SpecialpoemWithAcrostiche!.SpecialAcrostiche!.Second.Should().Be("créé");
+        var poemWithFirstAndSecondAcrostiche = engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "laircree_14");
+        poemWithFirstAndSecondAcrostiche.Should().NotBeNull();
+        poemWithFirstAndSecondAcrostiche!.SpecialAcrostiche.Should().NotBeNull();
+        poemWithFirstAndSecondAcrostiche!.SpecialAcrostiche!.First.Should().Be("L'air");
+        poemWithFirstAndSecondAcrostiche!.SpecialAcrostiche!.Second.Should().Be("créé");
     }
 }
