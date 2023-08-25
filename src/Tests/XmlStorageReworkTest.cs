@@ -19,7 +19,7 @@ public class XmlStorageReworkTest : IClassFixture<LoadDataFixture>
         _engine = data.Engine;
     }
     
-    [Fact]
+    [Fact(Skip = "Achieved")]
     public void RewriteXmlTagsInOrder()
     {
         _engine.SaveCleaned();

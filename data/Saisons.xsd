@@ -1,95 +1,75 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" xmlns="https://github.com/Xarkam/poesieland/ns" targetNamespace="https://github.com/Xarkam/poesieland/ns">
-    <xs:element name="Saisons">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="Saison"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="Saison">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="summary"/>
-                <xs:element ref="info"/>
-                <xs:element maxOccurs="unbounded" ref="poeme"/>
-            </xs:sequence>
-            <xs:attribute name="id" use="required"/>
-            <xs:attribute name="name" use="required"/>
-            <xs:attribute name="nombre" use="required"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="poeme">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="titre"/>
-                <xs:element ref="date"/>
-                <xs:element minOccurs="0" ref="longueur-vers"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" ref="translation"/>
-                <xs:element minOccurs="0" ref="acrostiche"/>
-                <xs:element minOccurs="0" ref="info"/>
-                <xs:element maxOccurs="unbounded" ref="categorie"/>
-                <xs:element maxOccurs="unbounded" ref="para"/>
-            </xs:sequence>
-            <xs:attribute name="id" use="required"/>
-            <xs:attribute name="type"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="date">
+<xs:schema attributeFormDefault="unqualified" elementFormDefault="qualified" targetNamespace="https://github.com/Xarkam/poesieland/ns" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:element name="c" type="xs:string"/>
+  <xs:element name="sous-cat" type="xs:string"/>
+  <xs:element name="vers" type="xs:string"/>
+  <xs:element name="titre" type="xs:string"/>
+  <xs:element name="info" type="xs:string"/>
+  <xs:element name="summary" type="xs:string"/>
+  <xs:element name="longueur-vers" type="xs:string"/>
+  <xs:element name="premier" type="xs:string"/>
+  <xs:element name="deuxieme" type="xs:string"/>
+  <xs:element name="date">
         <xs:simpleType>
             <xs:restriction base="xs:string">
                 <xs:pattern value="([0-9]{2}\.[0-9]{2}\.[0-9]{4})|([0-9]{4})"/>
             </xs:restriction>
         </xs:simpleType>
     </xs:element>
-    <xs:element name="titre" type="xs:string"/>
-    <xs:element name="longueur-vers" type="xs:integer"/>
-    <xs:element name="summary" type="xs:string"/>
-    <xs:element name="info" type="xs:string"/>
-    <xs:element name="translation">
-        <xs:complexType mixed="true">
-            <xs:attribute name="lang" use="required"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="categorie">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="c"/>
-                <xs:element minOccurs="0" ref="info"/>
-                <xs:element minOccurs="0" maxOccurs="unbounded" ref="sous-cat"/>
-            </xs:sequence>
-            <xs:attribute name="id"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="c" type="xs:string"/>
-    <xs:element name="sous-cat">
-        <xs:complexType mixed="true">
-            <xs:attribute name="id"/>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="acrostiche">
-        <xs:complexType mixed="true">
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="premier"/>
-                <xs:element ref="deuxieme"/>
-            </xs:choice>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="para">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="vers"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-    <xs:element name="vers" type="xs:string"/>
-    <xs:element name="premier" type="xs:string"/>
-    <xs:element name="deuxieme" type="xs:string"/>
-    <xs:element name="poemes_en">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element maxOccurs="unbounded" ref="poeme"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+  <xs:element name="categorie">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns:c" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:sous-cat" maxOccurs="unbounded" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="para">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns:vers" maxOccurs="unbounded" minOccurs="1" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="poeme">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns:titre" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:date" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:categorie" maxOccurs="unbounded" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:longueur-vers" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:info" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:acrostiche" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:para" maxOccurs="unbounded" minOccurs="1" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+      </xs:sequence>
+      <xs:attribute type="xs:string" name="id" use="required"/>
+      <xs:attribute type="xs:string" name="type" use="optional"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="acrostiche">
+    <xs:complexType mixed="true">
+      <xs:sequence>
+        <xs:element ref="ns:premier" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:deuxieme" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Saison">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns:summary" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:info" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:poeme" maxOccurs="unbounded" minOccurs="1" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+      </xs:sequence>
+      <xs:attribute type="xs:integer" name="id" use="required"/>
+      <xs:attribute type="xs:string" name="name" use="required"/>
+      <xs:attribute type="xs:string" name="nombre" use="required"/>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="Saisons">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element ref="ns:Saison" maxOccurs="unbounded" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
 </xs:schema>

@@ -19,14 +19,12 @@ public class XmlSchemaValidationTest
 
     [Theory]
     [InlineData("XmlStorageFile", "Latin1")]
-    [InlineData("XmlStorageCleanedFile", "UTF-8")]
     public void ShouldValidateSchema(string xmlFileKey, string encoding)
     {
         _errorsCount = 0;
         new Validator(_testOutputHelper).Validate(xmlFileKey, encoding);
 
         _errorsCount.Should().Be(0);
-        // 772 errors because of inconsistent tags order, before cleanup
     }
 
     private class Validator
