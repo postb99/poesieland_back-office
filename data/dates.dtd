@@ -1,9 +1,0 @@
-<!ELEMENT dates (yyyy)+>
-<!ELEMENT yyyy (mm)+>
-<!ELEMENT yyyy (poeme)+>
-<!ELEMENT mm (dd)*>
-<!ELEMENT dd (poeme)*>
-<!ELEMENT poeme (#PCDATA)>
-<!ATTLIST yyyy id CDATA #REQUIRED>
-<!ATTLIST mm id CDATA #REQUIRED>
-<!ATTLIST dd id CDATA #REQUIRED>
