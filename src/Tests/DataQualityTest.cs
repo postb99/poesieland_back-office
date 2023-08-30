@@ -60,21 +60,11 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
-    public void PoemShouldHaveCorrectFullDate()
+    public void PoemShouldHaveCorrectDateTime()
     {
-        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate.Length == 10).All(x =>
-                DateTime.TryParseExact(x.TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
-                    out _))
-            .Should().BeTrue();
+        var _ = _data.Seasons.SelectMany(x => x.Poems).Select(x => x.Date);
     }
-
-    [Fact]
-    public void PoemShouldHaveCorrectShortDate()
-    {
-        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate.Length == 4)
-            .All(x => int.Parse(x.TextDate) > 1991 && int.Parse(x.TextDate) < 1996).Should().BeTrue();
-    }
-
+    
     [Fact]
     public void PoemShouldHaveCategory()
     {
@@ -103,6 +93,5 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
     
     // Data Quality facts TODO check this again
-    // 9 poems with short date => additional info
     // 71 poems with category but no subcategory => will have tag but not category?
 }

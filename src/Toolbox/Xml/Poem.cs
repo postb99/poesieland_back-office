@@ -1,4 +1,5 @@
-﻿using System.Xml;
+﻿using System.Globalization;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace Toolbox.Xml;
@@ -23,10 +24,8 @@ public class Poem
 
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
 
-    public DateTime Date => TextDate.Length == 10
-        ? new DateTime(int.Parse(TextDate.Substring(6)), int.Parse(TextDate.Substring(3, 2)),
-            int.Parse(TextDate.Substring(0, 2)))
-        : new DateTime(int.Parse(TextDate), 1, 1);
+    public DateTime Date =>
+        DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
     public string? Acrostiche
     {

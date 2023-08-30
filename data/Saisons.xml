@@ -114,7 +114,7 @@
         </poeme>
         <poeme id="andre_1">
             <titre>André</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Amour</c>
                 <sous-cat>Romantisme</sous-cat>
@@ -209,7 +209,7 @@
         </poeme>
         <poeme id="lafemme_1">
             <titre>La Femme</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Amour</c>
                 <sous-cat>Femme</sous-cat>
@@ -499,7 +499,7 @@
         </poeme>
         <poeme id="lenfancedoree_1">
             <titre>L'enfance dorée</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Enfance</c>
             </categorie>
@@ -641,7 +641,7 @@
         </poeme>
         <poeme id="plenitude_1">
             <titre>Plénitude</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Attitudes</c>
                 <sous-cat>Musique, chant</sous-cat>
@@ -1134,7 +1134,7 @@
         </poeme>
         <poeme id="bleublanclarmes_1">
             <titre>Bleu, blanc, larmes</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Philosophie</c>
                 <sous-cat>Révolte</sous-cat>
@@ -1318,7 +1318,7 @@
         </poeme>
         <poeme id="decrepitudes_1">
             <titre>Décrépitudes</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Philosophie</c>
                 <sous-cat>Révolte</sous-cat>
@@ -1351,7 +1351,7 @@
         </poeme>
         <poeme id="findecombat_1">
             <titre>Fin de combat</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Philosophie</c>
                 <sous-cat>Révolte</sous-cat>
@@ -1384,7 +1384,7 @@
         </poeme>
         <poeme id="vanite_1">
             <titre>Vanité</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Philosophie</c>
                 <sous-cat>Révolte</sous-cat>
@@ -1430,7 +1430,7 @@
         </poeme>
         <poeme id="lesursaut_1">
             <titre>Le Sursaut</titre>
-            <date>1994</date>
+            <date>01.01.1994</date>
             <categorie>
                 <c>Philosophie</c>
                 <sous-cat>Révolte</sous-cat>
