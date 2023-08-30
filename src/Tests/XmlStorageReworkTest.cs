@@ -19,18 +19,26 @@ public class XmlStorageReworkTest : IClassFixture<LoadDataFixture>
         _engine = data.Engine;
     }
     
-    [Fact(Skip = "Achieved")]
-    public void RewriteXmlTagsInOrder()
+    [Theory(Skip = "Applied")]
+    [InlineData("Amitié", "Amour")]
+    [InlineData("Portraits", "Philosophie")]
+    [InlineData("Enfance", "Philosophie")]
+    [InlineData("Divers", "Philosophie")]
+    [InlineData("Ville", "Ombres et lumières")]
+    public void AddCategoryToSubCategory(string categoryBecomingSubCategory, string addedCategory)
     {
-        _engine.SaveCleaned();
-        var cleanedData = _engine.LoadCleaned();
-        
-        using var initialDataStringWriter = new StringWriter();
-        using var cleanedDataStringWriter = new StringWriter();
-        
-        _engine.XmlSerializer.Serialize(initialDataStringWriter, _data);
-        _engine.XmlSerializer.Serialize(cleanedDataStringWriter, cleanedData);
-
-        cleanedDataStringWriter.ToString().Length.Should().Be(initialDataStringWriter.ToString().Length);
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Any(x => x.Name == categoryBecomingSubCategory));
+        foreach (var poem in poems)
+        {
+            foreach (var category in poem.Categories)
+            {
+                if (category.Name == categoryBecomingSubCategory)
+                {
+                    category.Name = addedCategory;
+                    category.SubCategories = new List<string>{categoryBecomingSubCategory};
+                }
+            }
+        }
+        _engine.Save();
     }
 }

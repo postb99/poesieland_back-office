@@ -25,19 +25,27 @@ public class Engine
         Data = XmlSerializer.Deserialize(streamReader) as Root;
     }
     
-    public Root LoadCleaned()
+    public void Save()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
-        using var streamReader = new StreamReader(xmlDocPath);
-
-       return XmlSerializer.Deserialize(streamReader) as Root;
-    }
-    
-    public void SaveCleaned()
-    {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_FILE]);
         using var streamWriter = new StreamWriter(xmlDocPath);
-
+    
         XmlSerializer.Serialize(streamWriter, Data);
     }
+    
+    // public Root LoadCleaned()
+    // {
+    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
+    //     using var streamReader = new StreamReader(xmlDocPath);
+    //
+    //    return XmlSerializer.Deserialize(streamReader) as Root;
+    // }
+    //
+    // public void SaveCleaned()
+    // {
+    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
+    //     using var streamWriter = new StreamWriter(xmlDocPath);
+    //
+    //     XmlSerializer.Serialize(streamWriter, Data);
+    // }
 }

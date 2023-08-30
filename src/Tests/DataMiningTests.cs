@@ -100,14 +100,4 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                 lastPoem.Id);
         }
     }
-
-    [Fact]
-    public void PoemsWithEmptyVerseInLastParagraph()
-    {
-        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Paragraphs.Any(y => y.Verses.Count == 0)).ToList();
-        poems.ForEach(x => _testOutputHelper.WriteLine("[{0}]", x.Id));
-        
-        poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Paragraphs.Last().Verses.Last().Length == 0).ToList();
-        poems.ForEach(x => _testOutputHelper.WriteLine("[{0}]", x.Id));
-    }
 }
