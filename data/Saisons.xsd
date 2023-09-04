@@ -5,7 +5,7 @@
   <xs:element name="titre" type="xs:string"/>
   <xs:element name="info" type="xs:string"/>
   <xs:element name="summary" type="xs:string"/>
-  <xs:element name="longueur-vers" type="xs:string"/>
+  <xs:element name="longueurVers" type="xs:string"/>
   <xs:element name="premier" type="xs:string"/>
   <xs:element name="deuxieme" type="xs:string"/>
   <xs:element name="date">
@@ -36,13 +36,13 @@
         <xs:element ref="ns:titre" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:date" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:categorie" maxOccurs="unbounded" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
-        <xs:element ref="ns:longueur-vers" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:info" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:acrostiche" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:para" maxOccurs="unbounded" minOccurs="1" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
       </xs:sequence>
       <xs:attribute type="xs:string" name="id" use="required"/>
       <xs:attribute type="xs:string" name="type" use="optional"/>
+      <xs:attribute type="xs:string" name="longueurVers" use="optional"/>
     </xs:complexType>
   </xs:element>
   <xs:element name="acrostiche">

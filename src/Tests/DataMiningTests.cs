@@ -16,10 +16,10 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
-    public void PoemsWithSpecifiedLineLength()
+    public void PoemsWithSpecifiedVerseLength()
     {
         _testOutputHelper.WriteLine("{0} poems with verse length specified",
-            _data.Seasons.SelectMany(x => x.Poems).Count(x => x.LineLength > 0));
+            _data.Seasons.SelectMany(x => x.Poems).Count(x => x.VerseLength != null));
     }
 
     [Fact]

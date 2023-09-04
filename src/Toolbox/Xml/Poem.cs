@@ -16,11 +16,13 @@ public class Poem
 
     [XmlElement("categorie")] public List<Category> Categories { get; set; }
 
-    [XmlElement("longueur-vers")] public int? LineLength { get; set; }
+    [XmlAttribute("longueurVers")] public string VerseLength { get; set; }
 
     [XmlElement("info")] public string? Info { get; set; }
 
-    [XmlElement("acrostiche")] public dynamic? AnyAcrostiche { get; set; }
+    [XmlElement("acrostiche")]
+    //[XmlElement("acrostiche", typeof(Acrostiche1))]
+    public dynamic? AnyAcrostiche { get; set; }
 
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
 
