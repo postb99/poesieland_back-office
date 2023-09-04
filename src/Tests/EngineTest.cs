@@ -26,8 +26,8 @@ public class EngineTest
         var engine = Helpers.CreateEngine();
         var poemWithFirstAndSecondAcrostiche = engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "laircree_14");
         poemWithFirstAndSecondAcrostiche.Should().NotBeNull();
-        poemWithFirstAndSecondAcrostiche!.SpecialAcrostiche.Should().NotBeNull();
-        poemWithFirstAndSecondAcrostiche!.SpecialAcrostiche!.First.Should().Be("L'air");
-        poemWithFirstAndSecondAcrostiche!.SpecialAcrostiche!.Second.Should().Be("créé");
+        poemWithFirstAndSecondAcrostiche!.CrossingAcrostiche.Should().NotBeNull();
+        poemWithFirstAndSecondAcrostiche!.CrossingAcrostiche!.First.Should().Be("L'air");
+        poemWithFirstAndSecondAcrostiche!.CrossingAcrostiche!.Second.Should().Be("créé");
     }
 }

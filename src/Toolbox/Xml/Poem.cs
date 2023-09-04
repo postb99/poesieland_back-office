@@ -19,45 +19,13 @@ public class Poem
     [XmlAttribute("longueurVers")] public string VerseLength { get; set; }
 
     [XmlElement("info")] public string? Info { get; set; }
-
-    [XmlElement("acrostiche")]
-    //[XmlElement("acrostiche", typeof(Acrostiche1))]
-    public dynamic? AnyAcrostiche { get; set; }
-
+    
+    [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
+    
+    [XmlElement("crossingAcrostiche")] public CrossingAcrostiche? CrossingAcrostiche { get; set; }
+    
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
 
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
-
-    public string? Acrostiche
-    {
-        get
-        {
-            var xmlNodes = AnyAcrostiche as XmlNode[];
-            if (xmlNodes?.Length == 1)
-            {
-                return (xmlNodes[0] as XmlText)?.Data;
-            }
-
-            return null;
-        }
-    }
-
-    public SpecialAcrostiche? SpecialAcrostiche
-    {
-        get
-        {
-            var xmlNodes = AnyAcrostiche as XmlNode[];
-            if (xmlNodes?.Length == 2)
-            {
-                return new SpecialAcrostiche
-                {
-                    First = (xmlNodes[0] as XmlElement)?.InnerText,
-                    Second = (xmlNodes[1] as XmlElement)?.InnerText
-                };
-            }
-
-            return null;
-        }
-    }
 }

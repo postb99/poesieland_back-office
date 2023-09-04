@@ -19,25 +19,21 @@ public class XmlStorageReworkTest : IClassFixture<LoadDataFixture>
         _engine = data.Engine;
     }
 
-    [Fact]
+    [Fact(Skip = "Applied")]
     public void ReworkAndSave()
     {
-        // var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.LineLength.HasValue);
+      
+        // var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.SimpleAcrostiche != null);
         // foreach (var poem in poems)
         // {
-        //     poem.VerseLength = poem.LineLength.Value.ToString();
-        // }
-        
-        // poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Acrostiche != null);
-        // foreach (var poem in poems)
-        // {
-        //     poem.AnyAcrostiche = new Acrostiche1 { Simple = poem.Acrostiche };
+        //     poem.Acrostiche =  poem.SimpleAcrostiche;
+        //     poem.SimpleAcrostiche = null;
         // }
         //
         // poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.SpecialAcrostiche != null);
         // foreach (var poem in poems)
         // {
-        //     poem.AnyAcrostiche = new Acrostiche1 { First = poem.SpecialAcrostiche.First, Second = poem.SpecialAcrostiche.Second };
+        //     poem.crossingAcrostiche = new CrossingAcrostiche { First = poem.SpecialAcrostiche.First, Second = poem.SpecialAcrostiche.Second };
         // }
 
         _engine.Save();

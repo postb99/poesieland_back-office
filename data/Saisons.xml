@@ -13308,10 +13308,7 @@
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>Cathédrale</premier>
-        <deuxieme>de lumières</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="Cathédrale" deuxieme="de lumières" />
       <para>
         <vers>Cathédrale de lumières,</vers>
         <vers>Dans la foi de mes prières</vers>
@@ -13588,10 +13585,7 @@
       </categorie>
       <info>Inspiré par la
                 comédie musicale "Notre-Dame de Paris")</info>
-      <acrostiche>
-        <premier>J'écrirai ce</premier>
-        <deuxieme>mot, l'ultime</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="J'écrirai ce" deuxieme="mot, l'ultime" />
       <para>
         <vers>Je laisserai les mots s'écrire,</vers>
         <vers>Mais dusses-tu les déchirer,</vers>
@@ -14136,10 +14130,7 @@
         <c>Ombres et lumières</c>
         <sous-cat>Crépuscule</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>Miroirs</premier>
-        <deuxieme>mirages</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="Miroirs" deuxieme="mirages" />
       <para>
         <vers>Miroirs, les rimes qui s'enchantent</vers>
         <vers>Mirages, disent : les cœurs hantent</vers>
@@ -14271,10 +14262,7 @@
         <c>Philosophie</c>
         <sous-cat>Espoir</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>J'ai retrouvé</premier>
-        <deuxieme>le bonheur</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="J'ai retrouvé" deuxieme="le bonheur" />
       <para>
         <vers>J'ai retrouvé le bonheur,</vers>
         <vers>L'avais-je oublié sans dire</vers>
@@ -16655,10 +16643,7 @@
         <c>Attitudes</c>
         <sous-cat>Musique, chant</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>A la place</premier>
-        <deuxieme>un double</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="A la place" deuxieme="un double" />
       <para>
         <vers>A la place du cœur une étoile immortelle :</vers>
         <vers>Un double éclat, refrain frôlé,</vers>
@@ -17414,10 +17399,7 @@
         <c>Nature</c>
         <sous-cat>Jardin, paysage</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>Promenade</premier>
-        <deuxieme>la pluie</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="Promenade" deuxieme="la pluie" />
       <para>
         <vers>Parce qu'une saison chasse l'autre bientôt</vers>
         <vers>Le soleil trop brûlant plus vieux soudain, plus chaste</vers>
@@ -17549,10 +17531,7 @@
         <sous-cat>Automne</sous-cat>
       </categorie>
       <info>"Jardin des songes" en italien.</info>
-      <acrostiche>
-        <premier>giardino</premier>
-        <deuxieme>dei sogni</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="giardino" deuxieme="dei sogni" />
       <para>
         <vers>Grisé du temps par l'ombre de septembre</vers>
         <vers>Dans ce jardin mon cœur est revenu</vers>
@@ -18136,10 +18115,7 @@
         <c>Philosophie</c>
         <sous-cat>Temps</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>Poésie</premier>
-        <deuxieme>Statue</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="Poésie" deuxieme="Statue" />
       <para>
         <vers>Puisse le marbre de Carrare</vers>
         <vers>Sculpter l'espace, cet éclat</vers>
@@ -18582,10 +18558,7 @@
         <c>Saisons</c>
         <sous-cat>Automne</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>L'ombre de</premier>
-        <deuxieme>novembre</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="L'ombre de" deuxieme="novembre" />
       <para>
         <vers>Le ciel rosit le soir si pâle:</vers>
         <vers>Novembre a mangé les couleurs</vers>
@@ -19228,10 +19201,7 @@
         <c>Nature</c>
         <sous-cat>Flore</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>L'air</premier>
-        <deuxieme>créé</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="L'air" deuxieme="créé" />
       <para>
         <vers>Les rhododendrons, boules, blancs,</vers>
         <vers>Curieuses têtes de grand-pères</vers>
@@ -19250,10 +19220,7 @@
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <acrostiche>
-        <premier>Passé</premier>
-        <deuxieme>présent</deuxieme>
-      </acrostiche>
+      <crossingAcrostiche premier="Passé" deuxieme="présent" />
       <para>
         <vers>Par les milliers d'années</vers>
         <vers>Presque au-delà des gens</vers>

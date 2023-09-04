@@ -2,11 +2,10 @@
 
 namespace Toolbox.Xml;
 
-public class SpecialAcrostiche
+public class CrossingAcrostiche
 {
-    public string Content { get; set; }
-    [XmlElement("premier")]
+    [XmlAttribute("premier")]
     public string First { get; set; }
-    [XmlElement("deuxieme")]
+    [XmlAttribute("deuxieme")]
     public string Second { get; set; }
 }

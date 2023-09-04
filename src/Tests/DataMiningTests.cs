@@ -29,7 +29,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         using var streamWriter = new StreamWriter(outputFileStream);
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x =>
             !string.IsNullOrEmpty(x.Acrostiche)
-            || x.SpecialAcrostiche != null
+            || x.CrossingAcrostiche != null
             || !string.IsNullOrEmpty(x.PoemType)
             || !string.IsNullOrEmpty(x.Info)).ToList();
 
@@ -46,10 +46,10 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                 sb.AppendFormat(" [acrostiche] {0}", poem.Acrostiche);
             }
 
-            if (poem.SpecialAcrostiche != null)
+            if (poem.CrossingAcrostiche != null)
             {
-                sb.AppendFormat(" [special acrostiche] {0}/{1}", poem.SpecialAcrostiche.First,
-                    poem.SpecialAcrostiche.Second);
+                sb.AppendFormat(" [crossing acrostiche] {0}/{1}", poem.CrossingAcrostiche.First,
+                    poem.CrossingAcrostiche.Second);
             }
 
             streamWriter.WriteLine(sb.ToString());
