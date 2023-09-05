@@ -13308,7 +13308,7 @@
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="Cathédrale" deuxieme="de lumières" />
+      <acrosticheDouble premier="Cathédrale" deuxieme="de lumières" />
       <para>
         <vers>Cathédrale de lumières,</vers>
         <vers>Dans la foi de mes prières</vers>
@@ -13585,7 +13585,7 @@
       </categorie>
       <info>Inspiré par la
                 comédie musicale "Notre-Dame de Paris")</info>
-      <crossingAcrostiche premier="J'écrirai ce" deuxieme="mot, l'ultime" />
+      <acrosticheDouble premier="J'écrirai ce" deuxieme="mot, l'ultime" />
       <para>
         <vers>Je laisserai les mots s'écrire,</vers>
         <vers>Mais dusses-tu les déchirer,</vers>
@@ -14130,7 +14130,7 @@
         <c>Ombres et lumières</c>
         <sous-cat>Crépuscule</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="Miroirs" deuxieme="mirages" />
+      <acrosticheDouble premier="Miroirs" deuxieme="mirages" />
       <para>
         <vers>Miroirs, les rimes qui s'enchantent</vers>
         <vers>Mirages, disent : les cœurs hantent</vers>
@@ -14262,7 +14262,7 @@
         <c>Philosophie</c>
         <sous-cat>Espoir</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="J'ai retrouvé" deuxieme="le bonheur" />
+      <acrosticheDouble premier="J'ai retrouvé" deuxieme="le bonheur" />
       <para>
         <vers>J'ai retrouvé le bonheur,</vers>
         <vers>L'avais-je oublié sans dire</vers>
@@ -16643,7 +16643,7 @@
         <c>Attitudes</c>
         <sous-cat>Musique, chant</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="A la place" deuxieme="un double" />
+      <acrosticheDouble premier="A la place" deuxieme="un double" />
       <para>
         <vers>A la place du cœur une étoile immortelle :</vers>
         <vers>Un double éclat, refrain frôlé,</vers>
@@ -17399,7 +17399,7 @@
         <c>Nature</c>
         <sous-cat>Jardin, paysage</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="Promenade" deuxieme="la pluie" />
+      <acrosticheDouble premier="Promenade" deuxieme="la pluie" />
       <para>
         <vers>Parce qu'une saison chasse l'autre bientôt</vers>
         <vers>Le soleil trop brûlant plus vieux soudain, plus chaste</vers>
@@ -17531,7 +17531,7 @@
         <sous-cat>Automne</sous-cat>
       </categorie>
       <info>"Jardin des songes" en italien.</info>
-      <crossingAcrostiche premier="giardino" deuxieme="dei sogni" />
+      <acrosticheDouble premier="giardino" deuxieme="dei sogni" />
       <para>
         <vers>Grisé du temps par l'ombre de septembre</vers>
         <vers>Dans ce jardin mon cœur est revenu</vers>
@@ -18115,7 +18115,7 @@
         <c>Philosophie</c>
         <sous-cat>Temps</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="Poésie" deuxieme="Statue" />
+      <acrosticheDouble premier="Poésie" deuxieme="Statue" />
       <para>
         <vers>Puisse le marbre de Carrare</vers>
         <vers>Sculpter l'espace, cet éclat</vers>
@@ -18558,7 +18558,7 @@
         <c>Saisons</c>
         <sous-cat>Automne</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="L'ombre de" deuxieme="novembre" />
+      <acrosticheDouble premier="L'ombre de" deuxieme="novembre" />
       <para>
         <vers>Le ciel rosit le soir si pâle:</vers>
         <vers>Novembre a mangé les couleurs</vers>
@@ -19201,7 +19201,7 @@
         <c>Nature</c>
         <sous-cat>Flore</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="L'air" deuxieme="créé" />
+      <acrosticheDouble premier="L'air" deuxieme="créé" />
       <para>
         <vers>Les rhododendrons, boules, blancs,</vers>
         <vers>Curieuses têtes de grand-pères</vers>
@@ -19220,7 +19220,7 @@
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <crossingAcrostiche premier="Passé" deuxieme="présent" />
+      <acrosticheDouble premier="Passé" deuxieme="présent" />
       <para>
         <vers>Par les milliers d'années</vers>
         <vers>Presque au-delà des gens</vers>

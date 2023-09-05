@@ -39,7 +39,7 @@
         <xs:element ref="ns:categorie" maxOccurs="unbounded" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:info" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:acrostiche" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
-        <xs:element ref="ns:crossingAcrostiche" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:acrosticheDouble" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:para" maxOccurs="unbounded" minOccurs="1" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
       </xs:sequence>
       <xs:attribute type="xs:string" name="id" use="required"/>
@@ -47,7 +47,7 @@
       <xs:attribute type="xs:string" name="longueurVers" use="optional"/>
     </xs:complexType>
   </xs:element>
-  <xs:element name="crossingAcrostiche">
+  <xs:element name="acrosticheDouble">
     <xs:complexType>
       <xs:attribute type="xs:string" name="premier" use="required"/>
       <xs:attribute type="xs:string" name="deuxieme" use="required"/>

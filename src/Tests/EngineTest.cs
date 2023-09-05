@@ -21,13 +21,13 @@ public class EngineTest
     }
 
     [Fact]
-    public void ShouldLoadSpecialAcrostiche()
+    public void ShouldLoadDoubleAcrostiche()
     {
         var engine = Helpers.CreateEngine();
         var poemWithFirstAndSecondAcrostiche = engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "laircree_14");
         poemWithFirstAndSecondAcrostiche.Should().NotBeNull();
-        poemWithFirstAndSecondAcrostiche!.CrossingAcrostiche.Should().NotBeNull();
-        poemWithFirstAndSecondAcrostiche!.CrossingAcrostiche!.First.Should().Be("L'air");
-        poemWithFirstAndSecondAcrostiche!.CrossingAcrostiche!.Second.Should().Be("créé");
+        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche.Should().NotBeNull();
+        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.Should().Be("L'air");
+        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.Second.Should().Be("créé");
     }
 }

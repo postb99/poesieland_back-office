@@ -2,7 +2,7 @@
 
 namespace Toolbox.Xml;
 
-public class CrossingAcrostiche
+public class DoubleAcrostiche
 {
     [XmlAttribute("premier")]
     public string First { get; set; }

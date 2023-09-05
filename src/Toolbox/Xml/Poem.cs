@@ -22,7 +22,7 @@ public class Poem
     
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
     
-    [XmlElement("crossingAcrostiche")] public CrossingAcrostiche? CrossingAcrostiche { get; set; }
+    [XmlElement("acrosticheDouble")] public DoubleAcrostiche? DoubleAcrostiche { get; set; }
     
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
 

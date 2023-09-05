@@ -96,9 +96,9 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     [Fact]
     public void SpecialAcrosticheShouldBeConsistent()
     {
-        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.CrossingAcrostiche != null).All(x =>
-                !string.IsNullOrEmpty(x.CrossingAcrostiche!.First) &&
-                !string.IsNullOrEmpty(x.CrossingAcrostiche.Second)).Should()
+        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.DoubleAcrostiche != null).All(x =>
+                !string.IsNullOrEmpty(x.DoubleAcrostiche!.First) &&
+                !string.IsNullOrEmpty(x.DoubleAcrostiche.Second)).Should()
             .BeTrue();
     }
 }
