@@ -15,6 +15,7 @@ public class Engine
     {
         _configuration = configuration;
         XmlSerializer = new XmlSerializer(typeof(Root));
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
     }
 
     public void Load()
@@ -31,6 +32,14 @@ public class Engine
         using var streamWriter = new StreamWriter(xmlDocPath);
     
         XmlSerializer.Serialize(streamWriter, Data);
+    }
+
+    public void GenerateSeasonIndexFile(int seasonId)
+    {
+        var season = Data.Seasons.First(x => x.Id == seasonId);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.CONTENT_ROOT_DIR]);
+        Directory.CreateDirectory(Path.Combine(rootDir, season.ContentDir));
+        // TODO create _index.md then add a menu to Program to call Engine.
     }
     
     // public Root LoadCleaned()

@@ -30,4 +30,18 @@ public class EngineTest
         poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.Should().Be("L'air");
         poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.Second.Should().Be("créé");
     }
+
+    [Fact]
+    public void ShouldGetSeasonDirectoryName()
+    {
+        var engine = Helpers.CreateEngine();
+        engine.Data.Seasons[0].ContentDir.Should().Be("1_premiere_saison");
+    }
+
+    [Fact]
+    public void ShouldCreateFirstSeasonDirectory()
+    {
+        var engine = Helpers.CreateEngine();
+        engine.GenerateSeasonIndexFile(1);
+    }
 }

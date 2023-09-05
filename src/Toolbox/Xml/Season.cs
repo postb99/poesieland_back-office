@@ -5,7 +5,7 @@ namespace Toolbox.Xml;
 public class Season
 {
     [XmlAttribute("id")]
-    public string Id { get; set; }
+    public int Id { get; set; }
     
     [XmlAttribute("name")]
     public string Name { get; set; }
@@ -21,4 +21,6 @@ public class Season
     
     [XmlElement("poeme")]
     public List<Poem> Poems { get; set; }
+    
+    public string ContentDir => $"{Id}_{System.Text.Encoding.UTF8.GetString(System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(NumberedName.ToLowerInvariant()))}_saison";
 }
