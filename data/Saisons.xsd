@@ -58,7 +58,7 @@
       <xs:sequence>
         <xs:element ref="ns:summary" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
         <xs:element ref="ns:info" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
-        <xs:element ref="ns:poeme" maxOccurs="unbounded" minOccurs="1" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
+        <xs:element ref="ns:poeme" maxOccurs="unbounded" minOccurs="0" xmlns:ns="https://github.com/Xarkam/poesieland/ns"/>
       </xs:sequence>
       <xs:attribute type="xs:integer" name="id" use="required"/>
       <xs:attribute type="xs:string" name="name" use="required"/>

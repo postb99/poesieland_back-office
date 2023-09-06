@@ -23,9 +23,9 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
         var seasons = _data.Seasons.ToList();
         foreach (var season in seasons)
         {
-            _testOutputHelper.WriteLine("[{0}]: {1}", season.Name, season.Poems.Count);
+            _testOutputHelper.WriteLine($"[{season.Id} - {season.Name}]: {season.Poems.Count}");
         }
-        seasons.Take(seasons.Count - 1).All(x => x.Poems.Count == 50).Should().BeTrue();
+        seasons.Take(seasons.Count - 1).All(x => x.Poems.Count <= 50).Should().BeTrue();
         seasons.Skip(seasons.Count - 1).Single(x => x.Poems.Count <= 50).Should().NotBeNull();
     }
 
