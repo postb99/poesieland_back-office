@@ -32,14 +32,14 @@ public class EngineTest
     }
 
     [Fact]
-    public void ShouldGetSeasonDirectoryName()
+    public void ShouldBeSeasonContentDirectoryName()
     {
         var engine = Helpers.CreateEngine();
-        engine.Data.Seasons[0].ContentDir.Should().Be("1_premiere_saison");
+        engine.Data.Seasons[0].ContentDirectoryName.Should().Be("1_premiere_saison");
     }
 
     [Fact]
-    public void ShouldCreateFirstSeasonDirectory()
+    public void ShouldCreateFirstSeasonIndexFile()
     {
         var engine = Helpers.CreateEngine();
         engine.GenerateSeasonIndexFile(1);

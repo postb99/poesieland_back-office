@@ -10,27 +10,28 @@ public class Engine
     private IConfiguration _configuration;
     public Root Data { get; private set; }
     public XmlSerializer XmlSerializer { get; private set; }
-    
+
     public Engine(IConfiguration configuration)
     {
         _configuration = configuration;
         XmlSerializer = new XmlSerializer(typeof(Root));
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance); 
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
     public void Load()
     {
         var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_FILE]);
-        using var streamReader = new StreamReader(xmlDocPath, Encoding.GetEncoding(_configuration[Settings.XML_STORAGE_FILE_ENCODING]));
+        using var streamReader = new StreamReader(xmlDocPath,
+            Encoding.GetEncoding(_configuration[Settings.XML_STORAGE_FILE_ENCODING]));
 
         Data = XmlSerializer.Deserialize(streamReader) as Root;
     }
-    
+
     public void Save()
     {
         var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_FILE]);
         using var streamWriter = new StreamWriter(xmlDocPath);
-    
+
         XmlSerializer.Serialize(streamWriter, Data);
     }
 
@@ -38,10 +39,12 @@ public class Engine
     {
         var season = Data.Seasons.First(x => x.Id == seasonId);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.CONTENT_ROOT_DIR]);
-        Directory.CreateDirectory(Path.Combine(rootDir, season.ContentDir));
-        // TODO create _index.md then add a menu to Program to call Engine.
+        var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+        var indexFile = Path.Combine(contentDir, "_index.md");
+        Directory.CreateDirectory(contentDir);
+        File.WriteAllText(indexFile, season.IndexFileContent());
     }
-    
+
     // public Root LoadCleaned()
     // {
     //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);

@@ -2,8 +2,9 @@
 
 public class Settings
 {
-    public static string XML_STORAGE_FILE = "XmlStorageFile";
-    public static string XML_STORAGE_FILE_ENCODING = "XmlStorageFileEncoding";
-    public static string XML_SCHEMA_FILE = "XmlSchemaFile";
-    public static string CONTENT_ROOT_DIR = "ContentRoot";
+    public const string XML_STORAGE_FILE = "XmlStorageFile";
+    public const string XML_STORAGE_FILE_ENCODING = "XmlStorageFileEncoding";
+    public const string XML_SCHEMA_FILE = "XmlSchemaFile";
+    public const string CONTENT_ROOT_DIR = "ContentRoot";
+    public const string MAIN_MENU = "MainMenu";
 }

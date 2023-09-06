@@ -2,13 +2,11 @@
 <Saisons xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="https://github.com/Xarkam/poesieland/ns">
   <Saison id="1" name="Premiers élans" nombre="Première">
     <summary>Mes premiers poèmes suivant strictement la versification néoclassique, mais aussi des poèmes plus anciens et remaniés. De 1994 à septembre 1996</summary>
-    <info>
-            Quand je me suis mise à écrire vers 1992, les mots se sont assemblés, alliant sonorités, certains étant même de vraies petites chansonnettes qui devaient théoriquement être appréciées par mon lapin nain ??
+    <info>Quand je me suis mise à écrire vers 1992, les mots se sont assemblés, alliant sonorités, certains étant même de vraies petites chansonnettes qui devaient théoriquement être appréciées par mon lapin nain 😁
 
-            Cette saison comprend mes premiers poèmes suivant strictement la versification néoclassique, apprise courant 1995, mais aussi des poèmes plus anciens et remaniés. Une Saison toute de petites touches, dans un nouveau "moule" qui l'exacerbe.
+Cette saison comprend mes premiers poèmes suivant strictement la versification néoclassique, apprise courant 1995, mais aussi des poèmes plus anciens et remaniés. Une Saison toute de petites touches, dans un nouveau "moule" qui l'exacerbe.
 
-            De 1994 à septembre 1996
-        </info>
+De 1994 à septembre 1996</info>
     <poeme id="javaislheur_1" type="sonnet" longueurVers="12">
       <titre>J'avais l'heur de m'asseoir...</titre>
       <date>07.12.1995</date>
