@@ -20,15 +20,16 @@ public class Program
         {
             var menuEntry = MainMenu();
             menuChoice = ValidateMainMenuEntry(menuEntry);
+            
         } while (menuChoice == null);
     }
 
     private static char MainMenu()
     {
-        var mainMenuSettings = _configuration.GetSection(Settings.MAIN_MENU).Get<MainMenuSettings>(); // FIXME
+        var mainMenuSettings = _configuration.GetSection(Settings.MAIN_MENU).Get<MainMenuSettings>();
         foreach (var menuItem in mainMenuSettings.MenuItems)
         {
-            Console.WriteLine($"[{menuItem.Key}] {menuItem.Value}");
+            Console.WriteLine($"[{menuItem.Key}] {menuItem.Label}");
         }
 
         Console.WriteLine("Choice:");

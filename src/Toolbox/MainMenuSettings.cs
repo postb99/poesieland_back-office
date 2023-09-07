@@ -7,5 +7,11 @@ public class MainMenuSettings
         GenerateSeasonIndexFile = 1
     }
     
-    public List<KeyValuePair<string, string>> MenuItems { get; set; }
+    public List<MenuItem> MenuItems { get; set; }
+}
+
+public class MenuItem
+{
+    public int Key { get; set; }
+    public string Label { get; set; }
 }
