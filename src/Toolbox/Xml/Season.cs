@@ -12,6 +12,9 @@ public class Season
     [XmlAttribute("nombre")] public string NumberedName { get; set; }
 
     [XmlElement("summary")] public string Summary { get; set; }
+    
+    private string EscapedSummary => Summary.Replace("\"", "\\\"");
+        
 
     [XmlElement("info")] public string Introduction { get; set; }
 
@@ -26,7 +29,7 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append($"title = \"{NumberedName} Saison : {Name}\"");
         s.Append(Environment.NewLine);
-        s.Append($"summary = \"{Summary}\"");
+        s.Append($"summary = \"{EscapedSummary}\"");
         s.Append(Environment.NewLine);
         s.Append($"weight = {Id}");
         s.Append(Environment.NewLine);

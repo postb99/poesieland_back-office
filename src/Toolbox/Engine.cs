@@ -45,6 +45,12 @@ public class Engine
         File.WriteAllText(indexFile, season.IndexFileContent());
     }
 
+    public void GenerateAllSeasonsIndexFile()
+    {
+        for (var i = 1; i < Data.Seasons.Count + 1; i++)
+            GenerateSeasonIndexFile(i);
+    }
+
     // public Root LoadCleaned()
     // {
     //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);

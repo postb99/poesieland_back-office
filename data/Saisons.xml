@@ -1452,7 +1452,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="2" name="Tableaux" nombre="Deuxième">
     <summary>De l'amour, des éléments naturels, des réflexions. De septembre à décembre 1996</summary>
-    <info>De l'amour, des éléments naturels, des réflexions, cette Saison est toute de petites touches. De septembre à décembre 1996</info>
+    <info>De l'amour, des éléments naturels, des réflexions, cette Saison est toute de petites touches.
+
+De septembre à décembre 1996</info>
     <poeme id="evocation_2" longueurVers="12">
       <titre>Evocation</titre>
       <date>19.09.1996</date>
@@ -2926,7 +2928,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="3" name="Vivace" nombre="Troisième">
     <summary>Ces quelques mois presque exaltés, avant de connaître d'autres bonheurs. De janvier à mai 1997</summary>
-    <info>Ces quelques mois presque exaltés, avant de connaître d'autres bonheurs. De janvier à mai 1997</info>
+    <info>Ces quelques mois presque exaltés, avant de connaître d'autres bonheurs.
+
+De janvier à mai 1997</info>
     <poeme id="soleillevant_3" longueurVers="8">
       <titre>Soleil levant</titre>
       <date>07.02.1997</date>
@@ -5955,7 +5959,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="5" name="Espaces de vie" nombre="Cinquième">
     <summary>Multiples bonheurs. De septembre 1997 à mars 1998</summary>
-    <info>Multiples bonheurs. De septembre 1997 à mars 1998</info>
+    <info>Multiples bonheurs.
+
+De septembre 1997 à mars 1998</info>
     <poeme id="eveil_5" longueurVers="6">
       <titre>Eveil</titre>
       <date>03.01.1998</date>
@@ -7559,7 +7565,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="6" name="Sur le chemin" nombre="Sixième">
     <summary>En cherchant sa voie, avec un long regard vers un amour déçu passé. De mars à juin 1998</summary>
-    <info>En cherchant sa voie, avec un long regard vers un amour déçu passé. De mars à juin 1998</info>
+    <info>En cherchant sa voie, avec un long regard vers un amour déçu passé.
+
+De mars à juin 1998</info>
     <poeme id="quetedesens_6">
       <titre>Quête de sens</titre>
       <date>28.05.1998</date>
@@ -9125,7 +9133,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="7" name="Croire" nombre="Septième">
     <summary>Mois obsédés, amour éperdu. Juin et juillet 1998</summary>
-    <info>Mois obsédés, amour éperdu. Juin et juillet 1998</info>
+    <info>Mois obsédés, amour éperdu.
+
+Juin et juillet 1998</info>
     <poeme id="surlestade_7">
       <titre>Sur le stade d'aimer</titre>
       <date>04.07.1998</date>
@@ -10469,7 +10479,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="8" name="Reflets perdus" nombre="Huitième">
     <summary>La fin d'un amour, mais également une période de doute, et quelques "diamants". De juillet à septembre 1998</summary>
-    <info>La fin d'un amour, mais également une période de doute, et quelques "diamants". De juillet à septembre 1998</info>
+    <info>La fin d'un amour, mais également une période de doute, et quelques "diamants".
+
+De juillet à septembre 1998</info>
     <poeme id="surunair_8">
       <titre>Sur un air</titre>
       <date>20.07.1998</date>
@@ -11798,7 +11810,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="9" name="Souffles" nombre="Neuvième">
     <summary>A la recherche de nouvelles inspirations. De septembre à décembre 1998</summary>
-    <info>A la recherche de nouvelles inspirations. De septembre à décembre 1998</info>
+    <info>A la recherche de nouvelles inspirations.
+
+De septembre à décembre 1998</info>
     <poeme id="demainlautomne_9">
       <titre>Demain l'automne</titre>
       <date>22.09.1998</date>
@@ -13197,7 +13211,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="10" name="Pensées" nombre="Dixième">
     <summary>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour. De janvier à mars 1999</summary>
-    <info>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour. De janvier à mars 1999</info>
+    <info>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour.
+
+De janvier à mars 1999</info>
     <poeme id="surlocean_10">
       <titre>Sur l'océan : revivre</titre>
       <date>03.01.1999</date>
@@ -14484,7 +14500,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="11" name="Perceptible" nombre="Onzième">
     <summary>Toute d'éclats, cette Saison de printemps. De mars à mai 1999</summary>
-    <info>Toute d'éclats, cette Saison de printemps. De mars à mai 1999</info>
+    <info>Toute d'éclats, cette Saison de printemps.
+
+De mars à mai 1999</info>
     <poeme id="quando_11">
       <titre>Quando la vita dice</titre>
       <date>30.03.1999</date>
@@ -15789,7 +15807,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="12" name="Tempo piano" nombre="Douzième">
     <summary>Quelques accords plus vifs, quelques rêves plus doux. De mai à juillet 1999</summary>
-    <info>Quelques accords plus vifs, quelques rêves plus doux. De mai à juillet 1999</info>
+    <info>Quelques accords plus vifs, quelques rêves plus doux.
+
+De mai à juillet 1999</info>
     <poeme id="aunomducoeur_12">
       <titre>Au nom du cœur</titre>
       <date>30.05.1999</date>
@@ -17012,7 +17032,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="13" name="Divina" nombre="Treizième">
     <summary>D'un lieu de vie à l'autre, retrouver ses repères. De juillet à novembre 1999</summary>
-    <info>D'un lieu de vie à l'autre, retrouver ses repères. De juillet à novembre 1999</info>
+    <info>D'un lieu de vie à l'autre, retrouver ses repères.
+
+De juillet à novembre 1999</info>
     <poeme id="atoilagloire_13">
       <titre>A Toi la gloire</titre>
       <date>15.08.1999</date>
@@ -18409,7 +18431,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="14" name="Au long cours" nombre="Quatorzième">
     <summary>Rares, mais précieux, les moments de cette Saison très variée. De novembre 1999 à mars 2001</summary>
-    <info>Rares, mais précieux, les moments de cette Saison très variée. De novembre 1999 à mars 2001</info>
+    <info>Rares, mais précieux, les moments de cette Saison très variée.
+
+De novembre 1999 à mars 2001</info>
     <poeme id="saint_14">
       <titre>Saint</titre>
       <date>06.11.1999</date>
@@ -19731,10 +19755,11 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="15" name="De place en place" nombre="Quinzième">
     <summary>De ruelle en avenue, de cabane en palace, de lieux rêvés aux lieux vécus. D'avril à décembre 2001</summary>
-    <info>Les poèmes qui la conposent sont à présent dans l'ordre chronologique,
-            comme mon inspiration flâne de ruelle en avenue,
-            de cabane en palace, de lieux rêvés aux lieux vécus.
-            Cette saison s'achève alors que l'amour emplit pleinement mon cœur et ma vie. D'avril à décembre 2001</info>
+    <info>Les poèmes qui la conposent sont à présent dans l'ordre chronologique, comme mon inspiration flâne de ruelle en avenue, de cabane en palace, de lieux rêvés aux lieux vécus.
+
+Cette saison s'achève alors que l'amour emplit pleinement mon cœur et ma vie.
+      
+D'avril à décembre 2001</info>
     <poeme id="apresledrame_15">
       <titre>Après le drame</titre>
       <date>26.07.2001</date>
@@ -21113,7 +21138,9 @@ De 1994 à septembre 1996</info>
   </Saison>
   <Saison id="16" name="Plus loin" nombre="Seizième">
     <summary>Sur un air de fin, puis un renouveau. De mars 2002 à ...</summary>
-    <info>Une Saison commencée sur un air de fin, à travers les touches d'un amour qui n'en était plus vraiment un. Puis un renouveau un an après, cet épisode terminé. De mars 2002 à ...</info>
+    <info>Une Saison commencée sur un air de fin, à travers les touches d'un amour qui n'en était plus vraiment un. Puis un renouveau un an après, cet épisode terminé.
+
+De mars 2002 à ...</info>
     <poeme id="endormis_16">
       <titre>Endormis</titre>
       <date>02.03.2002</date>
@@ -21958,8 +21985,10 @@ De 1994 à septembre 1996</info>
       </para>
     </poeme>
   </Saison>
-  <Saison id="17" name="Traversées" nombre="Dix-septièième">
+  <Saison id="17" name="Traversées" nombre="Dix-septième">
     <summary>Vers la maturité... De ... à ce jour</summary>
-    <info>Le bien-être de la maturité. De ... à ce jour</info>
+    <info>Le bien-être de la maturité.
+
+De ... à ce jour</info>
   </Saison>
 </Saisons>
