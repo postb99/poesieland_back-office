@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
-using Toolbox.Xml;
+using Toolbox.Domain;
 
 namespace Toolbox;
 
@@ -49,6 +49,16 @@ public class Engine
     {
         for (var i = 1; i < Data.Seasons.Count + 1; i++)
             GenerateSeasonIndexFile(i);
+    }
+
+    public void GeneratePoemFile(Poem poem)
+    {
+        var season = Data.Seasons.First(x => x.Id == poem.SeasonId);
+        var poemIndex = season.Poems.IndexOf(poem);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.CONTENT_ROOT_DIR]);
+        var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+        var indexFile = Path.Combine(contentDir, poem.ContentFileName);
+        File.WriteAllText(indexFile, poem.FileContent(poemIndex));
     }
 
     // public Root LoadCleaned()

@@ -1,4 +1,4 @@
-﻿namespace Toolbox.Xml;
+﻿namespace Toolbox.Domain;
 
 public enum PoemType
 {

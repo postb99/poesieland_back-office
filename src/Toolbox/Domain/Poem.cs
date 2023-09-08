@@ -1,9 +1,8 @@
 ﻿using System.Globalization;
 using System.Text;
 using System.Xml.Serialization;
-using Microsoft.Extensions.Primitives;
 
-namespace Toolbox.Xml;
+namespace Toolbox.Domain;
 
 public class Poem
 {
@@ -20,20 +19,20 @@ public class Poem
     [XmlAttribute("longueurVers")] public string VerseLength { get; set; }
 
     [XmlElement("info")] public string? Info { get; set; }
-    
-    private string EscapedInfo => Info.Replace("\"", "\\\"");
-    
+
+
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
-    
+
     [XmlElement("acrosticheDouble")] public DoubleAcrostiche? DoubleAcrostiche { get; set; }
-    
+
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
 
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
-        
-    public string ContentFileName =>
-        $"{System.Text.Encoding.UTF8.GetString(System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(Title.ToLowerInvariant())).Replace(' ', '_').Replace('\'', '_').Replace('.', '_')}.md";
+
+    public string ContentFileName => $"{Title.Unaccented()}.md";
+
+    public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
 
     public string FileContent(int poemIndex)
     {
@@ -41,57 +40,70 @@ public class Poem
         s.Append(Environment.NewLine);
         s.Append($"title = \"{Title}\"");
         s.Append(Environment.NewLine);
-        s.Append($"date = \"{Date.ToString("yyyy-MM-dd")}\"");
+        s.Append($"date = {Date.ToString("yyyy-MM-dd")}");
         s.Append(Environment.NewLine);
-        s.Append($"weight = {poemIndex}");
+        s.Append($"weight = {poemIndex + 1}");
         s.Append(Environment.NewLine);
         s.Append("LastModifierDisplayName = \"Barbara Post\"");
         s.Append(Environment.NewLine);
+        
         s.Append("tags = [");
         foreach (var category in Categories)
         {
-            s.Append($"\"{category}\", ");
+            s.Append($"\"{category.Name}\", ");
         }
         if (Acrostiche != null)
         {
             s.Append($"\"Acrostiche\", ");
         }
+        if (PoemType != null)
+        {
+            s.Append($"\"{PoemType}\", ");
+        }
         s.Remove(s.Length - 2, 2);
         s.Append("]");
         s.Append(Environment.NewLine);
+        
         s.Append("categories = [");
-        foreach (var subCategory in Categories.Select(x => x.SubCategories))
+        foreach (var subCategory in Categories.SelectMany(x => x.SubCategories))
         {
             s.Append($"\"{subCategory}\", ");
         }
         s.Remove(s.Length - 2, 2);
         s.Append("]");
+        
         if (Info != null)
         {
+            s.Append(Environment.NewLine);
             s.Append("{{% notice style=\"primary\" %}}");
             s.Append(Environment.NewLine);
-            s.Append(EscapedInfo);
-            s.Append(Environment.NewLine);
+            s.Append(Info.Escaped());
             if (Acrostiche != null)
             {
+                s.Append(Environment.NewLine);
                 s.Append($"Acrostiche : {Acrostiche}");
             }
-            if (DoubleAcrostiche != null)
+            else if (DoubleAcrostiche != null)
             {
-                s.Append($"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");
+                s.Append(Environment.NewLine);
+                s.Append(
+                    $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");
             }
             s.Append("{{% /notice %}}");
         }
+        s.Append(Environment.NewLine);
         s.Append("+++");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);
+        s.Append(Title);
+        s.Append(Environment.NewLine);
+        s.Append((" \\"));
+        s.Append(Environment.NewLine);
+        
         foreach (var paragraph in Paragraphs)
         {
             s.Append(paragraph.FileContent());
-            s.Append((" \\"));
         }
-        s.Remove(s.Length - 2, 2);
-        s.Append(Environment.NewLine);
         return s.ToString();
     }
 }

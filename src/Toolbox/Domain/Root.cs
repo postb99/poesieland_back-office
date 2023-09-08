@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Toolbox.Xml;
+namespace Toolbox.Domain;
 
 [XmlRoot("Saisons", Namespace = XML_NAMESPACE)]
 public class Root

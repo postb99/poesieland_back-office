@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using FluentAssertions;
 using Toolbox;
-using Toolbox.Xml;
+using Toolbox.Domain;
 using Xunit.Abstractions;
 
 namespace Tests;
@@ -70,6 +70,24 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.Categories.Count > 0).Should().BeTrue();
     }
+
+    [Fact]
+    public void PoemShouldHaveParagraphs()
+    {
+        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).Should().BeTrue();
+    }
+    
+    [Fact]
+    public void PoemShouldHaveSeasonId()
+    {
+        _data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0).Should().BeTrue();
+    }
+    
+    [Fact]
+    public void ParagraphShouldHaveVerses()
+    {
+        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).Should().BeTrue();
+    }
     
     [Fact]
     public void CategoryShouldHaveSubCategory()
@@ -79,18 +97,6 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
         poems.ForEach(x => _testOutputHelper.WriteLine("[{0}] {1}", x.Id, string.Join(',', x.Categories.Where(x => x.SubCategories.Count == 0).Select(x => x.Name))));
 
         poems.Count.Should().Be(0);
-    }
-    
-    [Fact]
-    public void PoemShouldHaveParagraphs()
-    {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).Should().BeTrue();
-    }
-    
-    [Fact]
-    public void ParagraphShouldHaveVerses()
-    {
-        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).Should().BeTrue();
     }
     
     [Fact]

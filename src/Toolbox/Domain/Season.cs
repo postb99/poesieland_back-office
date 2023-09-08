@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Xml.Serialization;
 
-namespace Toolbox.Xml;
+namespace Toolbox.Domain;
 
 public class Season
 {
@@ -13,15 +13,11 @@ public class Season
 
     [XmlElement("summary")] public string Summary { get; set; }
     
-    private string EscapedSummary => Summary.Replace("\"", "\\\"");
-        
-
     [XmlElement("info")] public string Introduction { get; set; }
 
     [XmlElement("poeme")] public List<Poem> Poems { get; set; }
 
-    public string ContentDirectoryName =>
-        $"{Id}_{System.Text.Encoding.UTF8.GetString(System.Text.Encoding.GetEncoding("ISO-8859-8").GetBytes(NumberedName.ToLowerInvariant()))}_saison";
+    public string ContentDirectoryName => $"{Id}_{NumberedName.Unaccented()}_saison";
 
     public string IndexFileContent()
     {
@@ -29,7 +25,7 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append($"title = \"{NumberedName} Saison : {Name}\"");
         s.Append(Environment.NewLine);
-        s.Append($"summary = \"{EscapedSummary}\"");
+        s.Append($"summary = \"{Summary.Escaped()}\"");
         s.Append(Environment.NewLine);
         s.Append($"weight = {Id}");
         s.Append(Environment.NewLine);

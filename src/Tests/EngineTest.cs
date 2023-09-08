@@ -49,6 +49,20 @@ public class EngineTest
     public void ShouldBePoemContentFileName()
     {
         var engine = Helpers.CreateEngine();
-        engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir___.md");
+        engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir.md");
+    }
+    
+    [Fact]
+    public void ShouldBePoemSeasonId()
+    {
+        var engine = Helpers.CreateEngine();
+        engine.Data.Seasons[0].Poems[0].SeasonId.Should().Be(1);
+    }
+    
+    [Fact]
+    public void ShouldCreateFirstPoemFile()
+    {
+        var engine = Helpers.CreateEngine();
+        engine.GeneratePoemFile(engine.Data.Seasons[0].Poems[0]);
     }
 }

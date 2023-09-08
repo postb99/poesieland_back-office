@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using FluentAssertions;
 using Toolbox;
-using Toolbox.Xml;
+using Toolbox.Domain;
 using Xunit.Abstractions;
 
 namespace Tests;

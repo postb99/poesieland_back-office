@@ -1,6 +1,6 @@
 ﻿using System.Xml.Serialization;
 
-namespace Toolbox.Xml;
+namespace Toolbox.Domain;
 
 public class Category
 {
