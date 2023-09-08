@@ -46,61 +46,79 @@ public class Poem
         s.Append(Environment.NewLine);
         s.Append("LastModifierDisplayName = \"Barbara Post\"");
         s.Append(Environment.NewLine);
-        
+
         s.Append("tags = [");
         foreach (var category in Categories)
         {
             s.Append($"\"{category.Name.ToLowerInvariant()}\", ");
         }
+
         if (Acrostiche != null)
         {
             s.Append($"\"acrostiche\", ");
         }
+
         if (PoemType != null)
         {
             s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
         }
+
         s.Remove(s.Length - 2, 2);
         s.Append("]");
         s.Append(Environment.NewLine);
-        
+
         s.Append("categories = [");
         foreach (var subCategory in Categories.SelectMany(x => x.SubCategories))
         {
             s.Append($"\"{subCategory}\", ");
         }
+
         s.Remove(s.Length - 2, 2);
         s.Append("]");
-        
-        if (Info != null)
+
+
+        s.Append(Environment.NewLine);
+        s.Append("+++");
+        s.Append(Environment.NewLine);
+        s.Append(Environment.NewLine);
+
+        foreach (var paragraph in Paragraphs)
+        {
+            s.Append(paragraph.FileContent());
+        }
+
+        s.Remove(s.Length - 6, 6);
+
+        if (Info != null || Acrostiche != null || DoubleAcrostiche != null)
         {
             s.Append(Environment.NewLine);
             s.Append("{{% notice style=\"primary\" %}}");
             s.Append(Environment.NewLine);
-            s.Append(Info.Escaped());
+
+            if (Info != null)
+            {
+                s.Append(Info.Escaped());
+                s.Append(Environment.NewLine);
+            }
+
             if (Acrostiche != null)
             {
                 s.Append(Environment.NewLine);
                 s.Append($"Acrostiche : {Acrostiche}");
+                s.Append(Environment.NewLine);
             }
             else if (DoubleAcrostiche != null)
             {
                 s.Append(Environment.NewLine);
                 s.Append(
                     $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");
+                s.Append(Environment.NewLine);
             }
+
             s.Append("{{% /notice %}}");
+            s.Append(Environment.NewLine);
         }
-        s.Append(Environment.NewLine);
-        s.Append("+++");
-        s.Append(Environment.NewLine);
-        s.Append(Environment.NewLine);
-        
-        foreach (var paragraph in Paragraphs)
-        {
-            s.Append(paragraph.FileContent());
-        }
-        s.Remove(s.Length - 6, 6);
+
         return s.ToString();
     }
 }

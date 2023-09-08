@@ -65,4 +65,15 @@ public class EngineTest
         var engine = Helpers.CreateEngine();
         engine.GeneratePoemFile(engine.Data.Seasons[0].Poems[0]);
     }
+    
+    [Theory]
+    [InlineData("andre_1", 1)]
+    [InlineData("cathedraledelumieres_10", 10)]
+    [InlineData("nonmorro_10", 10)]
+    [InlineData("priere_10", 10)]
+    public void ShouldCreatePoemWithNoticeFile(string poemId, int seasonId)
+    {
+        var engine = Helpers.CreateEngine();
+        engine.GeneratePoemFile(engine.Data.Seasons[seasonId-1].Poems.FirstOrDefault(x => x.Id == poemId)!);
+    }
 }
