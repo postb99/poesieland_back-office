@@ -14,8 +14,8 @@ public class Paragraph
         {
             s.Append(verse);
             s.Append(Environment.NewLine);
+            s.Append(Environment.NewLine);
         }
-        s.Append(Environment.NewLine);
         s.Append((" \\"));
         s.Append(Environment.NewLine);
         return s.ToString();

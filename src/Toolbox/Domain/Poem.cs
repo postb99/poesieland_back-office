@@ -50,15 +50,15 @@ public class Poem
         s.Append("tags = [");
         foreach (var category in Categories)
         {
-            s.Append($"\"{category.Name}\", ");
+            s.Append($"\"{category.Name.ToLowerInvariant()}\", ");
         }
         if (Acrostiche != null)
         {
-            s.Append($"\"Acrostiche\", ");
+            s.Append($"\"acrostiche\", ");
         }
         if (PoemType != null)
         {
-            s.Append($"\"{PoemType}\", ");
+            s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
         }
         s.Remove(s.Length - 2, 2);
         s.Append("]");
@@ -95,15 +95,12 @@ public class Poem
         s.Append("+++");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);
-        s.Append(Title);
-        s.Append(Environment.NewLine);
-        s.Append((" \\"));
-        s.Append(Environment.NewLine);
         
         foreach (var paragraph in Paragraphs)
         {
             s.Append(paragraph.FileContent());
         }
+        s.Remove(s.Length - 6, 6);
         return s.ToString();
     }
 }
