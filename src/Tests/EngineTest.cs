@@ -44,4 +44,11 @@ public class EngineTest
         var engine = Helpers.CreateEngine();
         engine.GenerateSeasonIndexFile(1);
     }
+    
+    [Fact]
+    public void ShouldBePoemContentFileName()
+    {
+        var engine = Helpers.CreateEngine();
+        engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir___.md");
+    }
 }

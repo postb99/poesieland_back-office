@@ -6,4 +6,9 @@ public class Paragraph
 {
     [XmlElement("vers")]
     public List<string> Verses { get; set; }
+
+    public string FileContent()
+    {
+        return ""; // TODO
+    }
 }
