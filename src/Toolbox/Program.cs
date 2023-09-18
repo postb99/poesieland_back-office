@@ -12,67 +12,142 @@ public class Program
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         _configuration = configurationBuilder.Build();
+        _mainMenuSettings = _configuration.GetSection(Settings.MAIN_MENU).Get<MainMenuSettings>();
 
         _engine = new Engine(_configuration);
         _engine.Load();
 
-        Tuple<MainMenuSettings.MenuChoices, MenuItem>? menuChoice = null;
-        do
-        {
-            var menuEntry = MainMenu();
-            menuChoice = ValidateMainMenuEntry(menuEntry);
-        } while (menuChoice == null);
-
-        PerformAction(menuChoice);
+        var menuEntry = MainMenu();
+        ValidateAndPerformMenuChoice(null, menuEntry);
     }
 
     private static string MainMenu()
     {
-        _mainMenuSettings = _configuration.GetSection(Settings.MAIN_MENU).Get<MainMenuSettings>();
-        foreach (var menuItem in _mainMenuSettings.MenuItems)
+        return MenuChoice(_mainMenuSettings.MenuItems);
+    }
+
+    private static string MenuChoice(List<MenuItem> menuItems)
+    {
+        foreach (var menuItem in menuItems)
         {
             Console.WriteLine($"[{menuItem.Key}] {menuItem.Label}");
         }
 
-        Console.WriteLine("Choice:");
-        return Console.ReadLine();
+        var defaultChoice = menuItems[0].Key.ToString();
+        Console.WriteLine($"Choice [{defaultChoice}]:");
+        var input = Console.ReadLine();
+        return string.IsNullOrWhiteSpace(input) ? defaultChoice : input;
     }
 
-    private static Tuple<MainMenuSettings.MenuChoices, MenuItem>? ValidateMainMenuEntry(string entry)
+    private static void ValidateAndPerformMenuChoice(MenuItem? parentMenuItem, string input)
+    {
+        MenuItem? menuChoice = null;
+        do
+        {
+            menuChoice = ValidateMenuEntry(parentMenuItem, input);
+        } while (menuChoice == null);
+
+        if (PerformAction(menuChoice))
+        {
+            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine("Back to main menu");
+            var menuEntry = MainMenu();
+            ValidateAndPerformMenuChoice(null, menuEntry);
+        }
+    }
+
+    private static MenuItem? ValidateMenuEntry(MenuItem? parentMenuItem, string entry)
     {
         var ok = Enum.TryParse<MainMenuSettings.MenuChoices>(entry, true, out var menuChoice);
         if (ok)
         {
-            var menuItem = _mainMenuSettings.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
-            return new Tuple<MainMenuSettings.MenuChoices, MenuItem>(menuChoice, menuItem);
+            var menuItem = parentMenuItem != null
+                ? parentMenuItem.SubMenuItems.FirstOrDefault(x => x.Key == (int)menuChoice)
+                : _mainMenuSettings.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
+            return menuItem;
         }
 
         return null;
     }
 
-    private static void PerformAction(Tuple<MainMenuSettings.MenuChoices, MenuItem> menuChoice)
+    private static bool PerformAction(MenuItem menuChoice)
     {
-        switch (menuChoice.Item1)
+        switch ((MainMenuSettings.MenuChoices)menuChoice.Key)
         {
             case MainMenuSettings.MenuChoices.GenerateSeasonIndexFile:
                 GenerateSeasonIndexFiles(menuChoice);
+                return true;
                 break;
+            case MainMenuSettings.MenuChoices.GeneratePoemFiles:
+                ValidateAndPerformMenuChoice(menuChoice, MenuChoice(menuChoice.SubMenuItems));
+                return false;
+                break;
+            case MainMenuSettings.MenuChoices.SinglePoem:
+                GeneratePoemContentFile(menuChoice);
+                return true;
+                break;
+            case MainMenuSettings.MenuChoices.PoemsOfASeason:
+                GenerateSeasonPoemContentFiles(menuChoice);
+                return true;
+                break;
+        }
+
+        return true;
+    }
+
+    private static void GenerateSeasonPoemContentFiles(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
+        var choice = Console.ReadLine();
+        if (choice == "0")
+        {
+            Console.WriteLine("Not implemented");
+            return;
+        }
+
+        if (int.TryParse(choice, out var intChoice))
+        {
+            _engine.GenerateSeasonAllPoemFiles(intChoice);
+            Console.WriteLine("Poem content files OK");
+        }
+        else
+        {
+            Console.WriteLine("No matching season for input");
         }
     }
 
-    private static void GenerateSeasonIndexFiles(Tuple<MainMenuSettings.MenuChoices, MenuItem> menuChoice)
+    private static void GeneratePoemContentFile(MenuItem menuChoice)
     {
-        Console.WriteLine(menuChoice.Item2.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label);
+        var poemId = Console.ReadLine();
+
+        var poem = _engine.Data.Seasons.SelectMany(x => x.Poems).FirstOrDefault(x => x.Id == poemId);
+        if (poem != null)
+        {
+            _engine.GeneratePoemFile(poem);
+            Console.WriteLine("Poem content file OK");
+        }
+        else
+        {
+            Console.WriteLine("No matching poem for input");
+        }
+    }
+
+    private static void GenerateSeasonIndexFiles(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
         if (choice == "0")
         {
             _engine.GenerateAllSeasonsIndexFile();
+            Console.WriteLine("Seasons index files OK");
             return;
         }
 
         if (int.TryParse(choice, out var intChoice))
         {
             _engine.GenerateSeasonIndexFile(intChoice);
+            Console.WriteLine("Season index files OK");
         }
         else
         {

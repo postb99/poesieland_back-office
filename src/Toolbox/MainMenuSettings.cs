@@ -5,8 +5,13 @@ public class MainMenuSettings
     public enum MenuChoices
     {
         GenerateSeasonIndexFile = 10,
-        AskSeasonNumber = 11
-    }
+        AskSeasonNumberForIndexFile = 11,
+        GeneratePoemFiles = 200,
+        SinglePoem = 210,
+        InputPoemId = 211,
+        PoemsOfASeason = 220,
+        AskSeasonNumberForPoemFile = 221
+        }
     
     public List<MenuItem> MenuItems { get; set; }
 }
