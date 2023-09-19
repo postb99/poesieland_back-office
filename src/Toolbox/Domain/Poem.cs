@@ -98,23 +98,28 @@ public class Poem
             if (Info != null)
             {
                 s.Append(Info.Escaped());
-                s.Append(Environment.NewLine);
             }
 
-            if (Acrostiche != null)
+            if (Acrostiche != null || DoubleAcrostiche != null)
             {
-                s.Append(Environment.NewLine);
-                s.Append($"Acrostiche : {Acrostiche}");
-                s.Append(Environment.NewLine);
-            }
-            else if (DoubleAcrostiche != null)
-            {
-                s.Append(Environment.NewLine);
-                s.Append(
-                    $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");
-                s.Append(Environment.NewLine);
+                if (Info != null)
+                {
+                    s.Append(Environment.NewLine);
+                    s.Append(Environment.NewLine);
+                }
+
+                if (Acrostiche != null)
+                {
+                    s.Append($"Acrostiche : {Acrostiche}");
+                }
+                else if (DoubleAcrostiche != null)
+                {
+                    s.Append(
+                        $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");
+                }
             }
 
+            s.Append(Environment.NewLine);
             s.Append("{{% /notice %}}");
             s.Append(Environment.NewLine);
         }

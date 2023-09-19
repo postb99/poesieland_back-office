@@ -1,4 +1,6 @@
-﻿using FluentAssertions;
+﻿using AutoFixture;
+using FluentAssertions;
+using Toolbox.Domain;
 
 namespace Tests;
 
@@ -44,36 +46,61 @@ public class EngineTest
         var engine = Helpers.CreateEngine();
         engine.GenerateSeasonIndexFile(1);
     }
-    
+
     [Fact]
     public void ShouldBePoemContentFileName()
     {
         var engine = Helpers.CreateEngine();
         engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir.md");
     }
-    
+
     [Fact]
     public void ShouldBePoemSeasonId()
     {
         var engine = Helpers.CreateEngine();
         engine.Data.Seasons[0].Poems[0].SeasonId.Should().Be(1);
     }
-    
+
     [Fact]
     public void ShouldCreateFirstPoemFile()
     {
         var engine = Helpers.CreateEngine();
         engine.GeneratePoemFile(engine.Data.Seasons[0].Poems[0]);
     }
-    
+
     [Theory]
-    [InlineData("andre_1", 1)]
-    [InlineData("cathedraledelumieres_10", 10)]
-    [InlineData("nonmorro_10", 10)]
-    [InlineData("priere_10", 10)]
-    public void ShouldCreatePoemWithNoticeFile(string poemId, int seasonId)
+    [InlineData("simplest", false, null, false, false)]
+    [InlineData("only_info", false, null, false, true)]
+    [InlineData("only_type", false, PoemType.Sonnet, false, false)]
+    [InlineData("type_info", false, PoemType.Sonnet, false, true)]
+    [InlineData("only_acrostiche", true, null, false, false)]
+    [InlineData("acrostiche_type", true, PoemType.Sonnet, false, false)]
+    [InlineData("acrostiche_info", true, null, false, true)]
+    [InlineData("acrostiche_type_info", true, PoemType.Sonnet, false, true)]
+    [InlineData("only_double_acrostiche", false, null, true, false)]
+    [InlineData("type_double_acrostiche", false, PoemType.Sonnet, true, false)]
+    [InlineData("double_acrostiche_info", false, null, true, true)]
+    [InlineData("double_acrostiche_type_info", false, PoemType.Sonnet, true, true)]
+    public void ShouldCreatePoemFileWhateverContent(string fileName, bool isAcrostiche, PoemType? poemType,
+        bool isDoubleAcrostiche, bool hasInfo)
     {
+        var poem = new Fixture().Build<Poem>()
+            .With(x => x.TextDate, "01.01.1900")
+            .With(x => x.Title, fileName)
+            .With(x => x.Id, $"{fileName}_99")
+            .With(x => x.Acrostiche, isAcrostiche ? "Acrostiche" : null)
+            .With(x => x.PoemType, poemType?.ToString())
+            .With(x => x.DoubleAcrostiche,
+                isDoubleAcrostiche ? new DoubleAcrostiche { First = "Double", Second = "Acrostiche" } : null)
+            .With(x => x.Info, hasInfo ? "Some info text" : null)
+            .Create();
+
+        var fictiveSeason = new Season
+            { Id = 99, Name = "Test", NumberedName = "Test", Summary = "Test", Poems = new List<Poem> { poem } };
+
         var engine = Helpers.CreateEngine();
-        engine.GeneratePoemFile(engine.Data.Seasons[seasonId-1].Poems.FirstOrDefault(x => x.Id == poemId)!);
+        engine.Data.Seasons.Add(fictiveSeason);
+        engine.GenerateSeasonIndexFile(fictiveSeason.Id);
+        engine.GeneratePoemFile(poem);
     }
 }
