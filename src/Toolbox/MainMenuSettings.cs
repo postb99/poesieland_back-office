@@ -10,7 +10,8 @@ public class MainMenuSettings
         SinglePoem = 210,
         InputPoemId = 211,
         PoemsOfASeason = 220,
-        AskSeasonNumberForPoemFile = 221
+        AskSeasonNumberForPoemFile = 221,
+        AllPoems = 230
         }
     
     public List<MenuItem> MenuItems { get; set; }

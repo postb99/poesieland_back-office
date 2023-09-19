@@ -67,6 +67,12 @@ public class Engine
         season.Poems.ForEach(GeneratePoemFile);
     }
 
+    public void GenerateAllPoemFiles()
+    {
+        var poems = Data.Seasons.SelectMany(x => x.Poems).ToList();
+        poems.ForEach(GeneratePoemFile);
+    }
+
     // public Root LoadCleaned()
     // {
     //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);

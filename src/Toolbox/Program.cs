@@ -86,6 +86,10 @@ public class Program
                 GeneratePoemContentFile(menuChoice);
                 return true;
                 break;
+            case MainMenuSettings.MenuChoices.AllPoems:
+                GenerateAllPoemsContentFiles();
+                return true;
+                break;
             case MainMenuSettings.MenuChoices.PoemsOfASeason:
                 GenerateSeasonPoemContentFiles(menuChoice);
                 return true;
@@ -101,7 +105,7 @@ public class Program
         var choice = Console.ReadLine();
         if (choice == "0")
         {
-            Console.WriteLine("Not implemented");
+            GenerateAllPoemsContentFiles();
             return;
         }
 
@@ -131,6 +135,12 @@ public class Program
         {
             Console.WriteLine("No matching poem for input");
         }
+    }
+
+    private static void GenerateAllPoemsContentFiles()
+    {
+        _engine.GenerateAllPoemFiles();
+        Console.WriteLine("All poem content files OK");
     }
 
     private static void GenerateSeasonIndexFiles(MenuItem menuChoice)
