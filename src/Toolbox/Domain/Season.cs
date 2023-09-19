@@ -17,7 +17,7 @@ public class Season
 
     [XmlElement("poeme")] public List<Poem> Poems { get; set; }
 
-    public string ContentDirectoryName => $"{Id}_{NumberedName.Unaccented()}_saison";
+    public string ContentDirectoryName => $"{Id}_{NumberedName.UnaccentedCleaned()}_saison";
 
     public string IndexFileContent()
     {

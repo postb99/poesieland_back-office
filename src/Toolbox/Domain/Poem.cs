@@ -30,7 +30,7 @@ public class Poem
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
-    public string ContentFileName => $"{Title.Unaccented()}.md";
+    public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
     public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
 
