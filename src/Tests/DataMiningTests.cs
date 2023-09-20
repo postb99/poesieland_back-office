@@ -95,10 +95,10 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         foreach (var season in seasons)
         {
             var poems = season.Poems.OrderBy(x => x.Date).ToList();
-            var lastPoem = poems.Last();
-            _testOutputHelper.WriteLine("[{0} - {4}]: {1} - {2} ({3})", season.Name, poems[0].TextDate,
-                lastPoem.TextDate,
-                lastPoem.Id, poems.Count);
+            var lastPoem = poems.LastOrDefault();
+            _testOutputHelper.WriteLine("[{0} - {4}]: {1} - {2} ({3})", season.Name, poems.FirstOrDefault()?.TextDate,
+                lastPoem?.TextDate,
+                lastPoem?.Id, poems.Count);
         }
     }
 }

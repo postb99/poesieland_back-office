@@ -77,23 +77,21 @@ public class Program
             case MainMenuSettings.MenuChoices.GenerateSeasonIndexFile:
                 GenerateSeasonIndexFiles(menuChoice);
                 return true;
-                break;
             case MainMenuSettings.MenuChoices.GeneratePoemFiles:
                 ValidateAndPerformMenuChoice(menuChoice, MenuChoice(menuChoice.SubMenuItems));
                 return false;
-                break;
             case MainMenuSettings.MenuChoices.SinglePoem:
                 GeneratePoemContentFile(menuChoice);
                 return true;
-                break;
             case MainMenuSettings.MenuChoices.AllPoems:
                 GenerateAllPoemsContentFiles();
                 return true;
-                break;
             case MainMenuSettings.MenuChoices.PoemsOfASeason:
                 GenerateSeasonPoemContentFiles(menuChoice);
                 return true;
-                break;
+            case MainMenuSettings.MenuChoices.Debug:
+                Console.WriteLine(Directory.GetCurrentDirectory());
+                return true;
         }
 
         return true;
