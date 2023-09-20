@@ -22,20 +22,11 @@ public class XmlStorageReworkTest : IClassFixture<LoadDataFixture>
     [Fact(Skip = "Applied")]
     public void ReworkAndSave()
     {
-      
-        // var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.SimpleAcrostiche != null);
-        // foreach (var poem in poems)
-        // {
-        //     poem.Acrostiche =  poem.SimpleAcrostiche;
-        //     poem.SimpleAcrostiche = null;
-        // }
-        //
-        // poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.SpecialAcrostiche != null);
-        // foreach (var poem in poems)
-        // {
-        //     poem.crossingAcrostiche = new CrossingAcrostiche { First = poem.SpecialAcrostiche.First, Second = poem.SpecialAcrostiche.Second };
-        // }
 
+        foreach (var season in _data.Seasons)
+        {
+            season.Poems.ForEach(p => p.Id = $"{p.Title.UnaccentedCleaned()}_{season.Id}");
+        }
         _engine.Save();
     }
     

@@ -7,7 +7,7 @@
 Cette saison comprend mes premiers poèmes suivant strictement la versification néoclassique, apprise courant 1995, mais aussi des poèmes plus anciens et remaniés. Une Saison toute de petites touches, dans un nouveau "moule" qui l'exacerbe.
 
 De 1994 à septembre 1996</info>
-    <poeme id="javaislheur_1" type="sonnet" longueurVers="12">
+    <poeme id="j_avais_l_heur_de_m_asseoir_1" type="sonnet" longueurVers="12">
       <titre>J'avais l'heur de m'asseoir...</titre>
       <date>07.12.1995</date>
       <categorie>
@@ -37,7 +37,7 @@ De 1994 à septembre 1996</info>
         <vers>Refermer en mon cœur la plaie encor qui bouge.</vers>
       </para>
     </poeme>
-    <poeme id="foliedamour_1" longueurVers="12">
+    <poeme id="folie_d_amour_1" longueurVers="12">
       <titre>Folie d'amour</titre>
       <date>10.01.1996</date>
       <categorie>
@@ -75,7 +75,7 @@ De 1994 à septembre 1996</info>
         <vers>Vers le cœur de celui qui s'éloigne en calèche ?</vers>
       </para>
     </poeme>
-    <poeme id="femininmasculin_1" longueurVers="8">
+    <poeme id="feminin_masculin_1" longueurVers="8">
       <titre>Féminin, masculin</titre>
       <date>25.05.1996</date>
       <categorie>
@@ -146,7 +146,7 @@ De 1994 à septembre 1996</info>
         <vers>Je lui soufflai : "Je t'aime André".</vers>
       </para>
     </poeme>
-    <poeme id="villedemesamours_1" longueurVers="8">
+    <poeme id="ville_de_mes_amours_1" longueurVers="8">
       <titre>Ville de mes amours</titre>
       <date>13.06.1996</date>
       <categorie>
@@ -174,7 +174,7 @@ De 1994 à septembre 1996</info>
         <vers>Je vais te dire adieu, ville d'indifférence!</vers>
       </para>
     </poeme>
-    <poeme id="amourdevacances_1" longueurVers="12">
+    <poeme id="amour_de_vacances_1" longueurVers="12">
       <titre>Amour de vacances</titre>
       <date>21.08.1996</date>
       <categorie>
@@ -200,7 +200,7 @@ De 1994 à septembre 1996</info>
         <vers>Au creux de la fin d'août, en mon cœur baladin.</vers>
       </para>
     </poeme>
-    <poeme id="lafemme_1" longueurVers="6">
+    <poeme id="la_femme_1" longueurVers="6">
       <titre>La Femme</titre>
       <date>01.01.1994</date>
       <categorie>
@@ -249,7 +249,7 @@ De 1994 à septembre 1996</info>
         <vers>Mit des reflets subtils.</vers>
       </para>
     </poeme>
-    <poeme id="unoceandabime_1" longueurVers="12">
+    <poeme id="un_ocean_d_abime_1" longueurVers="12">
       <titre>Un océan d'abîme</titre>
       <date>01.09.1996</date>
       <categorie>
@@ -305,7 +305,7 @@ De 1994 à septembre 1996</info>
         <vers>En longue absence nous révèle.</vers>
       </para>
     </poeme>
-    <poeme id="lemessager_1" longueurVers="6">
+    <poeme id="le_messager_1" longueurVers="6">
       <titre>Le messager</titre>
       <date>02.04.1995</date>
       <categorie>
@@ -337,7 +337,7 @@ De 1994 à septembre 1996</info>
         <vers>A ceux qui la voudront.</vers>
       </para>
     </poeme>
-    <poeme id="lapoesie_1" longueurVers="6">
+    <poeme id="la_poesie_1" longueurVers="6">
       <titre>La Poésie</titre>
       <date>06.02.1996</date>
       <categorie>
@@ -355,7 +355,7 @@ De 1994 à septembre 1996</info>
         <vers>Me soit toujours fidèle !</vers>
       </para>
     </poeme>
-    <poeme id="retouralinnocence_1" longueurVers="6">
+    <poeme id="retour_a_l_innocence_1" longueurVers="6">
       <titre>Retour à l'innocence</titre>
       <date>19.02.1996</date>
       <categorie>
@@ -391,7 +391,7 @@ De 1994 à septembre 1996</info>
         <vers>D'avoir d'un enfant l'âme.</vers>
       </para>
     </poeme>
-    <poeme id="senteurstroublees_1" longueurVers="8">
+    <poeme id="senteurs_troublees_des_clematites_1" longueurVers="8">
       <titre>Senteurs troublées des clématites...</titre>
       <date>07.06.1996</date>
       <categorie>
@@ -427,7 +427,7 @@ De 1994 à septembre 1996</info>
         <vers>Quand je te vois et que je t'hume.</vers>
       </para>
     </poeme>
-    <poeme id="lagouttedeau_1" longueurVers="8">
+    <poeme id="la_goutte_d_eau_1" longueurVers="8">
       <titre>La goutte d'eau</titre>
       <date>10.06.1996</date>
       <categorie>
@@ -457,7 +457,7 @@ De 1994 à septembre 1996</info>
         <vers>Et mon enfance est loin dehors.</vers>
       </para>
     </poeme>
-    <poeme id="enfancelorraine_1" longueurVers="12">
+    <poeme id="enfance_lorraine_1" longueurVers="12">
       <titre>Enfance lorraine</titre>
       <date>11.06.1996</date>
       <categorie>
@@ -487,7 +487,7 @@ De 1994 à septembre 1996</info>
         <vers>S'assoupit par respect pour mon pays natal.</vers>
       </para>
     </poeme>
-    <poeme id="lenfancedoree_1">
+    <poeme id="l_enfance_doree_1">
       <titre>L'enfance dorée</titre>
       <date>01.01.1994</date>
       <categorie>
@@ -544,7 +544,7 @@ De 1994 à septembre 1996</info>
         <vers>Je vogue au gré de la douceur.</vers>
       </para>
     </poeme>
-    <poeme id="hymnealalune_1" longueurVers="8">
+    <poeme id="hymne_a_la_lune_1" longueurVers="8">
       <titre>Hymne à la lune</titre>
       <date>20.06.1996</date>
       <categorie>
@@ -597,7 +597,7 @@ De 1994 à septembre 1996</info>
         <vers>Dans mon jardin secret en mirifiques restes.</vers>
       </para>
     </poeme>
-    <poeme id="amitiedenfance_1" longueurVers="8">
+    <poeme id="amitie_d_enfance_1" longueurVers="8">
       <titre>Amitié d'enfance</titre>
       <date>23.08.1996</date>
       <categorie>
@@ -736,7 +736,7 @@ De 1994 à septembre 1996</info>
         <vers>D'où ne se répandra quelque gémissement.</vers>
       </para>
     </poeme>
-    <poeme id="borddemerintime_1" longueurVers="12">
+    <poeme id="bord_de_mer_intime_1" longueurVers="12">
       <titre>Bord de mer intime</titre>
       <date>09.07.1996</date>
       <categorie>
@@ -762,7 +762,7 @@ De 1994 à septembre 1996</info>
         <vers>Celle qui nous dit tous : "ne cesse d'espérer".</vers>
       </para>
     </poeme>
-    <poeme id="impressiondemer_1" longueurVers="8">
+    <poeme id="impression_de_mer_1" longueurVers="8">
       <titre>Impression de mer</titre>
       <date>12.07.1996</date>
       <categorie>
@@ -784,7 +784,7 @@ De 1994 à septembre 1996</info>
         <vers>De ce que furent nos enfances.</vers>
       </para>
     </poeme>
-    <poeme id="pecheenbord_1" longueurVers="12">
+    <poeme id="peche_en_bord_de_plage_1" longueurVers="12">
       <titre>Pêche en bord de plage</titre>
       <date>12.07.1996</date>
       <categorie>
@@ -806,7 +806,7 @@ De 1994 à septembre 1996</info>
         <vers>L'essence de la vie et soulever son voile.</vers>
       </para>
     </poeme>
-    <poeme id="desirdemer_1" longueurVers="12">
+    <poeme id="desir_de_mer_1" longueurVers="12">
       <titre>Désir de mer</titre>
       <date>13.07.1996</date>
       <categorie>
@@ -836,7 +836,7 @@ De 1994 à septembre 1996</info>
         <vers>Ne saura dire adieu, mer tendre mais trompeuse.</vers>
       </para>
     </poeme>
-    <poeme id="reveriemarine_1">
+    <poeme id="reverie_marine_1">
       <titre>Rêverie marine</titre>
       <date>01.11.1995</date>
       <categorie>
@@ -885,7 +885,7 @@ De 1994 à septembre 1996</info>
         <vers>S'anime en profondeur et comble tous les yeux.</vers>
       </para>
     </poeme>
-    <poeme id="grandsud_1" longueurVers="12">
+    <poeme id="grand_sud_1" longueurVers="12">
       <titre>Grand Sud</titre>
       <date>03.03.1996</date>
       <categorie>
@@ -973,7 +973,7 @@ De 1994 à septembre 1996</info>
         <vers>Naître le soleil boutonneux.</vers>
       </para>
     </poeme>
-    <poeme id="lethe_1" longueurVers="12">
+    <poeme id="le_the_1" longueurVers="12">
       <titre>Le Thé</titre>
       <date>17.06.1996</date>
       <categorie>
@@ -993,7 +993,7 @@ De 1994 à septembre 1996</info>
         <vers>Son haleine est légère ainsi qu'une caresse!</vers>
       </para>
     </poeme>
-    <poeme id="promenadecitadine_1" longueurVers="8">
+    <poeme id="promenade_citadine_1" longueurVers="8">
       <titre>Promenade citadine</titre>
       <date>22.06.1996</date>
       <categorie>
@@ -1025,7 +1025,7 @@ De 1994 à septembre 1996</info>
         <vers>Que la campagne en flânerie.</vers>
       </para>
     </poeme>
-    <poeme id="doucechatte_1" longueurVers="12">
+    <poeme id="douce_chatte_1" longueurVers="12">
       <titre>Douce chatte</titre>
       <date>05.08.1996</date>
       <categorie>
@@ -1052,7 +1052,7 @@ De 1994 à septembre 1996</info>
         <vers>Puis tu repartiras vers l'horizon d'amour.</vers>
       </para>
     </poeme>
-    <poeme id="findete_1" longueurVers="12">
+    <poeme id="fin_d_ete_1" longueurVers="12">
       <titre>Fin d'été</titre>
       <date>18.08.1996</date>
       <categorie>
@@ -1104,7 +1104,7 @@ De 1994 à septembre 1996</info>
         <vers>Que j'ai bien pour l'automne une dévotion ?</vers>
       </para>
     </poeme>
-    <poeme id="bleublanclarmes_1" longueurVers="12">
+    <poeme id="bleu_blanc_larmes_1" longueurVers="12">
       <titre>Bleu, blanc, larmes</titre>
       <date>01.01.1994</date>
       <categorie>
@@ -1225,7 +1225,7 @@ De 1994 à septembre 1996</info>
         <vers>Et les couleurs du jour ne furent plus mirage.</vers>
       </para>
     </poeme>
-    <poeme id="desespoirdupoete_1" longueurVers="12">
+    <poeme id="desespoir_du_poete_1" longueurVers="12">
       <titre>Désespoir du poète</titre>
       <date>30.07.1996</date>
       <categorie>
@@ -1315,7 +1315,7 @@ De 1994 à septembre 1996</info>
         <vers>Comme dans le linceul d'une haleine brouillée.</vers>
       </para>
     </poeme>
-    <poeme id="findecombat_1" longueurVers="12">
+    <poeme id="fin_de_combat_1" longueurVers="12">
       <titre>Fin de combat</titre>
       <date>01.01.1994</date>
       <categorie>
@@ -1391,7 +1391,7 @@ De 1994 à septembre 1996</info>
         <vers>Qui se crut déifié.</vers>
       </para>
     </poeme>
-    <poeme id="lesursaut_1" longueurVers="8">
+    <poeme id="le_sursaut_1" longueurVers="8">
       <titre>Le Sursaut</titre>
       <date>01.01.1994</date>
       <categorie>
@@ -1423,7 +1423,7 @@ De 1994 à septembre 1996</info>
         <vers>En un sursaut national.</vers>
       </para>
     </poeme>
-    <poeme id="letempsmortel_1" longueurVers="12">
+    <poeme id="le_temps_mortel_1" longueurVers="12">
       <titre>Le Temps Mortel</titre>
       <date>11.02.1996</date>
       <categorie>
@@ -1513,7 +1513,7 @@ De septembre à décembre 1996</info>
         <vers>Pour créer le bonheur du fugitif instant.</vers>
       </para>
     </poeme>
-    <poeme id="bellevolage_2" longueurVers="12">
+    <poeme id="belle_volage_2" longueurVers="12">
       <titre>Belle volage</titre>
       <date>05.09.1996</date>
       <categorie>
@@ -1563,7 +1563,7 @@ De septembre à décembre 1996</info>
         <vers>Je calme ma douleur.</vers>
       </para>
     </poeme>
-    <poeme id="lannamite_2" longueurVers="8">
+    <poeme id="l_annamite_2" longueurVers="8">
       <titre>L'Annamite</titre>
       <date>09.10.1996</date>
       <categorie>
@@ -1595,7 +1595,7 @@ De septembre à décembre 1996</info>
         <vers>Et vit passer tant de mitraille?</vers>
       </para>
     </poeme>
-    <poeme id="bellealanguie_2" longueurVers="12">
+    <poeme id="belle_alanguie_2" longueurVers="12">
       <titre>Belle alanguie</titre>
       <date>20.09.1996</date>
       <categorie>
@@ -1621,7 +1621,7 @@ De septembre à décembre 1996</info>
         <vers>Et mon cœur fut semblable au sang bleu de sa veine.</vers>
       </para>
     </poeme>
-    <poeme id="lesamoureux_2" longueurVers="12">
+    <poeme id="les_amoureux_2" longueurVers="12">
       <titre>Les Amoureux</titre>
       <date>07.11.1996</date>
       <categorie>
@@ -1745,7 +1745,7 @@ De septembre à décembre 1996</info>
         <vers>Désir de cris.</vers>
       </para>
     </poeme>
-    <poeme id="leparc_2" longueurVers="8">
+    <poeme id="le_parc_2" longueurVers="8">
       <titre>Le Parc</titre>
       <date>16.11.1996</date>
       <categorie>
@@ -1813,7 +1813,7 @@ De septembre à décembre 1996</info>
         <vers>Ta présence en paix qui m'arrose.</vers>
       </para>
     </poeme>
-    <poeme id="passevibrant_2" longueurVers="6">
+    <poeme id="passe_vibrant_2" longueurVers="6">
       <titre>Passé vibrant</titre>
       <date>07.10.1996</date>
       <categorie>
@@ -1871,7 +1871,7 @@ De septembre à décembre 1996</info>
         <vers>Où la feuille rêveuse atterrira demain.</vers>
       </para>
     </poeme>
-    <poeme id="harmonieautomnale_2" longueurVers="12">
+    <poeme id="harmonie_automnale_2" longueurVers="12">
       <titre>Harmonie automnale</titre>
       <date>15.09.1996</date>
       <categorie>
@@ -1897,7 +1897,7 @@ De septembre à décembre 1996</info>
         <vers>Qui font rougir l'automne au frais petit matin.</vers>
       </para>
     </poeme>
-    <poeme id="automnedenfance_2" longueurVers="12">
+    <poeme id="automne_d_enfance_2" longueurVers="12">
       <titre>Automne d'enfance</titre>
       <date>22.10.1996</date>
       <categorie>
@@ -1983,7 +1983,7 @@ De septembre à décembre 1996</info>
         <vers>Rebouclera le cycle à l'automne d'argile.</vers>
       </para>
     </poeme>
-    <poeme id="foliedenovembre_2" longueurVers="12">
+    <poeme id="folie_de_novembre_2" longueurVers="12">
       <titre>Folie de novembre</titre>
       <date>19.10.1996</date>
       <categorie>
@@ -2043,7 +2043,7 @@ De septembre à décembre 1996</info>
         <vers>De chaque saison démunie.</vers>
       </para>
     </poeme>
-    <poeme id="fuitedanslenord_2" longueurVers="6">
+    <poeme id="fuite_dans_le_nord_2" longueurVers="6">
       <titre>Fuite dans le Nord</titre>
       <date>02.11.1996</date>
       <categorie>
@@ -2070,7 +2070,7 @@ De septembre à décembre 1996</info>
         <vers>Tourbillonne sans âge.</vers>
       </para>
     </poeme>
-    <poeme id="novembredompte_2" longueurVers="12">
+    <poeme id="novembre_dompte_2" longueurVers="12">
       <titre>Novembre dompté</titre>
       <date>03.11.1996</date>
       <categorie>
@@ -2100,7 +2100,7 @@ De septembre à décembre 1996</info>
         <vers>Car ce n'est que de moi que vient toute conscience.</vers>
       </para>
     </poeme>
-    <poeme id="voyagedhiver_2" longueurVers="6">
+    <poeme id="voyage_d_hiver_2" longueurVers="6">
       <titre>Voyage d'hiver</titre>
       <date>06.12.1996</date>
       <categorie>
@@ -2132,7 +2132,7 @@ De septembre à décembre 1996</info>
         <vers>J'y trouverai ma place.</vers>
       </para>
     </poeme>
-    <poeme id="matindhiver_2" longueurVers="4">
+    <poeme id="matin_d_hiver_2" longueurVers="4">
       <titre>Matin d'hiver</titre>
       <date>07.12.1996</date>
       <categorie>
@@ -2164,7 +2164,7 @@ De septembre à décembre 1996</info>
         <vers>Absinthe blanche.</vers>
       </para>
     </poeme>
-    <poeme id="noelananterre_2" longueurVers="12">
+    <poeme id="noel_a_nanterre_2" longueurVers="12">
       <titre>Noël à Nanterre</titre>
       <date>23.12.1996</date>
       <categorie>
@@ -2308,7 +2308,7 @@ De septembre à décembre 1996</info>
         <vers>Vers un autre univers où n'est ni blanc ni noir.</vers>
       </para>
     </poeme>
-    <poeme id="borddhorizon_2" longueurVers="4">
+    <poeme id="bord_d_horizon_2" longueurVers="4">
       <titre>Bord d'horizon</titre>
       <date>11.10.1996</date>
       <categorie>
@@ -2377,7 +2377,7 @@ De septembre à décembre 1996</info>
         <vers>Car il sait que bientôt vient le chaos final.</vers>
       </para>
     </poeme>
-    <poeme id="letempsdesheures_2" longueurVers="4">
+    <poeme id="le_temps_des_heures_2" longueurVers="4">
       <titre>Le temps des heures</titre>
       <date>22.11.1996</date>
       <categorie>
@@ -2415,7 +2415,7 @@ De septembre à décembre 1996</info>
         <vers>Pour mon bonheur.</vers>
       </para>
     </poeme>
-    <poeme id="coucherdesoleil_2" longueurVers="8">
+    <poeme id="coucher_de_soleil_2" longueurVers="8">
       <titre>Coucher de soleil</titre>
       <date>28.11.1996</date>
       <categorie>
@@ -2441,7 +2441,7 @@ De septembre à décembre 1996</info>
         <vers>Qui me ravit ce soir fatal.</vers>
       </para>
     </poeme>
-    <poeme id="lesoleilestailleurs_2" longueurVers="6">
+    <poeme id="le_soleil_est_ailleurs_2" longueurVers="6">
       <titre>Le soleil est ailleurs</titre>
       <date>30.11.1996</date>
       <categorie>
@@ -2495,7 +2495,7 @@ De septembre à décembre 1996</info>
         <vers>Que la paix nous délivre!</vers>
       </para>
     </poeme>
-    <poeme id="debutdorage_2" longueurVers="4">
+    <poeme id="debut_d_orage_2" longueurVers="4">
       <titre>Début d'orage</titre>
       <date>27.11.1996</date>
       <categorie>
@@ -2615,7 +2615,7 @@ De septembre à décembre 1996</info>
         <vers>Connaître enfin la vie et même ses sanglots.</vers>
       </para>
     </poeme>
-    <poeme id="lavoilure_2" longueurVers="8">
+    <poeme id="la_voilure_de_la_voyance_2" longueurVers="8">
       <titre>La voilure de la voyance</titre>
       <date>09.09.1996</date>
       <categorie>
@@ -2641,7 +2641,7 @@ De septembre à décembre 1996</info>
         <vers>Très près de l'âme enfin natale.</vers>
       </para>
     </poeme>
-    <poeme id="lecancre_2" longueurVers="12">
+    <poeme id="le_cancre_2" longueurVers="12">
       <titre>Le cancre</titre>
       <date>13.09.1996</date>
       <categorie>
@@ -2667,7 +2667,7 @@ De septembre à décembre 1996</info>
         <vers>Tu ne trouves l'éclat de l'Afrique, ta terre.</vers>
       </para>
     </poeme>
-    <poeme id="dieuloiseau_2" longueurVers="8">
+    <poeme id="dieu_l_oiseau_et_l_oiseleur_2" longueurVers="8">
       <titre>Dieu, l'oiseau et l'oiseleur</titre>
       <date>10.09.1996</date>
       <categorie>
@@ -2705,7 +2705,7 @@ De septembre à décembre 1996</info>
         <vers>Libéra l'oiseau, son bonheur.</vers>
       </para>
     </poeme>
-    <poeme id="sinfoniacorsa_2" type="sonnet" longueurVers="12">
+    <poeme id="sinfonia_corsa_2" type="sonnet" longueurVers="12">
       <titre>Sinfonia corsa</titre>
       <date>17.10.1996</date>
       <categorie>
@@ -2735,7 +2735,7 @@ De septembre à décembre 1996</info>
         <vers>Sauras-tu leur renaître, ô forte et tendre femme?</vers>
       </para>
     </poeme>
-    <poeme id="pluieindienne_2" longueurVers="6">
+    <poeme id="pluie_indienne_2" longueurVers="6">
       <titre>Pluie indienne</titre>
       <date>26.10.1996</date>
       <categorie>
@@ -2765,7 +2765,7 @@ De septembre à décembre 1996</info>
         <vers>Sous le ciel de sa terre.</vers>
       </para>
     </poeme>
-    <poeme id="lescorbeaux_2" longueurVers="8">
+    <poeme id="les_corbeaux_2" longueurVers="8">
       <titre>Les Corbeaux</titre>
       <date>06.10.1996</date>
       <categorie>
@@ -2791,7 +2791,7 @@ De septembre à décembre 1996</info>
         <vers>Corneilles, freux, corbeaux du crime!</vers>
       </para>
     </poeme>
-    <poeme id="tousleschemins_2" longueurVers="8">
+    <poeme id="tous_les_chemins_2" longueurVers="8">
       <titre>Tous les chemins...</titre>
       <date>08.10.1996</date>
       <categorie>
@@ -2817,7 +2817,7 @@ De septembre à décembre 1996</info>
         <vers>C'est ce qui craint le moins la mort.</vers>
       </para>
     </poeme>
-    <poeme id="lesoiseaux_2" longueurVers="8">
+    <poeme id="les_oiseaux_2" longueurVers="8">
       <titre>Les Oiseaux</titre>
       <date>09.12.1996</date>
       <categorie>
@@ -2873,7 +2873,7 @@ De septembre à décembre 1996</info>
         <vers>Aux flots tout assombris verse l'ultime obole.</vers>
       </para>
     </poeme>
-    <poeme id="lalande_2" longueurVers="8">
+    <poeme id="la_lande_2" longueurVers="8">
       <titre>La lande</titre>
       <date>02.12.1996</date>
       <categorie>
@@ -2931,7 +2931,7 @@ De septembre à décembre 1996</info>
     <info>Ces quelques mois presque exaltés, avant de connaître d'autres bonheurs.
 
 De janvier à mai 1997</info>
-    <poeme id="soleillevant_3" longueurVers="8">
+    <poeme id="soleil_levant_3" longueurVers="8">
       <titre>Soleil levant</titre>
       <date>07.02.1997</date>
       <categorie>
@@ -2957,7 +2957,7 @@ De janvier à mai 1997</info>
         <vers>S'orne d'une magique boule.</vers>
       </para>
     </poeme>
-    <poeme id="calmedusoir_3" longueurVers="9">
+    <poeme id="calme_du_soir_3" longueurVers="9">
       <titre>Calme du soir</titre>
       <date>05.03.1997</date>
       <categorie>
@@ -3015,7 +3015,7 @@ De janvier à mai 1997</info>
         <vers>Et dans la paix mon bonheur s'ancre.</vers>
       </para>
     </poeme>
-    <poeme id="lalune_3" longueurVers="5">
+    <poeme id="la_lune_3" longueurVers="5">
       <titre>La Lune</titre>
       <date>09.04.1997</date>
       <categorie>
@@ -3073,7 +3073,7 @@ De janvier à mai 1997</info>
         <vers>Quand le cœur s'attache et persiste...</vers>
       </para>
     </poeme>
-    <poeme id="lacomete_3" longueurVers="6">
+    <poeme id="la_comete_3" longueurVers="6">
       <titre>La Comète</titre>
       <date>01.04.1997</date>
       <categorie>
@@ -3105,7 +3105,7 @@ De janvier à mai 1997</info>
         <vers>De nos nuits la compagne!</vers>
       </para>
     </poeme>
-    <poeme id="ladieu_3" longueurVers="6">
+    <poeme id="l_adieu_3" longueurVers="6">
       <titre>L'Adieu</titre>
       <date>10.05.1997</date>
       <categorie>
@@ -3137,7 +3137,7 @@ De janvier à mai 1997</info>
         <vers>De poussière une graine.</vers>
       </para>
     </poeme>
-    <poeme id="jeuxdenuits_3" longueurVers="8">
+    <poeme id="jeux_de_nuits_3" longueurVers="8">
       <titre>Jeux de nuits</titre>
       <date>16.03.1997</date>
       <categorie>
@@ -3164,7 +3164,7 @@ De janvier à mai 1997</info>
         <vers>S'enfuit.</vers>
       </para>
     </poeme>
-    <poeme id="lunemeurtriere_3" longueurVers="8">
+    <poeme id="lune_meurtriere_3" longueurVers="8">
       <titre>Lune meurtrière</titre>
       <date>23.01.1997</date>
       <categorie>
@@ -3190,7 +3190,7 @@ De janvier à mai 1997</info>
         <vers>La lune s'apaise et reluit.</vers>
       </para>
     </poeme>
-    <poeme id="findenuit_3" longueurVers="8">
+    <poeme id="fin_de_nuit_3" longueurVers="8">
       <titre>Fin de nuit</titre>
       <date>12.02.1997</date>
       <categorie>
@@ -3220,7 +3220,7 @@ De janvier à mai 1997</info>
         <vers>De ces chimères clôt l'exode.</vers>
       </para>
     </poeme>
-    <poeme id="ladanse_3" longueurVers="8">
+    <poeme id="la_danse_3" longueurVers="8">
       <titre>La Danse</titre>
       <date>18.01.1997</date>
       <categorie>
@@ -3262,7 +3262,7 @@ De janvier à mai 1997</info>
         <vers>Juste une valse, démesure !</vers>
       </para>
     </poeme>
-    <poeme id="cueilleuse_3" longueurVers="8">
+    <poeme id="cueilleuse_d_etoiles_3" longueurVers="8">
       <titre>Cueilleuse d'étoiles</titre>
       <date>09.02.1997</date>
       <categorie>
@@ -3288,7 +3288,7 @@ De janvier à mai 1997</info>
         <vers>Sublime cueilleuse d'étoiles !</vers>
       </para>
     </poeme>
-    <poeme id="lamoureuse_3" longueurVers="4">
+    <poeme id="l_amoureuse_3" longueurVers="4">
       <titre>L'Amoureuse</titre>
       <date>21.02.1997</date>
       <categorie>
@@ -3384,7 +3384,7 @@ De janvier à mai 1997</info>
         <vers>O ma bien noble amie.</vers>
       </para>
     </poeme>
-    <poeme id="mysteredophelie_3" longueurVers="6">
+    <poeme id="mystere_d_ophelie_3" longueurVers="6">
       <titre>Mystère d'Ophélie</titre>
       <date>14.03.1997</date>
       <categorie>
@@ -3416,7 +3416,7 @@ De janvier à mai 1997</info>
         <vers>La rendait plus sublime !</vers>
       </para>
     </poeme>
-    <poeme id="audeladunsourire_3" longueurVers="8">
+    <poeme id="au_dela_d_un_sourire_3" longueurVers="8">
       <titre>Au-delà d'un sourire</titre>
       <date>03.04.1997</date>
       <categorie>
@@ -3476,7 +3476,7 @@ De janvier à mai 1997</info>
         <vers>Ton cœur m'ouvre ses firmaments !</vers>
       </para>
     </poeme>
-    <poeme id="labsence_3" longueurVers="8">
+    <poeme id="l_absence_3" longueurVers="8">
       <titre>L'Absence</titre>
       <date>02.05.1997</date>
       <categorie>
@@ -3518,7 +3518,7 @@ De janvier à mai 1997</info>
         <vers>Le temps qui nous ronge...</vers>
       </para>
     </poeme>
-    <poeme id="lamitie_3" longueurVers="6">
+    <poeme id="l_amitie_3" longueurVers="6">
       <titre>L'Amitié</titre>
       <date>21.02.1997</date>
       <categorie>
@@ -3567,7 +3567,7 @@ De janvier à mai 1997</info>
         <vers>Je me redis enfin :" Par ton savoir je fus".</vers>
       </para>
     </poeme>
-    <poeme id="destinsingulier_3" longueurVers="6">
+    <poeme id="destin_singulier_3" longueurVers="6">
       <titre>Destin singulier</titre>
       <date>01.02.1997</date>
       <categorie>
@@ -3605,7 +3605,7 @@ De janvier à mai 1997</info>
         <vers>D'un pays au cœur d'or ?</vers>
       </para>
     </poeme>
-    <poeme id="estceun_3" longueurVers="8">
+    <poeme id="est_ce_un_automne_3" longueurVers="8">
       <titre>Est-ce un automne...</titre>
       <date>27.04.1997</date>
       <categorie>
@@ -3635,7 +3635,7 @@ De janvier à mai 1997</info>
         <vers>Est-ce une fin, nouveau début ?</vers>
       </para>
     </poeme>
-    <poeme id="letempspasse_3" longueurVers="8">
+    <poeme id="le_temps_passe_3" longueurVers="8">
       <titre>Le temps passé</titre>
       <date>03.01.1997</date>
       <categorie>
@@ -3667,7 +3667,7 @@ De janvier à mai 1997</info>
         <vers>Et nos saisons, brillants émaux ?</vers>
       </para>
     </poeme>
-    <poeme id="souslesureau_3" longueurVers="8">
+    <poeme id="sous_le_sureau_3" longueurVers="8">
       <titre>Sous le sureau</titre>
       <date>07.01.1997</date>
       <categorie>
@@ -3699,7 +3699,7 @@ De janvier à mai 1997</info>
         <vers>Dans l'enfance sous le sureau.</vers>
       </para>
     </poeme>
-    <poeme id="saisonsterrestres_3" longueurVers="8">
+    <poeme id="saisons_terrestres_3" longueurVers="8">
       <titre>Saisons terrestres</titre>
       <date>15.02.1997</date>
       <categorie>
@@ -3803,7 +3803,7 @@ De janvier à mai 1997</info>
         <vers>Le temps de l'irréel.</vers>
       </para>
     </poeme>
-    <poeme id="lespoir_3" longueurVers="8">
+    <poeme id="l_espoir_3" longueurVers="8">
       <titre>L'espoir</titre>
       <date>28.02.1997</date>
       <categorie>
@@ -3829,7 +3829,7 @@ De janvier à mai 1997</info>
         <vers>Encensé quand l'âme s'endort.</vers>
       </para>
     </poeme>
-    <poeme id="audela_3" longueurVers="12">
+    <poeme id="au_dela_3" longueurVers="12">
       <titre>Au-delà</titre>
       <date>01.03.1997</date>
       <categorie>
@@ -3855,7 +3855,7 @@ De janvier à mai 1997</info>
         <vers>Recrée une existence au bord d'immenses toiles.</vers>
       </para>
     </poeme>
-    <poeme id="saisonsdenvies_3" longueurVers="6">
+    <poeme id="saisons_d_envies_3" longueurVers="6">
       <titre>Saisons d'envies</titre>
       <date>21.03.1997</date>
       <categorie>
@@ -4009,7 +4009,7 @@ De janvier à mai 1997</info>
         <vers>Sauvage ainsi qu'un loir.</vers>
       </para>
     </poeme>
-    <poeme id="annoncedu_3" longueurVers="6">
+    <poeme id="annonce_du_printemps_3" longueurVers="6">
       <titre>Annonce du printemps</titre>
       <date>21.01.1997</date>
       <categorie>
@@ -4047,7 +4047,7 @@ De janvier à mai 1997</info>
         <vers>Manèges enfantins !</vers>
       </para>
     </poeme>
-    <poeme id="debaucheprint_3" longueurVers="12">
+    <poeme id="debauche_printaniere_3" longueurVers="12">
       <titre>Débauche printanière</titre>
       <date>26.02.1997</date>
       <categorie>
@@ -4077,7 +4077,7 @@ De janvier à mai 1997</info>
         <vers>Me laisse bien plus seule ainsi qu'un crève-cœur !</vers>
       </para>
     </poeme>
-    <poeme id="matindeprint_3" longueurVers="8">
+    <poeme id="matin_de_printemps_3" longueurVers="8">
       <titre>Matin de printemps</titre>
       <date>27.01.1997</date>
       <categorie>
@@ -4109,7 +4109,7 @@ De janvier à mai 1997</info>
         <vers>Et je m'évade en mon îlot.</vers>
       </para>
     </poeme>
-    <poeme id="oiseauxdemonjardin_3" longueurVers="8">
+    <poeme id="oiseaux_de_mon_jardin_3" longueurVers="8">
       <titre>Oiseaux de mon jardin</titre>
       <date>16.01.1997</date>
       <categorie>
@@ -4135,7 +4135,7 @@ De janvier à mai 1997</info>
         <vers>Dans l'air pur d'un petit matin.</vers>
       </para>
     </poeme>
-    <poeme id="lechantdeloiseau_3" longueurVers="12">
+    <poeme id="le_chant_de_l_oiseau_3" longueurVers="12">
       <titre>Le Chant de l'Oiseau</titre>
       <date>22.02.1997</date>
       <categorie>
@@ -4161,7 +4161,7 @@ De janvier à mai 1997</info>
         <vers>Il aura tôt repris dès le lever du jour.</vers>
       </para>
     </poeme>
-    <poeme id="lenvol_3" longueurVers="8">
+    <poeme id="l_envol_3" longueurVers="8">
       <titre>L'envol</titre>
       <date>18.02.1997</date>
       <categorie>
@@ -4193,7 +4193,7 @@ De janvier à mai 1997</info>
         <vers>Au creux du lac, au pied de l'orme.</vers>
       </para>
     </poeme>
-    <poeme id="vergerenfleurs_3" longueurVers="8">
+    <poeme id="verger_en_fleurs_3" longueurVers="8">
       <titre>Verger en fleurs</titre>
       <date>04.02.1997</date>
       <categorie>
@@ -4219,7 +4219,7 @@ De janvier à mai 1997</info>
         <vers>Aux soleils couchants qui s'irisent.</vers>
       </para>
     </poeme>
-    <poeme id="apreslapluie_3" longueurVers="6">
+    <poeme id="apres_la_pluie_3" longueurVers="6">
       <titre>Après la pluie</titre>
       <date>05.02.1997</date>
       <categorie>
@@ -4251,7 +4251,7 @@ De janvier à mai 1997</info>
         <vers>S'irise en son miracle.</vers>
       </para>
     </poeme>
-    <poeme id="ravissementlor_3" longueurVers="8">
+    <poeme id="ravissement_lorrain_3" longueurVers="8">
       <titre>Ravissement lorrain</titre>
       <date>28.01.1997</date>
       <categorie>
@@ -4287,7 +4287,7 @@ De janvier à mai 1997</info>
         <vers>Les charmes de nos horizons.</vers>
       </para>
     </poeme>
-    <poeme id="bulledesavon_3" longueurVers="6">
+    <poeme id="bulle_de_savon_3" longueurVers="6">
       <titre>Bulle de savon</titre>
       <date>06.03.1997</date>
       <categorie>
@@ -4425,7 +4425,7 @@ De janvier à mai 1997</info>
   <Saison id="4" name="Rêves" nombre="Quatrième">
     <summary>De mai à septembre 1997</summary>
     <info>De mai à septembre 1997</info>
-    <poeme id="saisonfugace_4" longueurVers="8">
+    <poeme id="saison_fugace_4" longueurVers="8">
       <titre>Saison fugace</titre>
       <date>05.08.1997</date>
       <categorie>
@@ -4553,7 +4553,7 @@ De janvier à mai 1997</info>
         <vers>Pendule d'ombre révélé.</vers>
       </para>
     </poeme>
-    <poeme id="debutsept_4" longueurVers="6">
+    <poeme id="debut_septembre_4" longueurVers="6">
       <titre>Début septembre</titre>
       <date>07.09.1997</date>
       <categorie>
@@ -4585,7 +4585,7 @@ De janvier à mai 1997</info>
         <vers>Ravira jours et nuits !</vers>
       </para>
     </poeme>
-    <poeme id="revedautomne_4" longueurVers="8">
+    <poeme id="reve_d_automne_4" longueurVers="8">
       <titre>Rêve d'automne</titre>
       <date>13.08.1997</date>
       <categorie>
@@ -4612,7 +4612,7 @@ De janvier à mai 1997</info>
         <vers>Xylophone de l'innocence.</vers>
       </para>
     </poeme>
-    <poeme id="bientotlautomne_4" longueurVers="8">
+    <poeme id="bientot_l_automne_4" longueurVers="8">
       <titre>Bientôt l'automne</titre>
       <date>20.08.1997</date>
       <categorie>
@@ -4638,7 +4638,7 @@ De janvier à mai 1997</info>
         <vers>Les jours en saison germinale.</vers>
       </para>
     </poeme>
-    <poeme id="coeurdautomne_4" longueurVers="5">
+    <poeme id="cour_d_automne_4" longueurVers="5">
       <titre>Cœur d'automne</titre>
       <date>01.09.1997</date>
       <categorie>
@@ -4676,7 +4676,7 @@ De janvier à mai 1997</info>
         <vers>Au cœur qui s'étonne !</vers>
       </para>
     </poeme>
-    <poeme id="voicilautomne_4" longueurVers="6">
+    <poeme id="voici_l_automne_4" longueurVers="6">
       <titre>Voici l'automne</titre>
       <date>03.09.1997</date>
       <categorie>
@@ -4738,7 +4738,7 @@ De janvier à mai 1997</info>
         <vers>Renaître un cœur de mai.</vers>
       </para>
     </poeme>
-    <poeme id="autantledire_4" longueurVers="8">
+    <poeme id="autant_le_dire_4" longueurVers="8">
       <titre>Autant le dire</titre>
       <date>03.08.1997</date>
       <categorie>
@@ -4765,7 +4765,7 @@ De janvier à mai 1997</info>
         <vers>Et je te quitte quand tu dors.</vers>
       </para>
     </poeme>
-    <poeme id="lamouramort_4" longueurVers="8">
+    <poeme id="l_amour_a_mort_4" longueurVers="8">
       <titre>L'Amour à mort</titre>
       <date>22.06.1997</date>
       <categorie>
@@ -4801,7 +4801,7 @@ De janvier à mai 1997</info>
         <vers>Sur ton cœur, mon visage pâle.</vers>
       </para>
     </poeme>
-    <poeme id="lamourtendre_4" longueurVers="6">
+    <poeme id="l_amour_tendre_4" longueurVers="6">
       <titre>L'amour tendre</titre>
       <date>10.08.1997</date>
       <categorie>
@@ -4828,7 +4828,7 @@ De janvier à mai 1997</info>
         <vers>Encres de nos amours.</vers>
       </para>
     </poeme>
-    <poeme id="jesaistaimer_4" longueurVers="6">
+    <poeme id="je_sais_t_aimer_4" longueurVers="6">
       <titre>Je sais t'aimer</titre>
       <date>15.08.1997</date>
       <categorie>
@@ -4855,7 +4855,7 @@ De janvier à mai 1997</info>
         <vers>Reviens donc à jamais !</vers>
       </para>
     </poeme>
-    <poeme id="jaimetevoir_4" longueurVers="6">
+    <poeme id="j_aime_te_voir_4" longueurVers="6">
       <titre>J'aime te voir</titre>
       <date>16.08.1997</date>
       <categorie>
@@ -4891,7 +4891,7 @@ De janvier à mai 1997</info>
         <vers>Tant la fleur que l'abeille !</vers>
       </para>
     </poeme>
-    <poeme id="lamoureternel_4" longueurVers="6">
+    <poeme id="l_amour_eternel_4" longueurVers="6">
       <titre>L'amour... éternel</titre>
       <date>18.08.1997</date>
       <categorie>
@@ -4929,7 +4929,7 @@ De janvier à mai 1997</info>
         <vers>Pour toujours tu m'aimais.</vers>
       </para>
     </poeme>
-    <poeme id="lamante_4" longueurVers="6">
+    <poeme id="l_amante_4" longueurVers="6">
       <titre>L'Amante</titre>
       <date>03.08.1997</date>
       <categorie>
@@ -4954,7 +4954,7 @@ De janvier à mai 1997</info>
         <vers>Et le lever du jour.</vers>
       </para>
     </poeme>
-    <poeme id="lebaiser_4" longueurVers="8">
+    <poeme id="le_baiser_4" longueurVers="8">
       <titre>Le Baiser</titre>
       <date>21.08.1997</date>
       <categorie>
@@ -4984,7 +4984,7 @@ De janvier à mai 1997</info>
         <vers>Mon doux baiser comme une offrande.</vers>
       </para>
     </poeme>
-    <poeme id="maisaijesu_4" longueurVers="6">
+    <poeme id="mais_ai_je_su_le_dire_4" longueurVers="6">
       <titre>Mais ai-je su le dire ?</titre>
       <date>12.09.1997</date>
       <categorie>
@@ -5017,7 +5017,7 @@ De janvier à mai 1997</info>
         <vers>En gestes baptismaux !</vers>
       </para>
     </poeme>
-    <poeme id="serezvous_4" longueurVers="6">
+    <poeme id="serez_vous_4" longueurVers="6">
       <titre>Serez-vous...</titre>
       <date>11.07.1997</date>
       <categorie>
@@ -5049,7 +5049,7 @@ De janvier à mai 1997</info>
         <vers>De la félicité !</vers>
       </para>
     </poeme>
-    <poeme id="atroptourner_4" longueurVers="8">
+    <poeme id="a_trop_tourner_4" longueurVers="8">
       <titre>A trop tourner</titre>
       <date>11.08.1997</date>
       <categorie>
@@ -5248,7 +5248,7 @@ De janvier à mai 1997</info>
         <vers>Vitrail sacré de la rosace.</vers>
       </para>
     </poeme>
-    <poeme id="astudejareve_4" longueurVers="8">
+    <poeme id="as_tu_deja_reve_4" longueurVers="8">
       <titre>As-tu déjà rêvé ?</titre>
       <date>14.08.1997</date>
       <categorie>
@@ -5275,7 +5275,7 @@ De janvier à mai 1997</info>
         <vers>Ecrire aux pointes des cactus.</vers>
       </para>
     </poeme>
-    <poeme id="forgedesmots_4" longueurVers="6">
+    <poeme id="forge_des_mots_4" longueurVers="6">
       <titre>Forge des mots</titre>
       <date>03.09.1997</date>
       <categorie>
@@ -5312,7 +5312,7 @@ De janvier à mai 1997</info>
         <vers>Sur l'autel de l'orfèvre.</vers>
       </para>
     </poeme>
-    <poeme id="livressedouce_4" longueurVers="6">
+    <poeme id="l_ivresse_douce_4" longueurVers="6">
       <titre>L'ivresse douce</titre>
       <date>04.09.1997</date>
       <categorie>
@@ -5338,7 +5338,7 @@ De janvier à mai 1997</info>
         <vers>Alambics baptismaux.</vers>
       </para>
     </poeme>
-    <poeme id="ledanseur_4" longueurVers="8">
+    <poeme id="le_danseur_4" longueurVers="8">
       <titre>Le Danseur</titre>
       <date>29.08.1997</date>
       <categorie>
@@ -5364,7 +5364,7 @@ De janvier à mai 1997</info>
         <vers>Et l'éternité nous sourit !</vers>
       </para>
     </poeme>
-    <poeme id="petitdepart_4" longueurVers="6">
+    <poeme id="petit_depart_4" longueurVers="6">
       <titre>Petit départ</titre>
       <date>31.08.1997</date>
       <categorie>
@@ -5456,7 +5456,7 @@ De janvier à mai 1997</info>
         <vers>Fine danse.</vers>
       </para>
     </poeme>
-    <poeme id="valsentlesans_4" longueurVers="8">
+    <poeme id="valsent_les_ans_4" longueurVers="8">
       <titre>Valsent les ans</titre>
       <date>08.09.1997</date>
       <categorie>
@@ -5488,7 +5488,7 @@ De janvier à mai 1997</info>
         <vers>Le seul bonheur comme une obole !</vers>
       </para>
     </poeme>
-    <poeme id="cesjoursla_4" longueurVers="6">
+    <poeme id="ces_jours_la_4" longueurVers="6">
       <titre>Ces jours-là</titre>
       <date>09.09.1997</date>
       <categorie>
@@ -5520,7 +5520,7 @@ De janvier à mai 1997</info>
         <vers>Aucun signe au miroir.</vers>
       </para>
     </poeme>
-    <poeme id="linfernale_4" longueurVers="6">
+    <poeme id="l_infernale_obscure_4" longueurVers="6">
       <titre>L'Infernale obscure</titre>
       <date>16.08.1997</date>
       <categorie>
@@ -5558,7 +5558,7 @@ De janvier à mai 1997</info>
         <vers>Et ce sera ton drame.</vers>
       </para>
     </poeme>
-    <poeme id="lorage_4" longueurVers="6">
+    <poeme id="l_orage_4" longueurVers="6">
       <titre>L'orage</titre>
       <date>18.05.1997</date>
       <categorie>
@@ -5590,7 +5590,7 @@ De janvier à mai 1997</info>
         <vers>Au ciel déteint.</vers>
       </para>
     </poeme>
-    <poeme id="soleildumatin_4" longueurVers="8">
+    <poeme id="soleil_du_matin_4" longueurVers="8">
       <titre>Soleil du matin</titre>
       <date>23.07.1997</date>
       <categorie>
@@ -5652,7 +5652,7 @@ De janvier à mai 1997</info>
         <vers>Qui terre et ciel relit.</vers>
       </para>
     </poeme>
-    <poeme id="lunerouge_4" longueurVers="8">
+    <poeme id="lune_rouge_4" longueurVers="8">
       <titre>Lune rouge</titre>
       <date>19.08.1997</date>
       <categorie>
@@ -5778,7 +5778,7 @@ De janvier à mai 1997</info>
         <vers>Cette chanson, lune-délice.</vers>
       </para>
     </poeme>
-    <poeme id="laraignee_4" longueurVers="6">
+    <poeme id="l_araignee_4" longueurVers="6">
       <titre>L'Araignée</titre>
       <date>16.08.1997</date>
       <categorie>
@@ -5810,7 +5810,7 @@ De janvier à mai 1997</info>
         <vers>Dore d'été le cil.</vers>
       </para>
     </poeme>
-    <poeme id="papillonsblancs_4" longueurVers="8">
+    <poeme id="papillons_blancs_4" longueurVers="8">
       <titre>Papillons blancs</titre>
       <date>17.08.1997</date>
       <categorie>
@@ -5836,7 +5836,7 @@ De janvier à mai 1997</info>
         <vers>Des plaisirs tendres, si fragiles !</vers>
       </para>
     </poeme>
-    <poeme id="lapeche_4" longueurVers="6">
+    <poeme id="la_peche_4" longueurVers="6">
       <titre>La Pêche</titre>
       <date>23.08.1997</date>
       <categorie>
@@ -5862,7 +5862,7 @@ De janvier à mai 1997</info>
         <vers>Cueillir Eve, merveille !</vers>
       </para>
     </poeme>
-    <poeme id="lesraiesleopard_4" longueurVers="6">
+    <poeme id="les_raies_leopard_4" longueurVers="6">
       <titre>Les raies-léopard</titre>
       <date>12.09.1997</date>
       <categorie>
@@ -5888,7 +5888,7 @@ De janvier à mai 1997</info>
         <vers>Les douceurs d'aquarelles !</vers>
       </para>
     </poeme>
-    <poeme id="legranddepart_4" longueurVers="8">
+    <poeme id="le_grand_depart_4" longueurVers="8">
       <titre>Le Grand départ</titre>
       <date>13.09.1997</date>
       <categorie>
@@ -5920,7 +5920,7 @@ De janvier à mai 1997</info>
         <vers>Car la saison s'est décidée.</vers>
       </para>
     </poeme>
-    <poeme id="lelacdamour_4" longueurVers="8">
+    <poeme id="le_lac_d_amour_4" longueurVers="8">
       <titre>Le lac d'amour</titre>
       <date>25.08.1997</date>
       <categorie>
@@ -5994,7 +5994,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Plaisir d'unique sorte !</vers>
       </para>
     </poeme>
-    <poeme id="lorageducoeur_5" longueurVers="12">
+    <poeme id="l_orage_du_cour_5" longueurVers="12">
       <titre>L'orage du cœur</titre>
       <date>04.01.1998</date>
       <categorie>
@@ -6020,7 +6020,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Au troublant souvenir d'une si folle image.</vers>
       </para>
     </poeme>
-    <poeme id="departamant_5" longueurVers="8">
+    <poeme id="le_depart_de_l_amant_5" longueurVers="8">
       <titre>Le Départ de l'Amant</titre>
       <date>19.01.1998</date>
       <categorie>
@@ -6046,7 +6046,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Avant de partir, au revoir !</vers>
       </para>
     </poeme>
-    <poeme id="jaitropreve_5" longueurVers="8">
+    <poeme id="j_ai_trop_reve_de_toi_5" longueurVers="8">
       <titre>J'ai trop rêvé de toi</titre>
       <date>20.01.1998</date>
       <categorie>
@@ -6083,7 +6083,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Irradiés de cette aventure !</vers>
       </para>
     </poeme>
-    <poeme id="etreinsdunsourire_5" longueurVers="8">
+    <poeme id="etreins_d_un_sourire_ami_5" longueurVers="8">
       <titre>Etreins d'un sourire, ami</titre>
       <date>25.01.1998</date>
       <categorie>
@@ -6126,7 +6126,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Irradiés en nuit d'ivresse !</vers>
       </para>
     </poeme>
-    <poeme id="paramour_5" longueurVers="8">
+    <poeme id="par_amour_5" longueurVers="8">
       <titre>Par amour</titre>
       <date>05.02.1998</date>
       <categorie>
@@ -6164,7 +6164,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Apaise-le de ta voix d'or.</vers>
       </para>
     </poeme>
-    <poeme id="prisme_5" longueurVers="8">
+    <poeme id="le_prisme_du_cour_5" longueurVers="8">
       <titre>Le prisme du cœur</titre>
       <date>10.02.1998</date>
       <categorie>
@@ -6196,7 +6196,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Reviens un jour, je sais t'attendre.</vers>
       </para>
     </poeme>
-    <poeme id="besoindetoi_5" longueurVers="8">
+    <poeme id="besoin_de_toi_5" longueurVers="8">
       <titre>Besoin de toi</titre>
       <date>15.02.1998</date>
       <categorie>
@@ -6232,7 +6232,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Mon âme dans la tienne enclose.</vers>
       </para>
     </poeme>
-    <poeme id="attraverso_5" longueurVers="8">
+    <poeme id="attraverso_il_tuo_cuore_5" longueurVers="8">
       <titre>Attraverso il tuo cuore</titre>
       <date>16.02.1998</date>
       <categorie>
@@ -6271,7 +6271,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Et découvrir le sens de vivre !</vers>
       </para>
     </poeme>
-    <poeme id="tumasdonne_5" longueurVers="7">
+    <poeme id="tu_m_as_donne_ton_bonheur_5" longueurVers="7">
       <titre>Tu m'as donné ton bonheur</titre>
       <date>22.02.1998</date>
       <categorie>
@@ -6310,7 +6310,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Ravit l'âme vaporeuse !</vers>
       </para>
     </poeme>
-    <poeme id="souvenirdebonheur_5" longueurVers="6">
+    <poeme id="souvenir_de_bonheur_5" longueurVers="6">
       <titre>Souvenir de bonheur</titre>
       <date>17.12.1997</date>
       <categorie>
@@ -6340,7 +6340,7 @@ De septembre 1997 à mars 1998</info>
         <vers>En forge des millions !</vers>
       </para>
     </poeme>
-    <poeme id="sijaidusable_5" longueurVers="8">
+    <poeme id="si_j_ai_du_sable_5" longueurVers="8">
       <titre>Si j'ai du sable</titre>
       <date>02.01.1998</date>
       <categorie>
@@ -6382,7 +6382,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Amie, en notre intime atour !</vers>
       </para>
     </poeme>
-    <poeme id="leplusbeaugeste_5" longueurVers="8">
+    <poeme id="le_plus_beau_geste_5" longueurVers="8">
       <titre>Le plus beau geste</titre>
       <date>17.01.1998</date>
       <categorie>
@@ -6414,7 +6414,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Berce la vie en son ivresse !</vers>
       </para>
     </poeme>
-    <poeme id="quandlheure_5" longueurVers="10">
+    <poeme id="quand_l_heure_sonne_5" longueurVers="10">
       <titre>Quand l'heure sonne</titre>
       <date>01.03.1998</date>
       <categorie>
@@ -6447,7 +6447,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Entendront-ils le cri du parchemin ?</vers>
       </para>
     </poeme>
-    <poeme id="jepartirai_5" longueurVers="8">
+    <poeme id="je_partirai_5" longueurVers="8">
       <titre>Je partirai</titre>
       <date>21.12.1997</date>
       <categorie>
@@ -6473,7 +6473,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Car avec toi je partirai !</vers>
       </para>
     </poeme>
-    <poeme id="moncoeurestlibre_5" longueurVers="8">
+    <poeme id="mon_cour_est_libre_5" longueurVers="8">
       <titre>Mon cœur est libre</titre>
       <date>05.12.1997</date>
       <categorie>
@@ -6506,7 +6506,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Et c'est cela qui sut nous plaire !</vers>
       </para>
     </poeme>
-    <poeme id="lafievre_5" longueurVers="6">
+    <poeme id="la_fievre_de_t_aimer_5" longueurVers="6">
       <titre>La fièvre de t'aimer</titre>
       <date>25.12.1997</date>
       <categorie>
@@ -6539,7 +6539,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Ravit l'âme moirée.</vers>
       </para>
     </poeme>
-    <poeme id="unaspina_5" longueurVers="7">
+    <poeme id="una_spina_nel_cuore_5" longueurVers="7">
       <titre>Una spina nel cuore</titre>
       <date>21.01.1998</date>
       <categorie>
@@ -6576,7 +6576,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Et cette douleur intime...</vers>
       </para>
     </poeme>
-    <poeme id="lesembruns_5" longueurVers="6">
+    <poeme id="les_embruns_du_cour_5" longueurVers="6">
       <titre>Les embruns du cœur</titre>
       <date>21.11.1997</date>
       <categorie>
@@ -6614,7 +6614,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Mystère...</vers>
       </para>
     </poeme>
-    <poeme id="larose_5" longueurVers="7">
+    <poeme id="la_rose_5" longueurVers="7">
       <titre>La Rose</titre>
       <date>05.03.1998</date>
       <categorie>
@@ -6653,7 +6653,7 @@ De septembre 1997 à mars 1998</info>
         <vers>S'il faut loin l'aller chercher.</vers>
       </para>
     </poeme>
-    <poeme id="noelestamour_5" longueurVers="8">
+    <poeme id="noel_est_amour_5" longueurVers="8">
       <titre>Noël est amour</titre>
       <date>11.12.1997</date>
       <categorie>
@@ -6684,7 +6684,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Rendons de lumière le nôtre !</vers>
       </para>
     </poeme>
-    <poeme id="toutlamour_5" longueurVers="6">
+    <poeme id="tout_l_amour_de_mon_cour_5" longueurVers="6">
       <titre>Tout l'amour de mon cœur</titre>
       <date>02.11.1997</date>
       <categorie>
@@ -6715,7 +6715,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Risette d'un bébé !</vers>
       </para>
     </poeme>
-    <poeme id="demainnousserons_5" longueurVers="12">
+    <poeme id="demain_nous_serons_5" longueurVers="12">
       <titre>Demain nous serons</titre>
       <date>21.11.1997</date>
       <categorie>
@@ -6781,7 +6781,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Immobile, une errance.</vers>
       </para>
     </poeme>
-    <poeme id="celesteoptique_5" longueurVers="7">
+    <poeme id="celeste_optique_5" longueurVers="7">
       <titre>Céleste optique</titre>
       <date>01.10.1997</date>
       <categorie>
@@ -6845,7 +6845,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Comme un destin s'espace.</vers>
       </para>
     </poeme>
-    <poeme id="7couleurs_5" longueurVers="8">
+    <poeme id="sept_couleurs_5" longueurVers="8">
       <titre>Sept couleurs</titre>
       <date>30.10.1997</date>
       <categorie>
@@ -6872,7 +6872,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Sept couleurs... pour ton souvenir.</vers>
       </para>
     </poeme>
-    <poeme id="leschemins_5" longueurVers="8">
+    <poeme id="les_chemins_de_la_memoire_5" longueurVers="8">
       <titre>Les chemins de la mémoire</titre>
       <date>12.01.1998</date>
       <categorie>
@@ -6937,7 +6937,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Sous les mots qui repassent.</vers>
       </para>
     </poeme>
-    <poeme id="esclaves_5" longueurVers="8">
+    <poeme id="esclaves_des_mots_5" longueurVers="8">
       <titre>Esclaves des mots</titre>
       <date>06.10.1997</date>
       <categorie>
@@ -6963,7 +6963,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Dans la quête des absolus.</vers>
       </para>
     </poeme>
-    <poeme id="solitudemar_5" longueurVers="6">
+    <poeme id="solitude_marine_5" longueurVers="6">
       <titre>Solitude marine</titre>
       <date>01.10.1997</date>
       <categorie>
@@ -6993,7 +6993,7 @@ De septembre 1997 à mars 1998</info>
         <vers>N'imite qu'une errance.</vers>
       </para>
     </poeme>
-    <poeme id="leserail_5" longueurVers="6">
+    <poeme id="le_serail_5" longueurVers="6">
       <titre>Le Sérail</titre>
       <date>20.10.1997</date>
       <categorie>
@@ -7061,7 +7061,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Perte de l'innocence.</vers>
       </para>
     </poeme>
-    <poeme id="jaitroque_5" longueurVers="6">
+    <poeme id="j_ai_troque_le_bonheur_5" longueurVers="6">
       <titre>J'ai troqué le bonheur</titre>
       <date>28.01.1998</date>
       <categorie>
@@ -7093,7 +7093,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Ma chaîne m'abandonne.</vers>
       </para>
     </poeme>
-    <poeme id="sansrime_5" longueurVers="6">
+    <poeme id="sans_rime_ni_raison_5" longueurVers="6">
       <titre>Sans rime ni raison</titre>
       <date>24.12.1997</date>
       <categorie>
@@ -7126,7 +7126,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Nu pour l'âme fragile.</vers>
       </para>
     </poeme>
-    <poeme id="pourdeployer_5" longueurVers="6">
+    <poeme id="pour_deployer_mes_ailes_5" longueurVers="6">
       <titre>Pour déployer mes ailes</titre>
       <date>28.12.1997</date>
       <categorie>
@@ -7165,7 +7165,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Survoler libertés.</vers>
       </para>
     </poeme>
-    <poeme id="lemarron_5" longueurVers="6">
+    <poeme id="le_marron_5" longueurVers="6">
       <titre>Le Marron</titre>
       <date>20.09.1997</date>
       <categorie>
@@ -7191,7 +7191,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Sous ton contour fatal ?</vers>
       </para>
     </poeme>
-    <poeme id="lepicvert_5" longueurVers="8">
+    <poeme id="le_pic_vert_5" longueurVers="8">
       <titre>Le Pic-Vert</titre>
       <date>29.09.1997</date>
       <categorie>
@@ -7217,7 +7217,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Du moindre insecte inopportun.</vers>
       </para>
     </poeme>
-    <poeme id="voldepapillon_5" longueurVers="8">
+    <poeme id="vol_de_papillon_5" longueurVers="8">
       <titre>Vol de papillon</titre>
       <date>01.01.1998</date>
       <categorie>
@@ -7273,7 +7273,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Le flot d'un espoir révélé !</vers>
       </para>
     </poeme>
-    <poeme id="voldoiseaux_5">
+    <poeme id="vol_d_oiseaux_5">
       <titre>Vol d'oiseaux</titre>
       <date>06.11.1997</date>
       <categorie>
@@ -7299,7 +7299,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Chaque oiseau séraphin!</vers>
       </para>
     </poeme>
-    <poeme id="matinceleste_5">
+    <poeme id="matin_celeste_5">
       <titre>Matin céleste</titre>
       <date>16.12.1997</date>
       <categorie>
@@ -7331,7 +7331,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Pour bercer l'ingénue.</vers>
       </para>
     </poeme>
-    <poeme id="matindautomne_5">
+    <poeme id="matin_d_automne_5">
       <titre>Matin d'automne</titre>
       <date>15.09.1997</date>
       <categorie>
@@ -7363,7 +7363,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Gardons ton souvenir !</vers>
       </para>
     </poeme>
-    <poeme id="chemindoctobre_5">
+    <poeme id="chemin_d_octobre_5">
       <titre>Chemin d'octobre</titre>
       <date>16.10.1997</date>
       <categorie>
@@ -7389,7 +7389,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Referment leur carré brumeux.</vers>
       </para>
     </poeme>
-    <poeme id="lautomneestvenu_5">
+    <poeme id="l_automne_est_venu_5">
       <titre>L'automne est venu</titre>
       <date>26.10.1997</date>
       <categorie>
@@ -7415,7 +7415,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Ravir le soir et sa lumière !</vers>
       </para>
     </poeme>
-    <poeme id="nuitdautomne_5">
+    <poeme id="nuit_d_automne_5">
       <titre>Nuit d'automne</titre>
       <date>02.11.1997</date>
       <categorie>
@@ -7441,7 +7441,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Ne plus sentir ni voir.</vers>
       </para>
     </poeme>
-    <poeme id="uneetoile_5">
+    <poeme id="une_etoile_5">
       <titre>Une étoile</titre>
       <date>11.01.1998</date>
       <categorie>
@@ -7505,7 +7505,7 @@ De septembre 1997 à mars 1998</info>
         <vers>La page absente d'univers.</vers>
       </para>
     </poeme>
-    <poeme id="prieredelalune_5">
+    <poeme id="priere_de_la_lune_5">
       <titre>Prière de la Lune</titre>
       <date>26.02.1998</date>
       <categorie>
@@ -7536,7 +7536,7 @@ De septembre 1997 à mars 1998</info>
         <vers>Alors que continue une guerre ici-bas...</vers>
       </para>
     </poeme>
-    <poeme id="nordimaginaire_5">
+    <poeme id="nord_imaginaire_5">
       <titre>Nord imaginaire</titre>
       <date>02.12.1997</date>
       <categorie>
@@ -7568,7 +7568,7 @@ De septembre 1997 à mars 1998</info>
     <info>En cherchant sa voie, avec un long regard vers un amour déçu passé.
 
 De mars à juin 1998</info>
-    <poeme id="quetedesens_6">
+    <poeme id="quete_de_sens_6">
       <titre>Quête de sens</titre>
       <date>28.05.1998</date>
       <categorie>
@@ -7600,7 +7600,7 @@ De mars à juin 1998</info>
         <vers>L'esquisse où tout est à l'envers.</vers>
       </para>
     </poeme>
-    <poeme id="mauxdemots_6">
+    <poeme id="maux_de_mots_6">
       <titre>Maux de mots</titre>
       <date>07.05.1998</date>
       <categorie>
@@ -7638,7 +7638,7 @@ De mars à juin 1998</info>
         <vers>Qu'en prenant l'âge...</vers>
       </para>
     </poeme>
-    <poeme id="jenaipassu_6">
+    <poeme id="je_n_ai_pas_su_le_dire_6">
       <titre>Je n'ai pas su le dire</titre>
       <date>03.04.1998</date>
       <categorie>
@@ -7671,7 +7671,7 @@ De mars à juin 1998</info>
         <vers>Et d'un souffle subtil aide-moi pour renaître.</vers>
       </para>
     </poeme>
-    <poeme id="onmacousu_6">
+    <poeme id="on_m_a_cousu_le_cour_6">
       <titre>On m'a cousu le cœur</titre>
       <date>05.04.1998</date>
       <categorie>
@@ -7730,7 +7730,7 @@ De mars à juin 1998</info>
         <vers>La plume roule en un excès de zèle...</vers>
       </para>
     </poeme>
-    <poeme id="lesperance_6">
+    <poeme id="l_esperance_6">
       <titre>L'espérance</titre>
       <date>20.05.1998</date>
       <categorie>
@@ -7760,7 +7760,7 @@ De mars à juin 1998</info>
         <vers>Il ne faut pas que je la brise !</vers>
       </para>
     </poeme>
-    <poeme id="lemerle_6">
+    <poeme id="le_merle_6">
       <titre>le Merle</titre>
       <date>20.05.1998</date>
       <categorie>
@@ -7812,7 +7812,7 @@ De mars à juin 1998</info>
         <vers>Clef de voûte, bêtise reine.</vers>
       </para>
     </poeme>
-    <poeme id="tumasappris_6">
+    <poeme id="tu_m_as_appris_6">
       <titre>Tu m'as appris</titre>
       <date>12.05.1998</date>
       <categorie>
@@ -7844,7 +7844,7 @@ De mars à juin 1998</info>
         <vers>C'est le plus beau des héritages !</vers>
       </para>
     </poeme>
-    <poeme id="viemanege_6">
+    <poeme id="la_vie_est_comme_un_manege_6">
       <titre>La vie est comme un manège</titre>
       <date>26.03.1998</date>
       <categorie>
@@ -7883,7 +7883,7 @@ De mars à juin 1998</info>
         <vers>En manège-souvenir.</vers>
       </para>
     </poeme>
-    <poeme id="oprintemps_6">
+    <poeme id="o_printemps_si_beau_6">
       <titre>O Printemps si beau</titre>
       <date>12.04.1998</date>
       <categorie>
@@ -7916,7 +7916,7 @@ De mars à juin 1998</info>
         <vers>Un souffle d'ange endort la jouvencelle !</vers>
       </para>
     </poeme>
-    <poeme id="valsedutemps_6">
+    <poeme id="valse_du_temps_6">
       <titre>Valse du temps</titre>
       <date>01.06.1998</date>
       <categorie>
@@ -7985,7 +7985,7 @@ De mars à juin 1998</info>
         <vers>Livre de dessein.</vers>
       </para>
     </poeme>
-    <poeme id="dernierrdv_6">
+    <poeme id="le_dernier_rendez_vous_6">
       <titre>Le Dernier Rendez-vous</titre>
       <date>15.04.1998</date>
       <categorie>
@@ -8023,7 +8023,7 @@ De mars à juin 1998</info>
         <vers>Retranscrira ta prière !</vers>
       </para>
     </poeme>
-    <poeme id="loeildelalune_6">
+    <poeme id="l_oil_de_la_lune_6">
       <titre>L'œil de la Lune</titre>
       <date>10.05.1998</date>
       <categorie>
@@ -8093,7 +8093,7 @@ De mars à juin 1998</info>
         <vers>J'en bercerai l'ivresse !</vers>
       </para>
     </poeme>
-    <poeme id="surpapierglace_6">
+    <poeme id="sur_papier_glace_6">
       <titre>Sur papier glacé</titre>
       <date>17.03.1998</date>
       <categorie>
@@ -8122,7 +8122,7 @@ De mars à juin 1998</info>
         <vers>Encore humide d'un secret.</vers>
       </para>
     </poeme>
-    <poeme id="quastumarque_6">
+    <poeme id="qu_as_tu_marque_6">
       <titre>Qu'as-tu marqué ?</titre>
       <date>22.03.1998</date>
       <categorie>
@@ -8149,7 +8149,7 @@ De mars à juin 1998</info>
         <vers>Et ton sourire épelle : ... amour !</vers>
       </para>
     </poeme>
-    <poeme id="poureffacer_6">
+    <poeme id="pour_effacer_6">
       <titre>Pour effacer</titre>
       <date>07.04.1998</date>
       <categorie>
@@ -8181,7 +8181,7 @@ De mars à juin 1998</info>
         <vers>Plus rien ne nous embête !</vers>
       </para>
     </poeme>
-    <poeme id="oeilmiroir_6">
+    <poeme id="oil_miroir_de_l_ame_6">
       <titre>Œil miroir de l'âme</titre>
       <date>17.05.1998</date>
       <categorie>
@@ -8214,7 +8214,7 @@ De mars à juin 1998</info>
         <vers>En pourront-ils bercer l'espoir ?</vers>
       </para>
     </poeme>
-    <poeme id="composedunsecret_6">
+    <poeme id="compose_d_un_secret_6">
       <titre>Composé d'un secret</titre>
       <date>26.04.1998</date>
       <categorie>
@@ -8247,7 +8247,7 @@ De mars à juin 1998</info>
         <vers>Tous les secrets d'écrire.</vers>
       </para>
     </poeme>
-    <poeme id="refairelemonde_6">
+    <poeme id="refaire_le_monde_6">
       <titre>Refaire le monde</titre>
       <date>04.05.1998</date>
       <categorie>
@@ -8279,7 +8279,7 @@ De mars à juin 1998</info>
         <vers>Frappe à la porte de la nuit.</vers>
       </para>
     </poeme>
-    <poeme id="lecoeurdelame_6">
+    <poeme id="le_cour_de_l_ame_6">
       <titre>Le cœur de l'âme</titre>
       <date>17.05.1998</date>
       <categorie>
@@ -8311,7 +8311,7 @@ De mars à juin 1998</info>
         <vers>Pour ouvrir le cœur de l'âme...</vers>
       </para>
     </poeme>
-    <poeme id="dentrolatuaanima_6">
+    <poeme id="dentro_la_tua_anima_6">
       <titre>Dentro la tua anima</titre>
       <date>06.04.1998</date>
       <categorie>
@@ -8344,7 +8344,7 @@ De mars à juin 1998</info>
         <vers>A la clarté des lendemains !</vers>
       </para>
     </poeme>
-    <poeme id="tumasconquise_6">
+    <poeme id="tu_m_as_conquise_6">
       <titre>Tu m'as conquise</titre>
       <date>18.05.1998</date>
       <categorie>
@@ -8376,7 +8376,7 @@ De mars à juin 1998</info>
         <vers>L'été chemine où l'on repart.</vers>
       </para>
     </poeme>
-    <poeme id="fleursdememoire_6">
+    <poeme id="fleurs_de_memoire_6">
       <titre>Fleurs de mémoire</titre>
       <date>21.04.1998</date>
       <categorie>
@@ -8414,7 +8414,7 @@ De mars à juin 1998</info>
         <vers>Dans notre paix jusqu'au grand soir.</vers>
       </para>
     </poeme>
-    <poeme id="filsdautomne_6">
+    <poeme id="fils_d_automne_6">
       <titre>Fils d'automne</titre>
       <date>24.03.1998</date>
       <categorie>
@@ -8441,7 +8441,7 @@ De mars à juin 1998</info>
         <vers>Et ton souvenir qui s'en vient.</vers>
       </para>
     </poeme>
-    <poeme id="unregard_6">
+    <poeme id="un_regard_6">
       <titre>Un regard</titre>
       <date>26.04.1998</date>
       <categorie>
@@ -8462,7 +8462,7 @@ De mars à juin 1998</info>
         <vers>Donne ses mains et le sens de ce rêve.</vers>
       </para>
     </poeme>
-    <poeme id="nemedispas_6">
+    <poeme id="ne_me_dis_pas_6">
       <titre>Ne me dis pas</titre>
       <date>27.04.1998</date>
       <categorie>
@@ -8503,7 +8503,7 @@ De mars à juin 1998</info>
         <vers>Que pour mieux demeurer je crois...</vers>
       </para>
     </poeme>
-    <poeme id="lamortivieta_6">
+    <poeme id="l_amor_ti_vieta_6">
       <titre>L'amor ti vieta</titre>
       <date>29.03.1998</date>
       <categorie>
@@ -8535,7 +8535,7 @@ De mars à juin 1998</info>
         <vers>Amour ne t'interdit que de ne pas m'aimer !</vers>
       </para>
     </poeme>
-    <poeme id="quunseuldesir_6">
+    <poeme id="qu_un_seul_desir_me_berce_6">
       <titre>Qu'un seul désir me berce</titre>
       <date>30.03.1998</date>
       <categorie>
@@ -8574,7 +8574,7 @@ De mars à juin 1998</info>
         <vers>Elle est parole retenue...</vers>
       </para>
     </poeme>
-    <poeme id="confidencedusoir_6">
+    <poeme id="confidence_du_soir_6">
       <titre>Confidence du soir</titre>
       <date>12.05.1998</date>
       <categorie>
@@ -8606,7 +8606,7 @@ De mars à juin 1998</info>
         <vers>Qu'endormira d'un geste une antique pavane...</vers>
       </para>
     </poeme>
-    <poeme id="lescerisiersdavril_6">
+    <poeme id="les_cerisiers_d_avril_6">
       <titre>Les Cerisiers d'avril</titre>
       <date>10.04.1998</date>
       <categorie>
@@ -8638,7 +8638,7 @@ De mars à juin 1998</info>
         <vers>Timides comme fleurs nouvelles.</vers>
       </para>
     </poeme>
-    <poeme id="enmai_6">
+    <poeme id="en_mai_6">
       <titre>En mai</titre>
       <date>01.05.1998</date>
       <categorie>
@@ -8702,7 +8702,7 @@ De mars à juin 1998</info>
         <vers>Orchestre sacrilège !</vers>
       </para>
     </poeme>
-    <poeme id="commeunbonheur_6">
+    <poeme id="comme_un_bonheur_6">
       <titre>Comme un bonheur</titre>
       <date>17.05.1998</date>
       <categorie>
@@ -8727,7 +8727,7 @@ De mars à juin 1998</info>
         <vers>Ravi son rire au tien charmé !</vers>
       </para>
     </poeme>
-    <poeme id="lalanguedelamour_6">
+    <poeme id="la_langue_de_l_amour_6">
       <titre>La langue de l'amour</titre>
       <date>13.05.1998</date>
       <categorie>
@@ -8760,7 +8760,7 @@ De mars à juin 1998</info>
         <vers>Rien au conditionnel n'est tendre !</vers>
       </para>
     </poeme>
-    <poeme id="jetoffrirai_6">
+    <poeme id="je_t_offrirai_6">
       <titre>Je t'offrirai</titre>
       <date>26.05.1998</date>
       <categorie>
@@ -8792,7 +8792,7 @@ De mars à juin 1998</info>
         <vers>De passion, bonheur !</vers>
       </para>
     </poeme>
-    <poeme id="lesecretdelarbre_6">
+    <poeme id="le_secret_de_l_arbre_6">
       <titre>Le secret de l'arbre</titre>
       <date>24.05.1998</date>
       <categorie>
@@ -8851,7 +8851,7 @@ De mars à juin 1998</info>
         <vers>Ravissement, songe sans fin !</vers>
       </para>
     </poeme>
-    <poeme id="nostalgiquedetoi_6">
+    <poeme id="nostalgique_de_toi_6">
       <titre>Nostalgique de toi</titre>
       <date>12.03.1998</date>
       <categorie>
@@ -8884,7 +8884,7 @@ De mars à juin 1998</info>
         <vers>Image imaginaire à l'ombre d'amitié.</vers>
       </para>
     </poeme>
-    <poeme id="toncoeur_6">
+    <poeme id="ton_cour_6">
       <titre>Ton cœur</titre>
       <date>08.05.1998</date>
       <categorie>
@@ -8928,7 +8928,7 @@ De mars à juin 1998</info>
         <vers>J'en calmerai le pleur...</vers>
       </para>
     </poeme>
-    <poeme id="quandjedistonnom_6">
+    <poeme id="quand_je_dis_ton_nom_6">
       <titre>Quand je dis ton nom</titre>
       <date>27.03.1998</date>
       <categorie>
@@ -8961,7 +8961,7 @@ De mars à juin 1998</info>
         <vers>Meurtri qu'un cœur émerveillait.</vers>
       </para>
     </poeme>
-    <poeme id="jenesaistoublier_6">
+    <poeme id="je_ne_sais_t_oublier_6">
       <titre>Je ne sais t'oublier</titre>
       <date>11.05.1998</date>
       <categorie>
@@ -9020,7 +9020,7 @@ De mars à juin 1998</info>
         <vers>Que pour demeure où je dormais.</vers>
       </para>
     </poeme>
-    <poeme id="pourquoirever_6">
+    <poeme id="pourquoi_rever_6">
       <titre>Pourquoi rêver</titre>
       <date>24.05.1998</date>
       <categorie>
@@ -9072,7 +9072,7 @@ De mars à juin 1998</info>
         <vers>La bouche close un désespoir s'enfuit.</vers>
       </para>
     </poeme>
-    <poeme id="tunaspasdevisage_6">
+    <poeme id="tu_n_as_pas_de_visage_6">
       <titre>Tu n'as pas de visage</titre>
       <date>30.05.1998</date>
       <categorie>
@@ -9105,7 +9105,7 @@ De mars à juin 1998</info>
         <vers>Et même sans couleur ta figure vibrait.</vers>
       </para>
     </poeme>
-    <poeme id="derrierelombre_6">
+    <poeme id="derriere_l_ombre_6">
       <titre>Derrière l'ombre</titre>
       <date>31.05.1998</date>
       <categorie>
@@ -9136,7 +9136,7 @@ De mars à juin 1998</info>
     <info>Mois obsédés, amour éperdu.
 
 Juin et juillet 1998</info>
-    <poeme id="surlestade_7">
+    <poeme id="sur_le_stade_d_aimer_7">
       <titre>Sur le stade d'aimer</titre>
       <date>04.07.1998</date>
       <categorie>
@@ -9163,7 +9163,7 @@ Juin et juillet 1998</info>
         <vers>Riront larmes au temps vaincues.</vers>
       </para>
     </poeme>
-    <poeme id="emeusmoi_7">
+    <poeme id="emeus_moi_7">
       <titre>Emeus-moi</titre>
       <date>15.07.1998</date>
       <categorie>
@@ -9184,7 +9184,7 @@ Juin et juillet 1998</info>
         <vers>Il suffit de m'aimer en ce jour frémissant.</vers>
       </para>
     </poeme>
-    <poeme id="dunfrolement_7">
+    <poeme id="d_un_frolement_7">
       <titre>D'un frôlement</titre>
       <date>03.06.1998</date>
       <categorie>
@@ -9211,7 +9211,7 @@ Juin et juillet 1998</info>
         <vers>Ta lèvre au vent déposé.</vers>
       </para>
     </poeme>
-    <poeme id="laserrure_7" type="sonnet">
+    <poeme id="la_serrure_d_un_cour_7" type="sonnet">
       <titre>La serrure d'un cœur</titre>
       <date>02.07.1998</date>
       <categorie>
@@ -9242,7 +9242,7 @@ Juin et juillet 1998</info>
         <vers>Et par toi j'ai perdu la clef de mon coffret.</vers>
       </para>
     </poeme>
-    <poeme id="adresseeatoi_7">
+    <poeme id="adressee_a_toi_7">
       <titre>Adressée à toi</titre>
       <date>16.07.1998</date>
       <categorie>
@@ -9269,7 +9269,7 @@ Juin et juillet 1998</info>
         <vers>Intime, belle, à l'unisson.</vers>
       </para>
     </poeme>
-    <poeme id="unparmidautres_7">
+    <poeme id="un_parmi_d_autres_7">
       <titre>Un parmi d'autres</titre>
       <date>06.07.1998</date>
       <categorie>
@@ -9294,7 +9294,7 @@ Juin et juillet 1998</info>
         <vers>Seule d'oubli, malentendu...</vers>
       </para>
     </poeme>
-    <poeme id="cejourla_7">
+    <poeme id="ce_jour_la_7">
       <titre>Ce jour-là</titre>
       <date>17.07.1998</date>
       <categorie>
@@ -9331,7 +9331,7 @@ Juin et juillet 1998</info>
         <vers>Seras-tu d'un adieu le dernier mot du livre ?</vers>
       </para>
     </poeme>
-    <poeme id="lamorebreve_7">
+    <poeme id="l_amor_e_breve_sogno_7">
       <titre>L'amor è breve sogno</titre>
       <date>05.07.1998</date>
       <categorie>
@@ -9365,7 +9365,7 @@ Juin et juillet 1998</info>
         <vers>Où ne répondent que douleurs...</vers>
       </para>
     </poeme>
-    <poeme id="daimerlenvie_7">
+    <poeme id="d_aimer_l_envie_7">
       <titre>D'aimer l'envie</titre>
       <date>07.06.1998</date>
       <categorie>
@@ -9392,7 +9392,7 @@ Juin et juillet 1998</info>
         <vers>En débit d'immédiat présage.</vers>
       </para>
     </poeme>
-    <poeme id="jattendslamour_7">
+    <poeme id="j_attends_l_amour_7">
       <titre>J'attends l'amour</titre>
       <date>07.07.1998</date>
       <categorie>
@@ -9417,7 +9417,7 @@ Juin et juillet 1998</info>
         <vers>Rires et pleurs, aubes fécondes !</vers>
       </para>
     </poeme>
-    <poeme id="nellamattinata_7">
+    <poeme id="nella_mattinata_7">
       <titre>Nella mattinata</titre>
       <date>01.07.1998</date>
       <categorie>
@@ -9442,7 +9442,7 @@ Juin et juillet 1998</info>
         <vers>Andante dans l'aurore, émois !</vers>
       </para>
     </poeme>
-    <poeme id="turesteras_7">
+    <poeme id="tu_resteras_7">
       <titre>Tu resteras</titre>
       <date>01.07.1998</date>
       <categorie>
@@ -9463,7 +9463,7 @@ Juin et juillet 1998</info>
         <vers>Serrés d'un bonheur fugitif !</vers>
       </para>
     </poeme>
-    <poeme id="adieuvoyages_7">
+    <poeme id="adieu_voyages_7">
       <titre>Adieu : voyages</titre>
       <date>07.07.1998</date>
       <categorie>
@@ -9486,7 +9486,7 @@ Juin et juillet 1998</info>
         <vers>Sera le plus doux des voyages.</vers>
       </para>
     </poeme>
-    <poeme id="jeterlancre_7">
+    <poeme id="jeter_l_ancre_de_ton_depart_7">
       <titre>Jeter l'ancre de ton départ...</titre>
       <date>08.07.1998</date>
       <categorie>
@@ -9523,7 +9523,7 @@ Juin et juillet 1998</info>
         <vers>Ton départ, j'en ai jeté l'ancre.</vers>
       </para>
     </poeme>
-    <poeme id="entrevieetmort_7">
+    <poeme id="entre_vie_et_mort_7">
       <titre>Entre vie et mort</titre>
       <date>09.07.1998</date>
       <categorie>
@@ -9548,7 +9548,7 @@ Juin et juillet 1998</info>
         <vers>Toi, ma vie, un seul délit.</vers>
       </para>
     </poeme>
-    <poeme id="gravepourtoi_7">
+    <poeme id="grave_pour_toi_7">
       <titre>Gravé pour toi</titre>
       <date>13.07.1998</date>
       <categorie>
@@ -9575,7 +9575,7 @@ Juin et juillet 1998</info>
         <vers>Inoublié le seul nom de l'amour !</vers>
       </para>
     </poeme>
-    <poeme id="danstoncoeur_7">
+    <poeme id="dans_ton_cour_7">
       <titre>Dans ton cœur</titre>
       <date>13.07.1998</date>
       <categorie>
@@ -9602,7 +9602,7 @@ Juin et juillet 1998</info>
         <vers>Rêve tombé sur le chemin tournant.</vers>
       </para>
     </poeme>
-    <poeme id="amantdhier_7">
+    <poeme id="amant_d_hier_de_demain_7">
       <titre>Amant d'hier, de demain</titre>
       <date>14.07.1998</date>
       <categorie>
@@ -9631,7 +9631,7 @@ Juin et juillet 1998</info>
         <vers>Nouvelle aubade en ce seul choix.</vers>
       </para>
     </poeme>
-    <poeme id="monlutin_7">
+    <poeme id="mon_lutin_7">
       <titre>Mon lutin</titre>
       <date>14.07.1998</date>
       <categorie>
@@ -9650,7 +9650,7 @@ Juin et juillet 1998</info>
         <vers>Nos rêves s'y recueillent.</vers>
       </para>
     </poeme>
-    <poeme id="commeunautrereve_7">
+    <poeme id="comme_un_autre_reve_7">
       <titre>Comme un autre rêve</titre>
       <date>15.07.1998</date>
       <categorie>
@@ -9681,7 +9681,7 @@ Juin et juillet 1998</info>
         <vers>En ta lumière s'en allait.</vers>
       </para>
     </poeme>
-    <poeme id="lieeatoi_7">
+    <poeme id="liee_a_toi_7">
       <titre>Liée à toi</titre>
       <date>17.07.1998</date>
       <categorie>
@@ -9702,7 +9702,7 @@ Juin et juillet 1998</info>
         <vers>Incolore en sa couleur, indécent !</vers>
       </para>
     </poeme>
-    <poeme id="hijodelaluna_7">
+    <poeme id="hijo_de_la_luna_7">
       <titre>Hijo de la luna</titre>
       <date>18.07.1998</date>
       <categorie>
@@ -9729,7 +9729,7 @@ Juin et juillet 1998</info>
         <vers>A la barque en nos délires !</vers>
       </para>
     </poeme>
-    <poeme id="acereve_7">
+    <poeme id="a_ce_reve_7">
       <titre>A ce rêve</titre>
       <date>18.07.1998</date>
       <categorie>
@@ -9760,7 +9760,7 @@ Juin et juillet 1998</info>
         <vers>Serre ses berceaux lancés !</vers>
       </para>
     </poeme>
-    <poeme id="lemoindremot_7">
+    <poeme id="le_moindre_mot_7">
       <titre>Le moindre mot</titre>
       <date>30.06.1998</date>
       <categorie>
@@ -9804,7 +9804,7 @@ Juin et juillet 1998</info>
         <vers>Et l'âme seule y goûte un nouvel élixir.</vers>
       </para>
     </poeme>
-    <poeme id="jinventerai_7">
+    <poeme id="j_inventerai_ma_vie_7">
       <titre>J'inventerai ma vie</titre>
       <date>07.07.1998</date>
       <categorie>
@@ -9831,7 +9831,7 @@ Juin et juillet 1998</info>
         <vers>En chacun de mes vers à mes rêves bouclés !</vers>
       </para>
     </poeme>
-    <poeme id="dureveaureel_7">
+    <poeme id="du_reve_au_reel_7">
       <titre>Du rêve au réel</titre>
       <date>10.07.1998</date>
       <categorie>
@@ -9858,7 +9858,7 @@ Juin et juillet 1998</info>
         <vers>Livré, lu d'unique couleur.</vers>
       </para>
     </poeme>
-    <poeme id="alamer_7">
+    <poeme id="a_la_mer_au_ciel_7">
       <titre>A la mer, au ciel</titre>
       <date>10.07.1998</date>
       <categorie>
@@ -9883,7 +9883,7 @@ Juin et juillet 1998</info>
         <vers>L'entends-tu qui récite son psaume ?</vers>
       </para>
     </poeme>
-    <poeme id="aubemuraille_7">
+    <poeme id="aube_muraille_7">
       <titre>Aube muraille</titre>
       <date>05.07.1998</date>
       <categorie>
@@ -9910,7 +9910,7 @@ Juin et juillet 1998</info>
         <vers>Entre moi, lui.</vers>
       </para>
     </poeme>
-    <poeme id="lencretracee_7">
+    <poeme id="l_encre_tracee_7">
       <titre>L'encre tracée</titre>
       <date>11.07.1998</date>
       <categorie>
@@ -9937,7 +9937,7 @@ Juin et juillet 1998</info>
         <vers>Elle s'enfuit, tracée.</vers>
       </para>
     </poeme>
-    <poeme id="priereamarie_7">
+    <poeme id="priere_a_marie_7">
       <titre>Prière à Marie</titre>
       <date>11.07.1998</date>
       <categorie>
@@ -9960,7 +9960,7 @@ Juin et juillet 1998</info>
         <vers>Et Marie au clair voile, à la vie, au trépas !</vers>
       </para>
     </poeme>
-    <poeme id="maiscela_7">
+    <poeme id="mais_cela_7">
       <titre>Mais cela...</titre>
       <date>08.07.1998</date>
       <categorie>
@@ -9981,7 +9981,7 @@ Juin et juillet 1998</info>
         <vers>Arrivera-t-il pâle à dire... oui, mais cela...</vers>
       </para>
     </poeme>
-    <poeme id="ecriresanssavoir_7">
+    <poeme id="ecrire_sans_savoir_7">
       <titre>Ecrire sans savoir</titre>
       <date>16.07.1998</date>
       <categorie>
@@ -10012,7 +10012,7 @@ Juin et juillet 1998</info>
         <vers>Réécrire l'histoire.</vers>
       </para>
     </poeme>
-    <poeme id="larosesecret_7">
+    <poeme id="la_rose_secret_7">
       <titre>La rose : secret</titre>
       <date>06.07.1998</date>
       <categorie>
@@ -10060,7 +10060,7 @@ Juin et juillet 1998</info>
         <vers>Riche moisson de l'âme, elle est belle, elle est vraie.</vers>
       </para>
     </poeme>
-    <poeme id="couriraperte_7">
+    <poeme id="courir_a_perte_d_ame_7">
       <titre>Courir à perte d'âme</titre>
       <date>08.07.1998</date>
       <categorie>
@@ -10134,7 +10134,7 @@ Juin et juillet 1998</info>
         <vers>Aube au creux de ce jour où chantonnent caresses...</vers>
       </para>
     </poeme>
-    <poeme id="danslaurore_7">
+    <poeme id="dans_l_aurore_7">
       <titre>Dans l'aurore</titre>
       <date>20.06.1998</date>
       <categorie>
@@ -10166,7 +10166,7 @@ Juin et juillet 1998</info>
         <vers>Au ciel et ses brisants...</vers>
       </para>
     </poeme>
-    <poeme id="auborddunlac_7">
+    <poeme id="au_bord_d_un_lac_7">
       <titre>Au bord d'un lac</titre>
       <date>03.07.1998</date>
       <categorie>
@@ -10197,7 +10197,7 @@ Juin et juillet 1998</info>
         <vers>Comme un oubli l'eau de ma prose.</vers>
       </para>
     </poeme>
-    <poeme id="chansondelune_7">
+    <poeme id="chanson_de_lune_7">
       <titre>Chanson de lune</titre>
       <date>08.06.1998</date>
       <categorie>
@@ -10219,7 +10219,7 @@ Juin et juillet 1998</info>
         <vers>L'ombre d'un cœur fugitif...</vers>
       </para>
     </poeme>
-    <poeme id="lecielnestbleu_7">
+    <poeme id="le_ciel_n_est_bleu_ni_gris_7">
       <titre>Le ciel n'est bleu ni gris...</titre>
       <date>05.07.1998</date>
       <categorie>
@@ -10267,7 +10267,7 @@ Juin et juillet 1998</info>
         <vers>Serrée en sa promesse et naissant sentiment.</vers>
       </para>
     </poeme>
-    <poeme id="lunelanuit_7">
+    <poeme id="lune_la_nuit_7">
       <titre>Lune, la nuit</titre>
       <date>08.07.1998</date>
       <categorie>
@@ -10330,7 +10330,7 @@ Juin et juillet 1998</info>
         <vers>Et l'âme sépare du corps...</vers>
       </para>
     </poeme>
-    <poeme id="ellecoule_7">
+    <poeme id="elle_coule_musique_7">
       <titre>Elle coule, musique</titre>
       <date>02.07.1998</date>
       <categorie>
@@ -10363,7 +10363,7 @@ Juin et juillet 1998</info>
         <vers>Et gémit, hurle et blesse à cœur !</vers>
       </para>
     </poeme>
-    <poeme id="jenesaisplus_7">
+    <poeme id="je_ne_sais_plus_7">
       <titre>Je ne sais plus</titre>
       <date>12.07.1998</date>
       <categorie>
@@ -10394,7 +10394,7 @@ Juin et juillet 1998</info>
         <vers>Se bercera d'un sacrilège.</vers>
       </para>
     </poeme>
-    <poeme id="sphere_7">
+    <poeme id="sphere_une_larme_7">
       <titre>Sphère, une larme</titre>
       <date>09.07.1998</date>
       <categorie>
@@ -10423,7 +10423,7 @@ Juin et juillet 1998</info>
         <vers>Elle est... la sphère des visages !</vers>
       </para>
     </poeme>
-    <poeme id="ilnesert_7">
+    <poeme id="il_ne_sert_7">
       <titre>Il ne sert</titre>
       <date>21.06.1998</date>
       <categorie>
@@ -10444,7 +10444,7 @@ Juin et juillet 1998</info>
         <vers>Troublantes pages trop frivoles.</vers>
       </para>
     </poeme>
-    <poeme id="lunlautremoi_7">
+    <poeme id="l_un_l_autre_moi_7">
       <titre>L'un, l'autre, moi</titre>
       <date>10.07.1998</date>
       <categorie>
@@ -10482,7 +10482,7 @@ Juin et juillet 1998</info>
     <info>La fin d'un amour, mais également une période de doute, et quelques "diamants".
 
 De juillet à septembre 1998</info>
-    <poeme id="surunair_8">
+    <poeme id="sur_un_air_8">
       <titre>Sur un air</titre>
       <date>20.07.1998</date>
       <categorie>
@@ -10501,7 +10501,7 @@ De juillet à septembre 1998</info>
         <vers>Ris au contraire comme on passe!</vers>
       </para>
     </poeme>
-    <poeme id="dunrevefou_8">
+    <poeme id="d_un_reve_fou_8">
       <titre>D'un rêve fou</titre>
       <date>21.07.1998</date>
       <categorie>
@@ -10522,7 +10522,7 @@ De juillet à septembre 1998</info>
         <vers>Unie à l'âme-saisons.</vers>
       </para>
     </poeme>
-    <poeme id="jemesens_8">
+    <poeme id="je_me_sens_8">
       <titre>Je me sens</titre>
       <date>21.07.1998</date>
       <categorie>
@@ -10543,7 +10543,7 @@ De juillet à septembre 1998</info>
         <vers>Sans plus retour l'âme troublée...</vers>
       </para>
     </poeme>
-    <poeme id="surteslevres_8">
+    <poeme id="sur_tes_levres_8">
       <titre>Sur tes lèvres</titre>
       <date>25.07.1998</date>
       <categorie>
@@ -10574,7 +10574,7 @@ De juillet à septembre 1998</info>
         <vers>Saura charmer soleil d'été.</vers>
       </para>
     </poeme>
-    <poeme id="alafolie_8">
+    <poeme id="a_la_folie_8">
       <titre>A la folie</titre>
       <date>27.07.1998</date>
       <categorie>
@@ -10595,7 +10595,7 @@ De juillet à septembre 1998</info>
         <vers>Encor de vivre en cette image.</vers>
       </para>
     </poeme>
-    <poeme id="dunsourire_8">
+    <poeme id="d_un_sourire_8">
       <titre>D'un sourire</titre>
       <date>28.07.1998</date>
       <categorie>
@@ -10616,7 +10616,7 @@ De juillet à septembre 1998</info>
         <vers>En moi que ta lèvre caresse ?</vers>
       </para>
     </poeme>
-    <poeme id="monamant_8">
+    <poeme id="mon_amant_8">
       <titre>Mon amant</titre>
       <date>28.07.1998</date>
       <categorie>
@@ -10637,7 +10637,7 @@ De juillet à septembre 1998</info>
         <vers>Trace des cœurs surannés.</vers>
       </para>
     </poeme>
-    <poeme id="tabouche_8">
+    <poeme id="ta_bouche_8">
       <titre>Ta bouche</titre>
       <date>28.07.1998</date>
       <categorie>
@@ -10658,7 +10658,7 @@ De juillet à septembre 1998</info>
         <vers>En l'écume y roule et tangue.</vers>
       </para>
     </poeme>
-    <poeme id="monsouhait_8">
+    <poeme id="mon_souhait_8">
       <titre>Mon souhait</titre>
       <date>20.07.1998</date>
       <categorie>
@@ -10679,7 +10679,7 @@ De juillet à septembre 1998</info>
         <vers>Trouble de joie une existence !</vers>
       </para>
     </poeme>
-    <poeme id="jecroisentoi_8">
+    <poeme id="je_crois_en_toi_8">
       <titre>Je crois en toi</titre>
       <date>23.07.1998</date>
       <categorie>
@@ -10706,7 +10706,7 @@ De juillet à septembre 1998</info>
         <vers>Intense à ton accord voleur.</vers>
       </para>
     </poeme>
-    <poeme id="unchapelet_8">
+    <poeme id="un_chapelet_8">
       <titre>Un chapelet</titre>
       <date>23.07.1998</date>
       <categorie>
@@ -10727,7 +10727,7 @@ De juillet à septembre 1998</info>
         <vers>Traces de lune en silence s'en vont.</vers>
       </para>
     </poeme>
-    <poeme id="jenecrirai_8">
+    <poeme id="je_n_ecrirai_8">
       <titre>Je n'écrirai</titre>
       <date>24.07.1998</date>
       <categorie>
@@ -10748,7 +10748,7 @@ De juillet à septembre 1998</info>
         <vers>Immortels mots en farandole.</vers>
       </para>
     </poeme>
-    <poeme id="adieuanous_8">
+    <poeme id="a_dieu_a_nous_8">
       <titre>A Dieu, à nous</titre>
       <date>24.07.1998</date>
       <categorie>
@@ -10769,7 +10769,7 @@ De juillet à septembre 1998</info>
         <vers>serre-moi d'un regard, ô songe qui m'enchante !</vers>
       </para>
     </poeme>
-    <poeme id="ilpleut_8">
+    <poeme id="il_pleut_sur_ta_figure_8">
       <titre>Il pleut sur ta figure...</titre>
       <date>27.07.1998</date>
       <categorie>
@@ -10825,7 +10825,7 @@ De juillet à septembre 1998</info>
         <vers>Offert unique à toi, symbole d'avenir ?</vers>
       </para>
     </poeme>
-    <poeme id="jenecroispas_8">
+    <poeme id="je_ne_crois_pas_8">
       <titre>Je ne crois pas...</titre>
       <date>29.07.1998</date>
       <categorie>
@@ -10856,7 +10856,7 @@ De juillet à septembre 1998</info>
         <vers>Sauront-ils qu'on ne s'y résigne ?</vers>
       </para>
     </poeme>
-    <poeme id="toiquonnomme_8">
+    <poeme id="toi_qu_on_nomme_8">
       <titre>Toi qu'on nomme...</titre>
       <date>30.07.1998</date>
       <categorie>
@@ -10883,7 +10883,7 @@ De juillet à septembre 1998</info>
         <vers>Envolés clair pétale, étamine, pétiole.</vers>
       </para>
     </poeme>
-    <poeme id="quandtugrandis_8">
+    <poeme id="quand_tu_grandis_8">
       <titre>Quand tu grandis</titre>
       <date>31.07.1998</date>
       <categorie>
@@ -10912,7 +10912,7 @@ De juillet à septembre 1998</info>
         <vers>sourire d'un destin quand en moi tu grandis.</vers>
       </para>
     </poeme>
-    <poeme id="tonpremier_8">
+    <poeme id="ton_premier_succes_8">
       <titre>Ton premier succès</titre>
       <date>01.08.1998</date>
       <categorie>
@@ -10945,7 +10945,7 @@ De juillet à septembre 1998</info>
         <vers>Soufflé des pages du grand livre.</vers>
       </para>
     </poeme>
-    <poeme id="miroirsdetoi_8">
+    <poeme id="miroirs_de_toi_8">
       <titre>Miroirs de toi</titre>
       <date>03.08.1998</date>
       <categorie>
@@ -10999,7 +10999,7 @@ De juillet à septembre 1998</info>
         <vers>A l'ombre où l'ombre se défait.</vers>
       </para>
     </poeme>
-    <poeme id="ilnestdeport_8">
+    <poeme id="il_n_est_de_port_8">
       <titre>Il n'est de port</titre>
       <date>24.08.1998</date>
       <categorie>
@@ -11026,7 +11026,7 @@ De juillet à septembre 1998</info>
         <vers>Tourmenté... traces de mémoire.</vers>
       </para>
     </poeme>
-    <poeme id="senzanord_8">
+    <poeme id="senza_nord_ne_sud_8">
       <titre>Senza nord nè sud</titre>
       <date>26.08.1998</date>
       <categorie>
@@ -11056,7 +11056,7 @@ De juillet à septembre 1998</info>
         <vers>désirs cardinaux sans réponse...</vers>
       </para>
     </poeme>
-    <poeme id="labrumeenmoi_8">
+    <poeme id="la_brume_en_moi_8">
       <titre>La brume en moi</titre>
       <date>31.08.1998</date>
       <categorie>
@@ -11083,7 +11083,7 @@ De juillet à septembre 1998</info>
         <vers>Ivre blancheur !</vers>
       </para>
     </poeme>
-    <poeme id="levolcan_8">
+    <poeme id="le_volcan_8">
       <titre>Le volcan</titre>
       <date>31.08.1998</date>
       <categorie>
@@ -11102,7 +11102,7 @@ De juillet à septembre 1998</info>
         <vers>Ne fais pas comme moi, cendre morte en ses grains.</vers>
       </para>
     </poeme>
-    <poeme id="lepeintre_8">
+    <poeme id="le_peintre_dit_8">
       <titre>Le peintre dit...</titre>
       <date>14.08.1998</date>
       <categorie>
@@ -11129,7 +11129,7 @@ De juillet à septembre 1998</info>
         <vers>Triste palette déicide.</vers>
       </para>
     </poeme>
-    <poeme id="beaulac_8">
+    <poeme id="beau_lac_8">
       <titre>Beau lac</titre>
       <date>22.07.1998</date>
       <categorie>
@@ -11162,7 +11162,7 @@ De juillet à septembre 1998</info>
         <vers>Sur ton eau calme, brise, aurore...</vers>
       </para>
     </poeme>
-    <poeme id="refletmirage_8">
+    <poeme id="reflet_mirage_8">
       <titre>Reflet : mirage</titre>
       <date>24.08.1998</date>
       <categorie>
@@ -11193,7 +11193,7 @@ De juillet à septembre 1998</info>
         <vers>En sa volute un fol secret : mirage...</vers>
       </para>
     </poeme>
-    <poeme id="dislaube_8">
+    <poeme id="dis_l_aube_8">
       <titre>Dis l'aube</titre>
       <date>28.08.1998</date>
       <categorie>
@@ -11256,7 +11256,7 @@ De juillet à septembre 1998</info>
         <vers>Elève cette ode à l'absence.</vers>
       </para>
     </poeme>
-    <poeme id="entrelesvagues_8">
+    <poeme id="entre_les_vagues_8">
       <titre>Entre les vagues</titre>
       <date>05.09.1998</date>
       <categorie>
@@ -11293,7 +11293,7 @@ De juillet à septembre 1998</info>
         <vers>Sourire, la mer au matin.</vers>
       </para>
     </poeme>
-    <poeme id="ellesonate_8">
+    <poeme id="elle_sonate_8">
       <titre>Elle : sonate</titre>
       <date>05.09.1998</date>
       <categorie>
@@ -11314,7 +11314,7 @@ De juillet à septembre 1998</info>
         <vers>Elle est musique, âme, sonates !</vers>
       </para>
     </poeme>
-    <poeme id="findete_8">
+    <poeme id="fin_d_ete_nonchalance_8">
       <titre>Fin d'été, nonchalance</titre>
       <date>06.09.1998</date>
       <categorie>
@@ -11343,7 +11343,7 @@ De juillet à septembre 1998</info>
         <vers>Et l'automne assassine.</vers>
       </para>
     </poeme>
-    <poeme id="lautomne_8">
+    <poeme id="l_automne_d_un_cour_8">
       <titre>L'automne d'un cœur</titre>
       <date>30.08.1998</date>
       <categorie>
@@ -11384,7 +11384,7 @@ De juillet à septembre 1998</info>
         <vers>Renouvelé d'un cœur déçu.</vers>
       </para>
     </poeme>
-    <poeme id="entoi_8">
+    <poeme id="en_toi_j_ai_aime_8">
       <titre>En toi j'ai aimé</titre>
       <date>01.09.1998</date>
       <categorie>
@@ -11411,7 +11411,7 @@ De juillet à septembre 1998</info>
         <vers>Etreinte d'un printemps troublé.</vers>
       </para>
     </poeme>
-    <poeme id="elleacru_8">
+    <poeme id="elle_a_cru_8">
       <titre>Elle a cru</titre>
       <date>03.09.1998</date>
       <categorie>
@@ -11432,7 +11432,7 @@ De juillet à septembre 1998</info>
         <vers>Unie au parfum qui l'arrose.</vers>
       </para>
     </poeme>
-    <poeme id="jecroisenlui_8">
+    <poeme id="je_crois_en_lui_8">
       <titre>Je crois en lui</titre>
       <date>05.09.1998</date>
       <categorie>
@@ -11459,7 +11459,7 @@ De juillet à septembre 1998</info>
         <vers>Il se traverse sans renier.</vers>
       </para>
     </poeme>
-    <poeme id="quandledestin_8">
+    <poeme id="quand_le_destin_dit_8">
       <titre>Quand le destin dit...</titre>
       <date>07.09.1998</date>
       <categorie>
@@ -11496,7 +11496,7 @@ De juillet à septembre 1998</info>
         <vers>Troublés dans d'étranges caresses...</vers>
       </para>
     </poeme>
-    <poeme id="secretduncoeur_8">
+    <poeme id="secret_d_un_cour_8">
       <titre>Secret d'un cœur</titre>
       <date>10.09.1998</date>
       <categorie>
@@ -11521,7 +11521,7 @@ De juillet à septembre 1998</info>
         <vers>Riche d'aimer l'âme est prophète.</vers>
       </para>
     </poeme>
-    <poeme id="unebague_8">
+    <poeme id="une_bague_8">
       <titre>Une bague</titre>
       <date>12.09.1998</date>
       <categorie>
@@ -11542,7 +11542,7 @@ De juillet à septembre 1998</info>
         <vers>Entrelaçons alors notre cœur germinal.</vers>
       </para>
     </poeme>
-    <poeme id="offremoi_8">
+    <poeme id="offre_moi_des_roses_8">
       <titre>Offre-moi des roses</titre>
       <date>12.09.1998</date>
       <categorie>
@@ -11579,7 +11579,7 @@ De juillet à septembre 1998</info>
         <vers>Sont l'amour vainqueur !</vers>
       </para>
     </poeme>
-    <poeme id="sansriendire_8">
+    <poeme id="sans_rien_dire_8">
       <titre>Sans rien dire</titre>
       <date>04.09.1998</date>
       <categorie>
@@ -11606,7 +11606,7 @@ De juillet à septembre 1998</info>
         <vers>En le tien je veux lire : nous ?</vers>
       </para>
     </poeme>
-    <poeme id="liberer_8">
+    <poeme id="liberer_la_vie_8">
       <titre>Libérer la vie</titre>
       <date>26.07.1998</date>
       <categorie>
@@ -11633,7 +11633,7 @@ De juillet à septembre 1998</info>
         <vers>Epinglés de fols bonheurs.</vers>
       </para>
     </poeme>
-    <poeme id="lacolombe_8">
+    <poeme id="la_colombe_8">
       <titre>la colombe</titre>
       <date>10.08.1998</date>
       <categorie>
@@ -11691,7 +11691,7 @@ De juillet à septembre 1998</info>
         <vers>En mémoire... bonheur...</vers>
       </para>
     </poeme>
-    <poeme id="surunfil_8">
+    <poeme id="sur_un_fil_8">
       <titre>Sur un fil</titre>
       <date>12.08.1998</date>
       <categorie>
@@ -11733,7 +11733,7 @@ De juillet à septembre 1998</info>
         <vers>Illusion, coquille vide.</vers>
       </para>
     </poeme>
-    <poeme id="danstoncoeur_8">
+    <poeme id="dans_ton_cour_dieu_8">
       <titre>Dans ton cœur, Dieu</titre>
       <date>21.07.1998</date>
       <categorie>
@@ -11760,7 +11760,7 @@ De juillet à septembre 1998</info>
         <vers>Relier le ciel à la terre !</vers>
       </para>
     </poeme>
-    <poeme id="diomhachiamato_8">
+    <poeme id="dio_m_ha_chiamato_8">
       <titre>Dio m'ha chiamato</titre>
       <date>19.08.1998</date>
       <categorie>
@@ -11813,7 +11813,7 @@ De juillet à septembre 1998</info>
     <info>A la recherche de nouvelles inspirations.
 
 De septembre à décembre 1998</info>
-    <poeme id="demainlautomne_9">
+    <poeme id="demain_l_automne_9">
       <titre>Demain l'automne</titre>
       <date>22.09.1998</date>
       <categorie>
@@ -11840,7 +11840,7 @@ De septembre à décembre 1998</info>
         <vers>Et la saison résonne en ma prison de feuilles.</vers>
       </para>
     </poeme>
-    <poeme id="lhiverdeja_9">
+    <poeme id="l_hiver_deja_9">
       <titre>L'hiver déjà</titre>
       <date>04.10.1998</date>
       <categorie>
@@ -11865,7 +11865,7 @@ De septembre à décembre 1998</info>
         <vers>Au seuil du précipice enfermer nos démences ?</vers>
       </para>
     </poeme>
-    <poeme id="lasaison_9">
+    <poeme id="la_saison_9">
       <titre>La saison</titre>
       <date>26.09.1998</date>
       <categorie>
@@ -11886,7 +11886,7 @@ De septembre à décembre 1998</info>
         <vers>Naît mystère oublié perdu sans lendemain.</vers>
       </para>
     </poeme>
-    <poeme id="farfalledottobre_9">
+    <poeme id="farfalle_d_ottobre_9">
       <titre>Farfalle d'ottobre</titre>
       <date>18.10.1998</date>
       <categorie>
@@ -11924,7 +11924,7 @@ De septembre à décembre 1998</info>
         <vers>En nos âmes l'étoile éclaire un ciel désert ?</vers>
       </para>
     </poeme>
-    <poeme id="soleildhiver_9">
+    <poeme id="soleil_d_hiver_9">
       <titre>Soleil d'hiver</titre>
       <date>22.11.1998</date>
       <categorie>
@@ -11955,7 +11955,7 @@ De septembre à décembre 1998</info>
         <vers>Retentis en gaîtés !</vers>
       </para>
     </poeme>
-    <poeme id="silesroses_9">
+    <poeme id="si_les_roses_fanent_9">
       <titre>Si les roses fanent</titre>
       <date>25.11.1998</date>
       <categorie>
@@ -11992,7 +11992,7 @@ De septembre à décembre 1998</info>
         <vers>Triste, un refrain fêlé.</vers>
       </para>
     </poeme>
-    <poeme id="unjourdefunt_9">
+    <poeme id="un_jour_defunt_9">
       <titre>Un jour défunt</titre>
       <date>18.09.1998</date>
       <categorie>
@@ -12029,7 +12029,7 @@ De septembre à décembre 1998</info>
         <vers>Tombé l'arbre n'est qu'un défunt.</vers>
       </para>
     </poeme>
-    <poeme id="nulnesait_9">
+    <poeme id="nul_ne_sait_9">
       <titre>Nul ne sait</titre>
       <date>02.10.1998</date>
       <categorie>
@@ -12063,7 +12063,7 @@ De septembre à décembre 1998</info>
         <vers>Aux amours délient cieux.</vers>
       </para>
     </poeme>
-    <poeme id="monpoeme_9">
+    <poeme id="mon_poeme_9">
       <titre>Mon poème</titre>
       <date>13.11.1998</date>
       <categorie>
@@ -12082,7 +12082,7 @@ De septembre à décembre 1998</info>
         <vers>En leur rythme de Malouin.</vers>
       </para>
     </poeme>
-    <poeme id="jenesais_9">
+    <poeme id="je_ne_sais_9">
       <titre>Je ne sais</titre>
       <date>14.11.1998</date>
       <categorie>
@@ -12103,7 +12103,7 @@ De septembre à décembre 1998</info>
         <vers>Serment d'esprit qui passe...</vers>
       </para>
     </poeme>
-    <poeme id="aube_9">
+    <poeme id="aube_d_un_poeme_9">
       <titre>Aube d'un poème</titre>
       <date>19.11.1998</date>
       <categorie>
@@ -12130,7 +12130,7 @@ De septembre à décembre 1998</info>
         <vers>Et l'aube d'un poème où les songes accourent...</vers>
       </para>
     </poeme>
-    <poeme id="leverdunjour_9">
+    <poeme id="lever_d_un_jour_9">
       <titre>Lever d'un jour</titre>
       <date>15.11.1998</date>
       <categorie>
@@ -12165,7 +12165,7 @@ De septembre à décembre 1998</info>
         <vers>Rejoindra le flot vert strié de reflets bruns.</vers>
       </para>
     </poeme>
-    <poeme id="sebastasse_9">
+    <poeme id="se_bastasse_la_vita_9">
       <titre>Se bastasse la vita</titre>
       <date>08.11.1998</date>
       <categorie>
@@ -12203,7 +12203,7 @@ De septembre à décembre 1998</info>
         <vers>Au gré de l'art l'aube future...</vers>
       </para>
     </poeme>
-    <poeme id="marchervers_9">
+    <poeme id="marcher_vers_la_vie_9">
       <titre>Marcher vers la vie</titre>
       <date>10.11.1998</date>
       <categorie>
@@ -12280,7 +12280,7 @@ De septembre à décembre 1998</info>
         <vers>en ta splendeur, ange charmant.</vers>
       </para>
     </poeme>
-    <poeme id="etrecree_9">
+    <poeme id="etre_cree_9">
       <titre>Etre créé</titre>
       <date>26.11.1998</date>
       <categorie>
@@ -12337,7 +12337,7 @@ De septembre à décembre 1998</info>
         <vers>Eternelles voix se répondent.</vers>
       </para>
     </poeme>
-    <poeme id="chansonboheme_9">
+    <poeme id="une_chanson_boheme_9">
       <titre>Une chanson bohème</titre>
       <date>30.09.1998</date>
       <categorie>
@@ -12385,7 +12385,7 @@ De septembre à décembre 1998</info>
         <vers>En notes-mirages.</vers>
       </para>
     </poeme>
-    <poeme id="auborddusens_9">
+    <poeme id="au_bord_du_sens_9">
       <titre>Au bord du sens</titre>
       <date>01.11.1998</date>
       <categorie>
@@ -12412,7 +12412,7 @@ De septembre à décembre 1998</info>
         <vers>En sa délivrance.</vers>
       </para>
     </poeme>
-    <poeme id="silencechant_9">
+    <poeme id="silence_chant_9">
       <titre>Silence : chant</titre>
       <date>13.11.1998</date>
       <categorie>
@@ -12439,7 +12439,7 @@ De septembre à décembre 1998</info>
         <vers>Ténue en son frisson ?</vers>
       </para>
     </poeme>
-    <poeme id="vivere_9">
+    <poeme id="vivere_nell_arte_9">
       <titre>Vivere nell'arte</titre>
       <date>01.11.1998</date>
       <categorie>
@@ -12469,7 +12469,7 @@ De septembre à décembre 1998</info>
         <vers>Exister, les lendemains...</vers>
       </para>
     </poeme>
-    <poeme id="unevielart_9">
+    <poeme id="une_vie_l_art_9">
       <titre>Une vie : l'art</titre>
       <date>07.11.1998</date>
       <categorie>
@@ -12515,7 +12515,7 @@ De septembre à décembre 1998</info>
         <vers>Sacrent la symphonie éclose en son élan.</vers>
       </para>
     </poeme>
-    <poeme id="noelenchante_9">
+    <poeme id="noel_enchante_9">
       <titre>Noël enchanté</titre>
       <date>16.12.1998</date>
       <categorie>
@@ -12561,7 +12561,7 @@ De septembre à décembre 1998</info>
         <vers>Soleil berce ombres folles...</vers>
       </para>
     </poeme>
-    <poeme id="lefleuve_9">
+    <poeme id="le_fleuve_9">
       <titre>Le fleuve</titre>
       <date>28.09.1998</date>
       <categorie>
@@ -12592,7 +12592,7 @@ De septembre à décembre 1998</info>
         <vers>Et l'oubli referme son livre.</vers>
       </para>
     </poeme>
-    <poeme id="sablevie_9">
+    <poeme id="le_sable_la_vie_9">
       <titre>Le sable, la vie</titre>
       <date>10.10.1998</date>
       <categorie>
@@ -12619,7 +12619,7 @@ De septembre à décembre 1998</info>
         <vers>Emporté, le sable disert.</vers>
       </para>
     </poeme>
-    <poeme id="resonances_9">
+    <poeme id="resonances_de_l_ame_9">
       <titre>Résonances de l'âme</titre>
       <date>20.10.1998</date>
       <categorie>
@@ -12650,7 +12650,7 @@ De septembre à décembre 1998</info>
         <vers>Entre les cœur de glaces.</vers>
       </para>
     </poeme>
-    <poeme id="enchaqueetre_9">
+    <poeme id="en_chaque_etre_9">
       <titre>En chaque être</titre>
       <date>30.10.1998</date>
       <categorie>
@@ -12677,7 +12677,7 @@ De septembre à décembre 1998</info>
         <vers>Etreintes sans parfum...</vers>
       </para>
     </poeme>
-    <poeme id="audela_9">
+    <poeme id="au_dela_9">
       <titre>Au-delà</titre>
       <date>06.11.1998</date>
       <categorie>
@@ -12702,7 +12702,7 @@ De septembre à décembre 1998</info>
         <vers>Un ciel en chasse un autre en débris d'existence.</vers>
       </para>
     </poeme>
-    <poeme id="jaiperdutonimage_9">
+    <poeme id="j_ai_perdu_ton_image_9">
       <titre>J'ai perdu ton image</titre>
       <date>05.12.1998</date>
       <categorie>
@@ -12735,7 +12735,7 @@ De septembre à décembre 1998</info>
         <vers>Eclate à l'infini.</vers>
       </para>
     </poeme>
-    <poeme id="jaiperdumondesir_9">
+    <poeme id="j_ai_perdu_mon_desir_9">
       <titre>J'ai perdu mon désir</titre>
       <date>06.12.1998</date>
       <categorie>
@@ -12768,7 +12768,7 @@ De septembre à décembre 1998</info>
         <vers>Rejoindre l'autre rive.</vers>
       </para>
     </poeme>
-    <poeme id="soufflesdhiver_9" type="sonnet">
+    <poeme id="souffles_d_hiver_9" type="sonnet">
       <titre>Souffles d'hiver</titre>
       <date>11.12.1998</date>
       <categorie>
@@ -12803,7 +12803,7 @@ De septembre à décembre 1998</info>
         <vers>Rire d'hiver où l'âme affleure en traces brèves...</vers>
       </para>
     </poeme>
-    <poeme id="alageoulebnh_9">
+    <poeme id="a_l_age_ou_le_bonheur_9">
       <titre>A l'âge où le bonheur...</titre>
       <date>13.12.1998</date>
       <categorie>
@@ -12836,7 +12836,7 @@ De septembre à décembre 1998</info>
         <vers>Rieuse quand de l'âme un oiseau blanc surgit.</vers>
       </para>
     </poeme>
-    <poeme id="quevivre_9">
+    <poeme id="que_vivre_9">
       <titre>Que vivre</titre>
       <date>16.12.1998</date>
       <categorie>
@@ -12861,7 +12861,7 @@ De septembre à décembre 1998</info>
         <vers>Exister c'est fragile, immense, beau !</vers>
       </para>
     </poeme>
-    <poeme id="danslanuit_9">
+    <poeme id="dans_la_nuit_9">
       <titre>Dans la nuit</titre>
       <date>21.12.1998</date>
       <categorie>
@@ -12890,7 +12890,7 @@ De septembre à décembre 1998</info>
         <vers>Tiens dans tes mains la nuit quand tes pas s'y raccrochent.</vers>
       </para>
     </poeme>
-    <poeme id="unreveaudela_9">
+    <poeme id="un_reve_au_dela_9">
       <titre>Un rêve au-delà</titre>
       <date>26.12.1998</date>
       <categorie>
@@ -12921,7 +12921,7 @@ De septembre à décembre 1998</info>
         <vers>A l'aube où le mystère absout.</vers>
       </para>
     </poeme>
-    <poeme id="reverdetoi_9">
+    <poeme id="rever_de_toi_9">
       <titre>Rêver de toi</titre>
       <date>21.09.1998</date>
       <categorie>
@@ -12946,7 +12946,7 @@ De septembre à décembre 1998</info>
         <vers>Illusion brise les Tables.</vers>
       </para>
     </poeme>
-    <poeme id="jetattendrai_9">
+    <poeme id="je_t_attendrai_9">
       <titre>Je t'attendrai</titre>
       <date>19.10.1998</date>
       <categorie>
@@ -12977,7 +12977,7 @@ De septembre à décembre 1998</info>
         <vers>Insensé quand s'envole une étoile brûlée.</vers>
       </para>
     </poeme>
-    <poeme id="labsenceduncoeur_9">
+    <poeme id="l_absence_d_un_cour_9">
       <titre>L'absence d'un cœur</titre>
       <date>18.10.1998</date>
       <categorie>
@@ -13004,7 +13004,7 @@ De septembre à décembre 1998</info>
         <vers>Rêve sans ciel, transfuge...</vers>
       </para>
     </poeme>
-    <poeme id="jairevedetoi_9">
+    <poeme id="j_ai_reve_de_toi_9">
       <titre>J'ai rêvé de toi</titre>
       <date>23.10.1998</date>
       <categorie>
@@ -13031,7 +13031,7 @@ De septembre à décembre 1998</info>
         <vers>Impatient, mystique !</vers>
       </para>
     </poeme>
-    <poeme id="lemasque_9">
+    <poeme id="le_masque_9">
       <titre>Le masque</titre>
       <date>24.10.1998</date>
       <categorie>
@@ -13052,7 +13052,7 @@ De septembre à décembre 1998</info>
         <vers>Et tombera le masque, et valsera l'accord !</vers>
       </para>
     </poeme>
-    <poeme id="donnemoitoncoeur_9">
+    <poeme id="donne_moi_ton_cour_9">
       <titre>Donne-moi ton cœur</titre>
       <date>26.10.1998</date>
       <categorie>
@@ -13085,7 +13085,7 @@ De septembre à décembre 1998</info>
         <vers>Roule en l'écume, absence...</vers>
       </para>
     </poeme>
-    <poeme id="unevierge_9">
+    <poeme id="une_vierge_9">
       <titre>Une vierge</titre>
       <date>31.10.1998</date>
       <categorie>
@@ -13112,7 +13112,7 @@ De septembre à décembre 1998</info>
         <vers>Imaginaire un rêve au corsage bizarre.</vers>
       </para>
     </poeme>
-    <poeme id="laneigedunreve_9" type="sonnet">
+    <poeme id="la_neige_d_un_reve_9" type="sonnet">
       <titre>La neige d'un rêve</titre>
       <date>02.12.1998</date>
       <categorie>
@@ -13143,7 +13143,7 @@ De septembre à décembre 1998</info>
         <vers>En ton sein vibre un diapason natal.</vers>
       </para>
     </poeme>
-    <poeme id="danssoncoeur_9">
+    <poeme id="dans_son_cour_9">
       <titre>Dans son cœur</titre>
       <date>13.11.1998</date>
       <categorie>
@@ -13170,7 +13170,7 @@ De septembre à décembre 1998</info>
         <vers>Ravi d'un cœur parti sans trace.</vers>
       </para>
     </poeme>
-    <poeme id="ellevit_9">
+    <poeme id="elle_vit_9">
       <titre>Elle vit</titre>
       <date>01.12.1998</date>
       <categorie>
@@ -13214,7 +13214,7 @@ De septembre à décembre 1998</info>
     <info>Pensées oniriques ou plus réelles, cette Saison est riche de vie intérieure, de philosophie et de recherche de la foi et de l'amour.
 
 De janvier à mars 1999</info>
-    <poeme id="surlocean_10">
+    <poeme id="sur_l_ocean_revivre_10">
       <titre>Sur l'océan : revivre</titre>
       <date>03.01.1999</date>
       <categorie>
@@ -13251,7 +13251,7 @@ De janvier à mars 1999</info>
         <vers>En ton cœur découvert : revivre !</vers>
       </para>
     </poeme>
-    <poeme id="marieprie_10">
+    <poeme id="marie_prie_pour_moi_10">
       <titre>Marie, prie pour moi</titre>
       <date>04.01.1999</date>
       <categorie>
@@ -13284,7 +13284,7 @@ De janvier à mars 1999</info>
         <vers>Irradie en amour, en subtile bonté !</vers>
       </para>
     </poeme>
-    <poeme id="cathedralebelle_10">
+    <poeme id="la_cathedrale_est_belle_10">
       <titre>La cathédrale est belle</titre>
       <date>24.01.1999</date>
       <categorie>
@@ -13315,7 +13315,7 @@ De janvier à mars 1999</info>
         <vers>Exauce le monde incertain.</vers>
       </para>
     </poeme>
-    <poeme id="cathedraledelumieres_10">
+    <poeme id="cathedrale_de_lumieres_10">
       <titre>Cathédrale de lumières</titre>
       <date>16.02.1999</date>
       <categorie>
@@ -13365,7 +13365,7 @@ De janvier à mars 1999</info>
         <vers>Aube, exhale souhaits...</vers>
       </para>
     </poeme>
-    <poeme id="nonmorro_10">
+    <poeme id="ave_maria_non_morro_10">
       <titre>Ave Maria non morro</titre>
       <date>04.03.1999</date>
       <categorie>
@@ -13399,7 +13399,7 @@ De janvier à mars 1999</info>
         <vers>O Marie, arrose un désir, nos déserts !</vers>
       </para>
     </poeme>
-    <poeme id="elleestpartie_10">
+    <poeme id="elle_est_partie_la_bas_10">
       <titre>Elle est partie là-bas</titre>
       <date>27.01.1999</date>
       <categorie>
@@ -13486,7 +13486,7 @@ De janvier à mars 1999</info>
         <vers>Sans bruit mes pas vont se perdre dans la mer...</vers>
       </para>
     </poeme>
-    <poeme id="ilfaro_10">
+    <poeme id="il_faro_10">
       <titre>Il faro</titre>
       <date>15.01.1999</date>
       <categorie>
@@ -13503,7 +13503,7 @@ De janvier à mars 1999</info>
         <vers>O le temps change ombre en verre et brise un phare au levant...</vers>
       </para>
     </poeme>
-    <poeme id="dansunreve_10">
+    <poeme id="dans_un_reve_10">
       <titre>Dans un rêve</titre>
       <date>29.01.1999</date>
       <categorie>
@@ -13529,7 +13529,7 @@ De janvier à mars 1999</info>
         <vers>Entre les galets gris un murmure s'éteint.</vers>
       </para>
     </poeme>
-    <poeme id="apeine_10">
+    <poeme id="a_peine_10">
       <titre>A peine</titre>
       <date>01.02.1999</date>
       <categorie>
@@ -13563,7 +13563,7 @@ De janvier à mars 1999</info>
         <vers>Sourire endormi, nos cœurs se reposent...</vers>
       </para>
     </poeme>
-    <poeme id="peurdelanuit_10">
+    <poeme id="peur_de_la_nuit_10">
       <titre>Peur de la nuit</titre>
       <date>14.02.1999</date>
       <categorie>
@@ -13590,7 +13590,7 @@ De janvier à mars 1999</info>
         <vers>Tes mains berceront leur cloche...</vers>
       </para>
     </poeme>
-    <poeme id="jecriraiultime_10">
+    <poeme id="j_ecrirai_ce_mot_l_ultime_10">
       <titre>J'écrirai ce mot, l'ultime</titre>
       <date>15.02.1999</date>
       <categorie>
@@ -13623,7 +13623,7 @@ De janvier à mars 1999</info>
         <vers>Egalité, notre printemps ?</vers>
       </para>
     </poeme>
-    <poeme id="jereve_10">
+    <poeme id="je_reve_10">
       <titre>Je rêve</titre>
       <date>18.02.1999</date>
       <categorie>
@@ -13707,7 +13707,7 @@ De janvier à mars 1999</info>
         <vers>Une trace... Oubli, de rien.</vers>
       </para>
     </poeme>
-    <poeme id="netreajamais_10">
+    <poeme id="n_etre_a_jamais_10">
       <titre>N'être à jamais</titre>
       <date>01.01.1998</date>
       <categorie>
@@ -13734,7 +13734,7 @@ De janvier à mars 1999</info>
         <vers>Sur la fleur brisée, encensoirs.</vers>
       </para>
     </poeme>
-    <poeme id="lunetonsourire_10">
+    <poeme id="lune_ton_sourire_10">
       <titre>Lune, ton sourire</titre>
       <date>31.01.1999</date>
       <categorie>
@@ -13759,7 +13759,7 @@ De janvier à mars 1999</info>
         <vers>Entre les nuages, la Terre.</vers>
       </para>
     </poeme>
-    <poeme id="lunetudanses_10">
+    <poeme id="lune_tu_danses_10">
       <titre>Lune, tu danses</titre>
       <date>10.02.1999</date>
       <categorie>
@@ -13786,7 +13786,7 @@ De janvier à mars 1999</info>
         <vers>Sur ton disque pâle...</vers>
       </para>
     </poeme>
-    <poeme id="lanuitseleve_10">
+    <poeme id="la_nuit_se_leve_10">
       <titre>La nuit se lève</titre>
       <date>26.01.1999</date>
       <categorie>
@@ -13809,7 +13809,7 @@ De janvier à mars 1999</info>
         <vers>Et la nuit ferme alors les yeux...</vers>
       </para>
     </poeme>
-    <poeme id="sonnetdelanuit_10" type="sonnet">
+    <poeme id="sonnet_de_la_nuit_10" type="sonnet">
       <titre>Sonnet de la nuit</titre>
       <date>07.02.1999</date>
       <categorie>
@@ -13840,7 +13840,7 @@ De janvier à mars 1999</info>
         <vers>Triste où le soleil revivra...</vers>
       </para>
     </poeme>
-    <poeme id="lumierelaneige_10">
+    <poeme id="lumiere_la_neige_10">
       <titre>Lumière, la neige</titre>
       <date>12.01.1999</date>
       <categorie>
@@ -13865,7 +13865,7 @@ De janvier à mars 1999</info>
         <vers>Etoile la neige en sa lumière brève...</vers>
       </para>
     </poeme>
-    <poeme id="qqflocons_10">
+    <poeme id="quelques_flocons_10">
       <titre>Quelques flocons...</titre>
       <date>08.02.1999</date>
       <categorie>
@@ -13886,7 +13886,7 @@ De janvier à mars 1999</info>
         <vers>Sur mon carreau le ciel se fait neige ici-bas.</vers>
       </para>
     </poeme>
-    <poeme id="lesoufflevif_10">
+    <poeme id="le_souffle_vif_10">
       <titre>Le souffle vif</titre>
       <date>18.01.1999</date>
       <categorie>
@@ -13917,7 +13917,7 @@ De janvier à mars 1999</info>
         <vers>Floraison : souffle vif.</vers>
       </para>
     </poeme>
-    <poeme id="jendors_10">
+    <poeme id="j_endors_10">
       <titre>J'endors</titre>
       <date>19.02.1999</date>
       <categorie>
@@ -13942,7 +13942,7 @@ De janvier à mars 1999</info>
         <vers>S'écrie en sa chanson d'amour...</vers>
       </para>
     </poeme>
-    <poeme id="celestesoir_10">
+    <poeme id="celeste_soir_10">
       <titre>Céleste soir</titre>
       <date>21.02.1999</date>
       <categorie>
@@ -13973,7 +13973,7 @@ De janvier à mars 1999</info>
         <vers>Rieuses étoiles : soir pur !</vers>
       </para>
     </poeme>
-    <poeme id="reveeden_10">
+    <poeme id="reve_eden_10">
       <titre>Rêve, eden</titre>
       <date>22.02.1999</date>
       <categorie>
@@ -14019,7 +14019,7 @@ De janvier à mars 1999</info>
         <vers>Ebauchée en oniriques bonheurs.</vers>
       </para>
     </poeme>
-    <poeme id="revebleu_10">
+    <poeme id="reve_bleu_10">
       <titre>Rêve bleu</titre>
       <date>26.02.1999</date>
       <categorie>
@@ -14058,7 +14058,7 @@ De janvier à mars 1999</info>
         <vers>Sur le monde qu'au cœur-brindille.</vers>
       </para>
     </poeme>
-    <poeme id="uneaubebleue_10">
+    <poeme id="une_aube_bleue_10">
       <titre>Une aube bleue</titre>
       <date>03.03.1999</date>
       <categorie>
@@ -14085,7 +14085,7 @@ De janvier à mars 1999</info>
         <vers>En ce jardin vivace, aimé.</vers>
       </para>
     </poeme>
-    <poeme id="lamerfeu_10">
+    <poeme id="la_mer_feu_10">
       <titre>La mer : feu</titre>
       <date>04.03.1999</date>
       <categorie>
@@ -14133,7 +14133,7 @@ De janvier à mars 1999</info>
         <vers>silencieuse à présent.</vers>
       </para>
     </poeme>
-    <poeme id="miroirsmirages_10">
+    <poeme id="miroirs_mirages_10">
       <titre>Miroirs, mirages</titre>
       <date>20.03.1999</date>
       <categorie>
@@ -14162,7 +14162,7 @@ De janvier à mars 1999</info>
         <vers>Soumis au temps qui les féconde.</vers>
       </para>
     </poeme>
-    <poeme id="quetavolonte_10">
+    <poeme id="que_ta_volonte_10">
       <titre>Que ta volonté</titre>
       <date>30.12.1998</date>
       <categorie>
@@ -14189,7 +14189,7 @@ De janvier à mars 1999</info>
         <vers>Emeut de félicité !</vers>
       </para>
     </poeme>
-    <poeme id="oserastu_10">
+    <poeme id="oseras_tu_10">
       <titre>Oseras-tu ?</titre>
       <date>30.01.1999</date>
       <categorie>
@@ -14208,7 +14208,7 @@ De janvier à mars 1999</info>
         <vers>Un soir trop tôt, le matin déjà tard...</vers>
       </para>
     </poeme>
-    <poeme id="labandon_10">
+    <poeme id="l_abandon_10">
       <titre>L'Abandon</titre>
       <date>05.02.1999</date>
       <categorie>
@@ -14229,7 +14229,7 @@ De janvier à mars 1999</info>
         <vers>N'entends-tu pas ce cœur, ombre à chaque seconde ?</vers>
       </para>
     </poeme>
-    <poeme id="jeublanc_10">
+    <poeme id="jeu_blanc_10">
       <titre>Jeu blanc</titre>
       <date>08.02.1999</date>
       <categorie>
@@ -14269,7 +14269,7 @@ De janvier à mars 1999</info>
         <vers>Et j'oublierai le jour et la nuit somnambule...</vers>
       </para>
     </poeme>
-    <poeme id="jairetrouve_10">
+    <poeme id="j_ai_retrouve_le_bonheur_10">
       <titre>J'ai retrouvé le bonheur</titre>
       <date>16.02.1999</date>
       <categorie>
@@ -14300,7 +14300,7 @@ De janvier à mars 1999</info>
         <vers>Envoûtant, qui me confondes !</vers>
       </para>
     </poeme>
-    <poeme id="lartiste_10">
+    <poeme id="l_artiste_10">
       <titre>L'artiste</titre>
       <date>27.02.1999</date>
       <categorie>
@@ -14323,7 +14323,7 @@ De janvier à mars 1999</info>
         <vers>Etreignent : le geste s'envoûte.</vers>
       </para>
     </poeme>
-    <poeme id="situpouvais_10">
+    <poeme id="si_tu_pouvais_10">
       <titre>Si tu pouvais</titre>
       <date>03.03.1999</date>
       <categorie>
@@ -14380,7 +14380,7 @@ De janvier à mars 1999</info>
         <vers>Etreint le bonheur drôle.</vers>
       </para>
     </poeme>
-    <poeme id="amourtheme_10">
+    <poeme id="amour_theme_eveils_10">
       <titre>Amour, thème : éveils</titre>
       <date>16.03.1999</date>
       <categorie>
@@ -14411,7 +14411,7 @@ De janvier à mars 1999</info>
         <vers>Souffles nés d'un jour d'avant...</vers>
       </para>
     </poeme>
-    <poeme id="racontemoi_10">
+    <poeme id="raconte_moi_10">
       <titre>Raconte-moi</titre>
       <date>20.03.1999</date>
       <categorie>
@@ -14432,7 +14432,7 @@ De janvier à mars 1999</info>
         <vers>Immortelle au creux de tes bras, de ton rêve...</vers>
       </para>
     </poeme>
-    <poeme id="tesmains_10">
+    <poeme id="tes_mains_10">
       <titre>Tes mains</titre>
       <date>25.03.1999</date>
       <categorie>
@@ -14451,7 +14451,7 @@ De janvier à mars 1999</info>
         <vers>Signes et destins envolés.</vers>
       </para>
     </poeme>
-    <poeme id="coeursmortels_10">
+    <poeme id="cours_mortels_10">
       <titre>Cœurs mortels</titre>
       <date>29.03.1999</date>
       <categorie>
@@ -14503,7 +14503,7 @@ De janvier à mars 1999</info>
     <info>Toute d'éclats, cette Saison de printemps.
 
 De mars à mai 1999</info>
-    <poeme id="quando_11">
+    <poeme id="quando_la_vita_dice_11">
       <titre>Quando la vita dice</titre>
       <date>30.03.1999</date>
       <categorie>
@@ -14560,7 +14560,7 @@ De mars à mai 1999</info>
         <vers>Ombre, le ciel, tu me souris.</vers>
       </para>
     </poeme>
-    <poeme id="cantique_11">
+    <poeme id="cantique_de_vie_11">
       <titre>Cantique de vie</titre>
       <date>16.04.1999</date>
       <categorie>
@@ -14600,7 +14600,7 @@ De mars à mai 1999</info>
         <vers>A la fontaine se tut.</vers>
       </para>
     </poeme>
-    <poeme id="dieusauveur_11">
+    <poeme id="dieu_mon_sauveur_11">
       <titre>Dieu, mon Sauveur !</titre>
       <date>17.04.1999</date>
       <categorie>
@@ -14646,7 +14646,7 @@ De mars à mai 1999</info>
         <vers>En confidence, une note : printemps.</vers>
       </para>
     </poeme>
-    <poeme id="atatons_11">
+    <poeme id="a_tatons_11">
       <titre>A tâtons</titre>
       <date>20.04.1999</date>
       <categorie>
@@ -14674,7 +14674,7 @@ De mars à mai 1999</info>
         <vers>Rêve de nos paradis !</vers>
       </para>
     </poeme>
-    <poeme id="odeurpresence_11">
+    <poeme id="une_odeur_presence_11">
       <titre>Une odeur : présence</titre>
       <date>23.04.1999</date>
       <categorie>
@@ -14705,7 +14705,7 @@ De mars à mai 1999</info>
         <vers>En lui je t'attends.</vers>
       </para>
     </poeme>
-    <poeme id="audelavoyage_11">
+    <poeme id="au_dela_voyage_11">
       <titre>Au-delà : voyage</titre>
       <date>07.05.1999</date>
       <categorie>
@@ -14732,7 +14732,7 @@ De mars à mai 1999</info>
         <vers>Embrassée entendit...</vers>
       </para>
     </poeme>
-    <poeme id="pourtoutmoncoeur_11">
+    <poeme id="pour_tout_mon_cour_11">
       <titre>Pour tout mon cœur</titre>
       <date>12.05.1999</date>
       <categorie>
@@ -14765,7 +14765,7 @@ De mars à mai 1999</info>
         <vers>Reine où ce qui n'est toi semble s'évanouir.</vers>
       </para>
     </poeme>
-    <poeme id="infinir_11">
+    <poeme id="infinir_s_unir_11">
       <titre>Infinir, s'unir</titre>
       <date>13.05.1999</date>
       <categorie>
@@ -14796,7 +14796,7 @@ De mars à mai 1999</info>
         <vers>Rythme le chant du pétale.</vers>
       </para>
     </poeme>
-    <poeme id="danseamour_11">
+    <poeme id="danse_amour_11">
       <titre>Danse, amour</titre>
       <date>16.05.1999</date>
       <categorie>
@@ -14823,7 +14823,7 @@ De mars à mai 1999</info>
         <vers>Rythme d'amour furtif.</vers>
       </para>
     </poeme>
-    <poeme id="unrendezvous_11">
+    <poeme id="un_rendez_vous_11">
       <titre>Un rendez-vous</titre>
       <date>21.05.1999</date>
       <categorie>
@@ -14850,7 +14850,7 @@ De mars à mai 1999</info>
         <vers>Sur un banc viens, je t'attends.</vers>
       </para>
     </poeme>
-    <poeme id="unapagina_11">
+    <poeme id="una_pagina_si_torna_11">
       <titre>Una pagina si torna</titre>
       <date>03.04.1999</date>
       <categorie>
@@ -14909,7 +14909,7 @@ De mars à mai 1999</info>
         <vers>Reflet pur d'un instant.</vers>
       </para>
     </poeme>
-    <poeme id="lunachedai_11">
+    <poeme id="luna_che_dai_11">
       <titre>Luna che dai</titre>
       <date>01.04.1999</date>
       <categorie>
@@ -14935,7 +14935,7 @@ De mars à mai 1999</info>
         <vers>Illuminé sur l'onde !</vers>
       </para>
     </poeme>
-    <poeme id="commeditlereve_11">
+    <poeme id="comme_dit_le_reve_11">
       <titre>Comme dit le rêve</titre>
       <date>09.04.1999</date>
       <categorie>
@@ -14966,7 +14966,7 @@ De mars à mai 1999</info>
         <vers>Ecrivait sur la nuit son orbe fantastique.</vers>
       </para>
     </poeme>
-    <poeme id="chansontriste_11">
+    <poeme id="une_chanson_triste_11">
       <titre>Une chanson triste</titre>
       <date>13.04.1999</date>
       <categorie>
@@ -14999,7 +14999,7 @@ De mars à mai 1999</info>
         <vers>Etranges miroirs.</vers>
       </para>
     </poeme>
-    <poeme id="laneve_11" type="sonnet">
+    <poeme id="la_neve_del_sogno_11" type="sonnet">
       <titre>La neve del sogno</titre>
       <date>14.04.1999</date>
       <categorie>
@@ -15052,7 +15052,7 @@ De mars à mai 1999</info>
         <vers>Sourire à l'été bleu d'un adonis refrain.</vers>
       </para>
     </poeme>
-    <poeme id="revedete_11">
+    <poeme id="un_reve_d_ete_11">
       <titre>Un rêve d'été</titre>
       <date>27.04.1999</date>
       <categorie>
@@ -15090,7 +15090,7 @@ De mars à mai 1999</info>
         <vers>Abritée, en un souffle, une terre, naissance.</vers>
       </para>
     </poeme>
-    <poeme id="enrelisant_11">
+    <poeme id="en_relisant_11">
       <titre>En relisant...</titre>
       <date>01.05.1999</date>
       <categorie>
@@ -15111,7 +15111,7 @@ De mars à mai 1999</info>
         <vers>Tes battements se font entendre.</vers>
       </para>
     </poeme>
-    <poeme id="nepasoublier_11">
+    <poeme id="ne_pas_oublier_11">
       <titre>Ne pas oublier</titre>
       <date>03.05.1999</date>
       <categorie>
@@ -15163,7 +15163,7 @@ De mars à mai 1999</info>
         <vers>en mots discrets.</vers>
       </para>
     </poeme>
-    <poeme id="poemetresors_11">
+    <poeme id="un_poeme_tresors_11">
       <titre>Un poème : trésors</titre>
       <date>30.04.1999</date>
       <categorie>
@@ -15190,7 +15190,7 @@ De mars à mai 1999</info>
         <vers>Sur les troncs aux chœurs troublants.</vers>
       </para>
     </poeme>
-    <poeme id="espritmajeur_11">
+    <poeme id="esprit_majeur_11">
       <titre>Esprit majeur</titre>
       <date>05.05.1999</date>
       <categorie>
@@ -15215,7 +15215,7 @@ De mars à mai 1999</info>
         <vers>Rythme profond de ce désir !</vers>
       </para>
     </poeme>
-    <poeme id="vraisens_11">
+    <poeme id="vrai_sens_11">
       <titre>Vrai sens</titre>
       <date>08.05.1999</date>
       <categorie>
@@ -15302,7 +15302,7 @@ De mars à mai 1999</info>
         <vers>Emaner de nos corps.</vers>
       </para>
     </poeme>
-    <poeme id="aveprega_11">
+    <poeme id="ave_maria_prega_per_me_11">
       <titre>Ave Maria prega per me</titre>
       <date>17.05.1999</date>
       <categorie>
@@ -15401,7 +15401,7 @@ De mars à mai 1999</info>
         <vers>En Toi vivre est immense et nos rêves si forts.</vers>
       </para>
     </poeme>
-    <poeme id="suisombre_11">
+    <poeme id="je_suis_ton_ombre_11">
       <titre>Je suis ton ombre</titre>
       <date>19.04.1999</date>
       <categorie>
@@ -15447,7 +15447,7 @@ De mars à mai 1999</info>
         <vers>Là : le même ciel.</vers>
       </para>
     </poeme>
-    <poeme id="laggiu_11">
+    <poeme id="laggiu_il_mare_11">
       <titre>Laggiù il mare</titre>
       <date>18.04.1999</date>
       <categorie>
@@ -15471,7 +15471,7 @@ De mars à mai 1999</info>
         <vers>En moi la mer toujours danseuse...</vers>
       </para>
     </poeme>
-    <poeme id="voileblanc_11">
+    <poeme id="un_voile_blanc_11">
       <titre>Un voile blanc</titre>
       <date>24.04.1999</date>
       <categorie>
@@ -15494,7 +15494,7 @@ De mars à mai 1999</info>
         <vers>Croire, un si blanc voile étreint seulement.</vers>
       </para>
     </poeme>
-    <poeme id="surunebarque_11">
+    <poeme id="sur_une_barque_11">
       <titre>Sur une barque</titre>
       <date>19.05.1999</date>
       <categorie>
@@ -15521,7 +15521,7 @@ De mars à mai 1999</info>
         <vers>entraînée au levant.</vers>
       </para>
     </poeme>
-    <poeme id="midi_11">
+    <poeme id="le_midi_tranquille_11">
       <titre>Le midi tranquille</titre>
       <date>26.04.1999</date>
       <categorie>
@@ -15548,7 +15548,7 @@ De mars à mai 1999</info>
         <vers>Etreint, son éclat.</vers>
       </para>
     </poeme>
-    <poeme id="souffledete_11">
+    <poeme id="souffle_d_ete_11">
       <titre>Souffle d'été</titre>
       <date>21.05.1999</date>
       <categorie>
@@ -15579,7 +15579,7 @@ De mars à mai 1999</info>
         <vers>Ravi, puis le soir plonge...</vers>
       </para>
     </poeme>
-    <poeme id="neeainsi_11">
+    <poeme id="nee_ainsi_11">
       <titre>Née ainsi</titre>
       <date>04.05.1999</date>
       <categorie>
@@ -15622,7 +15622,7 @@ De mars à mai 1999</info>
         <vers>Etreint tout l'horizon.</vers>
       </para>
     </poeme>
-    <poeme id="mainouveau_11">
+    <poeme id="le_mai_nouveau_11">
       <titre>Le mai nouveau</titre>
       <date>30.04.1999</date>
       <categorie>
@@ -15678,7 +15678,7 @@ De mars à mai 1999</info>
         <vers>Sincère joie, un jour plaisant !</vers>
       </para>
     </poeme>
-    <poeme id="parfummuguet_11">
+    <poeme id="parfum_muguet_11">
       <titre>Parfum muguet</titre>
       <date>01.05.1999</date>
       <categorie>
@@ -15703,7 +15703,7 @@ De mars à mai 1999</info>
         <vers>Trois brins que je t'offrais.</vers>
       </para>
     </poeme>
-    <poeme id="unoiseau_11">
+    <poeme id="un_oiseau_11">
       <titre>Un oiseau</titre>
       <date>03.05.1999</date>
       <categorie>
@@ -15724,7 +15724,7 @@ De mars à mai 1999</info>
         <vers>Un avion, fol oiseau lointain.</vers>
       </para>
     </poeme>
-    <poeme id="cieltu_11">
+    <poeme id="le_ciel_s_est_tu_11">
       <titre>Le ciel s'est tu</titre>
       <date>07.05.1999</date>
       <categorie>
@@ -15810,7 +15810,7 @@ De mars à mai 1999</info>
     <info>Quelques accords plus vifs, quelques rêves plus doux.
 
 De mai à juillet 1999</info>
-    <poeme id="aunomducoeur_12">
+    <poeme id="au_nom_du_cour_12">
       <titre>Au nom du cœur</titre>
       <date>30.05.1999</date>
       <categorie>
@@ -15839,7 +15839,7 @@ De mai à juillet 1999</info>
         <vers>Rêvez nos cœurs, nos corps amis !</vers>
       </para>
     </poeme>
-    <poeme id="reveunelarme_12">
+    <poeme id="reve_une_larme_12">
       <titre>Rêve, une larme</titre>
       <date>06.06.1999</date>
       <categorie>
@@ -15866,7 +15866,7 @@ De mai à juillet 1999</info>
         <vers>Etranger, brisé, veule.</vers>
       </para>
     </poeme>
-    <poeme id="baisercadeau_12">
+    <poeme id="baiser_cadeau_12">
       <titre>Baiser, cadeau</titre>
       <date>06.06.1999</date>
       <categorie>
@@ -15895,7 +15895,7 @@ De mai à juillet 1999</info>
         <vers>Unira son chiasme...</vers>
       </para>
     </poeme>
-    <poeme id="leseulparfum_12">
+    <poeme id="le_seul_parfum_12">
       <titre>Le seul parfum</titre>
       <date>07.06.1999</date>
       <categorie>
@@ -15922,7 +15922,7 @@ De mai à juillet 1999</info>
         <vers>Mêle notre âme immense...</vers>
       </para>
     </poeme>
-    <poeme id="ilcavalier_12">
+    <poeme id="il_cavalier_d_amore_12">
       <titre>Il cavalier' d'amore</titre>
       <date>07.06.1999</date>
       <categorie>
@@ -15960,7 +15960,7 @@ De mai à juillet 1999</info>
         <vers>Elue à ton bras tendre, un baiser, un voyage...</vers>
       </para>
     </poeme>
-    <poeme id="adautres_12">
+    <poeme id="a_d_autres_12">
       <titre>A d'autres</titre>
       <date>09.06.1999</date>
       <categorie>
@@ -15981,7 +15981,7 @@ De mai à juillet 1999</info>
         <vers>Souffle de vie, à toi, pour d'autres cœurs résonne.</vers>
       </para>
     </poeme>
-    <poeme id="dismoi_12">
+    <poeme id="dis_moi_12">
       <titre>Dis-moi</titre>
       <date>09.06.1999</date>
       <categorie>
@@ -15998,7 +15998,7 @@ De mai à juillet 1999</info>
         <vers>Invitée au matin, naissance.</vers>
       </para>
     </poeme>
-    <poeme id="tusais_12">
+    <poeme id="tu_sais_12">
       <titre>Tu sais</titre>
       <date>09.06.1999</date>
       <categorie>
@@ -16015,7 +16015,7 @@ De mai à juillet 1999</info>
         <vers>Sur le grand livre de nos heures.</vers>
       </para>
     </poeme>
-    <poeme id="ilmiosogno_12">
+    <poeme id="il_mio_sogno_12">
       <titre>Il mio sogno</titre>
       <date>14.06.1999</date>
       <categorie>
@@ -16040,7 +16040,7 @@ De mai à juillet 1999</info>
         <vers>Où le temps germe comme ivraie...</vers>
       </para>
     </poeme>
-    <poeme id="tunesais_12">
+    <poeme id="tu_ne_sais_12">
       <titre>Tu ne sais</titre>
       <date>14.06.1999</date>
       <categorie>
@@ -16063,7 +16063,7 @@ De mai à juillet 1999</info>
         <vers>Sous la lune les mots sans voile.</vers>
       </para>
     </poeme>
-    <poeme id="comeunprimamor_12">
+    <poeme id="come_un_prim_amor_12">
       <titre>Come un prim'amor</titre>
       <date>30.06.1999</date>
       <categorie>
@@ -16095,7 +16095,7 @@ De mai à juillet 1999</info>
         <vers>Retrouve, autre, le sien...</vers>
       </para>
     </poeme>
-    <poeme id="tesentir_12">
+    <poeme id="te_sentir_12">
       <titre>Te sentir</titre>
       <date>22.07.1999</date>
       <categorie>
@@ -16151,7 +16151,7 @@ De mai à juillet 1999</info>
         <vers>Suspendu, Christ, présent, tu nous souris.</vers>
       </para>
     </poeme>
-    <poeme id="dunprelude_12">
+    <poeme id="d_un_prelude_12">
       <titre>D'un prélude</titre>
       <date>02.06.1999</date>
       <categorie>
@@ -16176,7 +16176,7 @@ De mai à juillet 1999</info>
         <vers>et joie, invente couleurs...</vers>
       </para>
     </poeme>
-    <poeme id="tantdesens_12">
+    <poeme id="tant_de_sens_12">
       <titre>Tant de sens</titre>
       <date>05.06.1999</date>
       <categorie>
@@ -16205,7 +16205,7 @@ De mai à juillet 1999</info>
         <vers>Sens caché, notre vie en chante...</vers>
       </para>
     </poeme>
-    <poeme id="pregare_12">
+    <poeme id="pregare_la_fede_mia_12">
       <titre>Pregare, la fede mia</titre>
       <date>17.06.1999</date>
       <categorie>
@@ -16239,7 +16239,7 @@ De mai à juillet 1999</info>
         <vers>Eclate le chant pur, symphonique saveur...</vers>
       </para>
     </poeme>
-    <poeme id="lunetunesais_12">
+    <poeme id="lune_tu_ne_sais_12">
       <titre>Lune, tu ne sais</titre>
       <date>01.07.1999</date>
       <categorie>
@@ -16266,7 +16266,7 @@ De mai à juillet 1999</info>
         <vers>Sublimant l'écho transalpin.</vers>
       </para>
     </poeme>
-    <poeme id="loriginedusens_12" type="sonnet">
+    <poeme id="l_origine_du_sens_12" type="sonnet">
       <titre>L'origine du sens</titre>
       <date>02.07.1999</date>
       <categorie>
@@ -16297,7 +16297,7 @@ De mai à juillet 1999</info>
         <vers>Sous l'ombre le vent pâle effleure ce bonheur.</vers>
       </para>
     </poeme>
-    <poeme id="stabatmater_12">
+    <poeme id="stabat_mater_12">
       <titre>Stabat Mater</titre>
       <date>02.07.1999</date>
       <categorie>
@@ -16323,7 +16323,7 @@ De mai à juillet 1999</info>
         <vers>Ecoute encore, ô, ce chagrin profond !</vers>
       </para>
     </poeme>
-    <poeme id="undestin_12">
+    <poeme id="un_destin_12">
       <titre>Un destin</titre>
       <date>17.07.1999</date>
       <categorie>
@@ -16387,7 +16387,7 @@ De mai à juillet 1999</info>
         <vers>Originel berceau d'un nuage en esquif !</vers>
       </para>
     </poeme>
-    <poeme id="memelesens_12">
+    <poeme id="meme_le_sens_12">
       <titre>Même le sens</titre>
       <date>24.07.1999</date>
       <categorie>
@@ -16408,7 +16408,7 @@ De mai à juillet 1999</info>
         <vers>Souviens-toi; rêves en mémoire.</vers>
       </para>
     </poeme>
-    <poeme id="onnevoitbien_12">
+    <poeme id="on_ne_voit_bien_12">
       <titre>On ne voit bien...</titre>
       <date>24.07.1999</date>
       <categorie>
@@ -16435,7 +16435,7 @@ De mai à juillet 1999</info>
         <vers>Nouvelle paix, chante et pavoise...</vers>
       </para>
     </poeme>
-    <poeme id="jemesouviens_12">
+    <poeme id="je_me_souviens_12">
       <titre>Je me souviens</titre>
       <date>23.05.1999</date>
       <categorie>
@@ -16466,7 +16466,7 @@ De mai à juillet 1999</info>
         <vers>Sur l'hiver sans fin je rimais.</vers>
       </para>
     </poeme>
-    <poeme id="onretourne_12">
+    <poeme id="on_retourne_12">
       <titre>On retourne</titre>
       <date>26.05.1999</date>
       <categorie>
@@ -16528,7 +16528,7 @@ De mai à juillet 1999</info>
         <vers>Rien n'a plus de sens, mais cet oubli se presse...</vers>
       </para>
     </poeme>
-    <poeme id="audelavoie_12">
+    <poeme id="au_dela_voie_12">
       <titre>Au-delà : voie</titre>
       <date>19.06.1999</date>
       <categorie>
@@ -16557,7 +16557,7 @@ De mai à juillet 1999</info>
         <vers>Etrange, douce, une musique accédant l'autre voie.</vers>
       </para>
     </poeme>
-    <poeme id="sijamais_12">
+    <poeme id="si_jamais_12">
       <titre>Si jamais...</titre>
       <date>23.06.1999</date>
       <categorie>
@@ -16578,7 +16578,7 @@ De mai à juillet 1999</info>
         <vers>Souviens-toi d'un jour, l'aube en ce jardin.</vers>
       </para>
     </poeme>
-    <poeme id="vainpace_12">
+    <poeme id="va_in_pace_12">
       <titre>Va in pace</titre>
       <date>26.06.1999</date>
       <categorie>
@@ -16618,7 +16618,7 @@ De mai à juillet 1999</info>
         <vers>Etreinte d'or, paillette au ventre de Venise...</vers>
       </para>
     </poeme>
-    <poeme id="audeladujour_12">
+    <poeme id="au_dela_du_jour_12">
       <titre>Au-delà du jour</titre>
       <date>06.07.1999</date>
       <categorie>
@@ -16681,7 +16681,7 @@ De mai à juillet 1999</info>
         <vers>Etrave bleue au vent d'un cor.</vers>
       </para>
     </poeme>
-    <poeme id="aubedelanuit_12">
+    <poeme id="aube_de_la_nuit_12">
       <titre>Aube de la nuit</titre>
       <date>17.07.1999</date>
       <categorie>
@@ -16708,7 +16708,7 @@ De mai à juillet 1999</info>
         <vers>Troublante nuit, sa lame effleure un paysage.</vers>
       </para>
     </poeme>
-    <poeme id="revelunaire_12">
+    <poeme id="reve_lunaire_12">
       <titre>Rêve lunaire</titre>
       <date>28.05.1999</date>
       <categorie>
@@ -16736,7 +16736,7 @@ De mai à juillet 1999</info>
         <vers>Ensorcelle, lune magique.</vers>
       </para>
     </poeme>
-    <poeme id="jefaisunreve_12">
+    <poeme id="je_fais_un_reve_12">
       <titre>Je fais un rêve</titre>
       <date>01.06.1999</date>
       <categorie>
@@ -16782,7 +16782,7 @@ De mai à juillet 1999</info>
         <vers>Sur les toits, amoureuse...</vers>
       </para>
     </poeme>
-    <poeme id="jeudenfant_12">
+    <poeme id="jeu_d_enfant_12">
       <titre>Jeu d'enfant</titre>
       <date>01.06.1999</date>
       <categorie>
@@ -16809,7 +16809,7 @@ De mai à juillet 1999</info>
         <vers>Tu clochette en sa brillance.</vers>
       </para>
     </poeme>
-    <poeme id="marieeausoleil_12" type="sonnet">
+    <poeme id="mariee_au_soleil_12" type="sonnet">
       <titre>Mariée au soleil</titre>
       <date>12.06.1999</date>
       <categorie>
@@ -16840,7 +16840,7 @@ De mai à juillet 1999</info>
         <vers>Le chant comme partage.</vers>
       </para>
     </poeme>
-    <poeme id="surunpiano_12">
+    <poeme id="sur_un_piano_12">
       <titre>Sur un piano</titre>
       <date>12.06.1999</date>
       <categorie>
@@ -16914,7 +16914,7 @@ De mai à juillet 1999</info>
         <vers>Est-ce l'amour naissant qui s'accomplit, vainqueur ?</vers>
       </para>
     </poeme>
-    <poeme id="lair_12">
+    <poeme id="l_air_12">
       <titre>L'air</titre>
       <date>14.06.1999</date>
       <categorie>
@@ -16944,7 +16944,7 @@ De mai à juillet 1999</info>
         <vers>Etendu sur les deux rives.</vers>
       </para>
     </poeme>
-    <poeme id="cantopioggia_12">
+    <poeme id="canto_pioggia_12">
       <titre>Canto, pioggia</titre>
       <date>20.06.1999</date>
       <categorie>
@@ -16971,7 +16971,7 @@ De mai à juillet 1999</info>
         <vers>Au diamant ravivé le sourire en ses rais.</vers>
       </para>
     </poeme>
-    <poeme id="leaurage_12">
+    <poeme id="l_eau_rage_12">
       <titre>L'eau rage</titre>
       <date>30.06.1999</date>
       <categorie>
@@ -17035,7 +17035,7 @@ De mai à juillet 1999</info>
     <info>D'un lieu de vie à l'autre, retrouver ses repères.
 
 De juillet à novembre 1999</info>
-    <poeme id="atoilagloire_13">
+    <poeme id="a_toi_la_gloire_13">
       <titre>A Toi la gloire</titre>
       <date>15.08.1999</date>
       <categorie>
@@ -17062,7 +17062,7 @@ De juillet à novembre 1999</info>
         <vers>En notre Cité des deux îles belles !</vers>
       </para>
     </poeme>
-    <poeme id="sijeprie_13">
+    <poeme id="si_je_prie_13">
       <titre>Si je prie</titre>
       <date>28.08.1999</date>
       <categorie>
@@ -17083,7 +17083,7 @@ De juillet à novembre 1999</info>
         <vers>En cet instant mon âme est-elle sage ou folle ?</vers>
       </para>
     </poeme>
-    <poeme id="jevoussalue_13">
+    <poeme id="je_vous_salue_amour_13">
       <titre>Je vous salue, amour</titre>
       <date>10.09.1999</date>
       <categorie>
@@ -17116,7 +17116,7 @@ De juillet à novembre 1999</info>
         <vers>Remplis nos coupes vides !</vers>
       </para>
     </poeme>
-    <poeme id="germedespoir_13">
+    <poeme id="germe_d_espoir_13">
       <titre>Germe d'espoir</titre>
       <date>19.08.1999</date>
       <categorie>
@@ -17143,7 +17143,7 @@ De juillet à novembre 1999</info>
         <vers>Reine, le souffle de prière.</vers>
       </para>
     </poeme>
-    <poeme id="monterlavoie_13">
+    <poeme id="monter_la_voie_13">
       <titre>Monter la voie</titre>
       <date>29.08.1999</date>
       <categorie>
@@ -17170,7 +17170,7 @@ De juillet à novembre 1999</info>
         <vers>Eclate à cette mer...</vers>
       </para>
     </poeme>
-    <poeme id="imageunsensest_13">
+    <poeme id="image_un_sens_est_13">
       <titre>Image, un sens est</titre>
       <date>31.08.1999</date>
       <categorie>
@@ -17201,7 +17201,7 @@ De juillet à novembre 1999</info>
         <vers>Toi l'homme, moi la femme ?</vers>
       </para>
     </poeme>
-    <poeme id="jiraiparcechemin_13">
+    <poeme id="j_irai_par_ce_chemin_13">
       <titre>J'irai par ce chemin</titre>
       <date>08.09.1999</date>
       <categorie>
@@ -17234,7 +17234,7 @@ De juillet à novembre 1999</info>
         <vers>Nos chemins en sandale.</vers>
       </para>
     </poeme>
-    <poeme id="prendsmoncoeur_13">
+    <poeme id="prends_mon_cour_13">
       <titre>Prends mon cœur</titre>
       <date>11.09.1999</date>
       <categorie>
@@ -17263,7 +17263,7 @@ De juillet à novembre 1999</info>
         <vers>Raisonnable, homme, ciel, vent, fleuve, feu, fourmis.</vers>
       </para>
     </poeme>
-    <poeme id="naitrecondamne_13">
+    <poeme id="naitre_condamne_13">
       <titre>Naître condamné</titre>
       <date>11.09.1999</date>
       <categorie>
@@ -17288,7 +17288,7 @@ De juillet à novembre 1999</info>
         <vers>Et souvent l'oublions : chacun naît condamné".</vers>
       </para>
     </poeme>
-    <poeme id="cantodellanima_13">
+    <poeme id="canto_dell_anima_13">
       <titre>Canto dell'anima</titre>
       <date>19.09.1999</date>
       <categorie>
@@ -17322,7 +17322,7 @@ De juillet à novembre 1999</info>
         <vers>Anima dans l'éclat élevé de prière.</vers>
       </para>
     </poeme>
-    <poeme id="unangelo_13">
+    <poeme id="un_angelo_13">
       <titre>Un angelo</titre>
       <date>21.09.1999</date>
       <categorie>
@@ -17343,7 +17343,7 @@ De juillet à novembre 1999</info>
         <vers>Où les voix sont plus belles.</vers>
       </para>
     </poeme>
-    <poeme id="giustote_13">
+    <poeme id="giusto_te_13">
       <titre>Giusto te</titre>
       <date>02.10.1999</date>
       <categorie>
@@ -17365,7 +17365,7 @@ De juillet à novembre 1999</info>
         <vers>En l'éternité cantatrice !</vers>
       </para>
     </poeme>
-    <poeme id="lautunno_13">
+    <poeme id="l_autunno_13">
       <titre>L'Autunno</titre>
       <date>01.08.1999</date>
       <categorie>
@@ -17385,7 +17385,7 @@ De juillet à novembre 1999</info>
         <vers>Oraison blême, un chant du soleil dévoré.</vers>
       </para>
     </poeme>
-    <poeme id="lebrouillard_13">
+    <poeme id="le_brouillard_13">
       <titre>Le brouillard</titre>
       <date>04.08.1999</date>
       <categorie>
@@ -17412,7 +17412,7 @@ De juillet à novembre 1999</info>
         <vers>De gouttes perlé.</vers>
       </para>
     </poeme>
-    <poeme id="promenadelapluie_13">
+    <poeme id="promenade_la_pluie_13">
       <titre>Promenade, la pluie</titre>
       <date>10.08.1999</date>
       <categorie>
@@ -17462,7 +17462,7 @@ De juillet à novembre 1999</info>
         <vers>Sous la peur que personne ne l'aime.</vers>
       </para>
     </poeme>
-    <poeme id="loragela_13">
+    <poeme id="l_orage_la_13">
       <titre>L'orage, là</titre>
       <date>25.08.1999</date>
       <categorie>
@@ -17483,7 +17483,7 @@ De juillet à novembre 1999</info>
         <vers>Auréole plus forte en céleste mystère.</vers>
       </para>
     </poeme>
-    <poeme id="lunecitadine_13">
+    <poeme id="lune_citadine_13">
       <titre>Lune citadine</titre>
       <date>26.08.1999</date>
       <categorie>
@@ -17535,7 +17535,7 @@ De juillet à novembre 1999</info>
         <vers>A sa simplicité synchrone.</vers>
       </para>
     </poeme>
-    <poeme id="giardinodeisogni_13">
+    <poeme id="giardino_dei_sogni_13">
       <titre>Giardino dei sogni</titre>
       <date>04.09.1999</date>
       <categorie>
@@ -17571,7 +17571,7 @@ De juillet à novembre 1999</info>
         <vers>Imitent verts, et bleu, rose, marron.</vers>
       </para>
     </poeme>
-    <poeme id="solnuovo_13">
+    <poeme id="sol_nuovo_13">
       <titre>Sol' nuovo</titre>
       <date>08.09.1999</date>
       <categorie>
@@ -17593,7 +17593,7 @@ De juillet à novembre 1999</info>
         <vers>O terra incognita !</vers>
       </para>
     </poeme>
-    <poeme id="crescedautunno_13">
+    <poeme id="cresce_d_autunno_13">
       <titre>Cresce d'autunno</titre>
       <date>21.09.1999</date>
       <categorie>
@@ -17630,7 +17630,7 @@ De juillet à novembre 1999</info>
         <vers>O marins, sans prier ! Que le salut vous touche !".</vers>
       </para>
     </poeme>
-    <poeme id="alafenetre_13">
+    <poeme id="a_la_fenetre_13">
       <titre>A la fenêtre</titre>
       <date>27.09.1999</date>
       <categorie>
@@ -17655,7 +17655,7 @@ De juillet à novembre 1999</info>
         <vers>Etreint la jeune femme en visage qui passe.</vers>
       </para>
     </poeme>
-    <poeme id="nocturnevoie_13">
+    <poeme id="nocturne_voie_13">
       <titre>Nocturne voie</titre>
       <date>02.10.1999</date>
       <categorie>
@@ -17707,7 +17707,7 @@ De juillet à novembre 1999</info>
         <vers>Unique cueille l'essence.</vers>
       </para>
     </poeme>
-    <poeme id="surlaville_13">
+    <poeme id="sur_la_ville_13">
       <titre>Sur la ville</titre>
       <date>15.10.1999</date>
       <categorie>
@@ -17736,7 +17736,7 @@ De juillet à novembre 1999</info>
         <vers>Et cette nuit se fera tienne.</vers>
       </para>
     </poeme>
-    <poeme id="danslejardin_13">
+    <poeme id="dans_le_jardin_13">
       <titre>Dans le jardin</titre>
       <date>17.10.1999</date>
       <categorie>
@@ -17768,7 +17768,7 @@ De juillet à novembre 1999</info>
         <vers>Nu d'une rose, octobre, en verre ?</vers>
       </para>
     </poeme>
-    <poeme id="lecielserait_13">
+    <poeme id="le_ciel_serait_13">
       <titre>Le ciel serait</titre>
       <date>24.10.1999</date>
       <categorie>
@@ -17816,7 +17816,7 @@ De juillet à novembre 1999</info>
         <vers>Ne regrette qu'un cœur, oiseau sans sépulture.</vers>
       </para>
     </poeme>
-    <poeme id="dondusoir_13">
+    <poeme id="don_du_soir_13">
       <titre>Don du soir</titre>
       <date>05.11.1999</date>
       <categorie>
@@ -17850,7 +17850,7 @@ De juillet à novembre 1999</info>
         <vers>Rassemblé sur la Terre est au Ciel un décor.</vers>
       </para>
     </poeme>
-    <poeme id="arc_13">
+    <poeme id="j_ai_vu_un_arc_en_ciel_13">
       <titre>J'ai vu un arc-en-ciel</titre>
       <date>14.08.1999</date>
       <categorie>
@@ -17883,7 +17883,7 @@ De juillet à novembre 1999</info>
         <vers>Le soleil : mariages.</vers>
       </para>
     </poeme>
-    <poeme id="tumapparusla_13">
+    <poeme id="tu_m_apparus_la_13">
       <titre>Tu m'apparus là</titre>
       <date>15.08.1999</date>
       <categorie>
@@ -17910,7 +17910,7 @@ De juillet à novembre 1999</info>
         <vers>A toi reste le cœur entier.</vers>
       </para>
     </poeme>
-    <poeme id="lecielsait_13">
+    <poeme id="le_ciel_sait_13">
       <titre>Le ciel sait</titre>
       <date>16.08.1999</date>
       <categorie>
@@ -17935,7 +17935,7 @@ De juillet à novembre 1999</info>
         <vers>Tourné vers l'ouest le cœur n'y reste.</vers>
       </para>
     </poeme>
-    <poeme id="tumeconsoles_13">
+    <poeme id="tu_me_consoles_13">
       <titre>Tu me consoles</titre>
       <date>17.08.1999</date>
       <categorie>
@@ -17962,7 +17962,7 @@ De juillet à novembre 1999</info>
         <vers>Sur les mots consolés, un baiser d'hirondelle.</vers>
       </para>
     </poeme>
-    <poeme id="jetoublierai_13">
+    <poeme id="je_t_oublierai_13">
       <titre>Je t'oublierai</titre>
       <date>23.08.1999</date>
       <categorie>
@@ -17989,7 +17989,7 @@ De juillet à novembre 1999</info>
         <vers>Images, brisé vert...</vers>
       </para>
     </poeme>
-    <poeme id="jenesaisrien_13">
+    <poeme id="je_ne_sais_rien_13">
       <titre>Je ne sais rien</titre>
       <date>24.08.1999</date>
       <categorie>
@@ -18017,7 +18017,7 @@ De juillet à novembre 1999</info>
         <vers>Ne croyant plus au conte insensé de merveilles.</vers>
       </para>
     </poeme>
-    <poeme id="nonamorpiu_13">
+    <poeme id="non_amor_piu_13">
       <titre>Non amor più</titre>
       <date>24.08.1999</date>
       <categorie>
@@ -18043,7 +18043,7 @@ De juillet à novembre 1999</info>
         <vers>Un parfum fané sans détresse.</vers>
       </para>
     </poeme>
-    <poeme id="pluspresplusvrai_13">
+    <poeme id="plus_pres_plus_vrai_13">
       <titre>Plus près, plus vrai</titre>
       <date>07.09.1999</date>
       <categorie>
@@ -18076,7 +18076,7 @@ De juillet à novembre 1999</info>
         <vers>Intense, charmera !</vers>
       </para>
     </poeme>
-    <poeme id="quandoilsoffio_13">
+    <poeme id="quando_il_soffio_13">
       <titre>Quando il soffio</titre>
       <date>16.09.1999</date>
       <categorie>
@@ -18103,7 +18103,7 @@ De juillet à novembre 1999</info>
         <vers>Ordinairement par les jours et les nuits mêmes.</vers>
       </para>
     </poeme>
-    <poeme id="loctobre_13">
+    <poeme id="l_octobre_13">
       <titre>L'Octobre</titre>
       <date>05.10.1999</date>
       <categorie>
@@ -18128,7 +18128,7 @@ De juillet à novembre 1999</info>
         <vers>Etreint d'un voile doux, comme un chant pur résonne.</vers>
       </para>
     </poeme>
-    <poeme id="poesiestatue_13">
+    <poeme id="poesie_statue_13">
       <titre>Poésie, statue</titre>
       <date>26.07.1999</date>
       <categorie>
@@ -18151,7 +18151,7 @@ De juillet à novembre 1999</info>
         <vers>En ton cœur, statue, ô, ce vol...</vers>
       </para>
     </poeme>
-    <poeme id="songedunlevant_13">
+    <poeme id="songe_d_un_levant_13">
       <titre>Songe d'un levant</titre>
       <date>31.07.1999</date>
       <categorie>
@@ -18184,7 +18184,7 @@ De juillet à novembre 1999</info>
         <vers>Terre, Soleil, le temps s'élèvent !</vers>
       </para>
     </poeme>
-    <poeme id="donenfant_13">
+    <poeme id="don_enfant_vie_13">
       <titre>Don, enfant, vie</titre>
       <date>29.08.1999</date>
       <categorie>
@@ -18212,7 +18212,7 @@ De juillet à novembre 1999</info>
         <vers>En toi la volonté des heures indécises.</vers>
       </para>
     </poeme>
-    <poeme id="chantdesposs_13">
+    <poeme id="chant_des_possedes_13">
       <titre>Chant des possédés</titre>
       <date>30.08.1999</date>
       <categorie>
@@ -18243,7 +18243,7 @@ De juillet à novembre 1999</info>
         <vers>Silencieux le cœur... tu dois !</vers>
       </para>
     </poeme>
-    <poeme id="leslumieres_13">
+    <poeme id="les_lumieres_de_la_ville_13">
       <titre>Les lumières de la ville</titre>
       <date>18.08.1999</date>
       <categorie>
@@ -18286,7 +18286,7 @@ De juillet à novembre 1999</info>
         <vers>Encre du jour retenu...</vers>
       </para>
     </poeme>
-    <poeme id="chantersansmot_13">
+    <poeme id="chanter_sans_mot_13">
       <titre>Chanter sans mot</titre>
       <date>20.08.1999</date>
       <categorie>
@@ -18341,7 +18341,7 @@ De juillet à novembre 1999</info>
         <vers>O l'exil a blessé ce souvenir si pur !</vers>
       </para>
     </poeme>
-    <poeme id="derniersacre_13">
+    <poeme id="dernier_sacre_13">
       <titre>Dernier sacre</titre>
       <date>31.08.1999</date>
       <categorie>
@@ -18460,7 +18460,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Ivre, à toi, souverain, multicolore écume.</vers>
       </para>
     </poeme>
-    <poeme id="quandosaroio_14">
+    <poeme id="quando_saro_io_14">
       <titre>Quando sarò io</titre>
       <date>19.02.2000</date>
       <categorie>
@@ -18489,7 +18489,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Or le temps venu dit ce dernier poème.</vers>
       </para>
     </poeme>
-    <poeme id="nemoubliez_14">
+    <poeme id="ne_m_oubliez_14">
       <titre>Ne m'oubliez</titre>
       <date>16.04.2000</date>
       <categorie>
@@ -18507,7 +18507,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Et je pourrai revivre à ce jour toujours cher.</vers>
       </para>
     </poeme>
-    <poeme id="etjoublierai_14">
+    <poeme id="et_j_oublierai_14">
       <titre>Et j'oublierai</titre>
       <date>26.06.2000</date>
       <categorie>
@@ -18538,7 +18538,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Irons-nous, orpailleurs ?</vers>
       </para>
     </poeme>
-    <poeme id="lairdoctobre_14">
+    <poeme id="l_air_d_octobre_14">
       <titre>L'air d'octobre</titre>
       <date>15.10.2000</date>
       <categorie>
@@ -18569,7 +18569,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Etreinte du jour en ses rêts.</vers>
       </para>
     </poeme>
-    <poeme id="lombredenovembre_14">
+    <poeme id="l_ombre_de_novembre_14">
       <titre>L'ombre de novembre</titre>
       <date>11.11.2000</date>
       <categorie>
@@ -18606,7 +18606,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Esquisse à son écheveau nu.</vers>
       </para>
     </poeme>
-    <poeme id="baldelan_14">
+    <poeme id="bal_de_l_an_14">
       <titre>Bal de l'an</titre>
       <date>28.12.2000</date>
       <categorie>
@@ -18629,7 +18629,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Né sans baptême, un millénaire.</vers>
       </para>
     </poeme>
-    <poeme id="montsimage_14">
+    <poeme id="monts_image_14">
       <titre>Monts : image</titre>
       <date>10.03.2001</date>
       <categorie>
@@ -18671,7 +18671,7 @@ De novembre 1999 à mars 2001</info>
         <vers>En ce silence qui scintille.</vers>
       </para>
     </poeme>
-    <poeme id="auseinduciel_14">
+    <poeme id="au_sein_du_ciel_14">
       <titre>Au sein du ciel</titre>
       <date>16.03.2001</date>
       <categorie>
@@ -18695,7 +18695,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Le ciel touche à son terme.</vers>
       </para>
     </poeme>
-    <poeme id="solosprintemps_14">
+    <poeme id="solos_printemps_14">
       <titre>Solos, printemps</titre>
       <date>21.03.2001</date>
       <categorie>
@@ -18726,7 +18726,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Soyeux, des papillons volages.</vers>
       </para>
     </poeme>
-    <poeme id="cestundieu_14">
+    <poeme id="c_est_un_dieu_14">
       <titre>C'est un Dieu...</titre>
       <date>10.11.1999</date>
       <categorie>
@@ -18748,7 +18748,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Une âme plus féconde !</vers>
       </para>
     </poeme>
-    <poeme id="alaube_14">
+    <poeme id="a_l_aube_14">
       <titre>A l'aube</titre>
       <date>17.11.1999</date>
       <categorie>
@@ -18769,7 +18769,7 @@ De novembre 1999 à mars 2001</info>
         <vers>En invisible jour.</vers>
       </para>
     </poeme>
-    <poeme id="monchatprefere_14">
+    <poeme id="mon_chat_prefere_14">
       <titre>Mon chat préféré</titre>
       <date>17.11.1999</date>
       <categorie>
@@ -18815,7 +18815,7 @@ De novembre 1999 à mars 2001</info>
         <vers>l'éclat profond d'un monde étrenne un paysage.</vers>
       </para>
     </poeme>
-    <poeme id="lairrapsodie_14">
+    <poeme id="l_air_rapsodie_14">
       <titre>L'air : rapsodie</titre>
       <date>24.04.2000</date>
       <categorie>
@@ -18847,7 +18847,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Emerveillé, le Printemps dort, renaquit, se dévoile.</vers>
       </para>
     </poeme>
-    <poeme id="champpasse_14">
+    <poeme id="champ_passe_14">
       <titre>Champ passé</titre>
       <date>06.08.2000</date>
       <categorie>
@@ -18873,7 +18873,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Abandonnés, élans de lyre.</vers>
       </para>
     </poeme>
-    <poeme id="baladedusoir_14">
+    <poeme id="balade_du_soir_14">
       <titre>Balade du soir</titre>
       <date>15.08.2000</date>
       <categorie>
@@ -18904,7 +18904,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Riche, l'astre gris-écru.</vers>
       </para>
     </poeme>
-    <poeme id="situvois_14">
+    <poeme id="si_tu_vois_14">
       <titre>Si tu vois</titre>
       <date>29.08.2000</date>
       <categorie>
@@ -18951,7 +18951,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Ce bout de roche dans les airs.</vers>
       </para>
     </poeme>
-    <poeme id="lunedunenuit_14">
+    <poeme id="lune_d_une_nuit_14">
       <titre>Lune d'une nuit</titre>
       <date>11.11.2000</date>
       <categorie>
@@ -18984,7 +18984,7 @@ De novembre 1999 à mars 2001</info>
         <vers>En ta face un baiser changé.</vers>
       </para>
     </poeme>
-    <poeme id="jardinditsvers_14">
+    <poeme id="jardin_dits_vers_14">
       <titre>Jardin, dits vers</titre>
       <date>28.12.2000</date>
       <categorie>
@@ -19017,7 +19017,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Sur le sentier sans souffle, une prière.</vers>
       </para>
     </poeme>
-    <poeme id="toscana_14">
+    <poeme id="toscana_sogno_14">
       <titre>Toscana - Sogno</titre>
       <date>22.02.2001</date>
       <categorie>
@@ -19044,7 +19044,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Ouvrent l'éternel art de notes et de toile.</vers>
       </para>
     </poeme>
-    <poeme id="surlaplage_14">
+    <poeme id="sur_la_plage_14">
       <titre>Sur la plage</titre>
       <date>22.02.2001</date>
       <categorie>
@@ -19081,7 +19081,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Opéra, cieux d'hiver plus féconds.</vers>
       </para>
     </poeme>
-    <poeme id="letheatreart_14">
+    <poeme id="le_theatre_art_14">
       <titre>Le théâtre, art</titre>
       <date>24.02.2001</date>
       <categorie>
@@ -19108,7 +19108,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Tressés à d'autres jours, immortels: scène heureuse.</vers>
       </para>
     </poeme>
-    <poeme id="entretesbras_14">
+    <poeme id="entre_tes_bras_14">
       <titre>Entre tes bras</titre>
       <date>21.11.1999</date>
       <categorie>
@@ -19139,7 +19139,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Sur cette danse printanière.</vers>
       </para>
     </poeme>
-    <poeme id="partesgraces_14">
+    <poeme id="par_tes_graces_14">
       <titre>Par tes grâces</titre>
       <date>28.11.1999</date>
       <categorie>
@@ -19170,7 +19170,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Sacré dans l'air, la foi jaillit.</vers>
       </para>
     </poeme>
-    <poeme id="jetoffre_14">
+    <poeme id="je_t_offre_14">
       <titre>Je t'offre</titre>
       <date>02.12.1999</date>
       <categorie>
@@ -19216,7 +19216,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Notre espoir, entrelac.</vers>
       </para>
     </poeme>
-    <poeme id="laircree_14">
+    <poeme id="l_air_cree_14">
       <titre>L'air - créé</titre>
       <date>12.03.2000</date>
       <categorie>
@@ -19235,7 +19235,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Essaime un air qui s'enamoure.</vers>
       </para>
     </poeme>
-    <poeme id="passe_14">
+    <poeme id="passe_present_14">
       <titre>Passé - présent</titre>
       <date>01.04.2000</date>
       <categorie>
@@ -19262,7 +19262,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Ensemble l'existé !</vers>
       </para>
     </poeme>
-    <poeme id="commeunvoile_14">
+    <poeme id="comme_un_voile_14">
       <titre>Comme un voile</titre>
       <date>05.06.2000</date>
       <categorie>
@@ -19293,7 +19293,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Eternel à cet amour.</vers>
       </para>
     </poeme>
-    <poeme id="lautomneoublie_14">
+    <poeme id="l_automne_oublie_14">
       <titre>L'automne oublié</titre>
       <date>11.09.2000</date>
       <categorie>
@@ -19324,7 +19324,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Exquis, debout sous un autre arbre ; en nous, un cœur résonne.</vers>
       </para>
     </poeme>
-    <poeme id="commejaimais_14">
+    <poeme id="comme_j_aimais_14">
       <titre>Comme j'aimais</titre>
       <date>04.01.2001</date>
       <categorie>
@@ -19359,7 +19359,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Sa note bleue, amour, tout cet amour autour...</vers>
       </para>
     </poeme>
-    <poeme id="viensamant_14">
+    <poeme id="viens_amant_14">
       <titre>Viens, amant</titre>
       <date>30.01.2001</date>
       <categorie>
@@ -19384,7 +19384,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Impossible silence, cri.</vers>
       </para>
     </poeme>
-    <poeme id="lesaule_14" type="pantoum">
+    <poeme id="le_saule_14" type="pantoum">
       <titre>Le saule</titre>
       <date>03.02.2001</date>
       <categorie>
@@ -19420,7 +19420,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Au vieux saule pleureur.</vers>
       </para>
     </poeme>
-    <poeme id="cesamoursvie_14">
+    <poeme id="ces_amours_vie_14">
       <titre>Ces amours, vie</titre>
       <date>13.03.2001</date>
       <categorie>
@@ -19443,7 +19443,7 @@ De novembre 1999 à mars 2001</info>
         <vers>En leurs sarments insensés.</vers>
       </para>
     </poeme>
-    <poeme id="elansvalse_14">
+    <poeme id="elans_valse_14">
       <titre>Elans, valse</titre>
       <date>19.03.2001</date>
       <categorie>
@@ -19464,7 +19464,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Ensemble ils sont patins valseurs sans fin.</vers>
       </para>
     </poeme>
-    <poeme id="surglace_14">
+    <poeme id="sur_glace_14">
       <titre>Sur glace</titre>
       <date>24.03.2001</date>
       <categorie>
@@ -19511,7 +19511,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Sacré, n'effacera ces images sereines.</vers>
       </para>
     </poeme>
-    <poeme id="danstesnuits_14">
+    <poeme id="dans_tes_nuits_14">
       <titre>Dans tes nuits</titre>
       <date>08.12.1999</date>
       <categorie>
@@ -19542,7 +19542,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Souviens-toi : bribes alentour.</vers>
       </para>
     </poeme>
-    <poeme id="lordelalune_14">
+    <poeme id="l_or_de_la_lune_bleue_14">
       <titre>L'or de la lune bleue</titre>
       <date>12.12.1999</date>
       <categorie>
@@ -19575,7 +19575,7 @@ De novembre 1999 à mars 2001</info>
         <vers>En mots qui se défont.</vers>
       </para>
     </poeme>
-    <poeme id="oliebe_14">
+    <poeme id="o_liebe_14">
       <titre>O Liebe</titre>
       <date>07.01.2000</date>
       <categorie>
@@ -19593,7 +19593,7 @@ De novembre 1999 à mars 2001</info>
         <vers>En sens cible : opère acteur.</vers>
       </para>
     </poeme>
-    <poeme id="lombre_14">
+    <poeme id="l_ombre_14">
       <titre>L'ombre</titre>
       <date>07.01.2000</date>
       <categorie>
@@ -19610,7 +19610,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Et l'ombre, mon cœur le sait, vient au front beau.</vers>
       </para>
     </poeme>
-    <poeme id="songedencens_14">
+    <poeme id="songe_d_encens_14">
       <titre>Songe d'encens</titre>
       <date>23.01.2000</date>
       <categorie>
@@ -19637,7 +19637,7 @@ De novembre 1999 à mars 2001</info>
         <vers>Surprendre un monde à son début.</vers>
       </para>
     </poeme>
-    <poeme id="lacible_14">
+    <poeme id="la_cible_14">
       <titre>La cible</titre>
       <date>04.04.2000</date>
       <categorie>
@@ -19683,7 +19683,7 @@ De novembre 1999 à mars 2001</info>
         <vers>En d'autres mondes, reine.</vers>
       </para>
     </poeme>
-    <poeme id="nuitsanslune_14" type="pantoum">
+    <poeme id="nuit_sans_lune_14" type="pantoum">
       <titre>Nuit sans lune</titre>
       <date>19.12.2000</date>
       <categorie>
@@ -19715,7 +19715,7 @@ De novembre 1999 à mars 2001</info>
         <vers>De sépulcres prochains m'instillant l'âme amère!</vers>
       </para>
     </poeme>
-    <poeme id="alacourse_14">
+    <poeme id="a_la_course_aux_saisons_14">
       <titre>A la course aux saisons</titre>
       <date>24.03.2001</date>
       <categorie>
@@ -19760,7 +19760,7 @@ De novembre 1999 à mars 2001</info>
 Cette saison s'achève alors que l'amour emplit pleinement mon cœur et ma vie.
       
 D'avril à décembre 2001</info>
-    <poeme id="apresledrame_15">
+    <poeme id="apres_le_drame_15">
       <titre>Après le drame</titre>
       <date>26.07.2001</date>
       <categorie>
@@ -19787,7 +19787,7 @@ D'avril à décembre 2001</info>
         <vers>L'esprit plane à chaque cercueil.</vers>
       </para>
     </poeme>
-    <poeme id="leciel_15">
+    <poeme id="le_ciel_15">
       <titre>Le ciel</titre>
       <date>09.04.2001</date>
       <categorie>
@@ -19817,7 +19817,7 @@ D'avril à décembre 2001</info>
         <vers>Et laisse rêver cœur terrien.</vers>
       </para>
     </poeme>
-    <poeme id="lapluiesurlestoits_15">
+    <poeme id="la_pluie_sur_les_toits_15">
       <titre>La pluie sur les toits</titre>
       <date>14.04.2001</date>
       <categorie>
@@ -19881,7 +19881,7 @@ D'avril à décembre 2001</info>
         <vers>Nue âme mage au baiser.</vers>
       </para>
     </poeme>
-    <poeme id="auparc_15">
+    <poeme id="au_parc_15">
       <titre>Au parc</titre>
       <date>20.05.2001</date>
       <categorie>
@@ -19912,7 +19912,7 @@ D'avril à décembre 2001</info>
         <vers>A petits pas flâneurs, je suis l'âme à l'ombrelle.</vers>
       </para>
     </poeme>
-    <poeme id="balletduciel_15">
+    <poeme id="ballet_du_ciel_15">
       <titre>Ballet du ciel</titre>
       <date>20.06.2001</date>
       <categorie>
@@ -19939,7 +19939,7 @@ D'avril à décembre 2001</info>
         <vers>La terre circonscrite.</vers>
       </para>
     </poeme>
-    <poeme id="alma_15">
+    <poeme id="alma_libera_te_15">
       <titre>Alma, libera te</titre>
       <date>13.06.2001</date>
       <categorie>
@@ -19997,7 +19997,7 @@ D'avril à décembre 2001</info>
         <vers>Dieu des désirs reprend toujours son air.</vers>
       </para>
     </poeme>
-    <poeme id="larochelle_15">
+    <poeme id="la_rochelle_15">
       <titre>La Rochelle</titre>
       <date>23.06.2001</date>
       <categorie>
@@ -20074,7 +20074,7 @@ D'avril à décembre 2001</info>
         <vers>Silence, à sa musique, sève.</vers>
       </para>
     </poeme>
-    <poeme id="trenteans_15" type="pantoum">
+    <poeme id="trente_ans_15" type="pantoum">
       <titre>Trente ans</titre>
       <date>14.07.2001</date>
       <categorie>
@@ -20122,7 +20122,7 @@ D'avril à décembre 2001</info>
         <vers>Et d'un pinceau gris ses voiles.</vers>
       </para>
     </poeme>
-    <poeme id="ombresetlumieres_15">
+    <poeme id="ombres_et_lumieres_15">
       <titre>Ombres et lumières</titre>
       <date>26.07.2001</date>
       <categorie>
@@ -20153,7 +20153,7 @@ D'avril à décembre 2001</info>
         <vers>Souffle qui dit le ciel, la mer, tout se sachant.</vers>
       </para>
     </poeme>
-    <poeme id="surlaterrela_15">
+    <poeme id="sur_la_terre_la_15">
       <titre>Sur la terre, là</titre>
       <date>27.07.2001</date>
       <categorie>
@@ -20184,7 +20184,7 @@ D'avril à décembre 2001</info>
         <vers>Alliant paix, marine, à son nouvel...</vers>
       </para>
     </poeme>
-    <poeme id="cesaulela_15">
+    <poeme id="ce_saule_la_15">
       <titre>Ce saule-là</titre>
       <date>29.07.2001</date>
       <categorie>
@@ -20205,7 +20205,7 @@ D'avril à décembre 2001</info>
         <vers>Touchant le ciel, tresses vertes bohèmes.</vers>
       </para>
     </poeme>
-    <poeme id="celieudereve_15">
+    <poeme id="ce_lieu_de_reve_15">
       <titre>Ce lieu de rêve</titre>
       <date>05.08.2001</date>
       <categorie>
@@ -20236,7 +20236,7 @@ D'avril à décembre 2001</info>
         <vers>Essence rare, et sève, à nos vies versera.</vers>
       </para>
     </poeme>
-    <poeme id="motsmime_15">
+    <poeme id="mots_mime_15">
       <titre>Mots : mime</titre>
       <date>09.08.2001</date>
       <categorie>
@@ -20257,7 +20257,7 @@ D'avril à décembre 2001</info>
         <vers>En l'arpège, cœurs et corps.</vers>
       </para>
     </poeme>
-    <poeme id="soirdete_15">
+    <poeme id="soir_d_ete_15">
       <titre>Soir d'été</titre>
       <date>10.08.2001</date>
       <categorie>
@@ -20278,7 +20278,7 @@ D'avril à décembre 2001</info>
         <vers>Emue, à l'aventure, et bonheur mon mari.</vers>
       </para>
     </poeme>
-    <poeme id="jenedors_15">
+    <poeme id="je_ne_dors_15">
       <titre>Je ne dors</titre>
       <date>18.08.2001</date>
       <categorie>
@@ -20299,7 +20299,7 @@ D'avril à décembre 2001</info>
         <vers>Sommeil, seuil de l'aube vainqueur.</vers>
       </para>
     </poeme>
-    <poeme id="tesmains_15">
+    <poeme id="tes_mains_15">
       <titre>Tes mains</titre>
       <date>20.08.2001</date>
       <categorie>
@@ -20320,7 +20320,7 @@ D'avril à décembre 2001</info>
         <vers>Sur les sentiers des cœurs flâneurs.</vers>
       </para>
     </poeme>
-    <poeme id="lesoirtendre_15">
+    <poeme id="le_soir_tendre_15">
       <titre>Le soir tendre</titre>
       <date>20.08.2001</date>
       <categorie>
@@ -20347,7 +20347,7 @@ D'avril à décembre 2001</info>
         <vers>En cœur pour deux, ténu.</vers>
       </para>
     </poeme>
-    <poeme id="matinprivilege_15">
+    <poeme id="matin_privilege_15">
       <titre>Matin privilège</titre>
       <date>22.08.2001</date>
       <categorie>
@@ -20397,7 +20397,7 @@ D'avril à décembre 2001</info>
         <vers>Tantôt de fragments s'assembler.</vers>
       </para>
     </poeme>
-    <poeme id="nuitdaout_15">
+    <poeme id="nuit_d_aout_15">
       <titre>Nuit d'août</titre>
       <date>26.08.2001</date>
       <categorie>
@@ -20431,7 +20431,7 @@ D'avril à décembre 2001</info>
         <vers>Triste, ne dit que désaccord.</vers>
       </para>
     </poeme>
-    <poeme id="jeueclat_15">
+    <poeme id="jeu_eclat_15">
       <titre>Jeu - éclat</titre>
       <date>31.08.2001</date>
       <categorie>
@@ -20456,7 +20456,7 @@ D'avril à décembre 2001</info>
         <vers>Tressé de l'été, prunelle.</vers>
       </para>
     </poeme>
-    <poeme id="saistulamour_15">
+    <poeme id="sais_tu_l_amour_15">
       <titre>Sais-tu l'amour...</titre>
       <date>07.09.2001</date>
       <categorie>
@@ -20483,7 +20483,7 @@ D'avril à décembre 2001</info>
         <vers>Renvoyés, un amour à tisser.</vers>
       </para>
     </poeme>
-    <poeme id="ilestcherautomne_15">
+    <poeme id="il_est_cher_automne_15">
       <titre>Il est cher, automne</titre>
       <date>08.09.2001</date>
       <categorie>
@@ -20516,7 +20516,7 @@ D'avril à décembre 2001</info>
         <vers>Et je t'embrasse, et je m'éveille encor.</vers>
       </para>
     </poeme>
-    <poeme id="etreinte_15">
+    <poeme id="etreinte_ange_15">
       <titre>Etreinte - ange</titre>
       <date>11.09.2001</date>
       <categorie>
@@ -20547,7 +20547,7 @@ D'avril à décembre 2001</info>
         <vers>Etreint les lieux d'une ombre fauve.</vers>
       </para>
     </poeme>
-    <poeme id="miroirdombre_15">
+    <poeme id="miroir_d_ombre_15">
       <titre>Miroir d'ombre</titre>
       <date>13.09.2001</date>
       <categorie>
@@ -20570,7 +20570,7 @@ D'avril à décembre 2001</info>
         <vers>En cet écran brouillé du miroir, tout est vrai.</vers>
       </para>
     </poeme>
-    <poeme id="commetoiaile_15">
+    <poeme id="comme_toi_aile_15">
       <titre>Comme toi, aile</titre>
       <date>13.09.2001</date>
       <categorie>
@@ -20597,7 +20597,7 @@ D'avril à décembre 2001</info>
         <vers>Etreintes à jamais... en fruits.</vers>
       </para>
     </poeme>
-    <poeme id="lairdusoir_15">
+    <poeme id="l_air_du_soir_forets_15">
       <titre>L'air du soir, forêts</titre>
       <date>16.09.2001</date>
       <categorie>
@@ -20624,7 +20624,7 @@ D'avril à décembre 2001</info>
         <vers>Seule, sous les arbres altiers.</vers>
       </para>
     </poeme>
-    <poeme id="etcesera_15">
+    <poeme id="et_ce_sera_15">
       <titre>Et ce sera...</titre>
       <date>21.09.2001</date>
       <categorie>
@@ -20645,7 +20645,7 @@ D'avril à décembre 2001</info>
         <vers>Ambre dégradé sur un tronc.</vers>
       </para>
     </poeme>
-    <poeme id="dugrisaunoir_15">
+    <poeme id="du_gris_au_noir_15">
       <titre>Du gris au noir</titre>
       <date>21.09.2001</date>
       <categorie>
@@ -20680,7 +20680,7 @@ D'avril à décembre 2001</info>
         <vers>Riant de mon étoile en ses myriades froides.</vers>
       </para>
     </poeme>
-    <poeme id="partoi_15">
+    <poeme id="par_toi_15">
       <titre>Par toi</titre>
       <date>24.09.2001</date>
       <categorie>
@@ -20703,7 +20703,7 @@ D'avril à décembre 2001</info>
         <vers>Irradient en mesure, aube a pris les devants.</vers>
       </para>
     </poeme>
-    <poeme id="songesdelame_15">
+    <poeme id="songes_de_l_ame_15">
       <titre>Songes de l'âme</titre>
       <date>29.09.2001</date>
       <categorie>
@@ -20734,7 +20734,7 @@ D'avril à décembre 2001</info>
         <vers>Evanouit le temps pour créer d'autres dieux.</vers>
       </para>
     </poeme>
-    <poeme id="acquaviva_15">
+    <poeme id="acqua_viva_fra_le_mani_15">
       <titre>Acqua viva fra le mani</titre>
       <date>10.10.2001</date>
       <categorie>
@@ -20772,7 +20772,7 @@ D'avril à décembre 2001</info>
         <vers>Instants; l'onde perlée aux cils.</vers>
       </para>
     </poeme>
-    <poeme id="lautunnodolcemio_15">
+    <poeme id="l_autunno_dolce_mio_15">
       <titre>L'autunno, dolce mio</titre>
       <date>02.10.2001</date>
       <categorie>
@@ -20809,7 +20809,7 @@ D'avril à décembre 2001</info>
         <vers>Offrande où le vent me pardonne.</vers>
       </para>
     </poeme>
-    <poeme id="lunejoue_15">
+    <poeme id="lune_joue_15">
       <titre>Lune joue</titre>
       <date>02.10.2001</date>
       <categorie>
@@ -20830,7 +20830,7 @@ D'avril à décembre 2001</info>
         <vers>Entrelacés du monde.</vers>
       </para>
     </poeme>
-    <poeme id="nosnuits_15">
+    <poeme id="nos_nuits_15">
       <titre>Nos nuits</titre>
       <date>03.10.2001</date>
       <categorie>
@@ -20859,7 +20859,7 @@ D'avril à décembre 2001</info>
         <vers>Sur le bord, à la rive, abîme, à l'aube une autre vie.</vers>
       </para>
     </poeme>
-    <poeme id="lavitasopratutto_15">
+    <poeme id="la_vita_sopratutto_15">
       <titre>La vita sopratutto</titre>
       <date>08.10.2001</date>
       <categorie>
@@ -20893,7 +20893,7 @@ D'avril à décembre 2001</info>
         <vers>Ouvriront lendemains dociles.</vers>
       </para>
     </poeme>
-    <poeme id="danslesnotes_15">
+    <poeme id="dans_les_notes_15">
       <titre>Dans les notes</titre>
       <date>10.10.2001</date>
       <categorie>
@@ -20920,7 +20920,7 @@ D'avril à décembre 2001</info>
         <vers>Soufflé de ces notes parées.</vers>
       </para>
     </poeme>
-    <poeme id="casedepart_15">
+    <poeme id="case_depart_15">
       <titre>Case départ</titre>
       <date>11.10.2001</date>
       <categorie>
@@ -20945,7 +20945,7 @@ D'avril à décembre 2001</info>
         <vers>Terreurs; un chat rit d'ombres mauves.</vers>
       </para>
     </poeme>
-    <poeme id="lultimeroi_15">
+    <poeme id="l_ultime_roi_15">
       <titre>L'ultime roi</titre>
       <date>21.10.2001</date>
       <categorie>
@@ -20990,7 +20990,7 @@ D'avril à décembre 2001</info>
         <vers>A l'éclat de ta bouche une éternité passe.</vers>
       </para>
     </poeme>
-    <poeme id="balletdesens_15">
+    <poeme id="ballet_de_sens_15">
       <titre>Ballet de sens</titre>
       <date>10.11.2001</date>
       <categorie>
@@ -21021,7 +21021,7 @@ D'avril à décembre 2001</info>
         <vers>Son rêve, et m'y noyais.</vers>
       </para>
     </poeme>
-    <poeme id="tracesdeslevres_15">
+    <poeme id="traces_des_levres_15">
       <titre>Traces des lèvres</titre>
       <date>10.11.2001</date>
       <categorie>
@@ -21050,7 +21050,7 @@ D'avril à décembre 2001</info>
         <vers>Sourit de vous, chaste nouvel émoi.</vers>
       </para>
     </poeme>
-    <poeme id="reveeneant_15">
+    <poeme id="revee_neant_15">
       <titre>Rêvée, néant</titre>
       <date>14.11.2001</date>
       <categorie>
@@ -21077,7 +21077,7 @@ D'avril à décembre 2001</info>
         <vers>Tisse fils d'un sombre destin taquin.</vers>
       </para>
     </poeme>
-    <poeme id="etsilneigeait_15">
+    <poeme id="et_s_il_neigeait_sur_15">
       <titre>Et s'il neigeait sur...</titre>
       <date>24.12.2001</date>
       <categorie>
@@ -21108,7 +21108,7 @@ D'avril à décembre 2001</info>
         <vers>Riches souffles, amants et rêve.</vers>
       </para>
     </poeme>
-    <poeme id="cieldhiver_15">
+    <poeme id="ciel_d_hiver_15">
       <titre>Ciel d'hiver</titre>
       <date>24.12.2001</date>
       <categorie>
@@ -21156,7 +21156,7 @@ De mars 2002 à ...</info>
         <vers>Si le jour nous unit, berçons-nous de brillance.</vers>
       </para>
     </poeme>
-    <poeme id="coeursamants_16">
+    <poeme id="cours_amants_16">
       <titre>Cœurs amants</titre>
       <date>18.08.2002</date>
       <categorie>
@@ -21180,7 +21180,7 @@ De mars 2002 à ...</info>
         <vers>Seule, plane au plafond dans un rêve de femme.</vers>
       </para>
     </poeme>
-    <poeme id="ohquejetaime_16">
+    <poeme id="oh_que_je_t_aime_16">
       <titre>Oh que je t'aime</titre>
       <date>19.08.2002</date>
       <categorie>
@@ -21203,7 +21203,7 @@ De mars 2002 à ...</info>
         <vers>Espérance d'un jour qui survit à demain.</vers>
       </para>
     </poeme>
-    <poeme id="tabouche_16">
+    <poeme id="ta_bouche_16">
       <titre>Ta bouche</titre>
       <date>19.08.2002</date>
       <categorie>
@@ -21226,7 +21226,7 @@ De mars 2002 à ...</info>
         <vers>Et s'envole, soleil, dans les bras de l'amant.</vers>
       </para>
     </poeme>
-    <poeme id="lettre_16">
+    <poeme id="lettre_a_maman_16">
       <titre>Lettre à maman</titre>
       <date>30.10.2002</date>
       <categorie>
@@ -21246,7 +21246,7 @@ De mars 2002 à ...</info>
         <vers>Suivre maman, fatalité ?</vers>
       </para>
     </poeme>
-    <poeme id="enpaillettes_16">
+    <poeme id="en_paillettes_16">
       <titre>En paillettes</titre>
       <date>03.11.2002</date>
       <categorie>
@@ -21267,7 +21267,7 @@ De mars 2002 à ...</info>
         <vers>Silence, heure apaisée, et ma main dans ta main.</vers>
       </para>
     </poeme>
-    <poeme id="situdors_16">
+    <poeme id="si_tu_dors_16">
       <titre>Si tu dors</titre>
       <date>24.11.2002</date>
       <categorie>
@@ -21292,7 +21292,7 @@ De mars 2002 à ...</info>
         <vers>Suggère un air au doux refrain.</vers>
       </para>
     </poeme>
-    <poeme id="marcherneige_16">
+    <poeme id="marcher_neige_16">
       <titre>Marcher : neige</titre>
       <date>10.01.2003</date>
       <categorie>
@@ -21323,7 +21323,7 @@ De mars 2002 à ...</info>
         <vers>Ephémères, comme des mains.</vers>
       </para>
     </poeme>
-    <poeme id="soufflematin_16">
+    <poeme id="souffle_matin_16">
       <titre>Souffle : matin</titre>
       <date>21.01.2003</date>
       <categorie>
@@ -21346,7 +21346,7 @@ De mars 2002 à ...</info>
         <vers>Nuées vives d'un bond.</vers>
       </para>
     </poeme>
-    <poeme id="filetsdelune_16">
+    <poeme id="filets_de_lune_16">
       <titre>Filets de lune</titre>
       <date>22.01.2003</date>
       <categorie>
@@ -21371,7 +21371,7 @@ De mars 2002 à ...</info>
         <vers>En son céleste ressac, horde.</vers>
       </para>
     </poeme>
-    <poeme id="aladerive_16">
+    <poeme id="a_la_derive_16">
       <titre>A la dérive</titre>
       <date>27.01.2003</date>
       <categorie>
@@ -21398,7 +21398,7 @@ De mars 2002 à ...</info>
         <vers>Impossible hideur en ma transe.</vers>
       </para>
     </poeme>
-    <poeme id="jemelanguisdetoi_16">
+    <poeme id="je_me_languis_de_toi_16">
       <titre>Je me languis de toi</titre>
       <date>01.02.2003</date>
       <categorie>
@@ -21433,7 +21433,7 @@ De mars 2002 à ...</info>
         <vers>Insensé quand du néant je suis proche.</vers>
       </para>
     </poeme>
-    <poeme id="leprintempssapproche_16">
+    <poeme id="le_printemps_s_approche_16">
       <titre>Le printemps s'approche</titre>
       <date>26.02.2003</date>
       <categorie>
@@ -21476,7 +21476,7 @@ De mars 2002 à ...</info>
         <vers>Emue : un printemps.</vers>
       </para>
     </poeme>
-    <poeme id="lejardindemesparents_16">
+    <poeme id="le_jardin_de_mes_parents_16">
       <titre>Le jardin de mes parents</titre>
       <date>14.03.2003</date>
       <categorie>
@@ -21503,7 +21503,7 @@ De mars 2002 à ...</info>
         <vers>Nos mains rencontreront ton souffle plus mutin...</vers>
       </para>
     </poeme>
-    <poeme id="treveducoeur_16">
+    <poeme id="treve_du_coeur_16">
       <titre>Trêve du coeur</titre>
       <date>20.09.2003</date>
       <categorie>
@@ -21534,7 +21534,7 @@ De mars 2002 à ...</info>
         <vers>Rêve l'automne comme soie.</vers>
       </para>
     </poeme>
-    <poeme id="miroirdemesreves_16">
+    <poeme id="miroir_de_mes_reves_16">
       <titre>Miroir de mes rêves</titre>
       <date>28.09.2003</date>
       <categorie>
@@ -21569,7 +21569,7 @@ De mars 2002 à ...</info>
         <vers>Serti des chants de l'horizon.</vers>
       </para>
     </poeme>
-    <poeme id="unchatvoisin_16">
+    <poeme id="un_chat_voisin_16">
       <titre>Un chat voisin</titre>
       <date>05.10.2003</date>
       <categorie>
@@ -21651,7 +21651,7 @@ De mars 2002 à ...</info>
         <vers>Etrange espoir, sonne bourdon.</vers>
       </para>
     </poeme>
-    <poeme id="maisouvaisje_16">
+    <poeme id="mais_ou_vais_je_16">
       <titre>Mais où vais-je ?</titre>
       <date>14.01.2004</date>
       <categorie>
@@ -21678,7 +21678,7 @@ De mars 2002 à ...</info>
         <vers>Et chaque goutte abat son infini tapage.</vers>
       </para>
     </poeme>
-    <poeme id="unsoirtriste_16">
+    <poeme id="un_soir_triste_16">
       <titre>Un soir triste</titre>
       <date>17.01.2004</date>
       <categorie>
@@ -21713,7 +21713,7 @@ De mars 2002 à ...</info>
         <vers>Entre les bras du jour je verrai ton épure.</vers>
       </para>
     </poeme>
-    <poeme id="lecieletnous_16">
+    <poeme id="le_ciel_et_nous_16">
       <titre>Le ciel et nous</titre>
       <date>01.02.2004</date>
       <categorie>
@@ -21739,7 +21739,7 @@ De mars 2002 à ...</info>
         <vers>Se revoir : un défi vaurien.</vers>
       </para>
     </poeme>
-    <poeme id="espritduprintemps_16">
+    <poeme id="esprit_du_printemps_16">
       <titre>Esprit du printemps</titre>
       <date>21.03.2004</date>
       <categorie>
@@ -21802,7 +21802,7 @@ De mars 2002 à ...</info>
         <vers>Liera l'accord de l'être et l'onde digne.</vers>
       </para>
     </poeme>
-    <poeme id="aumatin_16">
+    <poeme id="au_matin_16">
       <titre>Au matin</titre>
       <date>26.04.2004</date>
       <categorie>
@@ -21828,7 +21828,7 @@ De mars 2002 à ...</info>
         <vers>Epoustouflent prémice.</vers>
       </para>
     </poeme>
-    <poeme id="unaurevoir_16">
+    <poeme id="un_au_revoir_16">
       <titre>Un au revoir</titre>
       <date>26.04.2004</date>
       <categorie>
@@ -21915,7 +21915,7 @@ De mars 2002 à ...</info>
         <vers>Versets, ces sombres chants !</vers>
       </para>
     </poeme>
-    <poeme id="amedemai_16">
+    <poeme id="ame_de_mai_16">
       <titre>Ame de mai</titre>
       <date>02.05.2004</date>
       <categorie>
