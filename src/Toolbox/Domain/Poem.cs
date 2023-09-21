@@ -16,7 +16,7 @@ public class Poem
 
     [XmlElement("categorie")] public List<Category> Categories { get; set; }
 
-    [XmlAttribute("longueurVers")] public string VerseLength { get; set; }
+    [XmlAttribute("longueurVers")] public string? VerseLength { get; set; }
 
     [XmlElement("info")] public string? Info { get; set; }
 
@@ -46,6 +46,33 @@ public class Poem
         s.Append(Environment.NewLine);
         s.Append("LastModifierDisplayName = \"Barbara Post\"");
         s.Append(Environment.NewLine);
+        s.Append($"id = \"{Title.UnaccentedCleaned()}_{SeasonId}\"");
+        s.Append(Environment.NewLine);
+        
+        // FIXME
+        // if (Info != null)
+        // {
+        //     s.Append($"info = \"{Info.Escaped()}\"");
+        //     s.Append(Environment.NewLine);
+        // }
+
+        if (Acrostiche != null)
+        {
+            s.Append($"acrostiche = \"{Acrostiche}\"");
+            s.Append(Environment.NewLine);
+        }
+
+        if (DoubleAcrostiche != null)
+        {
+            s.Append($"doubleAcrostiche = \"{DoubleAcrostiche.First} | {DoubleAcrostiche.Second}\"");
+            s.Append(Environment.NewLine);
+        }
+
+        if (VerseLength != null)
+        {
+            s.Append($"verseLength = {VerseLength}");
+            s.Append(Environment.NewLine);
+        }
 
         s.Append("tags = [");
         foreach (var category in Categories)

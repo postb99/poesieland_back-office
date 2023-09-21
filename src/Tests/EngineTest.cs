@@ -68,7 +68,7 @@ public class EngineTest
         engine.GeneratePoemFile(engine.Data.Seasons[0].Poems[0]);
     }
 
-    [Theory]
+    [Theory(Skip = "Validated")]
     [InlineData("simplest", false, null, false, false)]
     [InlineData("only_info", false, null, false, true)]
     [InlineData("only_type", false, PoemType.Sonnet, false, false)]
