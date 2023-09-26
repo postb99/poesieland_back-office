@@ -40,22 +40,59 @@ public class Poem
         s.Append(Environment.NewLine);
         s.Append($"title = \"{Title}\"");
         s.Append(Environment.NewLine);
+        s.Append($"id = \"{Title.UnaccentedCleaned()}_{SeasonId}\"");
+        s.Append(Environment.NewLine);
         s.Append($"date = {Date.ToString("yyyy-MM-dd")}");
         s.Append(Environment.NewLine);
         s.Append($"weight = {poemIndex + 1}");
         s.Append(Environment.NewLine);
-        s.Append("LastModifierDisplayName = \"Barbara Post\"");
-        s.Append(Environment.NewLine);
-        s.Append($"id = \"{Title.UnaccentedCleaned()}_{SeasonId}\"");
-        s.Append(Environment.NewLine);
-        
-        // FIXME
-        // if (Info != null)
-        // {
-        //     s.Append($"info = \"{Info.Escaped()}\"");
-        //     s.Append(Environment.NewLine);
-        // }
 
+        s.Append("categories = [");
+        foreach (var subCategory in Categories.SelectMany(x => x.SubCategories))
+        {
+            s.Append($"\"{subCategory}\", ");
+        }
+        s.Remove(s.Length - 2, 2);
+        s.Append("]");
+        s.Append(Environment.NewLine);
+
+        s.Append("tags = [");
+        foreach (var category in Categories)
+        {
+            s.Append($"\"{category.Name.ToLowerInvariant()}\", ");
+        }
+
+        if (Acrostiche != null)
+        {
+            s.Append($"\"acrostiche\", ");
+        }
+        
+        if (DoubleAcrostiche != null)
+        {
+            s.Append($"\"doubleAcrostiche\", ");
+        }
+
+        if (PoemType != null)
+        {
+            s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
+        }
+
+        s.Remove(s.Length - 2, 2);
+        s.Append("]");
+        s.Append(Environment.NewLine);
+
+        if (Info != null)
+        {
+            s.Append($"info = '{Info}'");
+            s.Append(Environment.NewLine);
+        }
+
+        if (PoemType != null)
+        {
+            s.Append($"type = \"{PoemType.ToLowerInvariant()}\"");
+            s.Append(Environment.NewLine);
+        }
+ 
         if (Acrostiche != null)
         {
             s.Append($"acrostiche = \"{Acrostiche}\"");
@@ -73,37 +110,8 @@ public class Poem
             s.Append($"verseLength = {VerseLength}");
             s.Append(Environment.NewLine);
         }
-
-        s.Append("tags = [");
-        foreach (var category in Categories)
-        {
-            s.Append($"\"{category.Name.ToLowerInvariant()}\", ");
-        }
-
-        if (Acrostiche != null)
-        {
-            s.Append($"\"acrostiche\", ");
-        }
-
-        if (PoemType != null)
-        {
-            s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
-        }
-
-        s.Remove(s.Length - 2, 2);
-        s.Append("]");
-        s.Append(Environment.NewLine);
-
-        s.Append("categories = [");
-        foreach (var subCategory in Categories.SelectMany(x => x.SubCategories))
-        {
-            s.Append($"\"{subCategory}\", ");
-        }
-
-        s.Remove(s.Length - 2, 2);
-        s.Append("]");
-
-
+        
+        s.Append("LastModifierDisplayName = \"Barbara Post\"");
         s.Append(Environment.NewLine);
         s.Append("+++");
         s.Append(Environment.NewLine);

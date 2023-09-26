@@ -93,6 +93,7 @@ public class EngineTest
             .With(x => x.DoubleAcrostiche,
                 isDoubleAcrostiche ? new DoubleAcrostiche { First = "Double", Second = "Acrostiche" } : null)
             .With(x => x.Info, hasInfo ? "Some info text" : null)
+            .With(x => x.VerseLength, "8")
             .Create();
 
         var fictiveSeason = new Season

@@ -87,6 +87,21 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             streamWriter.WriteLine(Environment.NewLine);
         }
     }
+    
+    [Fact]
+    public void PoemType()
+    {
+        using var outputFileStream = File.Open("PoemTypes.txt", FileMode.Create);
+        using var streamWriter = new StreamWriter(outputFileStream);
+
+        var types = _data.Seasons.SelectMany(x => x.Poems).Select(x => x.PoemType).ToList();
+
+        foreach (var type in types.Distinct())
+        {
+            streamWriter.WriteLine(type);
+            streamWriter.WriteLine(Environment.NewLine);
+        }
+    }
 
     [Fact]
     public void SeasonDatesAndLastPoem()
