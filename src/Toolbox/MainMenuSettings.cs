@@ -12,7 +12,7 @@ public class MainMenuSettings
         PoemsOfASeason = 220,
         AskSeasonNumberForPoemFile = 221,
         AllPoems = 230,
-        Debug = 0
+        ReloadDataFile = 0
     }
     
     public List<MenuItem> MenuItems { get; set; }

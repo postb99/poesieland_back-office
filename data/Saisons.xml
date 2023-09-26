@@ -10067,28 +10067,25 @@ Juin et juillet 1998</info>
         <c>Philosophie</c>
         <sous-cat>Création</sous-cat>
       </categorie>
-      <info>Cet acrostiche très particulier, par jeu, se veut croisé, sur la première lettre
-                du poème puis celle de la césure... Courir à p - erte d'âme...</info>
+      <info>Cet acrostiche très particulier, par jeu, se veut croisé, sur la première lettre du poème puis celle de la césure... Courir à p - erte d'âme...</info>
       <acrostiche>Courir à perte d'âme</acrostiche>
       <para>
-        <vers>Courir  à  perte   d'âme,
-                    effleurer   l'infini,</vers>
-        <vers>Offrir  caresse   au  vent
-                    ri   d'un  mot   réciproque,</vers>
-        <vers>Ululer    les
-                    couleurs,   trouver
-                    sans    pinceau   ni</vers>
-        <vers>Rime un roman, nouvelle étreinte d'une
-                    époque...</vers>
-        <vers>Inventer   les  chansons
-                    d'un  souffle   de  vitrail,</vers>
-        <vers>Rêver que l'on peut vivre au travers de
-                    naissance</vers>
-        <vers>Apprise   d'un
-                    chemin   menant   loin
-                    du   bercail :</vers>
-        <vers>Perdre   l'âme   à
-                    courir,  étonner  l'existence.</vers>
+        <vers>Courir à perte d'âme,
+                    effleurer l'infini,</vers>
+        <vers>Offrir caresse au vent
+                    ri d'un mot réciproque,</vers>
+        <vers>Ululer les couleurs,   
+                    trouver sans pinceau ni</vers>
+        <vers>Rime un roman, nouvelle 
+                    étreinte d'une époque...</vers>
+        <vers>Inventer les chansons
+                    d'un souffle de vitrail,</vers>
+        <vers>Rêver que l'on peut vivre 
+                    au travers de naissance</vers>
+        <vers>Apprise d'un chemin
+                    menant loin du   bercail :</vers>
+        <vers>Perdre l'âme à courir,
+                    étonner  l'existence.</vers>
       </para>
     </poeme>
     <poeme id="adagio_7">
@@ -10979,7 +10976,7 @@ De juillet à septembre 1998</info>
         <c>Philosophie</c>
         <sous-cat>Création</sous-cat>
       </categorie>
-      <info>Dernier poème de mon recueil "En six lettres : t'aimer".</info>
+      <info>Dernier poème de mon recueil En six lettres : t'aimer.</info>
       <para>
         <vers>Avant de partir sans un signe,</vers>
         <vers>Naïve et belle, j'ai voulu</vers>
@@ -11037,7 +11034,7 @@ De juillet à septembre 1998</info>
         <c>Nature</c>
         <sous-cat>Mer</sous-cat>
       </categorie>
-      <info>"Sans nord ni sud" en italien.</info>
+      <info>Sans nord ni sud, en italien.</info>
       <acrostiche>Senza nord nè sud</acrostiche>
       <para>
         <vers>Sans nord ni sud, boussole folle,</vers>
@@ -11767,7 +11764,7 @@ De juillet à septembre 1998</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"Dieu m'a appelée" en italien.</info>
+      <info>Dieu m'a appelée, en italien.</info>
       <acrostiche>Dio m'ha chiamato</acrostiche>
       <para>
         <vers>Dieu m'a livré sa parole,</vers>
@@ -11901,7 +11898,7 @@ De septembre à décembre 1998</info>
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <info>"Papillons d'octobre".</info>
+      <info>Papillons d'octobre, en italien.</info>
       <acrostiche>Farfalle d'ottobre</acrostiche>
       <para>
         <vers>Frémissants, trop légers, les papillons d'octobre</vers>
@@ -12036,7 +12033,7 @@ De septembre à décembre 1998</info>
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <info>"Nul ne le saura" en italien.</info>
+      <info>Nul ne le saura, en italien.</info>
       <acrostiche>Non lo nessun saprà</acrostiche>
       <para>
         <vers>Nul ne sait ce qu'il aime</vers>
@@ -12176,7 +12173,7 @@ De septembre à décembre 1998</info>
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <info>"Si la vie suffisait" en italien. Inspiré par plusieurs chansons.</info>
+      <info>Si la vie suffisait, en italien. Inspiré par plusieurs chansons.</info>
       <acrostiche>Se bastasse la vita</acrostiche>
       <para>
         <vers>S'il suffisait d'une chanson,</vers>
@@ -12446,7 +12443,7 @@ De septembre à décembre 1998</info>
         <c>Philosophie</c>
         <sous-cat>Création</sous-cat>
       </categorie>
-      <info>"Vivre dans l'art"... ou à travers l'art</info>
+      <info>Vivre dans l'art, en italien.</info>
       <acrostiche>Vivere nell'arte</acrostiche>
       <para>
         <vers>Vivre, c'est aimer dans l'art,</vers>
@@ -13597,8 +13594,7 @@ De janvier à mars 1999</info>
         <c>Philosophie</c>
         <sous-cat>Révolte</sous-cat>
       </categorie>
-      <info>Inspiré par la
-                comédie musicale "Notre-Dame de Paris")</info>
+      <info>Inspiré par la comédie musicale "Notre-Dame de Paris"</info>
       <acrosticheDouble premier="J'écrirai ce" deuxieme="mot, l'ultime" />
       <para>
         <vers>Je laisserai les mots s'écrire,</vers>
@@ -14458,7 +14454,7 @@ De janvier à mars 1999</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"Quando il giorno sarà nostro" : "Quand le jour sera nôtre" en italien.</info>
+      <info>Quand le jour sera nôtre, en italien.</info>
       <acrostiche>Quando il giorno sarà nostro</acrostiche>
       <para>
         <vers>Quand le soleil se lèvera</vers>
@@ -14511,7 +14507,7 @@ De mars à mai 1999</info>
         <sous-cat>Espoir</sous-cat>
         <sous-cat>Temps</sous-cat>
       </categorie>
-      <info>"Quand la vie dit..." en italien.</info>
+      <info>Quand la vie dit, en italien.</info>
       <acrostiche>Quando la vita dice</acrostiche>
       <para>
         <vers>Quand tu devins universel,</vers>
@@ -14545,7 +14541,7 @@ De mars à mai 1999</info>
         <c>Philosophie</c>
         <sous-cat>Temps</sous-cat>
       </categorie>
-      <info>"Tu sei bello" : "Tu es beau" en italien.</info>
+      <info>Tu es beau, en italien.</info>
       <acrostiche>Tu sei bello</acrostiche>
       <para>
         <vers>Trop de choses auront changé</vers>
@@ -14567,7 +14563,7 @@ De mars à mai 1999</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"Il tuo cantico da la vita" : "Ton cantique donne la vie" en italien.</info>
+      <info>Ton cantique donne la vie, en italien.</info>
       <acrostiche>Il tuo cantico da la vita</acrostiche>
       <para>
         <vers>Invite prémonitoire :</vers>
@@ -14861,7 +14857,7 @@ De mars à mai 1999</info>
         <c>Amour</c>
         <sous-cat>Amour malheureux</sous-cat>
       </categorie>
-      <info>"Une page se tourne" en italien.</info>
+      <info>Une page se tourne, en italien.</info>
       <acrostiche>Una pagina si torna</acrostiche>
       <para>
         <vers>Un sourire qui ne veut plus rien me dire</vers>
@@ -14916,7 +14912,7 @@ De mars à mai 1999</info>
         <c>Ombres et lumières</c>
         <sous-cat>Lune</sous-cat>
       </categorie>
-      <info>"Luna che dai" : "Lune que tu donnes" en italien.</info>
+      <info>Lune que tu donnes, en italien.</info>
       <acrostiche>Luna che dai</acrostiche>
       <para>
         <vers>La lune que tu donnes :</vers>
@@ -15010,7 +15006,7 @@ De mars à mai 1999</info>
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <info>"La neve del sogno" : "La neige du rêve" en italien.</info>
+      <info>La neige du rêve, en italien.</info>
       <acrostiche>La neve del sogno</acrostiche>
       <para>
         <vers>La neige dicte au monde un mouvement sans faille</vers>
@@ -15309,7 +15305,7 @@ De mars à mai 1999</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"Ave Maria prie pour moi", d'après une chanson de Pavaroti</info>
+      <info>"Ave Maria prie pour moi", chanson homonyme de Pavarotti</info>
       <acrostiche>Ave Maria prega per me</acrostiche>
       <para>
         <vers>Agenouillée une âme prie</vers>
@@ -15454,7 +15450,7 @@ De mars à mai 1999</info>
         <c>Nature</c>
         <sous-cat>Mer</sous-cat>
       </categorie>
-      <info>"Là-bas la mer" en italien.</info>
+      <info>Là-bas la mer, en italien.</info>
       <acrostiche>Laggiù il mare</acrostiche>
       <para>
         <vers>La pluie est tombée en tocsin</vers>
@@ -15933,7 +15929,7 @@ De mai à juillet 1999</info>
         <c>Amour</c>
         <sous-cat>Aimé (amant)</sous-cat>
       </categorie>
-      <info>"Le chevalier d'amour" en italien.</info>
+      <info>Le chevalier d'amour, en italien.</info>
       <acrostiche>Il cavalier' d'amore</acrostiche>
       <para>
         <vers>Il galope, droit, fier, sur son grand cheval bai;</vers>
@@ -16070,7 +16066,7 @@ De mai à juillet 1999</info>
         <c>Philosophie</c>
         <sous-cat>Apprentissage</sous-cat>
       </categorie>
-      <info>"Comme un premier amour" en italien.</info>
+      <info>Comme un premier amour, en italien.</info>
       <acrostiche>Come un prim'amor</acrostiche>
       <para>
         <vers>Ce fut comme un amour</vers>
@@ -16212,7 +16208,7 @@ De mai à juillet 1999</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"Prier, ma foi" en italien.</info>
+      <info>Prier, ma foi, en italien.</info>
       <acrostiche>Pregare, la fede mia</acrostiche>
       <para>
         <vers>Prier, croire en ce sens, en ce lieu, l'éternelle</vers>
@@ -16308,7 +16304,7 @@ De mai à juillet 1999</info>
         <c>Philosophie</c>
         <sous-cat>Portraits</sous-cat>
       </categorie>
-      <info>"Vera fede" : "Vraie foi" en italien.</info>
+      <info>Vraie foi, en italien.</info>
       <acrostiche>Vera fede</acrostiche>
       <para>
         <vers>Vraie, en éclats transpercés par la grâce,</vers>
@@ -16494,7 +16490,7 @@ De mai à juillet 1999</info>
         <c>Philosophie</c>
         <sous-cat>Temps</sous-cat>
       </categorie>
-      <info>"Oublier", en italien.</info>
+      <info>Oublier, en italien.</info>
       <acrostiche>Scordare...</acrostiche>
       <para>
         <vers>Sans souvenir, le temps</vers>
@@ -16952,7 +16948,7 @@ De mai à juillet 1999</info>
         <sous-cat>Eau douce</sous-cat>
         <sous-cat>Jardin, paysage</sous-cat>
       </categorie>
-      <info>"Chant, pluie" en italien.</info>
+      <info>Chant, pluie, en italien.</info>
       <acrostiche>Canto, pioggia</acrostiche>
       <para>
         <vers>Comme l'onde du ciel descendue à la terre</vers>
@@ -17299,7 +17295,7 @@ De juillet à novembre 1999</info>
         <c>Attitudes</c>
         <sous-cat>Musique, chant</sous-cat>
       </categorie>
-      <info>"Chant de l'âme" en italien.</info>
+      <info>Chant de l'âme, en italien.</info>
       <acrostiche>Canto dell'anima</acrostiche>
       <para>
         <vers>Comment viendrai-je enfin pour chanter tes louanges ?</vers>
@@ -17350,7 +17346,7 @@ De juillet à novembre 1999</info>
         <c>Philosophie</c>
         <sous-cat>Création</sous-cat>
       </categorie>
-      <info>"Juste toi" en italien.</info>
+      <info>Juste toi, en italien.</info>
       <acrostiche>Giusto te</acrostiche>
       <para>
         <vers>Grâce de Dieu sur toi descend :</vers>
@@ -17372,7 +17368,7 @@ De juillet à novembre 1999</info>
         <c>Philosophie</c>
         <sous-cat>Temps</sous-cat>
       </categorie>
-      <info>"L'automne" en italien.</info>
+      <info>L'automne, en italien.</info>
       <acrostiche>L'Autunno</acrostiche>
       <para>
         <vers>Lorsque le sanglier emportera tes rêves</vers>
@@ -17550,7 +17546,7 @@ De juillet à novembre 1999</info>
         <c>Saisons</c>
         <sous-cat>Automne</sous-cat>
       </categorie>
-      <info>"Jardin des songes" en italien.</info>
+      <info>Jardin des songes, en italien.</info>
       <acrosticheDouble premier="giardino" deuxieme="dei sogni" />
       <para>
         <vers>Grisé du temps par l'ombre de septembre</vers>
@@ -17578,7 +17574,7 @@ De juillet à novembre 1999</info>
         <c>Nature</c>
         <sous-cat>Mer</sous-cat>
       </categorie>
-      <info>"Soleil nouveau" en italien.</info>
+      <info>Soleil nouveau, en italien.</info>
       <acrostiche>Sol' nuovo</acrostiche>
       <para>
         <vers>Sur un inconnu rivage</vers>
@@ -17608,8 +17604,7 @@ De juillet à novembre 1999</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"Croix d'automne" en italien. La correspondance entre les mots de l'acrostiche et
-                le contenu des paragraphes est inversée.</info>
+      <info>Croix d'automne, en italien. La correspondance entre les mots de l'acrostiche et le contenu des paragraphes est inversée.</info>
       <acrostiche>Cresce d'autunno</acrostiche>
       <para>
         <vers>Comme l'automne embrasse aux ailes qui s'envolent</vers>
@@ -17692,7 +17687,7 @@ De juillet à novembre 1999</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"L'amour et toi", en portuguais, reprise du titre d'une chanson.</info>
+      <info>L'amour et toi, en portuguais, reprise du titre d'une chanson.</info>
       <acrostiche>L'amor e tu</acrostiche>
       <para>
         <vers>Là, tu ne sais pas encor,</vers>
@@ -17827,7 +17822,7 @@ De juillet à novembre 1999</info>
         <c>Philosophie</c>
         <sous-cat>Portraits</sous-cat>
       </categorie>
-      <info>"Arc-en-ciel prière" en italien. Inspiré en partie par une chanson d'A. Bocelli : "Ave Maria no morro".</info>
+      <info>Arc-en-ciel prière, en italien. Inspiré en partie par une chanson d'A. Bocelli : Ave Maria no morro.</info>
       <acrostiche>Arcobaleno preghier'</acrostiche>
       <para>
         <vers>Au ciel tout incendié le couchant qui s'emplit</vers>
@@ -18028,7 +18023,7 @@ De juillet à novembre 1999</info>
         <c>Nature</c>
         <sous-cat>Flore</sous-cat>
       </categorie>
-      <info>"Plus d'amour" en italien.</info>
+      <info>Plus d'amour, en italien.</info>
       <acrostiche>Non amor più</acrostiche>
       <para>
         <vers>Ne cherche pas ce qui te manque:</vers>
@@ -18084,7 +18079,7 @@ De juillet à novembre 1999</info>
         <sous-cat>Etre</sous-cat>
         <sous-cat>Création</sous-cat>
       </categorie>
-      <info>"Quand le souffle" en italien.</info>
+      <info>Quand le souffle, en italien.</info>
       <acrostiche>Quando il soffio</acrostiche>
       <para>
         <vers>Quand le souffle du vent transfigure le monde</vers>
@@ -18379,7 +18374,7 @@ De juillet à novembre 1999</info>
         <c>Philosophie</c>
         <sous-cat>Création</sous-cat>
       </categorie>
-      <info>"Il y a tant de temps" en italien.</info>
+      <info>Il y a tant de temps, en italien.</info>
       <acrostiche>Quanto tempo è</acrostiche>
       <para>
         <vers>Quand je ne saurai plus si vivre</vers>
@@ -18407,7 +18402,7 @@ De juillet à novembre 1999</info>
         <c>Amour</c>
         <sous-cat>Aimé (amant)</sous-cat>
       </categorie>
-      <info>"Unico resterà" : "Unique restera" en italien.</info>
+      <info>Unique restera, en italien.</info>
       <acrostiche>Unico resterà</acrostiche>
       <para>
         <vers>Unique ton cœur bat, le mien</vers>
@@ -18468,7 +18463,7 @@ De novembre 1999 à mars 2001</info>
         <sous-cat>Création</sous-cat>
         <sous-cat>Temps</sous-cat>
       </categorie>
-      <info>"Quand je serai (moi)" en italien.</info>
+      <info>Quand je serai (moi), en italien.</info>
       <acrostiche>Quando sarò io</acrostiche>
       <para>
         <vers>Quand la neige aura bercé le vent de mer</vers>
@@ -19950,7 +19945,7 @@ D'avril à décembre 2001</info>
         <c>Philosophie</c>
         <sous-cat>Foi</sous-cat>
       </categorie>
-      <info>"Ame, libère-toi" en italien.</info>
+      <info>Ame, libère-toi, en italien.</info>
       <acrostiche>Alma, libera te</acrostiche>
       <para>
         <vers>Âme libre, envole un songe :</vers>
@@ -20751,7 +20746,7 @@ D'avril à décembre 2001</info>
         <c>Nature</c>
         <sous-cat>Eau douce</sous-cat>
       </categorie>
-      <info>"Eau vive entre les mains" en italien.</info>
+      <info>Eau vive entre les mains, en italien.</info>
       <acrostiche>Acqua viva fra le mani</acrostiche>
       <para>
         <vers>Aller vers toi pour bercer chances;</vers>
@@ -20872,7 +20867,7 @@ D'avril à décembre 2001</info>
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <info>"La vie par-dessus tout" en italien.</info>
+      <info>La vie par-dessus tout, en italien.</info>
       <acrostiche>La vita sopratutto</acrostiche>
       <para>
         <vers>La vie, accord en adagio</vers>
@@ -20958,7 +20953,7 @@ D'avril à décembre 2001</info>
         <c>Philosophie</c>
         <sous-cat>Etre</sous-cat>
       </categorie>
-      <info>D'après la chanson d'A. Bocelli : "L'ultimo re".</info>
+      <info>D'après la chanson d'A. Bocelli : L'ultimo re.</info>
       <acrostiche>L'ultime roi</acrostiche>
       <para>
         <vers>Les images, les scènes</vers>

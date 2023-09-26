@@ -83,7 +83,11 @@ public class Poem
 
         if (Info != null)
         {
-            s.Append($"info = '{Info}'");
+            if (Info.Contains("\""))
+                s.Append($"info = '{Info}'");
+            else
+                s.Append($"info = \"{Info}\"");
+                
             s.Append(Environment.NewLine);
         }
 

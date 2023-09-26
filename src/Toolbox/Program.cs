@@ -89,8 +89,8 @@ public class Program
             case MainMenuSettings.MenuChoices.PoemsOfASeason:
                 GenerateSeasonPoemContentFiles(menuChoice);
                 return true;
-            case MainMenuSettings.MenuChoices.Debug:
-                Console.WriteLine(Directory.GetCurrentDirectory());
+            case MainMenuSettings.MenuChoices.ReloadDataFile:
+                _engine.Load();
                 return true;
         }
 
