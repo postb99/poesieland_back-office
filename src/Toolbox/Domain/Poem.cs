@@ -52,6 +52,7 @@ public class Poem
         {
             s.Append($"\"{subCategory}\", ");
         }
+
         s.Remove(s.Length - 2, 2);
         s.Append("]");
         s.Append(Environment.NewLine);
@@ -66,7 +67,7 @@ public class Poem
         {
             s.Append($"\"acrostiche\", ");
         }
-        
+
         if (DoubleAcrostiche != null)
         {
             s.Append($"\"doubleAcrostiche\", ");
@@ -83,11 +84,7 @@ public class Poem
 
         if (Info != null)
         {
-            if (Info.Contains("\""))
-                s.Append($"info = '{Info}'");
-            else
-                s.Append($"info = \"{Info}\"");
-                
+            s.Append($"info = \"{Info.Escaped()}\"");
             s.Append(Environment.NewLine);
         }
 
@@ -96,7 +93,7 @@ public class Poem
             s.Append($"type = \"{PoemType.ToLowerInvariant()}\"");
             s.Append(Environment.NewLine);
         }
- 
+
         if (Acrostiche != null)
         {
             s.Append($"acrostiche = \"{Acrostiche}\"");
@@ -114,7 +111,7 @@ public class Poem
             s.Append($"verseLength = {VerseLength}");
             s.Append(Environment.NewLine);
         }
-        
+
         s.Append("LastModifierDisplayName = \"Barbara Post\"");
         s.Append(Environment.NewLine);
         s.Append("+++");

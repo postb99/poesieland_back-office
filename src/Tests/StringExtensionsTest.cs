@@ -1,13 +1,17 @@
 ﻿using System.Text;
 using FluentAssertions;
 using Toolbox.Domain;
+using Xunit.Abstractions;
 
 namespace Tests;
 
 public class StringExtensionsTest
 {
-    public StringExtensionsTest()
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public StringExtensionsTest(ITestOutputHelper testOutputHelper)
     {
+        _testOutputHelper = testOutputHelper;
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
@@ -23,5 +27,15 @@ public class StringExtensionsTest
     public void ShouldBeUnaccentedCleaned(string input, string expected)
     {
         input.UnaccentedCleaned().Should().Be(expected);
+    }
+
+    [Theory]
+    [InlineData("Simple", "Simple")]
+    [InlineData("Vivere nell'arte", "Vivere nell'arte")]
+    [InlineData("\"Vivere nell'arte\", en italien", "\\\"Vivere nell'arte\\\", en italien")]
+    public void ShouldBeEscaped(string input, string expected)
+    {
+        _testOutputHelper.WriteLine("{0} => {1}", input, expected);
+        input.Escaped().Should().Be(expected);
     }
 }
