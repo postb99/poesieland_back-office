@@ -1,3 +1,7 @@
 # poesieland_back-office
 
-Back-office tools for managing website content: xml storage to individual md files. Also md to xml file for ease of adding new content.
+Back-office tools for managing http://poesieland.free.fr French poems.
+
+Data is privately stored in XML and is used to generate markdown files.
+
+There is also a markdown to storage feature.
