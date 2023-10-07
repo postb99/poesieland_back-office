@@ -47,6 +47,7 @@ public class Poem
         s.Append($"weight = {poemIndex + 1}");
         s.Append(Environment.NewLine);
 
+        // Categories taxonomy is fed by subcategories
         s.Append("categories = [");
         foreach (var subCategory in Categories.SelectMany(x => x.SubCategories))
         {
@@ -57,11 +58,14 @@ public class Poem
         s.Append("]");
         s.Append(Environment.NewLine);
 
+        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year
         s.Append("tags = [");
         foreach (var category in Categories)
         {
             s.Append($"\"{category.Name.ToLowerInvariant()}\", ");
         }
+        
+        s.Append($"\"{Date.ToString("yyyy")}\", ");
 
         if (Acrostiche != null)
         {

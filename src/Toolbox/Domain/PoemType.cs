@@ -3,5 +3,5 @@
 public enum PoemType
 {
     Sonnet,
-    Pantoum
+    Pantoun
 }
