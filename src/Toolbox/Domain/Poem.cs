@@ -20,7 +20,6 @@ public class Poem
 
     [XmlElement("info")] public string? Info { get; set; }
 
-
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
     [XmlElement("acrosticheDouble")] public DoubleAcrostiche? DoubleAcrostiche { get; set; }

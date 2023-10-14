@@ -15,4 +15,10 @@ public static class StringExtensions
         var cleaned = Regex.Replace(Regex.Replace(Regex.Replace(unaccented, @"[' -]+", "_"), @"[^a-z_]+", ""), "_+", "_").Trim('_');
         return cleaned;
     }
+
+    public static string? ContentCleanString(this string? s)
+    {
+        var c = s?.Trim('\'');
+        return string.IsNullOrEmpty(c) ? null : c;
+    }
 }
