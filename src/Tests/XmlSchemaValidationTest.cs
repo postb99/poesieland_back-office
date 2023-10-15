@@ -3,6 +3,7 @@ using System.Xml;
 using System.Xml.Schema;
 using FluentAssertions;
 using Toolbox;
+using Toolbox.Settings;
 using Xunit.Abstractions;
 
 namespace Tests;
@@ -41,7 +42,7 @@ public class XmlSchemaValidationTest
             var configuration = Helpers.GetConfiguration();
             XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
             xmlReaderSettings.Schemas.Add("https://github.com/Xarkam/poesieland/ns",
-                configuration[Settings.XML_SCHEMA_FILE]);
+                configuration[Constants.XML_SCHEMA_FILE]);
             xmlReaderSettings.ValidationType = ValidationType.Schema;
             xmlReaderSettings.ValidationEventHandler += ValidationEventHandler;
 

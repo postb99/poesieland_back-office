@@ -2,6 +2,7 @@
 using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
+using Toolbox.Settings;
 
 namespace Toolbox;
 
@@ -20,16 +21,16 @@ public class Engine
 
     public void Load()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_FILE]);
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]);
         using var streamReader = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Settings.XML_STORAGE_FILE_ENCODING]));
+            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
 
         Data = XmlSerializer.Deserialize(streamReader) as Root;
     }
 
     public void Save()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_FILE]);
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]);
         using var streamWriter = new StreamWriter(xmlDocPath);
 
         XmlSerializer.Serialize(streamWriter, Data);
@@ -38,7 +39,7 @@ public class Engine
     public void GenerateSeasonIndexFile(int seasonId)
     {
         var season = Data.Seasons.First(x => x.Id == seasonId);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
         var indexFile = Path.Combine(contentDir, "_index.md");
         Directory.CreateDirectory(contentDir);
@@ -55,7 +56,7 @@ public class Engine
     {
         var season = Data.Seasons.First(x => x.Id == poem.SeasonId);
         var poemIndex = season.Poems.IndexOf(poem);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
         var indexFile = Path.Combine(contentDir, poem.ContentFileName);
         File.WriteAllText(indexFile, poem.FileContent(poemIndex));
@@ -75,7 +76,7 @@ public class Engine
 
     // public Root LoadCleaned()
     // {
-    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
+    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_CLEANED_FILE]);
     //     using var streamReader = new StreamReader(xmlDocPath);
     //
     //    return XmlSerializer.Deserialize(streamReader) as Root;
@@ -83,7 +84,7 @@ public class Engine
     //
     // public void SaveCleaned()
     // {
-    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Settings.XML_STORAGE_CLEANED_FILE]);
+    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_CLEANED_FILE]);
     //     using var streamWriter = new StreamWriter(xmlDocPath);
     //
     //     XmlSerializer.Serialize(streamWriter, Data);

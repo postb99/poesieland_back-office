@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Toolbox;
+using Toolbox.Settings;
 
 public class Program
 {
@@ -12,7 +13,7 @@ public class Program
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         _configuration = configurationBuilder.Build();
-        _mainMenuSettings = _configuration.GetSection(Settings.MAIN_MENU).Get<MainMenuSettings>();
+        _mainMenuSettings = _configuration.GetSection(Constants.MAIN_MENU).Get<MainMenuSettings>();
 
         _engine = new Engine(_configuration);
         _engine.Load();

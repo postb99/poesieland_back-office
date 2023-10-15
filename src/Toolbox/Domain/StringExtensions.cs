@@ -16,9 +16,9 @@ public static class StringExtensions
         return cleaned;
     }
 
-    public static string? ContentCleanString(this string? s)
+    public static string? CleanedContent(this string? s)
     {
-        var c = s?.Trim('\'');
+        var c = s?.Trim('"');
         return string.IsNullOrEmpty(c) ? null : c;
     }
 }

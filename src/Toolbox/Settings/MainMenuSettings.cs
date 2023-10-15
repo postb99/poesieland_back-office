@@ -1,4 +1,4 @@
-﻿namespace Toolbox;
+﻿namespace Toolbox.Settings;
 
 public class MainMenuSettings
 {

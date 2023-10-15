@@ -38,4 +38,13 @@ public class StringExtensionsTest
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
         input.Escaped().Should().Be(expected);
     }
+    
+    [Theory]
+    [InlineData("\"Test1\"", "Test1")]
+    [InlineData("Test2", "Test2")]
+    public void ShouldBeCleanedContent(string input, string expected)
+    {
+        _testOutputHelper.WriteLine("{0} => {1}", input, expected);
+        input.CleanedContent().Should().Be(expected);
+    }
 }

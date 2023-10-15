@@ -36,7 +36,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetAcrostiche(string line)
     {
-        return line.Substring(12).ContentCleanString();
+        return line.Substring(12).CleanedContent();
     }
 
     public string GetVerseLength(string line)
