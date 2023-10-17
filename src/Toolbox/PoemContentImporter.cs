@@ -12,9 +12,13 @@ public class PoemContentImporter
     private bool _isInMetadata;
     private IMetadataProcessor _metadataProcessor;
 
-    public const string YamlMarker = "---";
-    public const string TomlMarker = "+++";
+    private const string YamlMarker = "---";
+    private const string TomlMarker = "+++";
 
+    public bool HasTomlMetadata { get; private set; }
+    
+    public bool HasYamlMetadata { get; private set; }
+    
     public Poem Import(string contentFilePath, IConfiguration configuration)
     {
         _configuration = configuration;
@@ -38,11 +42,13 @@ public class PoemContentImporter
 
         if (line.StartsWith(TomlMarker))
         {
+            HasTomlMetadata = true;
             _metadataProcessor = new TomlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
         else if (line.StartsWith(YamlMarker))
         {
+            HasYamlMetadata = true;
             _metadataProcessor = new YamlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
@@ -71,7 +77,11 @@ public class PoemContentImporter
         {
             _metadataProcessor.BuildCategories(line);
         }
-        else if (line.StartsWith("    - "))
+        else if (line.StartsWith("tags"))
+        {
+            _metadataProcessor.StopBuildCategories();
+        }
+        else if (line.StartsWith("  - "))
         {
             _metadataProcessor.AddValue(line);
         }

@@ -26,17 +26,17 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetInfo(string line)
     {
-        return line.Substring(6);
+        return line?.Substring(6);
     }
     
     public string? GetType(string line)
     {
-        return line.Substring(5);
+        return line?.Substring(6);
     }
 
     public string? GetAcrostiche(string line)
     {
-        return line.Substring(12).CleanedContent();
+        return line?.Substring(12).CleanedContent();
     }
 
     public string GetVerseLength(string line)
@@ -46,8 +46,8 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public DoubleAcrostiche GetDoubleAcrostiche(string line)
     {
-        var splitted = line.Substring(18).Split('|');
-        return new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() };
+        var splitted = line?.Substring(18).Split('|');
+        return splitted.Length < 2 ? null : new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() };
     }
 
     public void BuildCategories(string line)
@@ -55,11 +55,16 @@ public class YamlMetadataProcessor : IMetadataProcessor
         _isProcessingCategories = true;
     }
 
+    public void StopBuildCategories()
+    {
+        _isProcessingCategories = false;
+    }
+
     public void AddValue(string line)
     {
         if (_isProcessingCategories)
         {
-            _categories.Add(line.Substring(6));
+            _categories.Add(line.Substring(4));
         }
     }
 

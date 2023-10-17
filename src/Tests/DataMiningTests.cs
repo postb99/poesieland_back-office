@@ -87,7 +87,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             streamWriter.WriteLine(Environment.NewLine);
         }
     }
-    
+
     [Fact]
     public void PoemType()
     {
@@ -115,5 +115,13 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                 lastPoem?.TextDate,
                 lastPoem?.Id, poems.Count);
         }
+    }
+
+    [Fact]
+    public void PoemWithMultipleSubcategory()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Any(x => x.SubCategories.Count > 1));
+        foreach (var poem in poems)
+            _testOutputHelper.WriteLine(poem.Id);
     }
 }
