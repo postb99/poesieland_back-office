@@ -5,8 +5,15 @@ namespace Toolbox;
 
 public class YamlMetadataProcessor : IMetadataProcessor
 {
-    private bool _isProcessingCategories;
+    private enum IsProcessingList
+    {
+        Categories,
+        Tags
+    }
+
+    private IsProcessingList _isProcessingList;
     private readonly List<string> _categories = new();
+    private readonly List<string> _tags = new();
 
     public string GetTitle(string line)
     {
@@ -28,7 +35,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
     {
         return line?.Substring(6);
     }
-    
+
     public string? GetType(string line)
     {
         return line?.Substring(6);
@@ -47,29 +54,41 @@ public class YamlMetadataProcessor : IMetadataProcessor
     public DoubleAcrostiche GetDoubleAcrostiche(string line)
     {
         var splitted = line?.Substring(18).Split('|');
-        return splitted.Length < 2 ? null : new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() };
+        return splitted.Length < 2
+            ? null
+            : new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() };
     }
 
     public void BuildCategories(string line)
     {
-        _isProcessingCategories = true;
+        _isProcessingList = IsProcessingList.Categories;
     }
 
-    public void StopBuildCategories()
+    public void BuildTags()
     {
-        _isProcessingCategories = false;
+        _isProcessingList = IsProcessingList.Tags;
     }
 
-    public void AddValue(string line)
+    public void AddValue(string line, int nbSpaces)
     {
-        if (_isProcessingCategories)
+        switch (_isProcessingList)
         {
-            _categories.Add(line.Substring(4));
+            case IsProcessingList.Categories:
+                _categories.Add(line.Substring(nbSpaces + 2));
+                break;
+            case IsProcessingList.Tags:
+                _tags.Add(line.Substring(nbSpaces + 2).CleanedContent());
+                break;
         }
     }
 
     public List<string> GetCategories()
     {
         return _categories;
+    }
+
+    public List<string> GetTags()
+    {
+        return _tags;
     }
 }

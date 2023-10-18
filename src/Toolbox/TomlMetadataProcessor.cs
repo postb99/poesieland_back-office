@@ -54,17 +54,23 @@ public class TomlMetadataProcessor : IMetadataProcessor
         _categories = line.Substring(13).Trim('[').Trim(']').Split('"').Select(x => x.CleanedContent()).Where(x => x != null && x != ", ").ToList();
     }
 
-    public void StopBuildCategories()
+    public void BuildTags()
     {
+        // Nothing to implement
     }
 
-    public void AddValue(string line)
+    public void AddValue(string line, int nbSpaces)
     {
-        
+        // Nothing to implement
     }
 
     public List<string> GetCategories()
     {
         return _categories;
+    }
+
+    public List<string> GetTags()
+    {
+        throw new NotImplementedException();
     }
 }

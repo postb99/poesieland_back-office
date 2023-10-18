@@ -16,9 +16,9 @@ public class PoemContentImporter
     private const string TomlMarker = "+++";
 
     public bool HasTomlMetadata { get; private set; }
-    
+
     public bool HasYamlMetadata { get; private set; }
-    
+
     public Poem Import(string contentFilePath, IConfiguration configuration)
     {
         _configuration = configuration;
@@ -33,6 +33,66 @@ public class PoemContentImporter
         } while (line != null);
 
         return _poem;
+    }
+
+    public (int year, List<string> tags) Extract(string contentFilePath)
+    {
+        using var streamReader = new StreamReader(contentFilePath);
+        string line;
+        (int year, List<string> tags) output = new();
+        do
+        {
+            line = streamReader.ReadLine();
+            ProcessLine(line, ref output);
+        } while (line != null);
+
+        return output;
+    }
+
+    private void ProcessLine(string? line, ref (int year, List<string> tags) output)
+    {
+        if (line == null)
+            return;
+        
+        if (line.StartsWith(TomlMarker))
+        {
+            HasTomlMetadata = true;
+            HasYamlMetadata = false;
+            return;
+        }
+
+        if (line.StartsWith(YamlMarker))
+        {
+            HasTomlMetadata = false;
+            HasYamlMetadata = true;
+            // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
+            _metadataProcessor ??= new YamlMetadataProcessor();
+            _isInMetadata = !_isInMetadata;
+        }
+
+        if (_isInMetadata)
+        {
+            if (line.StartsWith("date"))
+            {
+                output.year = int.Parse(_metadataProcessor.GetTextDate(line).Substring(6));
+            }
+            else if (line.StartsWith("tags"))
+            {
+                _metadataProcessor.BuildTags();
+            }
+            else if (line.StartsWith("  - "))
+            {
+                _metadataProcessor.AddValue(line, 2);
+            }
+            else if (line.StartsWith("    - "))
+            {
+                _metadataProcessor.AddValue(line, 4);
+            }
+        }
+        else
+        {
+            output.tags = _metadataProcessor.GetTags();
+        }
     }
 
     private void ProcessLine(string? line)
@@ -79,11 +139,15 @@ public class PoemContentImporter
         }
         else if (line.StartsWith("tags"))
         {
-            _metadataProcessor.StopBuildCategories();
+            _metadataProcessor.BuildTags();
         }
         else if (line.StartsWith("  - "))
         {
-            _metadataProcessor.AddValue(line);
+            _metadataProcessor.AddValue(line, 2);
+        }
+        else if (line.StartsWith("    - "))
+        {
+            _metadataProcessor.AddValue(line, 4);
         }
         else if (line.StartsWith("info"))
         {

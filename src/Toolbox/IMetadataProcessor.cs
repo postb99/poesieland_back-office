@@ -13,11 +13,12 @@ public interface IMetadataProcessor
     string? GetType(string line);
     DoubleAcrostiche GetDoubleAcrostiche(string line);
     void BuildCategories(string line);
-    void StopBuildCategories();
+    void BuildTags();
     /// <summary>
     /// When YAML, add a value to a list of value determined by current context.
     /// </summary>
     /// <param name="line"></param>
-    void AddValue(string line);   
+    void AddValue(string line, int nbSpaces);   
     List<string> GetCategories();
+    List<string> GetTags();
 }

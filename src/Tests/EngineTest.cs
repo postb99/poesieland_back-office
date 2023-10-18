@@ -1,11 +1,19 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using Toolbox.Domain;
+using Xunit.Abstractions;
 
 namespace Tests;
 
 public class EngineTest
 {
+    private readonly ITestOutputHelper _testOutputHelper;
+
+    public EngineTest(ITestOutputHelper testOutputHelper)
+    {
+        _testOutputHelper = testOutputHelper;
+    }
+
     [Fact]
     public void ShouldLoad()
     {
@@ -103,5 +111,14 @@ public class EngineTest
         engine.Data.Seasons.Add(fictiveSeason);
         engine.GenerateSeasonIndexFile(fictiveSeason.Id);
         engine.GeneratePoemFile(poem);
+    }
+
+    [Fact]
+    public void CheckMissingYearTagInYamlMetadata()
+    {
+        var engine = Helpers.CreateEngine();
+        var anomalies = engine.CheckMissingYearTagInYamlMetadata();
+        _testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
+        anomalies.Count().Should().Be(0);
     }
 }

@@ -159,5 +159,36 @@ public class PoemContentImporterTest
             poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.FirstOrDefault().Should().Be("Eté");
             poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault().Should().Be("Animaux");
         }
+        
+        [Fact]
+        private void ShouldImportMultipleCategoriesWithMoreSpacesYamlMetadata()
+        {
+            var configuration = Helpers.GetConfiguration();
+            var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+                configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\hiver_en_ville.md");
+            var poemContentImporter = new PoemContentImporter();
+            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            poemContentImporter.HasYamlMetadata.Should().BeTrue();
+            poemContentImporter.HasTomlMetadata.Should().BeFalse();
+            poem.Categories.Count.Should().Be(2);
+            poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.Count.Should().Be(1);
+            poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count.Should().Be(1);
+            poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.FirstOrDefault().Should().Be("Hiver");
+            poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault().Should().Be("Ville");
+        }
+
+        [Fact]
+        private void ShouldExtractTags()
+        {
+            var configuration = Helpers.GetConfiguration();
+            var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+                configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\givre.md");
+            var poemContentImporter = new PoemContentImporter();
+            var yearAndTags = poemContentImporter.Extract(poemContentFilePath);
+            poemContentImporter.HasYamlMetadata.Should().BeTrue();
+            poemContentImporter.HasTomlMetadata.Should().BeFalse();
+            yearAndTags.tags.Count.Should().Be(2);
+
+        }
     }
 }

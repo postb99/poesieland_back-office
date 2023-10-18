@@ -74,19 +74,25 @@ public class Engine
         poems.ForEach(GeneratePoemFile);
     }
 
-    // public Root LoadCleaned()
-    // {
-    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_CLEANED_FILE]);
-    //     using var streamReader = new StreamReader(xmlDocPath);
-    //
-    //    return XmlSerializer.Deserialize(streamReader) as Root;
-    // }
-    //
-    // public void SaveCleaned()
-    // {
-    //     var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_CLEANED_FILE]);
-    //     using var streamWriter = new StreamWriter(xmlDocPath);
-    //
-    //     XmlSerializer.Serialize(streamWriter, Data);
-    // }
+    public IEnumerable<string> CheckMissingYearTagInYamlMetadata()
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var seasonMaxId = Data.Seasons.Count;
+        var poemContentImporter = new PoemContentImporter();
+        for (var i = 16; i < seasonMaxId + 1; i++)
+        {
+            var season = Data.Seasons.First(x => x.Id == i);
+            var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+            var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
+            foreach (var poemContentPath in poemContentPaths)
+            {
+                var yearAndTags = poemContentImporter.Extract(poemContentPath);
+                if (poemContentImporter.HasYamlMetadata && !yearAndTags.tags.Contains(yearAndTags.year.ToString()))
+                {
+                    yield return poemContentPath;
+                }
+            }
+        }
+
+    }
 }
