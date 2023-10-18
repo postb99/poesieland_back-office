@@ -11,9 +11,10 @@ public class PoemContentImporter
     private Poem _poem;
     private bool _isInMetadata;
     private IMetadataProcessor _metadataProcessor;
+    private ContentProcessor _contentProcessor;
 
-    private const string YamlMarker = "---";
-    private const string TomlMarker = "+++";
+    public const string YamlMarker = "---";
+    public const string TomlMarker = "+++";
 
     public bool HasTomlMetadata { get; private set; }
 
@@ -32,6 +33,7 @@ public class PoemContentImporter
             ProcessLine(line);
         } while (line != null);
 
+        _poem.Paragraphs = _contentProcessor.Paragraphs;
         return _poem;
     }
 
@@ -204,6 +206,7 @@ public class PoemContentImporter
 
     private void ProcessVerses(string line)
     {
-        // TODO create a ContentProcessor.
+        _contentProcessor ??= new ContentProcessor();
+        _contentProcessor.AddLine(line);
     }
 }
