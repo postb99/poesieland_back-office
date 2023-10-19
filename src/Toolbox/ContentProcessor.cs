@@ -6,11 +6,23 @@ public class ContentProcessor
 {
     private List<Paragraph> _paragraphs = new();
     private bool _isNewParagraph = true;
+    private bool _done = false;
 
     public void AddLine(string line)
     {
+        if (_done)
+        {
+            return;
+        }
+
         if (line == PoemContentImporter.YamlMarker || line == PoemContentImporter.TomlMarker)
         {
+            return;
+        }
+
+        if (line.StartsWith("{{% notice"))
+        {
+            _done = true;
             return;
         }
 
@@ -33,5 +45,15 @@ public class ContentProcessor
         }
     }
 
-    public List<Paragraph> Paragraphs => _paragraphs;
+    /// <summary>
+    /// Getting the paragraphs resets the _done internal state so that the processor is ready again.
+    /// </summary>
+    public List<Paragraph> Paragraphs
+    {
+        get
+        {
+            _done = false;
+            return _paragraphs;
+        }
+    }
 }

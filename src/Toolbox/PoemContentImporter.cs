@@ -11,7 +11,7 @@ public class PoemContentImporter
     private Poem _poem;
     private bool _isInMetadata;
     private IMetadataProcessor _metadataProcessor;
-    private ContentProcessor _contentProcessor;
+    private ContentProcessor? _contentProcessor;
 
     public const string YamlMarker = "---";
     public const string TomlMarker = "+++";
