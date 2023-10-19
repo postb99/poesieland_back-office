@@ -102,6 +102,8 @@ public class PoemContentImporterTest
             poem.Categories.First().SubCategories.Count.Should().Be(1);
             poem.Categories.First().SubCategories.First().Should().Be("Eau douce");
             poem.VerseLength.Should().Be("6");
+            poem.PoemType.Should().BeNull();
+            poem.Info.Should().BeNull();
         }
 
         [Fact]

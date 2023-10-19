@@ -33,12 +33,12 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetInfo(string line)
     {
-        return line?.Substring(6);
+        return line?.Substring(6).CleanedContent();
     }
 
     public string? GetType(string line)
     {
-        return line?.Substring(6);
+        return line?.Substring(6).CleanedContent();
     }
 
     public string? GetAcrostiche(string line)
