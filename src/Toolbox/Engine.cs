@@ -12,6 +12,8 @@ public class Engine
     public Root Data { get; private set; }
     public XmlSerializer XmlSerializer { get; private set; }
 
+    private PoemContentImporter? _poemContentImporter;
+
     public Engine(IConfiguration configuration)
     {
         _configuration = configuration;
@@ -68,6 +70,28 @@ public class Engine
         season.Poems.ForEach(GeneratePoemFile);
     }
 
+    public void ImportPoem(string poemId)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
+        var seasonDirName = Directory.EnumerateDirectories(rootDir).FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+        var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
+        var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
+        var poem = (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+        var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
+        var targetPoem = targetSeason.Poems.FirstOrDefault(x => x.Id == poemId);
+        if (targetPoem == null)
+        {
+            targetSeason.Poems.Add(poem);
+        }
+        else
+        {
+            targetPoem = poem;
+        }
+
+        Save();
+    }
+
     public void GenerateAllPoemFiles()
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems).ToList();
@@ -93,6 +117,5 @@ public class Engine
                 }
             }
         }
-
     }
 }

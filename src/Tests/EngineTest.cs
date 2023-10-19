@@ -121,4 +121,11 @@ public class EngineTest
         _testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
         anomalies.Count().Should().Be(0);
     }
+
+    [Fact]
+    public void ShouldImportPoem()
+    {
+        var engine = Helpers.CreateEngine();
+        engine.ImportPoem("j_avais_l_heur_de_m_asseoir_1");
+    }
 }
