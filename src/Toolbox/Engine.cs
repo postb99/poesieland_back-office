@@ -74,7 +74,8 @@ public class Engine
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
-        var seasonDirName = Directory.EnumerateDirectories(rootDir).FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+        var seasonDirName = Directory.EnumerateDirectories(rootDir)
+            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
         var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
         var poem = (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
@@ -87,6 +88,31 @@ public class Engine
         else
         {
             targetPoem = poem;
+        }
+
+        Save();
+    }
+
+    public void ImportSeason(int seasonId)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var seasonDirName = Directory.EnumerateDirectories(rootDir)
+            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+        var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == seasonId);
+        var poemFilePaths = Directory.EnumerateFiles(seasonDirName).Where(x => !x.EndsWith("_index.md"));
+        foreach (var poemContentPath in poemFilePaths)
+        {
+            var poem = (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+
+            var targetPoem = targetSeason.Poems.FirstOrDefault(x => x.Id == poem.Id);
+            if (targetPoem == null)
+            {
+                targetSeason.Poems.Add(poem);
+            }
+            else
+            {
+                targetPoem = poem;
+            }
         }
 
         Save();

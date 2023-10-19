@@ -126,6 +126,14 @@ public class EngineTest
     public void ShouldImportPoem()
     {
         var engine = Helpers.CreateEngine();
-        engine.ImportPoem("j_avais_l_heur_de_m_asseoir_1");
+        //engine.ImportPoem("j_avais_l_heur_de_m_asseoir_1");
+        engine.ImportPoem("par_omission_16");
+    }
+    
+    [Fact]
+    public void ShouldImportSeason()
+    {
+        var engine = Helpers.CreateEngine();
+        engine.ImportSeason(16);
     }
 }

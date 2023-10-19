@@ -26,11 +26,14 @@ public class Poem
 
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
 
+    [XmlIgnore]
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
+    [XmlIgnore]
     public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
+    [XmlIgnore]
     public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
 
     public string FileContent(int poemIndex)
