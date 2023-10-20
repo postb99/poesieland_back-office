@@ -124,4 +124,17 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         foreach (var poem in poems)
             _testOutputHelper.WriteLine(poem.Id);
     }
+
+    [Fact]
+    public void PoemWithMultipleSameCategory()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            var categoryNames = poem.Categories.Select(x => x.Name);
+            if (categoryNames.Count() > categoryNames.Distinct().Count())
+            {
+                _testOutputHelper.WriteLine(poem.Id);
+            }
+        }
+    }
 }

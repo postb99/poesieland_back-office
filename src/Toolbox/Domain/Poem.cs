@@ -62,9 +62,9 @@ public class Poem
 
         // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year
         s.Append("tags = [");
-        foreach (var category in Categories)
+        foreach (var categoryName in Categories.Select(x => x.Name).Distinct())
         {
-            s.Append($"\"{category.Name.ToLowerInvariant()}\", ");
+            s.Append($"\"{categoryName.ToLowerInvariant()}\", ");
         }
         
         s.Append($"\"{Date.ToString("yyyy")}\", ");
