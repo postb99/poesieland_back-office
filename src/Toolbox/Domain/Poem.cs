@@ -20,18 +20,20 @@ public class Poem
 
     [XmlElement("info")] public string? Info { get; set; }
 
-
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
     [XmlElement("acrosticheDouble")] public DoubleAcrostiche? DoubleAcrostiche { get; set; }
 
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
 
+    [XmlIgnore]
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
+    [XmlIgnore]
     public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
+    [XmlIgnore]
     public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
 
     public string FileContent(int poemIndex)
@@ -60,9 +62,9 @@ public class Poem
 
         // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year
         s.Append("tags = [");
-        foreach (var category in Categories)
+        foreach (var categoryName in Categories.Select(x => x.Name).Distinct())
         {
-            s.Append($"\"{category.Name.ToLowerInvariant()}\", ");
+            s.Append($"\"{categoryName.ToLowerInvariant()}\", ");
         }
         
         s.Append($"\"{Date.ToString("yyyy")}\", ");
