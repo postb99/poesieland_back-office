@@ -79,16 +79,23 @@ public class Program
                 GenerateSeasonIndexFiles(menuChoice);
                 return true;
             case MainMenuSettings.MenuChoices.GeneratePoemFiles:
+            case MainMenuSettings.MenuChoices.ImportPoemContent:
                 ValidateAndPerformMenuChoice(menuChoice, MenuChoice(menuChoice.SubMenuItems));
                 return false;
-            case MainMenuSettings.MenuChoices.SinglePoem:
+            case MainMenuSettings.MenuChoices.GenerateSinglePoem:
                 GeneratePoemContentFile(menuChoice);
                 return true;
-            case MainMenuSettings.MenuChoices.AllPoems:
+            case MainMenuSettings.MenuChoices.ImportSinglePoem:
+                ImportPoemContentFile(menuChoice);
+                return true;
+            case MainMenuSettings.MenuChoices.GenerateAllPoems:
                 GenerateAllPoemsContentFiles();
                 return true;
-            case MainMenuSettings.MenuChoices.PoemsOfASeason:
+            case MainMenuSettings.MenuChoices.GeneratePoemsOfASeason:
                 GenerateSeasonPoemContentFiles(menuChoice);
+                return true;
+            case MainMenuSettings.MenuChoices.ImportPoemsOfASeason:
+                ImportSeasonPoemContentFiles(menuChoice);
                 return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
@@ -119,6 +126,22 @@ public class Program
         }
     }
 
+    private static void ImportSeasonPoemContentFiles(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
+        var choice = Console.ReadLine();
+
+        if (int.TryParse(choice, out var intChoice))
+        {
+            _engine.ImportSeason(intChoice);
+            Console.WriteLine("Season import OK");
+        }
+        else
+        {
+            Console.WriteLine("No matching season for input");
+        }
+    }
+
     private static void GeneratePoemContentFile(MenuItem menuChoice)
     {
         Console.WriteLine(menuChoice.SubMenuItems.First().Label);
@@ -133,6 +156,22 @@ public class Program
         else
         {
             Console.WriteLine("No matching poem for input");
+        }
+    }
+
+    private static void ImportPoemContentFile(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label);
+        var poemId = Console.ReadLine();
+
+        var ok = _engine.ImportPoem(poemId);
+        if (ok)
+        {
+            Console.WriteLine("Poem import OK");
+        }
+        else
+        {
+            Console.WriteLine("No matching file for import");
         }
     }
 
