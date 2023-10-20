@@ -137,16 +137,17 @@ public class EngineTest
             TestOutputHelper = testOutputHelper;
         }
 
-        [Fact]
+        [Fact(Skip = "Validated")]
         public void ShouldImportPoem()
         {
             var engine = Helpers.CreateEngine();
             //engine.ImportPoem("j_avais_l_heur_de_m_asseoir_1");
             engine.ImportPoem("par_omission_16");
             engine.ImportPoem("le_jour_16");
+            engine.ImportPoem("accords_finis_16");
         }
 
-        [Fact]
+        [Fact(Skip = "Validated")]
         public void ShouldImportSeason()
         {
             var engine = Helpers.CreateEngine();

@@ -26,7 +26,7 @@ public class ContentProcessor
             return;
         }
 
-        if (line == " \\")
+        if (line.Trim() == "\\")
         {
             _isNewParagraph = true;
             return;

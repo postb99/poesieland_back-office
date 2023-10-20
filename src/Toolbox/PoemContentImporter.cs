@@ -24,9 +24,11 @@ public class PoemContentImporter
     {
         _configuration = configuration;
         _poem = new Poem();
-        _isInMetadata = true;
+        _isInMetadata = false;
         _metadataProcessor = null;
         _contentProcessor = null;
+        HasYamlMetadata = false;
+        HasTomlMetadata = false;
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
@@ -36,7 +38,7 @@ public class PoemContentImporter
             ProcessLine(line);
         } while (line != null);
 
-        _poem.Paragraphs = _contentProcessor.Paragraphs;
+        _poem.Paragraphs = _contentProcessor!.Paragraphs;
         return _poem;
     }
 
@@ -127,54 +129,54 @@ public class PoemContentImporter
     {
         if (line.StartsWith("title"))
         {
-            _poem.Title = _metadataProcessor.GetTitle(line);
+            _poem.Title = _metadataProcessor!.GetTitle(line);
         }
         else if (line.StartsWith("id"))
         {
-            _poem.Id = _metadataProcessor.GetId(line);
+            _poem.Id = _metadataProcessor!.GetId(line);
         }
         else if (line.StartsWith("date"))
         {
-            _poem.TextDate = _metadataProcessor.GetTextDate(line);
+            _poem.TextDate = _metadataProcessor!.GetTextDate(line);
         }
         else if (line.StartsWith("categories"))
         {
-            _metadataProcessor.BuildCategories(line);
+            _metadataProcessor!.BuildCategories(line);
         }
         else if (line.StartsWith("tags"))
         {
-            _metadataProcessor.BuildTags();
+            _metadataProcessor!.BuildTags();
         }
         else if (line.StartsWith("  - "))
         {
-            _metadataProcessor.AddValue(line, 2);
+            _metadataProcessor!.AddValue(line, 2);
         }
         else if (line.StartsWith("    - "))
         {
-            _metadataProcessor.AddValue(line, 4);
+            _metadataProcessor!.AddValue(line, 4);
         }
         else if (line.StartsWith("info"))
         {
-            _poem.Info = _metadataProcessor.GetInfo(line);
+            _poem.Info = _metadataProcessor!.GetInfo(line);
         }
         else if (line.StartsWith("acrostiche"))
         {
-            _poem.Acrostiche = _metadataProcessor.GetAcrostiche(line);
+            _poem.Acrostiche = _metadataProcessor!.GetAcrostiche(line);
         }
         else if (line.StartsWith("doubleAcrostiche"))
         {
-            _poem.DoubleAcrostiche = _metadataProcessor.GetDoubleAcrostiche(line);
+            _poem.DoubleAcrostiche = _metadataProcessor!.GetDoubleAcrostiche(line);
         }
         else if (line.StartsWith("verseLength"))
         {
-            _poem.VerseLength = _metadataProcessor.GetVerseLength(line);
+            _poem.VerseLength = _metadataProcessor!.GetVerseLength(line);
         }
         else if (line.StartsWith("type"))
         {
-            _poem.PoemType = _metadataProcessor.GetType(line);
+            _poem.PoemType = _metadataProcessor!.GetType(line);
         }
 
-        _poem.Categories = GetCategories(_metadataProcessor.GetCategories());
+        _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
     }
 
     private List<Category> GetCategories(List<string> metadataCategories)
