@@ -10,7 +10,7 @@ public class PoemContentImporter
     private IConfiguration _configuration;
     private Poem _poem;
     private bool _isInMetadata;
-    private IMetadataProcessor _metadataProcessor;
+    private IMetadataProcessor? _metadataProcessor;
     private ContentProcessor? _contentProcessor;
 
     public const string YamlMarker = "---";
@@ -24,6 +24,9 @@ public class PoemContentImporter
     {
         _configuration = configuration;
         _poem = new Poem();
+        _isInMetadata = true;
+        _metadataProcessor = null;
+        _contentProcessor = null;
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
@@ -55,7 +58,7 @@ public class PoemContentImporter
     {
         if (line == null)
             return;
-        
+
         if (line.StartsWith(TomlMarker))
         {
             HasTomlMetadata = true;
@@ -67,8 +70,7 @@ public class PoemContentImporter
         {
             HasTomlMetadata = false;
             HasYamlMetadata = true;
-            // ReSharper disable once NullCoalescingConditionIsAlwaysNotNullAccordingToAPIContract
-            _metadataProcessor ??= new YamlMetadataProcessor();
+            _metadataProcessor = new YamlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
 

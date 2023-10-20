@@ -34,8 +34,8 @@ public class Engine
     {
         var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]);
         using var streamWriter = new StreamWriter(xmlDocPath);
-
         XmlSerializer.Serialize(streamWriter, Data);
+        streamWriter.Close();
     }
 
     public void GenerateSeasonIndexFile(int seasonId)
