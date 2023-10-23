@@ -37,6 +37,11 @@ public class TomlMetadataProcessor : IMetadataProcessor
     {
         return line.Substring(14);
     }
+    
+    public int GetWeight(string line)
+    {
+        return int.Parse(line.Substring(9));
+    }
 
     public string? GetType(string line)
     {
@@ -51,7 +56,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildCategories(string line)
     {
-        _categories = line.Substring(13).Trim('[').Trim(']').Split('"').Select(x => x.CleanedContent()).Where(x => x != null && x != ", ").ToList();
+        _categories = line.Substring(13).Trim('[').Trim(']').Split('"').Select(x => x.CleanedContent()).Where(x => x != null && x != " " && x != ", ").ToList();
     }
 
     public void BuildTags()

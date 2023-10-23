@@ -15,7 +15,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "1_premiere_saison\\j_avais_l_heur_de_m_asseoir.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasTomlMetadata.Should().BeTrue();
             poemContentImporter.HasYamlMetadata.Should().BeFalse();
             poem.Title.Should().Be("J'avais l'heur de m'asseoir...");
@@ -27,6 +27,7 @@ public class PoemContentImporterTest
             poem.Categories.First().SubCategories.First().Should().Be("Femme");
             poem.PoemType.Should().Be("sonnet");
             poem.VerseLength.Should().Be("12");
+            position.Should().Be(0);
         }
 
         [Fact]
@@ -36,7 +37,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "12_douzieme_saison\\barcarolle.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasTomlMetadata.Should().BeTrue();
             poemContentImporter.HasYamlMetadata.Should().BeFalse();
             poem.Categories.Count.Should().Be(1);
@@ -52,7 +53,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "10_dixieme_saison\\cathedrale_de_lumieres.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasTomlMetadata.Should().BeTrue();
             poemContentImporter.HasYamlMetadata.Should().BeFalse();
             poem.DoubleAcrostiche.First.Should().Be("Cathédrale");
@@ -66,7 +67,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "15_quinzieme_saison\\du_gris_au_noir.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasTomlMetadata.Should().BeTrue();
             poemContentImporter.HasYamlMetadata.Should().BeFalse();
             poem.Acrostiche.Should().Be("Du gris au noir");
@@ -90,7 +91,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\sur_les_toits_la_pluie.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.Title.Should().Be("Sur les toits la pluie");
@@ -104,6 +105,7 @@ public class PoemContentImporterTest
             poem.VerseLength.Should().Be("6");
             poem.PoemType.Should().BeNull();
             poem.Info.Should().BeNull();
+            position.Should().Be(34);
         }
 
         [Fact]
@@ -113,7 +115,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\les_chenes.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.DoubleAcrostiche.First.Should().Be("Chênes");
@@ -127,7 +129,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\pantoun_du_reve.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.PoemType.Should().Be("pantoun");
@@ -140,7 +142,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\je_vivrai.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.Info.Should().Be("Les états d'âme d'une catherinette");
@@ -153,7 +155,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\oiseaux_de_juillet.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.Categories.Count.Should().Be(2);
@@ -171,7 +173,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\hiver_en_ville.md");
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.Categories.Count.Should().Be(2);
@@ -208,7 +210,7 @@ public class PoemContentImporterTest
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], poemContentPath);
             var poemContentImporter = new PoemContentImporter();
-            var poem = poemContentImporter.Import(poemContentFilePath, configuration);
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poem.Paragraphs.Count.Should().Be(paragraphs);
             poem.Paragraphs.ForEach(p => p.Verses.Count.Should().Be(verses));
         }

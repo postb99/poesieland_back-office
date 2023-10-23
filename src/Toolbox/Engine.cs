@@ -80,23 +80,22 @@ public class Engine
         {
             return false;
         }
+
         var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
         var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
         if (!File.Exists(poemContentPath))
         {
             return false;
         }
-        var poem = (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+
+        var (poem, position) =
+            (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
-        var targetPoem = targetSeason.Poems.FirstOrDefault(x => x.Id == poemId);
-        if (targetPoem == null)
-        {
-            targetSeason.Poems.Add(poem);
-        }
-        else
-        {
-            targetPoem = poem;
-        }
+
+        if (targetSeason.Poems.Capacity < position + 1)
+            targetSeason.Poems.Capacity = position + 1;
+
+        targetSeason.Poems.Insert(position, poem);
 
         Save();
         return true;
@@ -109,19 +108,21 @@ public class Engine
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == seasonId);
         var poemFilePaths = Directory.EnumerateFiles(seasonDirName).Where(x => !x.EndsWith("_index.md"));
+        var poemsByPosition = new Dictionary<int, Poem>(50);
         foreach (var poemContentPath in poemFilePaths)
         {
-            var poem = (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+            var (poem, position) =
+                (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
 
-            var targetPoem = targetSeason.Poems.FirstOrDefault(x => x.Id == poem.Id);
-            if (targetPoem == null)
-            {
+            poemsByPosition.Add(position, poem);
+        }
+
+        targetSeason.Poems.Clear();
+        
+        for (var i = 0; i < poemsByPosition.Count; i++)
+        {
+            if (poemsByPosition.TryGetValue(i, out var poem))
                 targetSeason.Poems.Add(poem);
-            }
-            else
-            {
-                targetPoem = poem;
-            }
         }
 
         Save();

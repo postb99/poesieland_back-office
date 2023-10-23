@@ -9,6 +9,7 @@ public class PoemContentImporter
 {
     private IConfiguration _configuration;
     private Poem _poem;
+    private int _position;
     private bool _isInMetadata;
     private IMetadataProcessor? _metadataProcessor;
     private ContentProcessor? _contentProcessor;
@@ -20,7 +21,7 @@ public class PoemContentImporter
 
     public bool HasYamlMetadata { get; private set; }
 
-    public Poem Import(string contentFilePath, IConfiguration configuration)
+    public (Poem, int) Import(string contentFilePath, IConfiguration configuration)
     {
         _configuration = configuration;
         _poem = new Poem();
@@ -39,7 +40,7 @@ public class PoemContentImporter
         } while (line != null);
 
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
-        return _poem;
+        return (_poem, _position);
     }
 
     public (int year, List<string> tags) Extract(string contentFilePath)
@@ -174,6 +175,10 @@ public class PoemContentImporter
         else if (line.StartsWith("type"))
         {
             _poem.PoemType = _metadataProcessor!.GetType(line);
+        }
+        else if (line.StartsWith("weight"))
+        {
+            _position = _metadataProcessor!.GetWeight(line) - 1;
         }
 
         _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());

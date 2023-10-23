@@ -11,6 +11,7 @@ public interface IMetadataProcessor
     string? GetAcrostiche(string line);
     string? GetVerseLength(string line);
     string? GetType(string line);
+    int GetWeight(string line);
     DoubleAcrostiche GetDoubleAcrostiche(string line);
     void BuildCategories(string line);
     void BuildTags();

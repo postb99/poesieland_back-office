@@ -50,6 +50,11 @@ public class YamlMetadataProcessor : IMetadataProcessor
     {
         return line.Substring(13);
     }
+    
+    public int GetWeight(string line)
+    {
+        return int.Parse(line.Substring(8));
+    }
 
     public DoubleAcrostiche GetDoubleAcrostiche(string line)
     {
