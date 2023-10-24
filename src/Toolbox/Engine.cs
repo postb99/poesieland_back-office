@@ -92,10 +92,12 @@ public class Engine
             (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
-        if (targetSeason.Poems.Capacity < position + 1)
-            targetSeason.Poems.Capacity = position + 1;
-
-        targetSeason.Poems.Insert(position, poem);
+        var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poemId);
+        
+        if (existingPosition > -1)
+            targetSeason.Poems[existingPosition] = poem;
+        else
+            targetSeason.Poems.Add(poem);
 
         Save();
         return true;
@@ -118,8 +120,8 @@ public class Engine
         }
 
         targetSeason.Poems.Clear();
-        
-        for (var i = 0; i < poemsByPosition.Count; i++)
+
+        for (var i = 0; i < 50; i++)
         {
             if (poemsByPosition.TryGetValue(i, out var poem))
                 targetSeason.Poems.Add(poem);
