@@ -40,6 +40,18 @@ public class PoemContentImporter
         } while (line != null);
 
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
+        
+        if (_poem.VerseLength == "-1")
+        {
+            if (_poem.Info == null || !_poem.Info!.StartsWith("Vers variable : "))
+            {
+                throw new InvalidOperationException(
+                    "When verse length is -1, info should give variable length: 'Vers variable : ...'");
+            }
+
+            _poem.VerseLength = _poem.Info.Substring(16);
+        }
+        
         return (_poem, _position);
     }
 
