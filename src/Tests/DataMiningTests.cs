@@ -18,8 +18,11 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     [Fact]
     public void PoemsWithSpecifiedVerseLength()
     {
-        _testOutputHelper.WriteLine("{0} poems with verse length specified",
-            _data.Seasons.SelectMany(x => x.Poems).Count(x => x.VerseLength != null));
+        var poems = _data.Seasons.SelectMany(x => x.Poems);
+        var poemsWithVerseLength = poems.Count(x => x.VerseLength != null);
+        int percentage = poemsWithVerseLength * 100 / poems.Count();
+        _testOutputHelper.WriteLine("{0}/{1} poems ({2} %) with verse length specified",
+            poemsWithVerseLength, poems.Count(), percentage);
     }
 
     [Fact]
