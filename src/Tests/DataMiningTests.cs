@@ -140,4 +140,16 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             }
         }
     }
+
+    [Fact]
+    public void PoemsWithStrangeVerseCount()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            if (poem.VersesCount % 2 != 0)
+            {
+                _testOutputHelper.WriteLine(poem.Id);
+            }
+        }
+    }
 }

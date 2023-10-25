@@ -48,6 +48,17 @@ public class EngineTest
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.Should().Be("L'air");
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.Second.Should().Be("créé");
         }
+
+        [Theory]
+        [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, 14)]
+        [InlineData("grand_sud_1", 1, 12)]
+        [InlineData("illusion_1", 1, 8)]
+        public void ShouldGetVersesCount(string poemId, int seasonId, int expectedCount)
+        {
+            var engine = Helpers.CreateEngine();
+            var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
+            poem.VersesCount.Should().Be(expectedCount);
+        }
     }
 
     public class ContentGenerationTest : EngineTest

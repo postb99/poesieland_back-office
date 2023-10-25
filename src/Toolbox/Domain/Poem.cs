@@ -36,6 +36,9 @@ public class Poem
     [XmlIgnore]
     public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
 
+    [XmlIgnore]
+    public int VersesCount => Paragraphs.SelectMany(x => x.Verses).Count();
+
     public string FileContent(int poemIndex)
     {
         var s = new StringBuilder("+++");

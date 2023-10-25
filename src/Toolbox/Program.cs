@@ -80,6 +80,7 @@ public class Program
                 return true;
             case MainMenuSettings.MenuChoices.GeneratePoemFiles:
             case MainMenuSettings.MenuChoices.ImportPoemContent:
+            case MainMenuSettings.MenuChoices.GenerateChartsDataFiles:
                 ValidateAndPerformMenuChoice(menuChoice, MenuChoice(menuChoice.SubMenuItems));
                 return false;
             case MainMenuSettings.MenuChoices.GenerateSinglePoem:
@@ -97,8 +98,15 @@ public class Program
             case MainMenuSettings.MenuChoices.ImportPoemsOfASeason:
                 ImportSeasonPoemContentFiles(menuChoice);
                 return true;
+            case MainMenuSettings.MenuChoices.GeneratePoemsLengthBarChartDataFile:
+                GeneratePoemsLengthBarChartDataFile();
+                return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
+                return true;
+            case MainMenuSettings.MenuChoices.ExitProgram:
+                Console.WriteLine("Closing program...");
+                Environment.Exit(0);
                 return true;
         }
 
@@ -201,5 +209,11 @@ public class Program
         {
             Console.WriteLine("No matching season for input");
         }
+    }
+    
+    private static void GeneratePoemsLengthBarChartDataFile()
+    {
+        _engine.GeneratePoemsLengthBarChartDataFile();
+        Console.WriteLine("Poems length bar chart data file OK");
     }
 }

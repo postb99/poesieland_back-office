@@ -8,4 +8,5 @@ public class Constants
     public const string CONTENT_ROOT_DIR = "ContentRoot";
     public const string MAIN_MENU = "MainMenu";
     public const string STORAGE_SETTINGS = "StorageSettings";
+    public const string CHART_DATA_FILES_ROOT_DIR = "ChartDataFilesRoot";
 }

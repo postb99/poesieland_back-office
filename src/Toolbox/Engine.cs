@@ -93,7 +93,7 @@ public class Engine
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poemId);
-        
+
         if (existingPosition > -1)
             targetSeason.Poems[existingPosition] = poem;
         else
@@ -155,5 +155,38 @@ public class Engine
                 }
             }
         }
+    }
+
+    public void GeneratePoemsLengthBarChartDataFile()
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "poems-length-bar.js"));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
+        chartDataFileHelper.WriteBeforeData();
+        var data = new Dictionary<int, int>();
+        foreach (var poem in Data.Seasons.SelectMany(x => x.Poems))
+        {
+            var nbVerses = poem.VersesCount;
+            if (data.TryGetValue(nbVerses, out var _))
+            {
+                data[nbVerses]++;
+            }
+            else
+            {
+                data[nbVerses] = 1;
+            }
+        }
+
+        var chartData = new List<ChartDataFileHelper.DataLine>();
+        foreach (var nbVerses in data.Keys.Order())
+        {
+            chartData.Add(new ChartDataFileHelper.DataLine { Label = nbVerses.ToString(), Value = data[nbVerses] });
+        }
+
+        chartDataFileHelper.WriteData(chartData);
+
+        chartDataFileHelper.WriteAfterData("poemLengthBar", "Nombre de vers par poème");
+        streamWriter.Close();
     }
 }
