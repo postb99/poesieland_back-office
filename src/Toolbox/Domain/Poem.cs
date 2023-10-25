@@ -114,7 +114,8 @@ public class Poem
 
         if (VerseLength != null)
         {
-            s.Append($"verseLength = {VerseLength}");
+            var verseLength = VerseLength.Contains(',') ? "-1" : VerseLength;
+            s.Append($"verseLength = {verseLength}");
             s.Append(Environment.NewLine);
         }
 
