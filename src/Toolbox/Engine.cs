@@ -200,28 +200,27 @@ public class Engine
         }
 
         var nbVersesRange = nbVersesData.Keys.Order().ToList();
+        
         var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
-        foreach (var nbVerses in nbVersesRange)
-        {
-            nbVersesChartData.Add(new ChartDataFileHelper.DataLine { Label = nbVerses.ToString(), Value = nbVersesData[nbVerses] });
-        }
-        chartDataFileHelper.WriteData(nbVersesChartData, false);
-        
         var hasQuatrainsChartData = new List<ChartDataFileHelper.DataLine>();
+        var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
+        
         foreach (var nbVerses in nbVersesRange)
         {
-            hasQuatrainsChartData.Add(new ChartDataFileHelper.DataLine { Label = "Quatrains", Value = hasQuatrainsData.ContainsKey(nbVerses) ? hasQuatrainsData[nbVerses] : 0 });
-        }
-        chartDataFileHelper.WriteData(hasQuatrainsChartData, false);
-        
-        var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
-        foreach (var _ in nbVersesRange)
-        {
+            var hasQuatrainValue = hasQuatrainsData.ContainsKey(nbVerses) ? hasQuatrainsData[nbVerses] : 0;
+            hasQuatrainsChartData.Add(new ChartDataFileHelper.DataLine { Label = "Quatrains", Value = hasQuatrainValue });
+            
             isSonnetChartData.Add(new ChartDataFileHelper.DataLine { Label = string.Empty, Value = 0 });
+            
+            nbVersesChartData.Add(new ChartDataFileHelper.DataLine { Label = nbVerses.ToString(), Value = nbVersesData[nbVerses] - hasQuatrainValue });
         }
-
+        
         var index = nbVersesRange.FindIndex(x => x == 14);
         isSonnetChartData[index] = new ChartDataFileHelper.DataLine { Label = "Sonnets", Value = nbSonnets };
+        nbVersesChartData[index] = new ChartDataFileHelper.DataLine { Label = nbVersesChartData[index].Label, Value = nbVersesChartData[index].Value - nbSonnets };
+        
+        chartDataFileHelper.WriteData(nbVersesChartData, false);
+        chartDataFileHelper.WriteData(hasQuatrainsChartData, false);
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
         chartDataFileHelper.WriteAfterData("poemLengthBar", new []{"Poèmes", "Avec quatrains", "Sonnets"});
