@@ -53,11 +53,24 @@ public class EngineTest
         [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, 14)]
         [InlineData("grand_sud_1", 1, 12)]
         [InlineData("illusion_1", 1, 8)]
-        public void ShouldGetVersesCount(string poemId, int seasonId, int expectedCount)
+        public void ShouldVersesCount(string poemId, int seasonId, int expectedCount)
         {
             var engine = Helpers.CreateEngine();
             var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
             poem.VersesCount.Should().Be(expectedCount);
+        }
+        
+        [Theory]
+        [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, false)]
+        [InlineData("grand_sud_1", 1, true)]
+        [InlineData("illusion_1", 1, false)]
+        [InlineData("matin_privilege_15", 15, false)]
+        [InlineData("ombres_et_lumieres_15", 15, false)]
+        public void ShouldHasQuatrains(string poemId, int seasonId, bool expectedHasQuatrain)
+        {
+            var engine = Helpers.CreateEngine();
+            var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
+            poem.HasQuatrains.Should().Be(expectedHasQuatrain);
         }
     }
 

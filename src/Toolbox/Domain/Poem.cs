@@ -39,6 +39,8 @@ public class Poem
     [XmlIgnore]
     public int VersesCount => Paragraphs.SelectMany(x => x.Verses).Count();
 
+    [XmlIgnore] public bool HasQuatrains => (VersesCount / Paragraphs.Count) % 4 == 0;
+
     public string FileContent(int poemIndex)
     {
         var s = new StringBuilder("+++");

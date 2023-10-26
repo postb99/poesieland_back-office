@@ -176,6 +176,7 @@ public class Program
         if (ok)
         {
             Console.WriteLine("Poem import OK");
+            GeneratePoemsLengthBarChartDataFile();
         }
         else
         {

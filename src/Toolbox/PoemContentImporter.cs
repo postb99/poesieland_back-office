@@ -71,7 +71,7 @@ public class PoemContentImporter
 
     private void ProcessLine(string? line, ref (int year, List<string> tags) output)
     {
-        if (line == null)
+        if (line == null || HasTomlMetadata)
             return;
 
         if (line.StartsWith(TomlMarker))

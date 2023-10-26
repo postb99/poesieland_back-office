@@ -162,31 +162,69 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "poems-length-bar.js"));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 3);
         chartDataFileHelper.WriteBeforeData();
-        var data = new Dictionary<int, int>();
+        var nbVersesData = new Dictionary<int, int>();
+        var hasQuatrainsData = new Dictionary<int, int>();
+        var nbSonnets = 0;
         foreach (var poem in Data.Seasons.SelectMany(x => x.Poems))
         {
             var nbVerses = poem.VersesCount;
-            if (data.TryGetValue(nbVerses, out var _))
+            var hasQuatrains = nbVerses % 4 == 0 && poem.HasQuatrains;
+            var isSonnet = poem.PoemType?.ToLowerInvariant() == PoemType.Sonnet.ToString().ToLowerInvariant();
+            if (nbVersesData.TryGetValue(nbVerses, out var _))
             {
-                data[nbVerses]++;
+                nbVersesData[nbVerses]++;
             }
             else
             {
-                data[nbVerses] = 1;
+                nbVersesData[nbVerses] = 1;
+            }
+
+            if (hasQuatrains)
+            {
+                if (hasQuatrainsData.TryGetValue(nbVerses, out var _))
+                {
+                    hasQuatrainsData[nbVerses]++;
+                }
+                else
+                {
+                    hasQuatrainsData[nbVerses] = 1;
+                }
+            }
+
+            if (isSonnet)
+            {
+                nbSonnets++;
             }
         }
 
-        var chartData = new List<ChartDataFileHelper.DataLine>();
-        foreach (var nbVerses in data.Keys.Order())
+        var nbVersesRange = nbVersesData.Keys.Order().ToList();
+        var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
+        foreach (var nbVerses in nbVersesRange)
         {
-            chartData.Add(new ChartDataFileHelper.DataLine { Label = nbVerses.ToString(), Value = data[nbVerses] });
+            nbVersesChartData.Add(new ChartDataFileHelper.DataLine { Label = nbVerses.ToString(), Value = nbVersesData[nbVerses] });
+        }
+        chartDataFileHelper.WriteData(nbVersesChartData, false);
+        
+        var hasQuatrainsChartData = new List<ChartDataFileHelper.DataLine>();
+        foreach (var nbVerses in nbVersesRange)
+        {
+            hasQuatrainsChartData.Add(new ChartDataFileHelper.DataLine { Label = "Quatrains", Value = hasQuatrainsData.ContainsKey(nbVerses) ? hasQuatrainsData[nbVerses] : 0 });
+        }
+        chartDataFileHelper.WriteData(hasQuatrainsChartData, false);
+        
+        var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
+        foreach (var _ in nbVersesRange)
+        {
+            isSonnetChartData.Add(new ChartDataFileHelper.DataLine { Label = string.Empty, Value = 0 });
         }
 
-        chartDataFileHelper.WriteData(chartData);
+        var index = nbVersesRange.FindIndex(x => x == 14);
+        isSonnetChartData[index] = new ChartDataFileHelper.DataLine { Label = "Sonnets", Value = nbSonnets };
+        chartDataFileHelper.WriteData(isSonnetChartData, true);
 
-        chartDataFileHelper.WriteAfterData("poemLengthBar", "Nombre de vers par poème");
+        chartDataFileHelper.WriteAfterData("poemLengthBar", new []{"Poèmes", "Avec quatrains", "Sonnets"});
         streamWriter.Close();
     }
 }

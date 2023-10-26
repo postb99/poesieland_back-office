@@ -97,7 +97,7 @@ public class PoemContentImporterTest
 
     public class YamlMetadataProcessorTest : PoemContentImporterTest
     {
-        [Fact]
+        [Fact(Skip = "Metadata updated to TOML")]
         private void ShouldImportYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
@@ -121,7 +121,7 @@ public class PoemContentImporterTest
             position.Should().Be(34);
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata updated to TOML")]
         private void ShouldImportDoubleAcrosticheYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
@@ -135,7 +135,7 @@ public class PoemContentImporterTest
             poem.DoubleAcrostiche.Second.Should().Be("destin");
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata updated to TOML")]
         private void ShouldImportTypeYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
@@ -148,7 +148,7 @@ public class PoemContentImporterTest
             poem.PoemType.Should().Be("pantoun");
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata updated to TOML")]
         private void ShouldImportInfoYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
@@ -161,7 +161,7 @@ public class PoemContentImporterTest
             poem.Info.Should().Be("Les états d'âme d'une catherinette");
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata updated to TOML")]
         private void ShouldImportMultipleCategoriesYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
@@ -179,7 +179,7 @@ public class PoemContentImporterTest
                 .Be("Animaux");
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata updated to TOML")]
         private void ShouldImportMultipleCategoriesWithMoreSpacesYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
@@ -198,7 +198,7 @@ public class PoemContentImporterTest
                 .Be("Ville");
         }
 
-        [Fact]
+        [Fact(Skip = "Metadata updated to TOML")]
         private void ShouldExtractTags()
         {
             var configuration = Helpers.GetConfiguration();
