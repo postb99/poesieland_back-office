@@ -39,7 +39,7 @@ public class Poem
     [XmlIgnore]
     public int VersesCount => Paragraphs.SelectMany(x => x.Verses).Count();
 
-    [XmlIgnore] public bool HasQuatrains => VersesCount == Paragraphs.Count * 4;
+    [XmlIgnore] public bool HasQuatrains => VersesCount == Paragraphs.Count * 4 && VersesCount % 4 == 0;
 
     public string FileContent(int poemIndex)
     {
