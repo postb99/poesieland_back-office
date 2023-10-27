@@ -101,6 +101,9 @@ public class Program
             case MainMenuSettings.MenuChoices.GeneratePoemsLengthBarChartDataFile:
                 GeneratePoemsLengthBarChartDataFile();
                 return true;
+            case MainMenuSettings.MenuChoices.GenerateSeasonCategoriesPieChartDataFile:
+                GenerateSeasonCategoriesPieChart(menuChoice);
+                return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
                 return true;
@@ -143,6 +146,9 @@ public class Program
         {
             _engine.ImportSeason(intChoice);
             Console.WriteLine("Season import OK");
+            GeneratePoemsLengthBarChartDataFile();
+            _engine.GenerateSeasonCategoriesPieChartDataFile(intChoice);
+            Console.WriteLine($"Season {intChoice} categories pie chart data file OK");
         }
         else
         {
@@ -177,6 +183,9 @@ public class Program
         {
             Console.WriteLine("Poem import OK");
             GeneratePoemsLengthBarChartDataFile();
+            var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
+            _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+            Console.WriteLine($"Season {seasonId} categories pie chart data file OK");
         }
         else
         {
@@ -216,5 +225,21 @@ public class Program
     {
         _engine.GeneratePoemsLengthBarChartDataFile();
         Console.WriteLine("Poems length bar chart data file OK");
+    }
+    
+    private static void GenerateSeasonCategoriesPieChart(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
+        var choice = Console.ReadLine();
+
+        if (int.TryParse(choice, out var intChoice))
+        {
+            _engine.GenerateSeasonCategoriesPieChartDataFile(intChoice);
+            Console.WriteLine("Season categories pie chart data file OK");
+        }
+        else
+        {
+            Console.WriteLine("No matching season for input");
+        }
     }
 }

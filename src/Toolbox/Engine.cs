@@ -170,7 +170,7 @@ public class Engine
         foreach (var poem in Data.Seasons.SelectMany(x => x.Poems))
         {
             var nbVerses = poem.VersesCount;
-            var hasQuatrains = nbVerses % 4 == 0 && poem.HasQuatrains;
+            var hasQuatrains = poem.HasQuatrains;
             var isSonnet = poem.PoemType?.ToLowerInvariant() == PoemType.Sonnet.ToString().ToLowerInvariant();
             if (nbVersesData.TryGetValue(nbVerses, out var _))
             {
@@ -224,6 +224,45 @@ public class Engine
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
         chartDataFileHelper.WriteAfterData("poemLengthBar", new []{"Poèmes", "Avec quatrains", "Sonnets"});
+        streamWriter.Close();
+    }
+
+    public void GenerateSeasonCategoriesPieChartDataFile(int seasonId)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, $"season-{seasonId}-pie.js"));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie, 1);
+        chartDataFileHelper.WriteBeforeData();
+        var byStorageSubcategoryCount = new Dictionary<string, int>();
+
+        foreach (var poem in Data.Seasons.First(x => x.Id == seasonId).Poems)
+        {
+            foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
+            {
+                if (byStorageSubcategoryCount.TryGetValue(subCategory, out var _))
+                {
+                    byStorageSubcategoryCount[subCategory]++;
+                }
+                else
+                {
+                    byStorageSubcategoryCount[subCategory] = 1;
+                }
+            }
+        }
+        
+        var subcategories = byStorageSubcategoryCount.Keys.Order().ToList();
+        var pieChartData = new List<ChartDataFileHelper.ColoredDataLine>();
+        
+        foreach (var subcategory in subcategories)
+        {
+            pieChartData.Add(new ChartDataFileHelper.ColoredDataLine { Label = subcategory, Value = byStorageSubcategoryCount[subcategory], RgbColor = storageSettings.Categories.SelectMany(x => x.Subcategories).First(x => x.Name == subcategory).Color});
+        }
+        
+        chartDataFileHelper.WriteData(pieChartData, true);
+
+        chartDataFileHelper.WriteAfterData($"season{seasonId}Pie", new []{"Catégories"});
         streamWriter.Close();
     }
 }

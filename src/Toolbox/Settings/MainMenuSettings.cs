@@ -5,21 +5,23 @@ public class MainMenuSettings
     public enum MenuChoices
     {
         GenerateSeasonIndexFile = 100,
-        GenerateAskSeasonNumberForIndexFile = 110,
+        GenerateSeasonIndexFileAskSeasonNumber = 110,
         GeneratePoemFiles = 200,
         GenerateSinglePoem = 210,
-        GenerateInputPoemId = 211,
+        GenerateSinglePoemAskPoemId = 211,
         GeneratePoemsOfASeason = 220,
-        GenerateAskSeasonNumberForPoemFile = 221,
+        GGeneratePoemsOfASeasonAskPoemId = 221,
         GenerateAllPoems = 230,
         ReloadDataFile = 0,
         ImportPoemContent = 300,
         ImportSinglePoem = 310,
-        ImportInputPoemId = 311,
+        ImportSinglePoemAskPoemId = 311,
         ImportPoemsOfASeason = 320,
-        ImportAskSeasonNumberForPoemFile = 321,
+        ImportPoemsOfASeasonAskSeasonId = 321,
         GenerateChartsDataFiles = 400,
         GeneratePoemsLengthBarChartDataFile = 410,
+        GenerateSeasonCategoriesPieChartDataFile = 420,
+        GenerateSeasonCategoriesPieChartAskSeasonId = 421,
         ExitProgram = 99
     }
     

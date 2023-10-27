@@ -16,6 +16,16 @@ public class ChartDataFileHelper
         public string Label;
         public int Value;
     }
+    
+    /// <summary>
+    /// RgbColor sample value: "rgb(255, 205, 86)" or "rgba(255, 205, 86, 1)".
+    /// </summary>
+    public struct ColoredDataLine
+    {
+        public string Label;
+        public int Value;
+        public string RgbColor;
+    }
 
     private readonly StreamWriter _streamWriter;
     private readonly ChartType _chartType;
@@ -36,6 +46,9 @@ public class ChartDataFileHelper
         {
             case ChartType.Bar:
                 _streamWriter.WriteLine("import { addBarChart } from './add-chart.js'");
+                break;
+            case ChartType.Pie:
+                _streamWriter.WriteLine("import { addPieChart } from './add-chart.js'");
                 break;
         }
 
@@ -64,6 +77,9 @@ public class ChartDataFileHelper
                     ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data]);"
                     : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data);");
                 break;
+            case ChartType.Pie:
+                _streamWriter.WriteLine("  addPieChart('samplePie', [data]);");
+                break;
         }
 
         _streamWriter.WriteLine("})();");
@@ -80,6 +96,27 @@ public class ChartDataFileHelper
         foreach (var dataLine in dataLines)
         {
             _streamWriter.WriteLine($"    {{ label: '{dataLine.Label}', value: {dataLine.Value} }},");
+        }
+        
+        if (_nbDatasets > 1)
+        {
+            _streamWriter.WriteLine(isLastDataLine ? "]" : "],");
+        }
+
+        _datasetIndex++;
+        _streamWriter.Flush();
+    }
+    
+    public void WriteData(IEnumerable<ColoredDataLine> dataLines, bool isLastDataLine)
+    {
+        if (_nbDatasets > 1)
+        {
+            _streamWriter.WriteLine("[");
+        }
+        
+        foreach (var dataLine in dataLines)
+        {
+            _streamWriter.WriteLine($"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: {dataLine.RgbColor} }},");
         }
         
         if (_nbDatasets > 1)
