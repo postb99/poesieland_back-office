@@ -205,7 +205,7 @@ public class PoemContentImporter
         {
             var cleanMetadataCategory = metadataCategory.CleanedContent();
             var settingsCategory =
-                storageSettings.Categories.FirstOrDefault(x => x.Subcategories.Contains(cleanMetadataCategory));
+                storageSettings.Categories.FirstOrDefault(x => x.Subcategories.Select(x => x.Name).Contains(cleanMetadataCategory));
             if (settingsCategory == null)
             {
                 throw new InvalidOperationException(

@@ -42,7 +42,7 @@ public class EngineTest
         {
             var engine = Helpers.CreateEngine();
             var poemWithFirstAndSecondAcrostiche =
-                engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "laircree_14");
+                engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
             poemWithFirstAndSecondAcrostiche.Should().NotBeNull();
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche.Should().NotBeNull();
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.Should().Be("L'air");
@@ -71,6 +71,7 @@ public class EngineTest
             var engine = Helpers.CreateEngine();
             var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
             poem.HasQuatrains.Should().Be(expectedHasQuatrain);
+            TestOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
         }
     }
 
