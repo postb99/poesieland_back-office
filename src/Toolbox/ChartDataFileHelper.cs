@@ -18,7 +18,7 @@ public class ChartDataFileHelper
     }
     
     /// <summary>
-    /// RgbColor sample value: "rgb(255, 205, 86)" or "rgba(255, 205, 86, 1)".
+    /// RgbColor sample value: "rgb(255, 205, 86)".
     /// </summary>
     public struct ColoredDataLine
     {
@@ -78,7 +78,7 @@ public class ChartDataFileHelper
                     : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data);");
                 break;
             case ChartType.Pie:
-                _streamWriter.WriteLine("  addPieChart('samplePie', [data]);");
+                _streamWriter.WriteLine($"  addPieChart('{chartId}', [data], '{chartTitles[0]}');");
                 break;
         }
 

@@ -200,30 +200,33 @@ public class Engine
         }
 
         var nbVersesRange = nbVersesData.Keys.Order().ToList();
-        
+
         var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
         var hasQuatrainsChartData = new List<ChartDataFileHelper.DataLine>();
         var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
-        
+
         foreach (var nbVerses in nbVersesRange)
         {
             var hasQuatrainValue = hasQuatrainsData.ContainsKey(nbVerses) ? hasQuatrainsData[nbVerses] : 0;
-            hasQuatrainsChartData.Add(new ChartDataFileHelper.DataLine { Label = "Quatrains", Value = hasQuatrainValue });
-            
+            hasQuatrainsChartData.Add(
+                new ChartDataFileHelper.DataLine { Label = "Quatrains", Value = hasQuatrainValue });
+
             isSonnetChartData.Add(new ChartDataFileHelper.DataLine { Label = string.Empty, Value = 0 });
-            
-            nbVersesChartData.Add(new ChartDataFileHelper.DataLine { Label = nbVerses.ToString(), Value = nbVersesData[nbVerses] - hasQuatrainValue });
+
+            nbVersesChartData.Add(new ChartDataFileHelper.DataLine
+                { Label = nbVerses.ToString(), Value = nbVersesData[nbVerses] - hasQuatrainValue });
         }
-        
+
         var index = nbVersesRange.FindIndex(x => x == 14);
         isSonnetChartData[index] = new ChartDataFileHelper.DataLine { Label = "Sonnets", Value = nbSonnets };
-        nbVersesChartData[index] = new ChartDataFileHelper.DataLine { Label = nbVersesChartData[index].Label, Value = nbVersesChartData[index].Value - nbSonnets };
-        
+        nbVersesChartData[index] = new ChartDataFileHelper.DataLine
+            { Label = nbVersesChartData[index].Label, Value = nbVersesChartData[index].Value - nbSonnets };
+
         chartDataFileHelper.WriteData(nbVersesChartData, false);
         chartDataFileHelper.WriteData(hasQuatrainsChartData, false);
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
-        chartDataFileHelper.WriteAfterData("poemLengthBar", new []{"Poèmes", "Avec quatrains", "Sonnets"});
+        chartDataFileHelper.WriteAfterData("poemLengthBar", new[] { "Poèmes", "Avec quatrains", "Sonnets" });
         streamWriter.Close();
     }
 
@@ -237,7 +240,8 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
         var byStorageSubcategoryCount = new Dictionary<string, int>();
 
-        foreach (var poem in Data.Seasons.First(x => x.Id == seasonId).Poems)
+        var season = Data.Seasons.First(x => x.Id == seasonId);
+        foreach (var poem in season.Poems)
         {
             foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
             {
@@ -251,18 +255,26 @@ public class Engine
                 }
             }
         }
-        
-        var subcategories = byStorageSubcategoryCount.Keys.Order().ToList();
+
+        var orderedSubcategories =
+            storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).ToList();
         var pieChartData = new List<ChartDataFileHelper.ColoredDataLine>();
-        
-        foreach (var subcategory in subcategories)
+
+        foreach (var subcategory in orderedSubcategories)
         {
-            pieChartData.Add(new ChartDataFileHelper.ColoredDataLine { Label = subcategory, Value = byStorageSubcategoryCount[subcategory], RgbColor = storageSettings.Categories.SelectMany(x => x.Subcategories).First(x => x.Name == subcategory).Color});
+            if (byStorageSubcategoryCount.ContainsKey(subcategory))
+                pieChartData.Add(new ChartDataFileHelper.ColoredDataLine
+                {
+                    Label = subcategory, Value = byStorageSubcategoryCount[subcategory],
+                    RgbColor = storageSettings.Categories.SelectMany(x => x.Subcategories)
+                        .First(x => x.Name == subcategory).Color
+                });
         }
-        
+
         chartDataFileHelper.WriteData(pieChartData);
 
-        chartDataFileHelper.WriteAfterData($"season{seasonId}Pie", new []{"Catégories"});
+        chartDataFileHelper.WriteAfterData($"season{seasonId}Pie",
+            new[] { $"{season.NumberedName} Saison : {season.Name} - {season.Summary.Substring(season.Summary.LastIndexOf('.') + 2)}" });
         streamWriter.Close();
     }
 }
