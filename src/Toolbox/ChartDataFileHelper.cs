@@ -107,24 +107,12 @@ public class ChartDataFileHelper
         _streamWriter.Flush();
     }
     
-    public void WriteData(IEnumerable<ColoredDataLine> dataLines, bool isLastDataLine)
+    public void WriteData(IEnumerable<ColoredDataLine> dataLines)
     {
-        if (_nbDatasets > 1)
-        {
-            _streamWriter.WriteLine("[");
-        }
-        
         foreach (var dataLine in dataLines)
         {
-            _streamWriter.WriteLine($"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: {dataLine.RgbColor} }},");
+            _streamWriter.WriteLine($"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{dataLine.RgbColor}' }},");
         }
-        
-        if (_nbDatasets > 1)
-        {
-            _streamWriter.WriteLine(isLastDataLine ? "]" : "],");
-        }
-
-        _datasetIndex++;
         _streamWriter.Flush();
     }
 }

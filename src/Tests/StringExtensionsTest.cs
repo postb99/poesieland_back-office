@@ -24,6 +24,7 @@ public class StringExtensionsTest
     [InlineData("L'air - créé", "l_air_cree")]
     [InlineData("Sais-tu l'amour...", "sais_tu_l_amour")]
     [InlineData("Marcher : neige", "marcher_neige")]
+    [InlineData("Sur un air, souffles", "sur_un_air_souffles")]
     public void ShouldBeUnaccentedCleaned(string input, string expected)
     {
         input.UnaccentedCleaned().Should().Be(expected);

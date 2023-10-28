@@ -260,7 +260,7 @@ public class Engine
             pieChartData.Add(new ChartDataFileHelper.ColoredDataLine { Label = subcategory, Value = byStorageSubcategoryCount[subcategory], RgbColor = storageSettings.Categories.SelectMany(x => x.Subcategories).First(x => x.Name == subcategory).Color});
         }
         
-        chartDataFileHelper.WriteData(pieChartData, true);
+        chartDataFileHelper.WriteData(pieChartData);
 
         chartDataFileHelper.WriteAfterData($"season{seasonId}Pie", new []{"Catégories"});
         streamWriter.Close();

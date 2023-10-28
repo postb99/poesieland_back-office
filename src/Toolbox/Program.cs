@@ -220,13 +220,13 @@ public class Program
             Console.WriteLine("No matching season for input");
         }
     }
-    
+
     private static void GeneratePoemsLengthBarChartDataFile()
     {
         _engine.GeneratePoemsLengthBarChartDataFile();
         Console.WriteLine("Poems length bar chart data file OK");
     }
-    
+
     private static void GenerateSeasonCategoriesPieChart(MenuItem menuChoice)
     {
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
@@ -234,7 +234,18 @@ public class Program
 
         if (int.TryParse(choice, out var intChoice))
         {
-            _engine.GenerateSeasonCategoriesPieChartDataFile(intChoice);
+            if (intChoice == 0)
+            {
+                for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
+                {
+                    _engine.GenerateSeasonCategoriesPieChartDataFile(i);
+                }
+
+                Console.WriteLine("All seasons categories pie chart data file OK");
+            }
+            else
+                _engine.GenerateSeasonCategoriesPieChartDataFile(intChoice);
+
             Console.WriteLine("Season categories pie chart data file OK");
         }
         else
