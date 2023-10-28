@@ -273,8 +273,9 @@ public class Engine
 
         chartDataFileHelper.WriteData(pieChartData);
 
+        var seasonSummaryLastDot = season.Summary.LastIndexOf('.');
         chartDataFileHelper.WriteAfterData($"season{seasonId}Pie",
-            new[] { $"{season.NumberedName} Saison : {season.Name} - {season.Summary.Substring(season.Summary.LastIndexOf('.') + 2)}" });
+            new[] { $"{season.NumberedName} Saison : {season.Name} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}" });
         streamWriter.Close();
     }
 }
