@@ -142,13 +142,11 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
 
-        if (int.TryParse(choice, out var intChoice))
+        if (int.TryParse(choice, out var seasonId))
         {
-            _engine.ImportSeason(intChoice);
+            _engine.ImportSeason(seasonId);
             Console.WriteLine("Season import OK");
-            GeneratePoemsLengthBarChartDataFile();
-            _engine.GenerateSeasonCategoriesPieChartDataFile(intChoice);
-            Console.WriteLine($"Season {intChoice} categories pie chart data file OK");
+            GenerateDependantChartDataFiles(seasonId);
         }
         else
         {
@@ -182,10 +180,8 @@ public class Program
         if (ok)
         {
             Console.WriteLine("Poem import OK");
-            GeneratePoemsLengthBarChartDataFile();
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
-            _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
-            Console.WriteLine($"Season {seasonId} categories pie chart data file OK");
+            GenerateDependantChartDataFiles(seasonId);
         }
         else
         {
@@ -232,25 +228,48 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
 
-        if (int.TryParse(choice, out var intChoice))
+        if (int.TryParse(choice, out var seasonId))
         {
-            if (intChoice == 0)
+            if (seasonId == 0)
             {
                 for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
                 {
                     _engine.GenerateSeasonCategoriesPieChartDataFile(i);
                 }
-
-                Console.WriteLine("All seasons categories pie chart data file OK");
             }
             else
-                _engine.GenerateSeasonCategoriesPieChartDataFile(intChoice);
+            {
+                _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+            }
 
-            Console.WriteLine("Season categories pie chart data file OK");
+            Console.WriteLine(seasonId == 0
+                ? "All seasons categories pie chart data file OK"
+                : $"Season {seasonId} categories pie chart data file OK");
         }
         else
         {
             Console.WriteLine("No matching season for input");
         }
+    }
+
+    private static void GenerateDependantChartDataFiles(int seasonId)
+    {
+        GeneratePoemsLengthBarChartDataFile();
+
+        if (seasonId == 0)
+        {
+            for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
+            {
+                _engine.GenerateSeasonCategoriesPieChartDataFile(i);
+            }
+        }
+        else
+        {
+            _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+        }
+
+        Console.WriteLine(seasonId == 0
+            ? "All seasons categories pie chart data file OK"
+            : $"Season {seasonId} categories pie chart data file OK");
     }
 }
