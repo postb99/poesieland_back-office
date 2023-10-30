@@ -55,8 +55,17 @@ public class PoemContentImporterTest
             poemContentImporter.HasYamlMetadata.Should().BeFalse();
             poem.Categories.Count.Should().Be(1);
             poem.Categories.First().SubCategories.Count.Should().Be(1);
-            poem.Categories.First().SubCategories.First().Should().Be("Musique, chant");
+            poem.Categories.First().SubCategories.First().Should().Be("Musique et chant");
             poem.Info.Should().Be("Inspiré par l'air homonyme d'Offenbach.");
+        }
+
+        [Fact]
+        private void ShouldProperlyParseCategories()
+        {
+            var categories = "categories = [\"First\", \"Here and there\"]";
+            var processor = new TomlMetadataProcessor();
+            processor.BuildCategories(categories);
+            processor.GetCategories().Should().BeEquivalentTo(new List<string> { "First", "Here and there" });
         }
 
         [Fact]
