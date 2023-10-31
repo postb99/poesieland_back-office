@@ -203,13 +203,12 @@ public class PoemContentImporter
 
         foreach (var metadataCategory in metadataCategories)
         {
-            var cleanMetadataCategory = metadataCategory.CleanedContent();
             var settingsCategory =
-                storageSettings.Categories.FirstOrDefault(x => x.Subcategories.Select(x => x.Name).Contains(cleanMetadataCategory));
+                storageSettings.Categories.FirstOrDefault(x => x.Subcategories.Select(x => x.Name).Contains(metadataCategory));
             if (settingsCategory == null)
             {
                 throw new InvalidOperationException(
-                    $"No storage category found for metadata category {cleanMetadataCategory}");
+                    $"No storage category found for metadata category {metadataCategory}");
             }
 
             storageCategories.TryGetValue(settingsCategory.Name, out var storageCategory);
@@ -219,7 +218,7 @@ public class PoemContentImporter
                 storageCategories.Add(storageCategory.Name, storageCategory);
             }
 
-            storageCategory.SubCategories.Add(cleanMetadataCategory);
+            storageCategory.SubCategories.Add(metadataCategory);
         }
 
         return storageCategories.Values.ToList();

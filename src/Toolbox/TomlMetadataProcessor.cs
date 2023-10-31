@@ -24,7 +24,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public string? GetInfo(string line)
     {
-        return line.Substring(7).CleanedContent();
+        return line.Substring(8, line.Length - 9).CleanedContent();
     }
 
     public string? GetAcrostiche(string line)

@@ -41,8 +41,23 @@ public class StringExtensionsTest
     }
     
     [Theory]
-    [InlineData("\"Test1\"", "Test1")]
-    [InlineData("Test2", "Test2")]
+    [InlineData(null, "")]
+    [InlineData("Simple", "Simple")]
+    [InlineData("Vivere nell'arte", "Vivere nell'arte")]
+    [InlineData("\"Vivere nell'arte\", en italien", "\\\"Vivere nell'arte\\\", en italien")]
+    public void ShouldBeUnescaped(string expected, string input)
+    {
+        _testOutputHelper.WriteLine("{0} => {1}", input, expected);
+        input.Unescaped().Should().Be(expected);
+    }
+    
+    [Theory]
+    [InlineData("\\\"Test1\\\"", "Test1")]
+    [InlineData("\"Test2\"", "Test2")]
+    [InlineData("Test3", "Test3")]
+    [InlineData("Text4 with a \\\"quote\\\" into", "Text4 with a \"quote\" into")]
+    [InlineData("Text5 with an end \\\"quote\\\"", "Text5 with an end \"quote\"")]
+    [InlineData("\\\"Start quote\\\" for text6", "\"Start quote\" for text6")]
     public void ShouldBeCleanedContent(string input, string expected)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
