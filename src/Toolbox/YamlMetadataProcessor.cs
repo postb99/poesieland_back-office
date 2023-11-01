@@ -39,7 +39,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetType(string line)
     {
-        var value = line?.Substring(6).CleanedContent();
+        var value = line?.Substring(6);
         return value == "\"\"" ? null : value;
     }
 
