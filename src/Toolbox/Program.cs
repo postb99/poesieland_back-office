@@ -104,6 +104,9 @@ public class Program
             case MainMenuSettings.MenuChoices.GenerateSeasonCategoriesPieChartDataFile:
                 GenerateSeasonCategoriesPieChart(menuChoice);
                 return true;
+            case MainMenuSettings.MenuChoices.GeneratePoemsRadarChartDataFile:
+                GeneratePoemsRadarChartDataFile(menuChoice);
+                return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
                 return true;
@@ -271,5 +274,31 @@ public class Program
         Console.WriteLine(seasonId == 0
             ? "All seasons categories pie chart data file OK"
             : $"Season {seasonId} categories pie chart data file OK");
+    }
+
+    private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label);
+        var choice = Console.ReadLine();
+
+        if (string.IsNullOrEmpty(choice))
+        {
+            _engine.GeneratePoemsByDayRadarChart(null);
+            Console.WriteLine("Poems by day chart data file OK");
+            return;
+        }
+
+        var colorSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+        var color = colorSettings.Categories.SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == choice);
+
+        if (color == null)
+        {
+            Console.WriteLine("No matching category for input (case sensitive)");
+        }
+        else
+        {
+            _engine.GeneratePoemsByDayRadarChart(choice);
+            Console.WriteLine($"Poems by day chart data file for category {choice} OK");
+        }
     }
 }

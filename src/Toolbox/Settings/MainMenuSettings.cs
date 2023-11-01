@@ -22,6 +22,8 @@ public class MainMenuSettings
         GeneratePoemsLengthBarChartDataFile = 410,
         GenerateSeasonCategoriesPieChartDataFile = 420,
         GenerateSeasonCategoriesPieChartAskSeasonId = 421,
+        GeneratePoemsRadarChartDataFile = 430,
+        GeneratePoemsRadarChartAskCategory = 431,
         ExitProgram = 99
     }
     

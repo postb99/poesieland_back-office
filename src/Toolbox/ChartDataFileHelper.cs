@@ -16,7 +16,7 @@ public class ChartDataFileHelper
         public string Label;
         public int Value;
     }
-    
+
     /// <summary>
     /// RgbColor sample value: "rgb(255, 205, 86)".
     /// </summary>
@@ -50,6 +50,9 @@ public class ChartDataFileHelper
             case ChartType.Pie:
                 _streamWriter.WriteLine("import { addPieChart } from './add-chart.js'");
                 break;
+            case ChartType.Radar:
+                _streamWriter.WriteLine("import { addRadarChart } from './add-chart.js'");
+                break;
         }
 
         _streamWriter.WriteLine("(async function () {");
@@ -58,10 +61,11 @@ public class ChartDataFileHelper
         _streamWriter.Flush();
     }
 
-    public void WriteAfterData(string chartId, string[] chartTitles)
+    public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
+        string radarChartBackgroundColor = null)
     {
         _streamWriter.WriteLine("  ];");
-        
+
         switch (_chartType)
         {
             case ChartType.Bar:
@@ -72,13 +76,20 @@ public class ChartDataFileHelper
                 }
 
                 chartTitlesBuilder.Remove(chartTitlesBuilder.Length - 1, 1);
-                
+
                 _streamWriter.WriteLine(_nbDatasets == 1
                     ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data]);"
                     : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data);");
                 break;
             case ChartType.Pie:
                 _streamWriter.WriteLine($"  addPieChart('{chartId}', [data], '{chartTitles[0]}');");
+                break;
+            case ChartType.Radar:
+                if (radarChartBorderColor != null)
+                    _streamWriter.WriteLine(
+                        $"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data], '{radarChartBorderColor}', '{radarChartBackgroundColor}');");
+                else
+                    _streamWriter.WriteLine($"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data]);");
                 break;
         }
 
@@ -92,12 +103,12 @@ public class ChartDataFileHelper
         {
             _streamWriter.WriteLine("[");
         }
-        
+
         foreach (var dataLine in dataLines)
         {
             _streamWriter.WriteLine($"    {{ label: '{dataLine.Label}', value: {dataLine.Value} }},");
         }
-        
+
         if (_nbDatasets > 1)
         {
             _streamWriter.WriteLine(isLastDataLine ? "]" : "],");
@@ -106,13 +117,15 @@ public class ChartDataFileHelper
         _datasetIndex++;
         _streamWriter.Flush();
     }
-    
+
     public void WriteData(IEnumerable<ColoredDataLine> dataLines)
     {
         foreach (var dataLine in dataLines)
         {
-            _streamWriter.WriteLine($"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{dataLine.RgbColor}' }},");
+            _streamWriter.WriteLine(
+                $"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{dataLine.RgbColor}' }},");
         }
+
         _streamWriter.Flush();
     }
 }

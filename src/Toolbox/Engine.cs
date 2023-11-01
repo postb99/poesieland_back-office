@@ -275,7 +275,86 @@ public class Engine
 
         var seasonSummaryLastDot = season.Summary.LastIndexOf('.');
         chartDataFileHelper.WriteAfterData($"season{seasonId}Pie",
-            new[] { $"{season.NumberedName} Saison : {season.Name} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}" });
+            new[]
+            {
+                $"{season.NumberedName} Saison : {season.Name} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}"
+            });
+        streamWriter.Close();
+    }
+
+    public void GeneratePoemsByDayRadarChart(string? storageSubCategory)
+    {
+        var poemStringDates = new List<string>();
+        poemStringDates = storageSubCategory == null
+            ? Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList()
+            : Data.Seasons.SelectMany(x => x.Poems)
+                .Where(x => x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory))).Select(x => x.TextDate)
+                .ToList();
+
+        var dataDict = new Dictionary<string, int>();
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"01-0{i}" : $"01-{i}", 0);
+        for (var i = 1; i < 30; i++)
+            dataDict.Add(i < 10 ? $"02-0{i}" : $"02-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"03-0{i}" : $"03-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"04-0{i}" : $"04-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"05-0{i}" : $"05-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"06-0{i}" : $"06-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"07-0{i}" : $"07-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"08-0{i}" : $"08-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"09-0{i}" : $"09-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"10-0{i}" : $"10-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"11-0{i}" : $"11-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"12-0{i}" : $"12-{i}", 0);
+
+        foreach (var poemStringDate in poemStringDates)
+        {
+            var year = poemStringDate.Substring(6);
+            if(year == "1994")
+                continue;
+            var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
+            dataDict[day]++;
+        }
+        
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        var fileName = storageSubCategory != null
+            ? $"poems-day-{storageSubCategory.ToLowerInvariant()}-radar.js"
+            : "poems-day-radar.js";
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
+        chartDataFileHelper.WriteBeforeData();
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        
+        foreach (var monthDay in dataDict.Keys)
+        {
+            var day = monthDay.Substring(3);
+            dataLines.Add(new ChartDataFileHelper.DataLine { Label = day == "01" || day == "15" ? $"{day}.{monthDay.Substring(0, 2)}"
+                : "", Value = dataDict[monthDay]});
+        }
+        chartDataFileHelper.WriteData(dataLines, true);
+        
+        var chartId = storageSubCategory != null
+            ? $"poemDay-{storageSubCategory.ToLowerInvariant()}Radar"
+            : "poemDayRadar";
+        var borderColor = storageSubCategory != null
+            ? _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
+                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory).Color
+            : null;
+        var backgroundColor = borderColor?.Replace("1)", "0.5)");
+        
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, borderColor, backgroundColor);
         streamWriter.Close();
     }
 }
