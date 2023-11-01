@@ -62,7 +62,7 @@ public class PoemContentImporter
         _contentProcessor = null;
         HasYamlMetadata = false;
         HasTomlMetadata = false;
-        
+
         using var streamReader = new StreamReader(contentFilePath);
         string line;
         (int year, List<string> tags) output = new();
@@ -72,12 +72,15 @@ public class PoemContentImporter
             ProcessLine(line, ref output);
         } while (line != null);
 
-        output.tags = _metadataProcessor.GetTags();
+        if (HasYamlMetadata)
+            output.tags = _metadataProcessor.GetTags();
         return output;
     }
 
     private void ProcessLine(string? line, ref (int year, List<string> tags) output)
     {
+        if (!_isInMetadata) return;
+
         if (line == null || HasTomlMetadata)
             return;
 
@@ -95,8 +98,6 @@ public class PoemContentImporter
             _metadataProcessor = new YamlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
-
-        if (!_isInMetadata) return;
 
         if (line.StartsWith("date"))
         {

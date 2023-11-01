@@ -141,7 +141,7 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
         var seasonMaxId = Data.Seasons.Count;
         var poemContentImporter = new PoemContentImporter();
-        for (var i = 16; i < seasonMaxId + 1; i++)
+        for (var i = 17; i < seasonMaxId + 1; i++)
         {
             var season = Data.Seasons.First(x => x.Id == i);
             var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
