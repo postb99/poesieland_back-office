@@ -33,22 +33,26 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetInfo(string line)
     {
-        return line?.Substring(6);
+        var value = line?.Substring(6);
+        return value == "\"\"" ? null : value;
     }
 
     public string? GetType(string line)
     {
-        return line?.Substring(6).CleanedContent();
+        var value = line?.Substring(6).CleanedContent();
+        return value == "\"\"" ? null : value;
     }
 
     public string? GetAcrostiche(string line)
     {
-        return line?.Substring(12).CleanedContent();
+        var value = line?.Substring(12).CleanedContent();
+        return value == "\"\"" ? null : value;
     }
 
     public string GetVerseLength(string line)
     {
-        return line.Substring(13);
+        var value = line.Substring(13);
+        return value == "\"\"" ? null : value;
     }
     
     public int GetWeight(string line)
