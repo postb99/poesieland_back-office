@@ -18,13 +18,16 @@ public static class StringExtensions
         return cleaned;
     }
 
+    /// <summary>
+    /// Expect a quoted string, cleanup the quotes around the string and the escaping of any quote into the string.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
     public static string? CleanedContent(this string? s)
     {
-        var unescaped = s.Unescaped();
+        if (s.Length < 2) return null;
+        var unescaped = s.Substring(1, s.Length - 2).Unescaped();
         if (unescaped == null) return null;
-        var cleaned = s.Replace("\\", "").Replace("\"\"", "\"");
-        if (cleaned.StartsWith("\"") && !cleaned.EndsWith("\"")) return cleaned.TrimEnd('"');
-        if (!cleaned.StartsWith("\"") && cleaned.EndsWith("\"")) return cleaned.TrimStart('"');
-        return cleaned.Trim('"');
+        return unescaped.Replace("\\", "");
     }
 }

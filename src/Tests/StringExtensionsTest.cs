@@ -52,12 +52,10 @@ public class StringExtensionsTest
     }
     
     [Theory]
-    [InlineData("\\\"Test1\\\"", "Test1")]
-    [InlineData("\"Test2\"", "Test2")]
-    [InlineData("Test3", "Test3")]
-    [InlineData("Text4 with a \\\"quote\\\" into", "Text4 with a \"quote\" into")]
-    [InlineData("Text5 with an end \\\"quote\\\"", "Text5 with an end \"quote\"")]
-    [InlineData("\\\"Start quote\\\" for text6", "\"Start quote\" for text6")]
+    [InlineData("\"Test1\"", "Test1")]
+    [InlineData("\"Text2 with a \\\"quote\\\" into\"", "Text2 with a \"quote\" into")]
+    [InlineData("\"Text3 with an end \\\"quote\\\"\"", "Text3 with an end \"quote\"")]
+    [InlineData("\"\\\"Start quote\\\" for text4\"", "\"Start quote\" for text4")]
     public void ShouldBeCleanedContent(string input, string expected)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);

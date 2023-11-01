@@ -18,13 +18,13 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public string GetTextDate(string line)
     {
-        return DateTime.ParseExact(line.Substring(7).CleanedContent(), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None)
+        return DateTime.ParseExact(line.Substring(7), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None)
             .ToString("dd.MM.yyyy");
     }
 
     public string? GetInfo(string line)
     {
-        return line.Substring(8, line.Length - 9).CleanedContent();
+        return line.Substring(7).CleanedContent();
     }
 
     public string? GetAcrostiche(string line)
@@ -55,8 +55,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildCategories(string line)
     {
-        //_categories = line.Substring(13).Trim('[').Trim(']').Split('"').Select(x => x.CleanedContent()).Where(x => x != null && x != " " && x != ", ").ToList();
-        _categories = line.Substring(13).Trim('[').Trim(']').Split('"').Select(x => x.CleanedContent()).Where(x => x != null && x != ", ").ToList();
+        _categories = line.Substring(13).Trim('[').Trim(']').Split('"').Where(x => x != "" && x != ", ").ToList();
     }
 
     public void BuildTags()
