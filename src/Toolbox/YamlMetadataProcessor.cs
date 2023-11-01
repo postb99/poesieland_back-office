@@ -33,7 +33,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetInfo(string line)
     {
-        return line?.Substring(6).CleanedContent();
+        return line?.Substring(6);
     }
 
     public string? GetType(string line)
@@ -76,13 +76,14 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public void AddValue(string line, int nbSpaces)
     {
+        var lineValue = line.Substring(nbSpaces + 2);
         switch (_isProcessingList)
         {
             case IsProcessingList.Categories:
-                _categories.Add(line.Substring(nbSpaces + 2));
+                _categories.Add(lineValue);
                 break;
             case IsProcessingList.Tags:
-                _tags.Add(line.Substring(nbSpaces + 2).CleanedContent());
+                _tags.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
                 break;
         }
     }

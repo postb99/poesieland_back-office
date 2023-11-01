@@ -6,28 +6,27 @@ namespace Tests;
 
    public class YamlMetadataProcessorTest
     {
-        [Fact(Skip = "Metadata updated to TOML")]
+        [Fact]
         private void ShouldImportYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-                configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\sur_les_toits_la_pluie.md");
+                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
             var poemContentImporter = new PoemContentImporter();
             var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            poem.Title.Should().Be("Sur les toits la pluie");
-            poem.Id.Should().Be("sur_les_toits_la_pluie_16");
-            poem.Acrostiche.Should().Be("Sur les toits la pluie");
-            poem.TextDate.Should().Be("31.05.2004");
+            poem.Title.Should().Be("Saisons");
+            poem.Id.Should().Be("saisons_18");
+            //poem.Acrostiche.Should().Be("Sur les toits la pluie");
+            poem.TextDate.Should().Be("01.11.2023");
             poem.Categories.Count.Should().Be(1);
-            poem.Categories.First().Name.Should().Be("Nature");
-            poem.Categories.First().SubCategories.Count.Should().Be(1);
-            poem.Categories.First().SubCategories.First().Should().Be("Eau douce");
-            poem.VerseLength.Should().Be("6");
+            poem.Categories.First().Name.Should().Be("Saisons");
+            poem.Categories.First().SubCategories.Count.Should().Be(4);
+            poem.Categories.First().SubCategories.First().Should().Be("Automne");
+            poem.VerseLength.Should().Be("8");
             poem.PoemType.Should().BeNull();
-            poem.Info.Should().BeNull();
-            position.Should().Be(34);
+            position.Should().Be(11);
         }
 
         [Fact(Skip = "Metadata updated to TOML")]
@@ -57,17 +56,17 @@ namespace Tests;
             poem.PoemType.Should().Be("pantoun");
         }
 
-        [Fact(Skip = "Metadata updated to TOML")]
+        [Fact]
         private void ShouldImportInfoYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-                configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\je_vivrai.md");
+                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
             var poemContentImporter = new PoemContentImporter();
             var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            poem.Info.Should().Be("Les états d'âme d'une catherinette");
+            poem.Info.Should().Be("Reprise des deux premiers vers d'un [poème de 1997](../3_troisieme_saison/est_ce_un_automne) mais pour exprimer une autre idée");
         }
 
         [Fact(Skip = "Metadata updated to TOML")]
@@ -107,16 +106,18 @@ namespace Tests;
                 .Be("Ville");
         }
 
-        [Fact(Skip = "Metadata updated to TOML")]
+        [Fact]
         private void ShouldExtractTags()
         {
             var configuration = Helpers.GetConfiguration();
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-                configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\givre.md");
+                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
             var poemContentImporter = new PoemContentImporter();
             var yearAndTags = poemContentImporter.Extract(poemContentFilePath);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             yearAndTags.tags.Count.Should().Be(2);
+            yearAndTags.tags[0].Should().Be("2023");
+            yearAndTags.tags[1].Should().Be("Saisons");
         }
     }

@@ -40,7 +40,7 @@ public class PoemContentImporter
         } while (line != null);
 
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
-        
+
         if (_poem.VerseLength == "-1")
         {
             if (_poem.Info == null || !_poem.Info!.StartsWith("Vers variable : "))
@@ -51,12 +51,18 @@ public class PoemContentImporter
 
             _poem.VerseLength = _poem.Info.Substring(16);
         }
-        
+
         return (_poem, _position);
     }
 
     public (int year, List<string> tags) Extract(string contentFilePath)
     {
+        _isInMetadata = false;
+        _metadataProcessor = null;
+        _contentProcessor = null;
+        HasYamlMetadata = false;
+        HasTomlMetadata = false;
+        
         using var streamReader = new StreamReader(contentFilePath);
         string line;
         (int year, List<string> tags) output = new();
@@ -66,6 +72,7 @@ public class PoemContentImporter
             ProcessLine(line, ref output);
         } while (line != null);
 
+        output.tags = _metadataProcessor.GetTags();
         return output;
     }
 
@@ -89,28 +96,23 @@ public class PoemContentImporter
             _isInMetadata = !_isInMetadata;
         }
 
-        if (_isInMetadata)
+        if (!_isInMetadata) return;
+
+        if (line.StartsWith("date"))
         {
-            if (line.StartsWith("date"))
-            {
-                output.year = int.Parse(_metadataProcessor.GetTextDate(line).Substring(6));
-            }
-            else if (line.StartsWith("tags"))
-            {
-                _metadataProcessor.BuildTags();
-            }
-            else if (line.StartsWith("  - "))
-            {
-                _metadataProcessor.AddValue(line, 2);
-            }
-            else if (line.StartsWith("    - "))
-            {
-                _metadataProcessor.AddValue(line, 4);
-            }
+            output.year = int.Parse(_metadataProcessor.GetTextDate(line).Substring(6));
         }
-        else
+        else if (line.StartsWith("tags"))
         {
-            output.tags = _metadataProcessor.GetTags();
+            _metadataProcessor.BuildTags();
+        }
+        else if (line.StartsWith("  - "))
+        {
+            _metadataProcessor.AddValue(line, 2);
+        }
+        else if (line.StartsWith("    - "))
+        {
+            _metadataProcessor.AddValue(line, 4);
         }
     }
 
@@ -204,7 +206,8 @@ public class PoemContentImporter
         foreach (var metadataCategory in metadataCategories)
         {
             var settingsCategory =
-                storageSettings.Categories.FirstOrDefault(x => x.Subcategories.Select(x => x.Name).Contains(metadataCategory));
+                storageSettings.Categories.FirstOrDefault(x =>
+                    x.Subcategories.Select(x => x.Name).Contains(metadataCategory));
             if (settingsCategory == null)
             {
                 throw new InvalidOperationException(
