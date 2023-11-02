@@ -274,6 +274,17 @@ public class Program
         Console.WriteLine(seasonId == 0
             ? "All seasons categories pie chart data file OK"
             : $"Season {seasonId} categories pie chart data file OK");
+        
+        _engine.GeneratePoemsByDayRadarChart(null);
+        Console.WriteLine("Poems by day chart data file OK");
+        _engine.GeneratePoemsByDayRadarChart("Printemps");
+        Console.WriteLine("Poems by day for 'Printemps' chart data file OK");
+        _engine.GeneratePoemsByDayRadarChart("Eté");
+        Console.WriteLine("Poems by day for 'Eté' chart data file OK");
+        _engine.GeneratePoemsByDayRadarChart("Automne");
+        Console.WriteLine("Poems by day for 'Automne' chart data file OK");
+        _engine.GeneratePoemsByDayRadarChart("Hiver");
+        Console.WriteLine("Poems by day for 'Hiver' chart data file OK");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
@@ -298,7 +309,7 @@ public class Program
         else
         {
             _engine.GeneratePoemsByDayRadarChart(choice);
-            Console.WriteLine($"Poems by day chart data file for category {choice} OK");
+            Console.WriteLine($"Poems by day for '{choice}' chart data file OK");
         }
     }
 }

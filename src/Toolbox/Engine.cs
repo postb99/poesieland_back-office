@@ -320,12 +320,12 @@ public class Engine
         foreach (var poemStringDate in poemStringDates)
         {
             var year = poemStringDate.Substring(6);
-            if(year == "1994")
+            if (year == "1994")
                 continue;
             var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
             dataDict[day]++;
         }
-        
+
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         var fileName = storageSubCategory != null
@@ -336,15 +336,18 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
 
         var dataLines = new List<ChartDataFileHelper.DataLine>();
-        
+
         foreach (var monthDay in dataDict.Keys)
         {
-            var day = monthDay.Substring(3);
-            dataLines.Add(new ChartDataFileHelper.DataLine { Label = day == "01" || day == "15" ? $"{day}.{monthDay.Substring(0, 2)}"
-                : "", Value = dataDict[monthDay]});
+            dataLines.Add(new ChartDataFileHelper.DataLine
+            {
+                Label = GetRadarChartLabel(monthDay),
+                Value = dataDict[monthDay]
+            });
         }
+
         chartDataFileHelper.WriteData(dataLines, true);
-        
+
         var chartId = storageSubCategory != null
             ? $"poemDay-{storageSubCategory.ToLowerInvariant()}Radar"
             : "poemDayRadar";
@@ -353,8 +356,44 @@ public class Engine
                 .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory).Color
             : null;
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
-        
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, borderColor, backgroundColor);
+
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, borderColor,
+            backgroundColor);
         streamWriter.Close();
+    }
+
+    private string GetRadarChartLabel(string monthDay)
+    {
+        var day = monthDay.Substring(3);
+        var month = monthDay.Substring(0, 2);
+        switch (month)
+        {
+            case "01":
+                return day == "01" ? "Janvier" : string.Empty;
+            case "02":
+                return day == "01" ? "Février" : string.Empty;
+            case "03":
+                return day == "01" ? "Mars" : day == "20" ? "Printemps" : string.Empty;
+            case "04":
+                return day == "01" ? "Avril" : string.Empty;
+            case "05":
+                return day == "01" ? "Mai" : string.Empty;
+            case "06":
+                return day == "01" ? "Juin" : day == "21" ? "Eté" : string.Empty;
+            case "07":
+                return day == "01" ? "Juillet" : string.Empty;
+            case "08":
+                return day == "01" ? "Août" : string.Empty;
+            case "09":
+                return day == "01" ? "Septembre" : day == "23" ? "Automne" : string.Empty;
+            case "10":
+                return day == "01" ? "Octobre" : string.Empty;
+            case "11":
+                return day == "01" ? "Novembre" : string.Empty;
+            case "12":
+                return day == "01" ? "Décembre" : day == "21" ? "Hiver" : string.Empty;
+            default:
+                return string.Empty;
+        }
     }
 }
