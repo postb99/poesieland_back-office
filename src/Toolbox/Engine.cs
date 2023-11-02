@@ -329,7 +329,7 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         var fileName = storageSubCategory != null
-            ? $"poems-day-{storageSubCategory.ToLowerInvariant()}-radar.js"
+            ? $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js"
             : "poems-day-radar.js";
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
@@ -349,7 +349,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
         var chartId = storageSubCategory != null
-            ? $"poemDay-{storageSubCategory.ToLowerInvariant()}Radar"
+            ? $"poemDay-{storageSubCategory.UnaccentedCleaned()}Radar"
             : "poemDayRadar";
         var borderColor = storageSubCategory != null
             ? _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
