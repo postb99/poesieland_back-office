@@ -17,7 +17,7 @@ public class ChartDataFileHelper
         public string Label { get; }
         public int Value { get; }
 
-        public bool DefaultColor => true;
+        public virtual bool DefaultColor => true;
 
         public DataLine(string label, int value)
         {
@@ -33,7 +33,7 @@ public class ChartDataFileHelper
     {
         public string RgbaColor { get; }
 
-        public bool DefaultColor => false;
+        public override bool DefaultColor => false;
 
         public ColoredDataLine(string label, int value, string rgbaColor) : base(label, value)
         {

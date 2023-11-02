@@ -414,11 +414,11 @@ public class Engine
         foreach (var verseLength in variableVerseLengthRange)
         {
             variableVerseLengthChartData.Add(new ChartDataFileHelper.ColoredDataLine
-                (verseLength, variableVerseLengthData[verseLength], "'rgba(72, 149, 239, 1)'"));
+                (verseLength, variableVerseLengthData[verseLength], "rgba(72, 149, 239, 1)"));
         }
 
         var undefinedVerseLengthChartData = new ChartDataFileHelper.ColoredDataLine
-        ("Pas de données pour l\\'instant", nbUndefinedVerseLength, "'rgb(211, 211, 211)'"
+        ("Pas de données pour l\\'instant", nbUndefinedVerseLength, "rgb(211, 211, 211)"
         );
 
         var dataLines = new List<ChartDataFileHelper.DataLine>();
