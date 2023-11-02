@@ -209,18 +209,18 @@ public class Engine
         {
             var hasQuatrainValue = hasQuatrainsData.ContainsKey(nbVerses) ? hasQuatrainsData[nbVerses] : 0;
             hasQuatrainsChartData.Add(
-                new ChartDataFileHelper.DataLine { Label = "Quatrains", Value = hasQuatrainValue });
+                new ChartDataFileHelper.DataLine("Quatrains", hasQuatrainValue));
 
-            isSonnetChartData.Add(new ChartDataFileHelper.DataLine { Label = string.Empty, Value = 0 });
+            isSonnetChartData.Add(new ChartDataFileHelper.DataLine(string.Empty, 0));
 
-            nbVersesChartData.Add(new ChartDataFileHelper.DataLine
-                { Label = nbVerses.ToString(), Value = nbVersesData[nbVerses] - hasQuatrainValue });
+            nbVersesChartData.Add(new ChartDataFileHelper.DataLine(nbVerses.ToString(),
+                nbVersesData[nbVerses] - hasQuatrainValue));
         }
 
         var index = nbVersesRange.FindIndex(x => x == 14);
-        isSonnetChartData[index] = new ChartDataFileHelper.DataLine { Label = "Sonnets", Value = nbSonnets };
+        isSonnetChartData[index] = new ChartDataFileHelper.DataLine("Sonnets", nbSonnets);
         nbVersesChartData[index] = new ChartDataFileHelper.DataLine
-            { Label = nbVersesChartData[index].Label, Value = nbVersesChartData[index].Value - nbSonnets };
+            (nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
 
         chartDataFileHelper.WriteData(nbVersesChartData, false);
         chartDataFileHelper.WriteData(hasQuatrainsChartData, false);
@@ -236,7 +236,7 @@ public class Engine
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, $"season-{seasonId}-pie.js"));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie, 1);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         var byStorageSubcategoryCount = new Dictionary<string, int>();
 
@@ -264,11 +264,10 @@ public class Engine
         {
             if (byStorageSubcategoryCount.ContainsKey(subcategory))
                 pieChartData.Add(new ChartDataFileHelper.ColoredDataLine
-                {
-                    Label = subcategory, Value = byStorageSubcategoryCount[subcategory],
-                    RgbColor = storageSettings.Categories.SelectMany(x => x.Subcategories)
+                (subcategory, byStorageSubcategoryCount[subcategory],
+                    storageSettings.Categories.SelectMany(x => x.Subcategories)
                         .First(x => x.Name == subcategory).Color
-                });
+                ));
         }
 
         chartDataFileHelper.WriteData(pieChartData);
@@ -339,11 +338,8 @@ public class Engine
 
         foreach (var monthDay in dataDict.Keys)
         {
-            dataLines.Add(new ChartDataFileHelper.DataLine
-            {
-                Label = GetRadarChartLabel(monthDay),
-                Value = dataDict[monthDay]
-            });
+            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarChartLabel(monthDay), dataDict[monthDay]
+            ));
         }
 
         chartDataFileHelper.WriteData(dataLines, true);
@@ -361,6 +357,81 @@ public class Engine
             backgroundColor);
         streamWriter.Close();
     }
+
+    public void GeneratePoemsVerseLengthBarChartDataFile()
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "poems-verse-length-bar.js"));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 1);
+        chartDataFileHelper.WriteBeforeData();
+        var regularVerseLengthData = new Dictionary<int, int>();
+        var variableVerseLengthData = new Dictionary<string, int>();
+        var nbUndefinedVerseLength = 0;
+        foreach (var poem in Data.Seasons.SelectMany(x => x.Poems))
+        {
+            if (string.IsNullOrEmpty(poem.VerseLength))
+            {
+                nbUndefinedVerseLength++;
+            }
+            else if (poem.VerseLength.Contains(','))
+            {
+                if (variableVerseLengthData.TryGetValue(poem.VerseLength, out var _))
+                {
+                    variableVerseLengthData[poem.VerseLength]++;
+                }
+                else
+                {
+                    variableVerseLengthData[poem.VerseLength] = 1;
+                }
+            }
+            else
+            {
+                var verseLength = int.Parse(poem.VerseLength);
+                if (regularVerseLengthData.TryGetValue(verseLength, out var _))
+                {
+                    regularVerseLengthData[verseLength]++;
+                }
+                else
+                {
+                    regularVerseLengthData[verseLength] = 1;
+                }
+            }
+        }
+
+        var regularVerseLengthRange = regularVerseLengthData.Keys.Order().ToList();
+        var variableVerseLengthRange = variableVerseLengthData.Keys.Order().ToList();
+
+        var regularVerseLengthChartData = new List<ChartDataFileHelper.DataLine>();
+        var variableVerseLengthChartData = new List<ChartDataFileHelper.ColoredDataLine>();
+
+        foreach (var verseLength in regularVerseLengthRange)
+        {
+            regularVerseLengthChartData.Add(new ChartDataFileHelper.DataLine(
+                verseLength.ToString(), regularVerseLengthData[verseLength]));
+        }
+
+        foreach (var verseLength in variableVerseLengthRange)
+        {
+            variableVerseLengthChartData.Add(new ChartDataFileHelper.ColoredDataLine
+                (verseLength, variableVerseLengthData[verseLength], "'rgba(72, 149, 239, 1)'"));
+        }
+
+        var undefinedVerseLengthChartData = new ChartDataFileHelper.ColoredDataLine
+        ("Pas de données pour l\\'instant", nbUndefinedVerseLength, "'rgb(211, 211, 211)'"
+        );
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        dataLines.AddRange(regularVerseLengthChartData);
+        dataLines.AddRange(variableVerseLengthChartData);
+        dataLines.Add(undefinedVerseLengthChartData);
+
+        chartDataFileHelper.WriteData(dataLines, true);
+
+        chartDataFileHelper.WriteAfterData("poemVerseLengthBar", new[] { "Poèmes" });
+        streamWriter.Close();
+    }
+
 
     private string GetRadarChartLabel(string monthDay)
     {

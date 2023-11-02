@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Data.Common;
+using System.Text;
 
 namespace Toolbox;
 
@@ -11,20 +12,33 @@ public class ChartDataFileHelper
         Radar
     }
 
-    public struct DataLine
+    public class DataLine
     {
-        public string Label;
-        public int Value;
+        public string Label { get; }
+        public int Value { get; }
+
+        public bool DefaultColor => true;
+
+        public DataLine(string label, int value)
+        {
+            Label = label;
+            Value = value;
+        }
     }
 
     /// <summary>
-    /// RgbColor sample value: "rgb(255, 205, 86)".
+    /// RgbaColor sample value: "rgb(255, 205, 86)", "rgba(255, 205, 86, 0.5)".
     /// </summary>
-    public struct ColoredDataLine
+    public class ColoredDataLine : DataLine
     {
-        public string Label;
-        public int Value;
-        public string RgbColor;
+        public string RgbaColor { get; }
+
+        public bool DefaultColor => false;
+
+        public ColoredDataLine(string label, int value, string rgbaColor) : base(label, value)
+        {
+            RgbaColor = rgbaColor;
+        }
     }
 
     private readonly StreamWriter _streamWriter;
@@ -106,7 +120,9 @@ public class ChartDataFileHelper
 
         foreach (var dataLine in dataLines)
         {
-            _streamWriter.WriteLine($"    {{ label: '{dataLine.Label}', value: {dataLine.Value} }},");
+            _streamWriter.WriteLine(dataLine.DefaultColor
+                ? $"    {{ label: '{dataLine.Label}', value: {dataLine.Value} }},"
+                : $"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{((ColoredDataLine)dataLine).RgbaColor}' }},");
         }
 
         if (_nbDatasets > 1)
@@ -123,7 +139,7 @@ public class ChartDataFileHelper
         foreach (var dataLine in dataLines)
         {
             _streamWriter.WriteLine(
-                $"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{dataLine.RgbColor}' }},");
+                $"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{dataLine.RgbaColor}' }},");
         }
 
         _streamWriter.Flush();
