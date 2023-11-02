@@ -358,7 +358,7 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GeneratePoemsVerseLengthBarChartDataFile()
+    public void GeneratePoemVersesLengthBarChartDataFile()
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);

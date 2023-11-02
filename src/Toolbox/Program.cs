@@ -101,6 +101,9 @@ public class Program
             case MainMenuSettings.MenuChoices.GeneratePoemsLengthBarChartDataFile:
                 GeneratePoemsLengthBarChartDataFile();
                 return true;
+            case MainMenuSettings.MenuChoices.GeneratePoemVersesLengthBarChartDataFile:
+                GeneratePoemVersesLengthBarChartDataFile();
+                return true;
             case MainMenuSettings.MenuChoices.GenerateSeasonCategoriesPieChartDataFile:
                 GenerateSeasonCategoriesPieChart(menuChoice);
                 return true;
@@ -225,6 +228,12 @@ public class Program
         _engine.GeneratePoemsLengthBarChartDataFile();
         Console.WriteLine("Poems length bar chart data file OK");
     }
+    
+    private static void GeneratePoemVersesLengthBarChartDataFile()
+    {
+        _engine.GeneratePoemVersesLengthBarChartDataFile();
+        Console.WriteLine("Poem verses length bar chart data file OK");
+    }
 
     private static void GenerateSeasonCategoriesPieChart(MenuItem menuChoice)
     {
@@ -258,6 +267,8 @@ public class Program
     private static void GenerateDependantChartDataFiles(int seasonId)
     {
         GeneratePoemsLengthBarChartDataFile();
+
+        GeneratePoemVersesLengthBarChartDataFile();
 
         if (seasonId == 0)
         {
