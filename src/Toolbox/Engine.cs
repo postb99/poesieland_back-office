@@ -387,7 +387,7 @@ public class Engine
             {
                 nbUndefinedVerseLength++;
             }
-            else if (poem.VerseLength.Contains(','))
+            else if (poem.VerseLength.Contains(',') || poem.VerseLength.Contains(' '))
             {
                 if (variableVerseLengthData.TryGetValue(poem.VerseLength, out var _))
                 {
