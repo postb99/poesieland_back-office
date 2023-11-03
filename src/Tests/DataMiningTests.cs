@@ -23,8 +23,10 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         int percentage = poemsWithVerseLength * 100 / poems.Count();
         _testOutputHelper.WriteLine("{0}/{1} poems ({2} %) with verse length specified",
             poemsWithVerseLength, poems.Count(), percentage);
-        _testOutputHelper.WriteLine("First poem without verse length specified: {0}",
+        _testOutputHelper.WriteLine("[INFO] First poem without verse length specified: {0}",
             poems.FirstOrDefault(x => x.VerseLength == null)?.Id);
+        _testOutputHelper.WriteLine("[ERROR] First poem with verse length equal to '0': {0}",
+            poems.FirstOrDefault(x => x.VerseLength == "0")?.Id);
     }
 
     [Fact]

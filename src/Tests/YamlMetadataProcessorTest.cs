@@ -18,7 +18,6 @@ namespace Tests;
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.Title.Should().Be("Saisons");
             poem.Id.Should().Be("saisons_18");
-            //poem.Acrostiche.Should().Be("Sur les toits la pluie");
             poem.TextDate.Should().Be("01.11.2023");
             poem.Categories.Count.Should().Be(1);
             poem.Categories.First().Name.Should().Be("Saisons");
@@ -67,6 +66,33 @@ namespace Tests;
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.Info.Should().Be("Reprise des deux premiers vers d'un [poème de 1997](../3_troisieme_saison/est_ce_un_automne) mais pour exprimer une autre idée");
+        }
+        
+        [Fact]
+        private void ShouldImportNullInfoYamlMetadata()
+        {
+            var configuration = Helpers.GetConfiguration();
+            var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\novembre.md");
+            var poemContentImporter = new PoemContentImporter();
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+            poemContentImporter.HasYamlMetadata.Should().BeTrue();
+            poemContentImporter.HasTomlMetadata.Should().BeFalse();
+            poem.Info.Should().BeNull();
+        }
+        
+        [Fact]
+        private void ShouldImportInfoAndVerselengthYamlMetadata()
+        {
+            var configuration = Helpers.GetConfiguration();
+            var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\automne_genereux.md");
+            var poemContentImporter = new PoemContentImporter();
+            var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+            poemContentImporter.HasYamlMetadata.Should().BeTrue();
+            poemContentImporter.HasTomlMetadata.Should().BeFalse();
+            poem.Info.Should().Be("Vers variable : 6, 3");
+            poem.VerseLength.Should().Be("6, 3");
         }
 
         [Fact(Skip = "Metadata updated to TOML")]

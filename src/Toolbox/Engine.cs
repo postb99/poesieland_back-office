@@ -157,6 +157,19 @@ public class Engine
         }
     }
 
+    public void CheckPoemsWithoutVerseLength()
+    {
+        var poems = Data.Seasons.SelectMany(x => x.Poems);
+        var poemsWithVerseLength = poems.Count(x => x.VerseLength != null && x.VerseLength != "0");
+        int percentage = poemsWithVerseLength * 100 / poems.Count();
+        Console.WriteLine("{0}/{1} poems ({2} %) with verse length specified",
+            poemsWithVerseLength, poems.Count(), percentage);
+        Console.WriteLine("[INFO] First poem without verse length specified: {0}",
+            poems.FirstOrDefault(x => x.VerseLength == null)?.Id);
+        Console.WriteLine("[ERROR] First poem with verse length equal to '0': {0}",
+            poems.FirstOrDefault(x => x.VerseLength == "0")?.Id);
+    }
+
     public void GeneratePoemsLengthBarChartDataFile()
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),

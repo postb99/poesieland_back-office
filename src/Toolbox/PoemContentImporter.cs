@@ -79,7 +79,7 @@ public class PoemContentImporter
 
     private void ProcessLine(string? line, ref (int year, List<string> tags) output)
     {
-        if (!_isInMetadata) return;
+        if (!_isInMetadata && (HasTomlMetadata || HasYamlMetadata)) return;
 
         if (line == null || HasTomlMetadata)
             return;

@@ -20,12 +20,12 @@ public class ContentProcessor
             return;
         }
 
-        if (line.StartsWith("{{% notice") || line.StartsWith(("<!-- FM:Snippet:")))
+        if (line.StartsWith("{{% notice") || line.StartsWith("<!-- FM:Snippet:") || line.StartsWith("!["))
         {
             _done = true;
             return;
         }
-
+        
         if (line.Trim() == "\\")
         {
             _isNewParagraph = true;

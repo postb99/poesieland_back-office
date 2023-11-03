@@ -33,8 +33,8 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetInfo(string line)
     {
-        var value = line?.Substring(6);
-        return value == "\"\"" ? null : value;
+        var value = line?.Substring(6).Trim('"');
+        return string.IsNullOrEmpty(value) ? null : value;
     }
 
     public string? GetType(string line)

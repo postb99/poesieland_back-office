@@ -113,6 +113,9 @@ public class Program
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
                 return true;
+            case MainMenuSettings.MenuChoices.CheckPoemsWithoutVerseLength:
+                _engine.CheckPoemsWithoutVerseLength();
+                return true;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
                 Environment.Exit(0);
