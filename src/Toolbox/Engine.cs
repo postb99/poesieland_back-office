@@ -348,11 +348,33 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
 
         var dataLines = new List<ChartDataFileHelper.DataLine>();
+        
+        var dayWithPoems = 0;
+        var dayWithoutPoems = 0;
 
         foreach (var monthDay in dataDict.Keys)
         {
-            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarChartLabel(monthDay), dataDict[monthDay]
+            var value = dataDict[monthDay];
+            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarChartLabel(monthDay), value
             ));
+            if (value == 0)
+            {
+                dayWithoutPoems++;
+            }
+            else
+            {
+                dayWithPoems++;
+            }
+        }
+
+        var specialValue = dataDict["02-29"];
+        if (specialValue == 0)
+        {
+            dayWithoutPoems--;
+        }
+        else
+        {
+            dayWithPoems--;
         }
 
         chartDataFileHelper.WriteData(dataLines, true);
@@ -369,6 +391,21 @@ public class Engine
         chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, borderColor,
             backgroundColor);
         streamWriter.Close();
+        
+        // Second chart
+        if (storageSubCategory != null)
+            return;
+        
+        fileName = "poem-day-pie.js";
+        var streamWriter2 = new StreamWriter(Path.Combine(rootDir, fileName));
+        chartDataFileHelper = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        dataLines = new List<ChartDataFileHelper.DataLine>();
+        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Jours sans écrire", dayWithoutPoems, "rgba(72, 149, 239, 1)"));
+        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Jours de création", dayWithPoems, "rgba(76, 201, 240, 1)"));
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemDayPie", new[] { "Avec ou sans création ?" });
+        streamWriter2.Close();
     }
 
     public void GeneratePoemVersesLengthBarChartDataFile()
