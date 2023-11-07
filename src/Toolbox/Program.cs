@@ -309,7 +309,8 @@ public class Program
         if (string.IsNullOrEmpty(choice))
         {
             _engine.GeneratePoemsByDayRadarChart(null);
-            Console.WriteLine("Poems by day chart data file OK");
+            _engine.GeneratePoemIntensityPieChart();
+            Console.WriteLine("Poems by day and cie chart data file OK");
             return;
         }
 

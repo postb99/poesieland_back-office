@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
@@ -348,7 +349,7 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
 
         var dataLines = new List<ChartDataFileHelper.DataLine>();
-        
+
         var dayWithPoems = 0;
         var dayWithoutPoems = 0;
 
@@ -391,18 +392,20 @@ public class Engine
         chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, borderColor,
             backgroundColor);
         streamWriter.Close();
-        
+
         // Second chart
         if (storageSubCategory != null)
             return;
-        
+
         fileName = "poem-day-pie.js";
         var streamWriter2 = new StreamWriter(Path.Combine(rootDir, fileName));
         chartDataFileHelper = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         dataLines = new List<ChartDataFileHelper.DataLine>();
-        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Jours sans écrire", dayWithoutPoems, "rgba(72, 149, 239, 1)"));
-        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Jours de création", dayWithPoems, "rgba(76, 201, 240, 1)"));
+        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Jours sans écrire", dayWithoutPoems,
+            "rgba(72, 149, 239, 1)"));
+        dataLines.Add(
+            new ChartDataFileHelper.ColoredDataLine("Jours de création", dayWithPoems, "rgba(76, 201, 240, 1)"));
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemDayPie", new[] { "Avec ou sans création ?" });
         streamWriter2.Close();
@@ -482,6 +485,58 @@ public class Engine
         streamWriter.Close();
     }
 
+    public void GeneratePoemIntensityPieChart()
+    {
+        var dataDict = new Dictionary<string, int>();
+
+        foreach (var fullDate in Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).Where(x => x != "01.01.1994").ToList())
+        {
+            if (dataDict.ContainsKey(fullDate))
+            {
+                dataDict[fullDate]++;
+            }
+            else
+            {
+                dataDict.Add(fullDate, 1);
+            }
+        }
+
+        var intensityDict = new Dictionary<int, int>();
+
+        foreach (var data in dataDict)
+        {
+            var value = data.Value;
+            if (intensityDict.ContainsKey(value))
+            {
+                intensityDict[value]++;
+            }
+            else
+            {
+                intensityDict.Add(value, 1);
+            }
+        }
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var orderedIntensitiesKeys = intensityDict.Keys.Order();
+        var baseColor = "rgba(72, 149, 239, {0})";
+        var baseAlpha = 0.5;
+        foreach (var key in orderedIntensitiesKeys)
+        {
+            if (key == 0) continue;
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key} {(key == 1 ? "poème" : "poèmes")}",
+                intensityDict[key], string.Format(baseColor, (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo { NumberDecimalSeparator = ".", NumberDecimalDigits = 1}))));
+        }
+
+        var fileName = "poem-intensity-pie.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemIntensityPie", new[] { "Les jours de création sont-ils intenses ?" });
+        streamWriter.Close();
+    }
 
     private string GetRadarChartLabel(string monthDay)
     {
