@@ -79,12 +79,13 @@ public class TomlMetadataProcessorTest
             .Contain("Crépuscule");
     }
 
-    [Fact]
-    private void ShouldProperlyParseCategories()
+    [Theory]
+    [InlineData("categories = [\"First\", \"Here and there\"]")]
+    [InlineData("categories = [ \"First\", \"Here and there\" ]")]
+    private void ShouldProperlyParseCategories(string categoriesLine)
     {
-        var categories = "categories = [\"First\", \"Here and there\"]";
         var processor = new TomlMetadataProcessor();
-        processor.BuildCategories(categories);
+        processor.BuildCategories(categoriesLine);
         processor.GetCategories().Should().BeEquivalentTo(new List<string> { "First", "Here and there" });
     }
 

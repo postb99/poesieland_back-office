@@ -55,7 +55,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildCategories(string line)
     {
-        _categories = line.Substring(13).Trim('[').Trim(']').Split('"').Where(x => x != "" && x != ", ").ToList();
+        _categories = line.Substring(13).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != "" && x != ", ").ToList();
     }
 
     public void BuildTags()
