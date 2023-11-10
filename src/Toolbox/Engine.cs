@@ -290,12 +290,12 @@ public class Engine
         chartDataFileHelper.WriteAfterData($"season{seasonId}Pie",
             new[]
             {
-                $"{season.NumberedName} Saison : {season.Name} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}"
+                $"{season.LongTitle} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}"
             });
         streamWriter.Close();
     }
 
-    public void GeneratePoemsByDayRadarChart(string? storageSubCategory)
+    public void GeneratePoemsByDayRadarChartDataFile(string? storageSubCategory)
     {
         var poemStringDates = new List<string>();
         poemStringDates = storageSubCategory == null
@@ -485,7 +485,7 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GeneratePoemIntensityPieChart()
+    public void GeneratePoemIntensityPieChartDataFile()
     {
         var dataDict = new Dictionary<string, int>();
 
@@ -538,6 +538,32 @@ public class Engine
         streamWriter.Close();
     }
 
+    public void GenerateAcrosticheBarChartDataFile()
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "acrostiche-bar.js"));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 2);
+        chartDataFileHelper.WriteBeforeData();
+        var nonAcrosticheDataLines = new List<ChartDataFileHelper.DataLine>();
+        var acrosticheDataLines = new List<ChartDataFileHelper.DataLine>();
+
+        foreach (var season in Data.Seasons)
+        {
+            var acrosticheCount = season.Poems.Count(x => !string.IsNullOrEmpty(x.Acrostiche) || x.DoubleAcrostiche != null);
+            var nonAcrosticheCount = season.Poems.Count() - acrosticheCount;
+            
+            nonAcrosticheDataLines.Add(new ChartDataFileHelper.DataLine(season.LongTitle, nonAcrosticheCount));
+            acrosticheDataLines.Add(new ChartDataFileHelper.DataLine(season.LongTitle, acrosticheCount));
+        }
+        
+        chartDataFileHelper.WriteData(nonAcrosticheDataLines, false);
+        chartDataFileHelper.WriteData(acrosticheDataLines, true);
+        
+        chartDataFileHelper.WriteAfterData("acrosticheBar", new[] { "Ordinaire", "Acrostiche" });
+        streamWriter.Close();
+    }
+    
     private string GetRadarChartLabel(string monthDay)
     {
         var day = monthDay.Substring(3);

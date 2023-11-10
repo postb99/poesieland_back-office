@@ -269,10 +269,13 @@ public class Program
 
     private static void GenerateDependantChartDataFiles(int seasonId)
     {
+        // Poem length
         GeneratePoemsLengthBarChartDataFile();
 
+        // Poem verse length
         GeneratePoemVersesLengthBarChartDataFile();
 
+        // Season's pie
         if (seasonId == 0)
         {
             for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
@@ -289,15 +292,16 @@ public class Program
             ? "All seasons categories pie chart data file OK"
             : $"Season {seasonId} categories pie chart data file OK");
 
-        _engine.GeneratePoemsByDayRadarChart(null);
+        // Poem by day
+        _engine.GeneratePoemsByDayRadarChartDataFile(null);
         Console.WriteLine("Poems by day chart data file OK");
 
-        var categories = new[] { "Printemps", "Eté", "Automne", "Hiver", "Flore", "Jardin et paysage", "Aube", "Ciel", "Création", "Crépuscule", "Etre", "Espoir", "Lune", "Neige", "Nuit", "Temps", "Ville" };
-        foreach (var category in categories)
-        {
-            _engine.GeneratePoemsByDayRadarChart(category);
-            Console.WriteLine($"Poems by day for '{category}' chart data file OK");
-        }
+        // Categories' pie
+        GeneratePoemsCategoriesRadarChartDataFile();
+        
+        // Acrostiche
+        _engine.GenerateAcrosticheBarChartDataFile();
+        Console.WriteLine("Acrostiche chart data file OK");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
@@ -307,8 +311,8 @@ public class Program
 
         if (string.IsNullOrEmpty(choice))
         {
-            _engine.GeneratePoemsByDayRadarChart(null);
-            _engine.GeneratePoemIntensityPieChart();
+            _engine.GeneratePoemsByDayRadarChartDataFile(null);
+            _engine.GeneratePoemIntensityPieChartDataFile();
             Console.WriteLine("Poems by day and cie chart data file OK");
             return;
         }
@@ -322,8 +326,18 @@ public class Program
         }
         else
         {
-            _engine.GeneratePoemsByDayRadarChart(choice);
+            _engine.GeneratePoemsByDayRadarChartDataFile(choice);
             Console.WriteLine($"Poems by day for '{choice}' chart data file OK");
+        }
+    }
+
+    private static void GeneratePoemsCategoriesRadarChartDataFile()
+    {
+        var categories = new[] { "Printemps", "Eté", "Automne", "Hiver", "Flore", "Jardin et paysage", "Aube", "Ciel", "Création", "Crépuscule", "Etre", "Espoir", "Lune", "Neige", "Nuit", "Temps", "Ville" };
+        foreach (var category in categories)
+        {
+            _engine.GeneratePoemsByDayRadarChartDataFile(category);
+            Console.WriteLine($"Poems by day for '{category}' chart data file OK");
         }
     }
 }

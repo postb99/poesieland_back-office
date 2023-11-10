@@ -19,12 +19,14 @@ public class Season
 
     [XmlIgnore]
     public string ContentDirectoryName => $"{Id}_{NumberedName.UnaccentedCleaned()}_saison";
+
+    [XmlIgnore] public string LongTitle => $"{NumberedName} Saison : {Name}";
     
     public string IndexFileContent()
     {
         var s = new StringBuilder("+++");
         s.Append(Environment.NewLine);
-        s.Append($"title = \"{NumberedName} Saison : {Name}\"");
+        s.Append($"title = \"{LongTitle}\"");
         s.Append(Environment.NewLine);
         s.Append($"summary = \"{Summary.Escaped()}\"");
         s.Append(Environment.NewLine);
