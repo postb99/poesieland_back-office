@@ -295,6 +295,10 @@ public class Program
         // Poem by day
         _engine.GeneratePoemsByDayRadarChartDataFile(null);
         Console.WriteLine("Poems by day chart data file OK");
+        
+        // Poem interval
+        _engine.GeneratePoemIntervalBarChartDataFile();
+        Console.WriteLine("Poems interval chart data file OK");
 
         // Categories' pie
         GeneratePoemsCategoriesRadarChartDataFile();

@@ -489,7 +489,8 @@ public class Engine
     {
         var dataDict = new Dictionary<string, int>();
 
-        foreach (var fullDate in Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).Where(x => x != "01.01.1994").ToList())
+        foreach (var fullDate in Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate)
+                     .Where(x => x != "01.01.1994").ToList())
         {
             if (dataDict.ContainsKey(fullDate))
             {
@@ -524,7 +525,10 @@ public class Engine
         {
             if (key == 0) continue;
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key} {(key == 1 ? "poème" : "poèmes")}",
-                intensityDict[key], string.Format(baseColor, (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo { NumberDecimalSeparator = ".", NumberDecimalDigits = 1}))));
+                intensityDict[key],
+                string.Format(baseColor,
+                    (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
         var fileName = "poem-intensity-pie.js";
@@ -550,20 +554,102 @@ public class Engine
 
         foreach (var season in Data.Seasons)
         {
-            var acrosticheCount = season.Poems.Count(x => !string.IsNullOrEmpty(x.Acrostiche) || x.DoubleAcrostiche != null);
+            var acrosticheCount =
+                season.Poems.Count(x => !string.IsNullOrEmpty(x.Acrostiche) || x.DoubleAcrostiche != null);
             var nonAcrosticheCount = season.Poems.Count() - acrosticheCount;
-            
+
             nonAcrosticheDataLines.Add(new ChartDataFileHelper.DataLine(season.LongTitle, nonAcrosticheCount));
             acrosticheDataLines.Add(new ChartDataFileHelper.DataLine(season.LongTitle, acrosticheCount));
         }
-        
+
         chartDataFileHelper.WriteData(nonAcrosticheDataLines, false);
         chartDataFileHelper.WriteData(acrosticheDataLines, true);
-        
+
         chartDataFileHelper.WriteAfterData("acrosticheBar", new[] { "Ordinaire", "Acrostiche" });
         streamWriter.Close();
     }
-    
+
+    public void GeneratePoemIntervalBarChartDataFile()
+    {
+        var datesList = Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
+            .Select(x => x.Date).Order().ToList();
+        var intervalDict = new Dictionary<int, int>();
+
+        int dateCount = datesList.Count();
+        for (var i = 1; i < dateCount; i++)
+        {
+            var current = datesList[i];
+            var previous = datesList[i - 1];
+            var dayDiff = (int)(current - previous).TotalDays;
+            if (intervalDict.ContainsKey(dayDiff))
+            {
+                intervalDict[dayDiff]++;
+            }
+            else
+            {
+                intervalDict.Add(dayDiff, 1);
+            }
+        }
+
+        var dataLines = new List<ChartDataFileHelper.ColoredDataLine>();
+        var orderedIntervalKeys = intervalDict.Keys.Order();
+        var zeroDayColor = "rgba(72, 149, 239, 0.5)";
+        var oneDayColor = "rgba(72, 149, 239, 0.6)";
+        var upToSevenDayColor = "rgba(72, 149, 239, 0.7)";
+        var upToThirtyDayColor = "rgba(72, 149, 239, 0.8)";
+        var upToNinetyDayColor = "rgba(72, 149, 239, 0.9)";
+        var moreThanNinetyDayColor = "rgba(72, 149, 239, 0.9)";
+        var moreThanOneYearColor = "rgba(72, 149, 239, 1)";
+        foreach (var key in orderedIntervalKeys)
+        {
+            if (key == 0)
+            {
+                dataLines.Add(
+                    new ChartDataFileHelper.ColoredDataLine("Moins d\\'un jour", intervalDict[key], zeroDayColor));
+            }
+            else if (key == 1)
+            {
+                dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Un jour", intervalDict[key], oneDayColor));
+            }
+            else if (key < 8)
+            {
+                dataLines.Add(
+                    new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key], upToSevenDayColor));
+            }
+            else if (key < 31)
+            {
+                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
+                    upToThirtyDayColor));
+            }
+            else if (key < 91)
+            {
+                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
+                    upToNinetyDayColor));
+            }
+            else if (key < 366)
+            {
+                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
+                    moreThanNinetyDayColor));
+            }
+            else
+            {
+                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
+                    moreThanOneYearColor));
+            }
+        }
+
+        var fileName = "poem-interval-bar.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemIntervalBar",
+            new[] { "Fréquence" });
+        streamWriter.Close();
+    }
+
     private string GetRadarChartLabel(string monthDay)
     {
         var day = monthDay.Substring(3);
