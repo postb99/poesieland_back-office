@@ -175,6 +175,10 @@ public class PoemContentImporter
         {
             _poem.Info = _metadataProcessor!.GetInfo(line);
         }
+        else if (line.StartsWith("picture"))
+        {
+            _poem.Picture = _metadataProcessor!.GetPicture(line);
+        }
         else if (line.StartsWith("acrostiche"))
         {
             _poem.Acrostiche = _metadataProcessor!.GetAcrostiche(line);

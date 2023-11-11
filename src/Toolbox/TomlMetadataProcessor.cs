@@ -26,6 +26,11 @@ public class TomlMetadataProcessor : IMetadataProcessor
     {
         return line.Substring(7).CleanedContent();
     }
+    
+    public string? GetPicture(string line)
+    {
+        return line.Substring(10).CleanedContent();
+    }
 
     public string? GetAcrostiche(string line)
     {

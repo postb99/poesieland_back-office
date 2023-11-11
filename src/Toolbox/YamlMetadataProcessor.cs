@@ -36,6 +36,12 @@ public class YamlMetadataProcessor : IMetadataProcessor
         var value = line?.Substring(6).Trim('"');
         return string.IsNullOrEmpty(value) ? null : value;
     }
+    
+    public string? GetPicture(string line)
+    {
+        var value = line?.Substring(9).Trim('"');
+        return string.IsNullOrEmpty(value) ? null : value;
+    }
 
     public string? GetType(string line)
     {

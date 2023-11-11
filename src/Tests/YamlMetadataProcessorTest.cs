@@ -93,6 +93,7 @@ namespace Tests;
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             poem.Info.Should().Be("Vers variable : 6, 3");
             poem.VerseLength.Should().Be("6, 3");
+            poem.Picture.Should().Be("Le Ravel le 3 novembre 2023");
         }
 
         [Fact(Skip = "Metadata updated to TOML")]

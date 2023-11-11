@@ -8,6 +8,7 @@ public interface IMetadataProcessor
     string GetId(string line);
     string GetTextDate(string line);
     string? GetInfo(string line);
+    string? GetPicture(string line);
     string? GetAcrostiche(string line);
     string? GetVerseLength(string line);
     string? GetType(string line);

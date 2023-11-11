@@ -19,6 +19,8 @@ public class Poem
     [XmlAttribute("longueurVers")] public string? VerseLength { get; set; }
 
     [XmlElement("info")] public string? Info { get; set; }
+    
+    [XmlElement("picture")] public string? Picture { get; set; }
 
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
@@ -96,6 +98,12 @@ public class Poem
         if (Info != null)
         {
             s.Append($"info = \"{Info.Escaped()}\"");
+            s.Append(Environment.NewLine);
+        }
+        
+        if (Picture != null)
+        {
+            s.Append($"picture = \"{Picture.Escaped()}\"");
             s.Append(Environment.NewLine);
         }
 
