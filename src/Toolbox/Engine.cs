@@ -600,6 +600,7 @@ public class Engine
         var upToNinetyDayColor = "rgba(72, 149, 239, 0.9)";
         var moreThanNinetyDayColor = "rgba(72, 149, 239, 0.9)";
         var moreThanOneYearColor = "rgba(72, 149, 239, 1)";
+        var moreThanOneYearCount = 0;
         foreach (var key in orderedIntervalKeys)
         {
             if (key == 0)
@@ -633,10 +634,13 @@ public class Engine
             }
             else
             {
-                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
-                    moreThanOneYearColor));
+                moreThanOneYearCount++;
             }
         }
+        
+        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Plus d\\'un an", moreThanOneYearCount,
+            moreThanOneYearColor));
+
 
         var fileName = "poem-interval-bar.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
