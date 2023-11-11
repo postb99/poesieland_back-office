@@ -19,8 +19,8 @@ public class Poem
     [XmlAttribute("longueurVers")] public string? VerseLength { get; set; }
 
     [XmlElement("info")] public string? Info { get; set; }
-    
-    [XmlElement("picture")] public string? Picture { get; set; }
+
+    [XmlElement("picture")] public List<string>? Pictures { get; set; }
 
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
@@ -32,14 +32,11 @@ public class Poem
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
-    [XmlIgnore]
-    public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
+    [XmlIgnore] public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
-    [XmlIgnore]
-    public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
+    [XmlIgnore] public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
 
-    [XmlIgnore]
-    public int VersesCount => Paragraphs.SelectMany(x => x.Verses).Count();
+    [XmlIgnore] public int VersesCount => Paragraphs.SelectMany(x => x.Verses).Count();
 
     [XmlIgnore] public bool HasQuatrains => VersesCount == Paragraphs.Count * 4 && VersesCount % 4 == 0;
 
@@ -73,7 +70,7 @@ public class Poem
         {
             s.Append($"\"{categoryName.ToLowerInvariant()}\", ");
         }
-        
+
         s.Append($"\"{Date.ToString("yyyy")}\", ");
 
         if (Acrostiche != null)
@@ -100,10 +97,17 @@ public class Poem
             s.Append($"info = \"{Info.Escaped()}\"");
             s.Append(Environment.NewLine);
         }
-        
-        if (Picture != null)
+
+        if (Pictures != null && Pictures.Count > 0)
         {
-            s.Append($"picture = \"{Picture.Escaped()}\"");
+            s.Append("pictures = [");
+            foreach (var picture in Pictures)
+            {
+                s.Append($"\"{picture}\", ");
+            }
+
+            s.Remove(s.Length - 2, 2);
+            s.Append("]");
             s.Append(Environment.NewLine);
         }
 
@@ -144,6 +148,16 @@ public class Poem
         }
 
         s.Remove(s.Length - 6, 6);
+
+        if (Pictures != null)
+        {
+            for (var i = 0; i < Pictures.Count; i++)
+            {
+                s.Append(Environment.NewLine);
+                s.Append($"![Picture](/images/{Id}_{i}.jpg \"{Pictures[i].Escaped()}\")");
+                s.Append(Environment.NewLine);
+            }
+        }
 
         if (Info != null || Acrostiche != null || DoubleAcrostiche != null)
         {

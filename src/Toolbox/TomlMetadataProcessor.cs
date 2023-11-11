@@ -5,7 +5,14 @@ namespace Toolbox;
 
 public class TomlMetadataProcessor : IMetadataProcessor
 {
+ private IsProcessingList _isProcessingList;
+    private enum IsProcessingList
+    {
+        Pictures
+    }
     private List<string> _categories = new();
+    private List<string> _pictures = new();
+
     public string GetTitle(string line)
     {
         return line.Substring(8).CleanedContent()!;
@@ -26,11 +33,6 @@ public class TomlMetadataProcessor : IMetadataProcessor
     {
         return line.Substring(7).CleanedContent();
     }
-    
-    public string? GetPicture(string line)
-    {
-        return line.Substring(10).CleanedContent();
-    }
 
     public string? GetAcrostiche(string line)
     {
@@ -41,7 +43,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
     {
         return line.Substring(14);
     }
-    
+
     public int GetWeight(string line)
     {
         return int.Parse(line.Substring(9));
@@ -60,7 +62,8 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildCategories(string line)
     {
-        _categories = line.Substring(13).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != "" && x != ", ").ToList();
+        _categories = line.Substring(13).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != "" && x != ", ")
+            .ToList();
     }
 
     public void BuildTags()
@@ -68,9 +71,26 @@ public class TomlMetadataProcessor : IMetadataProcessor
         // Nothing to implement
     }
 
+    public void BuildPictures(string line)
+    {
+        _isProcessingList = IsProcessingList.Pictures;
+        _pictures = new List<string>();
+        if (line.Contains("\""))
+        {
+            _pictures.AddRange(line.Substring(11).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != "" && x != ", ")
+                .ToList());
+        }
+    }
+
     public void AddValue(string line, int nbSpaces)
     {
-        // Nothing to implement
+        var lineValue = line.Substring(nbSpaces + 2);
+        switch (_isProcessingList)
+        {
+            case IsProcessingList.Pictures:
+                _pictures.Add(lineValue.TrimEnd(',').CleanedContent());
+                break;
+        }
     }
 
     public List<string> GetCategories()
@@ -81,5 +101,10 @@ public class TomlMetadataProcessor : IMetadataProcessor
     public List<string> GetTags()
     {
         throw new NotImplementedException();
+    }
+
+    public List<string> GetPictures()
+    {
+        return _pictures;
     }
 }

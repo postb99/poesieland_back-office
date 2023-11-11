@@ -97,4 +97,18 @@ public class TomlMetadataProcessorTest
         var readInfo = processor.GetInfo(info);
         readInfo.Should().Be("It is a \"quoted text\"");
     }
+
+    [Fact]
+    private void ShouldImportPictures()
+    {
+        var configuration = Helpers.GetConfiguration();
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\une_derniere_visite.md");
+        var poemContentImporter = new PoemContentImporter();
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        poemContentImporter.HasTomlMetadata.Should().BeTrue();
+        poemContentImporter.HasYamlMetadata.Should().BeFalse();
+        poem.Pictures.Count.Should().Be(4);
+        poem.Pictures[0].Should().Be("Le puits du château de Ham-sous-Varsberg");
+    }
 }

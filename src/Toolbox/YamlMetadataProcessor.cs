@@ -8,12 +8,14 @@ public class YamlMetadataProcessor : IMetadataProcessor
     private enum IsProcessingList
     {
         Categories,
-        Tags
+        Tags,
+        Pictures
     }
 
     private IsProcessingList _isProcessingList;
     private readonly List<string> _categories = new();
     private readonly List<string> _tags = new();
+    private readonly List<string> _pictures = new();
 
     public string GetTitle(string line)
     {
@@ -83,6 +85,11 @@ public class YamlMetadataProcessor : IMetadataProcessor
     {
         _isProcessingList = IsProcessingList.Tags;
     }
+    
+    public void BuildPictures(string line)
+    {
+        _isProcessingList = IsProcessingList.Pictures;
+    }
 
     public void AddValue(string line, int nbSpaces)
     {
@@ -95,6 +102,9 @@ public class YamlMetadataProcessor : IMetadataProcessor
             case IsProcessingList.Tags:
                 _tags.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
                 break;
+            case IsProcessingList.Pictures:
+                _pictures.Add(lineValue);
+                break;
         }
     }
 
@@ -106,5 +116,10 @@ public class YamlMetadataProcessor : IMetadataProcessor
     public List<string> GetTags()
     {
         return _tags;
+    }
+    
+    public List<string> GetPictures()
+    {
+        return _pictures;
     }
 }

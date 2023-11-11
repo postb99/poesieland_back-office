@@ -39,6 +39,8 @@ public class PoemContentImporter
             ProcessLine(line);
         } while (line != null);
 
+        _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
+        _poem.Pictures = _metadataProcessor.GetPictures();
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
 
         if (_poem.VerseLength == "-1")
@@ -107,13 +109,17 @@ public class PoemContentImporter
         {
             _metadataProcessor.BuildTags();
         }
+        else if (line.StartsWith("    - "))
+        {
+            _metadataProcessor.AddValue(line, 4);
+        }
         else if (line.StartsWith("  - "))
         {
             _metadataProcessor.AddValue(line, 2);
         }
-        else if (line.StartsWith("    - "))
+        else if (line.StartsWith("  ")) // double space only
         {
-            _metadataProcessor.AddValue(line, 4);
+            _metadataProcessor.AddValue(line, 0);
         }
     }
 
@@ -125,13 +131,13 @@ public class PoemContentImporter
         if (line.StartsWith(TomlMarker))
         {
             HasTomlMetadata = true;
-            _metadataProcessor = new TomlMetadataProcessor();
+            _metadataProcessor ??= new TomlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
         else if (line.StartsWith(YamlMarker))
         {
             HasYamlMetadata = true;
-            _metadataProcessor = new YamlMetadataProcessor();
+            _metadataProcessor ??= new YamlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
 
@@ -163,21 +169,25 @@ public class PoemContentImporter
         {
             _metadataProcessor!.BuildTags();
         }
-        else if (line.StartsWith("  - "))
+        else if (line.StartsWith("pictures"))
         {
-            _metadataProcessor!.AddValue(line, 2);
+            _metadataProcessor!.BuildPictures(line);
         }
         else if (line.StartsWith("    - "))
         {
             _metadataProcessor!.AddValue(line, 4);
         }
+        else if (line.StartsWith("  - "))
+        {
+            _metadataProcessor!.AddValue(line, 2);
+        }
+        else if (line.StartsWith("  ")) // double space only
+        {
+            _metadataProcessor!.AddValue(line, 0);
+        }
         else if (line.StartsWith("info"))
         {
             _poem.Info = _metadataProcessor!.GetInfo(line);
-        }
-        else if (line.StartsWith("picture"))
-        {
-            _poem.Picture = _metadataProcessor!.GetPicture(line);
         }
         else if (line.StartsWith("acrostiche"))
         {
@@ -199,8 +209,6 @@ public class PoemContentImporter
         {
             _position = _metadataProcessor!.GetWeight(line) - 1;
         }
-
-        _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
     }
 
     private List<Category> GetCategories(List<string> metadataCategories)

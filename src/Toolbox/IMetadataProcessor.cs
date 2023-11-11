@@ -8,7 +8,6 @@ public interface IMetadataProcessor
     string GetId(string line);
     string GetTextDate(string line);
     string? GetInfo(string line);
-    string? GetPicture(string line);
     string? GetAcrostiche(string line);
     string? GetVerseLength(string line);
     string? GetType(string line);
@@ -16,6 +15,7 @@ public interface IMetadataProcessor
     DoubleAcrostiche GetDoubleAcrostiche(string line);
     void BuildCategories(string line);
     void BuildTags();
+    void BuildPictures(string line);
     /// <summary>
     /// When YAML, add a value to a list of value determined by current context.
     /// </summary>
@@ -23,4 +23,5 @@ public interface IMetadataProcessor
     void AddValue(string line, int nbSpaces);   
     List<string> GetCategories();
     List<string> GetTags();
+    List<string> GetPictures();
 }
