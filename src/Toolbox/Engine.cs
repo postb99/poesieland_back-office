@@ -593,13 +593,15 @@ public class Engine
 
         var dataLines = new List<ChartDataFileHelper.ColoredDataLine>();
         var orderedIntervalKeys = intervalDict.Keys.Order();
-        var zeroDayColor = "rgba(72, 149, 239, 0.5)";
-        var oneDayColor = "rgba(72, 149, 239, 0.6)";
+        var zeroDayColor = "rgba(72, 149, 239, 1)";
+        var oneDayColor = "rgba(72, 149, 239, 0.9)";
         var upToSevenDayColor = "rgba(72, 149, 239, 0.7)";
-        var upToThirtyDayColor = "rgba(72, 149, 239, 0.8)";
-        var upToNinetyDayColor = "rgba(72, 149, 239, 0.9)";
-        var moreThanNinetyDayColor = "rgba(72, 149, 239, 0.9)";
-        var moreThanOneYearColor = "rgba(72, 149, 239, 1)";
+        var upToOneMonthColor = "rgba(72, 149, 239, 0.5)";
+        var upToThreeMonthsColor = "rgba(72, 149, 239, 0.3)";
+        var upToOneYearColor = "rgba(72, 149, 239, 0.2)";
+        var moreThanOneYearColor = "rgba(72, 149, 239, 0.1)";
+        var moreThanOneMonthCount = 0;
+        var moreThanThreeMonthsCount = 0;
         var moreThanOneYearCount = 0;
         foreach (var key in orderedIntervalKeys)
         {
@@ -620,17 +622,15 @@ public class Engine
             else if (key < 31)
             {
                 dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
-                    upToThirtyDayColor));
+                    upToOneMonthColor));
             }
             else if (key < 91)
             {
-                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
-                    upToNinetyDayColor));
+                moreThanOneMonthCount++;
             }
             else if (key < 366)
             {
-                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
-                    moreThanNinetyDayColor));
+                moreThanThreeMonthsCount++;
             }
             else
             {
@@ -638,9 +638,14 @@ public class Engine
             }
         }
         
+        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre un et trois mois", moreThanOneMonthCount,
+            upToThreeMonthsColor));
+        
+        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre trois mois et un an", moreThanThreeMonthsCount,
+            upToOneYearColor));
+
         dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Plus d\\'un an", moreThanOneYearCount,
             moreThanOneYearColor));
-
 
         var fileName = "poem-interval-bar.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
