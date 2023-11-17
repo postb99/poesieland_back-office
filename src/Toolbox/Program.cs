@@ -337,7 +337,7 @@ public class Program
 
     private static void GeneratePoemsCategoriesRadarChartDataFile()
     {
-        var categories = new[] { "Printemps", "Eté", "Automne", "Hiver", "Flore", "Jardin et paysage", "Aube", "Ciel", "Création", "Crépuscule", "Etre", "Espoir", "Lune", "Neige", "Nuit", "Temps", "Ville" };
+        var categories = new[] { "Printemps", "Eté", "Automne", "Hiver", "Flore", "Jardin et paysage", "Aube", "Ciel", "Création", "Crépuscule", "Etre", "Espoir", "Lune", "Neige", "Nuit", "Temps", "Ville", "Animaux" };
         foreach (var category in categories)
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(category);
