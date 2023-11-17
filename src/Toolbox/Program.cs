@@ -234,7 +234,7 @@ public class Program
 
     private static void GeneratePoemVersesLengthBarChartDataFile()
     {
-        _engine.GeneratePoemVersesLengthBarChartDataFile();
+        _engine.GeneratePoemVersesLengthBarChartDataFile(null);
         Console.WriteLine("Poem verses length bar chart data file OK");
     }
 
@@ -272,8 +272,9 @@ public class Program
         // Poem length
         GeneratePoemsLengthBarChartDataFile();
 
-        // Poem verse length
+        // Poem and season verse length
         GeneratePoemVersesLengthBarChartDataFile();
+        _engine.GeneratePoemVersesLengthBarChartDataFile(seasonId);
 
         // Season's pie
         if (seasonId == 0)

@@ -47,6 +47,8 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append($"{{{{< chartjs id=\"season{Id}Pie\" width=\"75%\" jsFile=\"../../charts/season-{Id}-pie.js\" />}}}}");
         s.Append(Environment.NewLine);
+        s.Append($"{{{{< chartjs id=\"season{Id}VerseLengthBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}-verse-length-bar.js\" />}}}}");
+        s.Append(Environment.NewLine);
         return s.ToString();
     }
 }

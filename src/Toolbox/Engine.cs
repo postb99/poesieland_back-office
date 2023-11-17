@@ -52,7 +52,11 @@ public class Engine
     public void GenerateAllSeasonsIndexFile()
     {
         for (var i = 1; i < Data.Seasons.Count + 1; i++)
+        {
             GenerateSeasonIndexFile(i);
+            // useful once
+            //GeneratePoemVersesLengthBarChartDataFile(i);
+        }
     }
 
     public void GeneratePoemFile(Poem poem)
@@ -411,17 +415,24 @@ public class Engine
         streamWriter2.Close();
     }
 
-    public void GeneratePoemVersesLengthBarChartDataFile()
+    public void GeneratePoemVersesLengthBarChartDataFile(int? seasonId)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "poems-verse-length-bar.js"));
+        var fileName = seasonId != null
+            ? $"season-{seasonId}-verse-length-bar.js"
+            : "poems-verse-length-bar.js";
+        var chartId = seasonId != null ? $"season{seasonId}VerseLengthBar" : "poemVerseLengthBar";
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 1);
         chartDataFileHelper.WriteBeforeData();
         var regularVerseLengthData = new Dictionary<int, int>();
         var variableVerseLengthData = new Dictionary<string, int>();
         var nbUndefinedVerseLength = 0;
-        foreach (var poem in Data.Seasons.SelectMany(x => x.Poems))
+        var poems = seasonId != null
+            ? Data.Seasons.First(x => x.Id == seasonId).Poems
+            : Data.Seasons.SelectMany(x => x.Poems);
+        foreach (var poem in poems)
         {
             if (string.IsNullOrEmpty(poem.VerseLength))
             {
@@ -477,11 +488,12 @@ public class Engine
         var dataLines = new List<ChartDataFileHelper.DataLine>();
         dataLines.AddRange(regularVerseLengthChartData);
         dataLines.AddRange(variableVerseLengthChartData);
-        dataLines.Add(undefinedVerseLengthChartData);
+        if(nbUndefinedVerseLength > 0)
+            dataLines.Add(undefinedVerseLengthChartData);
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData("poemVerseLengthBar", new[] { "Poèmes" });
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" });
         streamWriter.Close();
     }
 
