@@ -173,6 +173,11 @@ public class Engine
             poems.FirstOrDefault(x => x.VerseLength == null)?.Id);
         Console.WriteLine("[ERROR] First poem with verse length equal to '0': {0}",
             poems.FirstOrDefault(x => x.VerseLength == "0")?.Id);
+
+        var seasonWithoutAllVerseLength =
+            Data.Seasons.Where(x => x.Poems.Any(x => x.VerseLength == null || x.VerseLength == "0")).ToList();
+        Console.WriteLine("[INFO] IDs of seasons without all verse length specified: {0}",
+            string.Join(',', seasonWithoutAllVerseLength.Select(x => x.Id)));
     }
 
     public void GeneratePoemsLengthBarChartDataFile()
