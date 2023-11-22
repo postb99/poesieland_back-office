@@ -57,8 +57,10 @@ public class PoemContentImporter
         return (_poem, _position);
     }
 
-    public (int year, List<string> tags) Extract(string contentFilePath)
+    public (List<string>, int, string) GetTagsAndYear(string contentFilePath, IConfiguration configuration)
     {
+        _configuration = configuration;
+        _poem = new Poem();
         _isInMetadata = false;
         _metadataProcessor = null;
         _contentProcessor = null;
@@ -67,60 +69,13 @@ public class PoemContentImporter
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
-        (int year, List<string> tags) output = new();
         do
         {
             line = streamReader.ReadLine();
-            ProcessLine(line, ref output);
+            ProcessLine(line);
         } while (line != null);
 
-        if (HasYamlMetadata)
-            output.tags = _metadataProcessor.GetTags();
-        return output;
-    }
-
-    private void ProcessLine(string? line, ref (int year, List<string> tags) output)
-    {
-        if (!_isInMetadata && (HasTomlMetadata || HasYamlMetadata)) return;
-
-        if (line == null || HasTomlMetadata)
-            return;
-
-        if (line.StartsWith(TomlMarker))
-        {
-            HasTomlMetadata = true;
-            HasYamlMetadata = false;
-            return;
-        }
-
-        if (line.StartsWith(YamlMarker))
-        {
-            HasTomlMetadata = false;
-            HasYamlMetadata = true;
-            _metadataProcessor = new YamlMetadataProcessor();
-            _isInMetadata = !_isInMetadata;
-        }
-
-        if (line.StartsWith("date"))
-        {
-            output.year = int.Parse(_metadataProcessor.GetTextDate(line).Substring(6));
-        }
-        else if (line.StartsWith("tags"))
-        {
-            _metadataProcessor.BuildTags();
-        }
-        else if (line.StartsWith("    - "))
-        {
-            _metadataProcessor.AddValue(line, 4);
-        }
-        else if (line.StartsWith("  - "))
-        {
-            _metadataProcessor.AddValue(line, 2);
-        }
-        else if (line.StartsWith("  ")) // double space only
-        {
-            _metadataProcessor.AddValue(line, 0);
-        }
+        return (_metadataProcessor.GetTags(), _poem.Date.Year, _poem.Id);
     }
 
     private void ProcessLine(string? line)

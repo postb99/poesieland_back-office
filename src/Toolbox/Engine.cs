@@ -153,10 +153,10 @@ public class Engine
             var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
             foreach (var poemContentPath in poemContentPaths)
             {
-                var yearAndTags = poemContentImporter.Extract(poemContentPath);
-                if (poemContentImporter.HasYamlMetadata && !yearAndTags.tags.Contains(yearAndTags.year.ToString()))
+                var (tags, year, poemId) = poemContentImporter.GetTagsAndYear(poemContentPath, _configuration);
+                if (poemContentImporter.HasYamlMetadata && !tags.Contains(year.ToString()))
                 {
-                    yield return poemContentPath;
+                    yield return poemId;
                 }
             }
         }
@@ -488,7 +488,7 @@ public class Engine
         var dataLines = new List<ChartDataFileHelper.DataLine>();
         dataLines.AddRange(regularVerseLengthChartData);
         dataLines.AddRange(variableVerseLengthChartData);
-        if(nbUndefinedVerseLength > 0)
+        if (nbUndefinedVerseLength > 0)
             dataLines.Add(undefinedVerseLengthChartData);
 
         chartDataFileHelper.WriteData(dataLines, true);
@@ -649,10 +649,10 @@ public class Engine
                 moreThanOneYearCount++;
             }
         }
-        
+
         dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre un et trois mois", moreThanOneMonthCount,
             upToThreeMonthsColor));
-        
+
         dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre trois mois et un an", moreThanThreeMonthsCount,
             upToOneYearColor));
 

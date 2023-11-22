@@ -191,6 +191,12 @@ public class Program
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
             GenerateDependantChartDataFiles(seasonId);
+
+            var missingYearInTags = _engine.CheckMissingYearTagInYamlMetadata();
+            if (missingYearInTags.Any())
+            {
+                Console.WriteLine($"Missing year in tags for poems: {string.Join(',', missingYearInTags)}");
+            }
         }
         else
         {
@@ -296,14 +302,14 @@ public class Program
         // Poem by day
         _engine.GeneratePoemsByDayRadarChartDataFile(null);
         Console.WriteLine("Poems by day chart data file OK");
-        
+
         // Poem interval
         _engine.GeneratePoemIntervalBarChartDataFile();
         Console.WriteLine("Poems interval chart data file OK");
 
         // Categories' pie
         GeneratePoemsCategoriesRadarChartDataFile();
-        
+
         // Acrostiche
         _engine.GenerateAcrosticheBarChartDataFile();
         Console.WriteLine("Acrostiche chart data file OK");
@@ -338,7 +344,11 @@ public class Program
 
     private static void GeneratePoemsCategoriesRadarChartDataFile()
     {
-        var categories = new[] { "Printemps", "Eté", "Automne", "Hiver", "Flore", "Jardin et paysage", "Aube", "Ciel", "Création", "Crépuscule", "Etre", "Espoir", "Lune", "Neige", "Nuit", "Temps", "Ville", "Animaux" };
+        var categories = new[]
+        {
+            "Printemps", "Eté", "Automne", "Hiver", "Flore", "Jardin et paysage", "Aube", "Ciel", "Création",
+            "Crépuscule", "Etre", "Espoir", "Lune", "Neige", "Nuit", "Temps", "Ville", "Animaux"
+        };
         foreach (var category in categories)
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(category);

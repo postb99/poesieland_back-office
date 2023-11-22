@@ -142,11 +142,11 @@ namespace Tests;
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
             var poemContentImporter = new PoemContentImporter();
-            var yearAndTags = poemContentImporter.Extract(poemContentFilePath);
+            var (tags, year, poemId) = poemContentImporter.GetTagsAndYear(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            yearAndTags.tags.Count.Should().Be(2);
-            yearAndTags.tags[0].Should().Be("2023");
-            yearAndTags.tags[1].Should().Be("Saisons");
+            tags.Count.Should().Be(2);
+            tags[0].Should().Be("2023");
+            tags[1].Should().Be("saisons");
         }
     }

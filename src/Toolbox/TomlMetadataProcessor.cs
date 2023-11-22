@@ -100,7 +100,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public List<string> GetTags()
     {
-        throw new NotImplementedException();
+        return new List<string>();
     }
 
     public List<string> GetPictures()
