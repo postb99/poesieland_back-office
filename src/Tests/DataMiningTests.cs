@@ -156,4 +156,29 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             }
         }
     }
+
+    [Fact]
+    public void PoemsWithoutCapitalLetterAtVerseBeginning()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            var letter = poem.Paragraphs[0].Verses[1][0].ToString();
+            if (letter != letter.ToUpperInvariant())
+            {
+                _testOutputHelper.WriteLine(poem.Id);
+            }
+        }
+    }
+    
+    [Fact]
+    public void PoemsThatCouldHaveQuatrainsButHaveNot()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            if (poem.VersesCount % 4 == 0 && !poem.HasQuatrains)
+            {
+                _testOutputHelper.WriteLine(poem.Id);
+            }
+        }
+    }
 }
