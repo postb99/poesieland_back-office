@@ -182,14 +182,11 @@ public class Engine
 
     public void GeneratePoemsLengthBarChartDataFile()
     {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "poems-length-bar.js"));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 3);
-        chartDataFileHelper.WriteBeforeData();
         var nbVersesData = new Dictionary<int, int>();
-        var hasQuatrainsData = new Dictionary<int, int>();
+        var quatrainsData = new Dictionary<int, int>();
         var nbSonnets = 0;
+        var nbNotQuatrainImpossible = 0;
+        var nbNotQuatrainVoluntarily = 0;
         foreach (var poem in Data.Seasons.SelectMany(x => x.Poems))
         {
             var nbVerses = poem.VersesCount;
@@ -206,13 +203,24 @@ public class Engine
 
             if (hasQuatrains)
             {
-                if (hasQuatrainsData.TryGetValue(nbVerses, out var _))
+                if (quatrainsData.TryGetValue(nbVerses, out var _))
                 {
-                    hasQuatrainsData[nbVerses]++;
+                    quatrainsData[nbVerses]++;
                 }
                 else
                 {
-                    hasQuatrainsData[nbVerses] = 1;
+                    quatrainsData[nbVerses] = 1;
+                }
+            }
+            else
+            {
+                if (nbVerses % 4 != 0)
+                {
+                    nbNotQuatrainImpossible++;
+                }
+                else
+                {
+                    nbNotQuatrainVoluntarily++;
                 }
             }
 
@@ -224,20 +232,31 @@ public class Engine
 
         var nbVersesRange = nbVersesData.Keys.Order().ToList();
 
+        // Bar chart
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "poems-length-bar.js"));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 2);
+        chartDataFileHelper.WriteBeforeData();
+
         var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
-        var hasQuatrainsChartData = new List<ChartDataFileHelper.DataLine>();
         var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
+
+        // Pie chart
+        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "poems-length-pie.js"));
+        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Pie);
+        chartDataFileHelper2.WriteBeforeData();
+
+        var baseColor = "rgba(72, 149, 239, {0})";
+        var baseAlpha = 0.4;
+        var pieChartDataLines = new List<ChartDataFileHelper.DataLine>();
 
         foreach (var nbVerses in nbVersesRange)
         {
-            var hasQuatrainValue = hasQuatrainsData.ContainsKey(nbVerses) ? hasQuatrainsData[nbVerses] : 0;
-            hasQuatrainsChartData.Add(
-                new ChartDataFileHelper.DataLine("Quatrains", hasQuatrainValue));
-
             isSonnetChartData.Add(new ChartDataFileHelper.DataLine(string.Empty, 0));
 
             nbVersesChartData.Add(new ChartDataFileHelper.DataLine(nbVerses.ToString(),
-                nbVersesData[nbVerses] - hasQuatrainValue));
+                nbVersesData[nbVerses]));
         }
 
         var index = nbVersesRange.FindIndex(x => x == 14);
@@ -246,11 +265,31 @@ public class Engine
             (nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
 
         chartDataFileHelper.WriteData(nbVersesChartData, false);
-        chartDataFileHelper.WriteData(hasQuatrainsChartData, false);
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
-        chartDataFileHelper.WriteAfterData("poemLengthBar", new[] { "Poèmes", "Avec quatrains", "Sonnets" });
+        chartDataFileHelper.WriteAfterData("poemLengthBar", new[] { "Poèmes", "Sonnets" });
         streamWriter.Close();
+
+        foreach (var key in nbVersesRange)
+        {
+            if (!quatrainsData.ContainsKey(key)) continue;
+            pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
+                $"{key / 4} {(key == 4 ? "quatrain" : "quatrains")}",
+                quatrainsData[key],
+                string.Format(baseColor,
+                    (baseAlpha + 0.1 * (key / 4 - 1)).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+        }
+
+        pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Nombre de vers non multiple de quatre",
+            nbNotQuatrainImpossible, "rgba(67, 97, 238, 0.9)"));
+        pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
+            "Pas de quatrain car rimes suivies, acrostiche découpé différemment", nbNotQuatrainVoluntarily,
+            "rgba(67, 97, 238, 0.7)"));
+
+        chartDataFileHelper2.WriteData(pieChartDataLines, true);
+        chartDataFileHelper2.WriteAfterData("poemLengthPie", new[] { "En quatrains ?" });
+        streamWriter2.Close();
     }
 
     public void GenerateSeasonCategoriesPieChartDataFile(int seasonId)
