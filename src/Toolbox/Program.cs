@@ -300,15 +300,15 @@ public class Program
             : $"Season {seasonId} categories pie chart data file OK");
 
         // Poem by day
-        _engine.GeneratePoemsByDayRadarChartDataFile(null);
+        _engine.GeneratePoemsByDayRadarChartDataFile(null, null);
         Console.WriteLine("Poems by day chart data file OK");
 
         // Poem interval
         _engine.GeneratePoemIntervalBarChartDataFile();
         Console.WriteLine("Poems interval chart data file OK");
 
-        // Categories' pie
-        GeneratePoemsCategoriesRadarChartDataFile();
+        // Categories' and tags' radar
+        GeneratePoemsCategoriesAndTagsRadarChartDataFile();
 
         // Acrostiche
         _engine.GenerateAcrosticheBarChartDataFile();
@@ -322,7 +322,7 @@ public class Program
 
         if (string.IsNullOrEmpty(choice))
         {
-            _engine.GeneratePoemsByDayRadarChartDataFile(null);
+            _engine.GeneratePoemsByDayRadarChartDataFile(null, null);
             _engine.GeneratePoemIntensityPieChartDataFile();
             Console.WriteLine("Poems by day and cie chart data file OK");
             return;
@@ -337,21 +337,24 @@ public class Program
         }
         else
         {
-            _engine.GeneratePoemsByDayRadarChartDataFile(choice);
+            _engine.GeneratePoemsByDayRadarChartDataFile(choice, null);
             Console.WriteLine($"Poems by day for '{choice}' chart data file OK");
         }
     }
 
-    private static void GeneratePoemsCategoriesRadarChartDataFile()
+    private static void GeneratePoemsCategoriesAndTagsRadarChartDataFile()
     {
-        var categories = new[]
+        var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+
+        foreach (var category in storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).Distinct())
         {
-            "Printemps", "Eté", "Automne", "Hiver", "Flore", "Jardin et paysage", "Aube", "Ciel", "Création",
-            "Crépuscule", "Etre", "Espoir", "Lune", "Neige", "Nuit", "Temps", "Ville", "Animaux"
-        };
-        foreach (var category in categories)
+            _engine.GeneratePoemsByDayRadarChartDataFile(category, null);
+            Console.WriteLine($"Poems by day for '{category}' chart data file OK");
+        }
+        
+        foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
         {
-            _engine.GeneratePoemsByDayRadarChartDataFile(category);
+            _engine.GeneratePoemsByDayRadarChartDataFile(null, category);
             Console.WriteLine($"Poems by day for '{category}' chart data file OK");
         }
     }

@@ -343,40 +343,27 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GeneratePoemsByDayRadarChartDataFile(string? storageSubCategory)
+    public void GeneratePoemsByDayRadarChartDataFile(string? storageSubCategory, string? storageCategory)
     {
         var poemStringDates = new List<string>();
-        poemStringDates = storageSubCategory == null
-            ? Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList()
-            : Data.Seasons.SelectMany(x => x.Poems)
+        if (storageSubCategory != null)
+        {
+            poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
                 .Where(x => x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory))).Select(x => x.TextDate)
                 .ToList();
+        }
+        else if (storageCategory != null)
+        {
+            poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
+                .Where(x => x.Categories.Any(x => x.Name == storageCategory)).Select(x => x.TextDate)
+                .ToList();
+        }
+        else
+        {
+            poemStringDates = Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
+        }
 
-        var dataDict = new Dictionary<string, int>();
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"01-0{i}" : $"01-{i}", 0);
-        for (var i = 1; i < 30; i++)
-            dataDict.Add(i < 10 ? $"02-0{i}" : $"02-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"03-0{i}" : $"03-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"04-0{i}" : $"04-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"05-0{i}" : $"05-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"06-0{i}" : $"06-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"07-0{i}" : $"07-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"08-0{i}" : $"08-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"09-0{i}" : $"09-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"10-0{i}" : $"10-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"11-0{i}" : $"11-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"12-0{i}" : $"12-{i}", 0);
+        var dataDict = InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -389,9 +376,31 @@ public class Engine
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        var fileName = storageSubCategory != null
-            ? $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js"
-            : "poems-day-radar.js";
+        var fileName = string.Empty;
+        
+        var chartId = string.Empty;
+        var borderColor = string.Empty;
+
+        if (storageSubCategory != null)
+        {
+            fileName = $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js";
+            chartId = $"poemDay-{storageSubCategory.UnaccentedCleaned()}Radar";
+            borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
+                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory).Color;
+        }
+        else if (storageCategory != null)
+        {
+            fileName = $"poems-day-{storageCategory.UnaccentedCleaned()}-radar.js";
+            chartId = $"poemDay-{storageCategory.UnaccentedCleaned()}Radar";
+            borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
+                .FirstOrDefault(x => x.Name == storageCategory).Color;
+        }
+        else
+        {
+            fileName = "poems-day-radar.js";
+            chartId = "poemDayRadar";
+        }
+        
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
@@ -428,13 +437,6 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        var chartId = storageSubCategory != null
-            ? $"poemDay-{storageSubCategory.UnaccentedCleaned()}Radar"
-            : "poemDayRadar";
-        var borderColor = storageSubCategory != null
-            ? _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
-                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory).Color
-            : null;
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
 
         chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, borderColor,
@@ -442,8 +444,7 @@ public class Engine
         streamWriter.Close();
 
         // Second chart
-        if (storageSubCategory != null)
-            return;
+        if (storageSubCategory != null || storageCategory != null) return;
 
         fileName = "poem-day-pie.js";
         var streamWriter2 = new StreamWriter(Path.Combine(rootDir, fileName));
@@ -457,6 +458,36 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemDayPie", new[] { "Avec ou sans création ?" });
         streamWriter2.Close();
+    }
+
+    private static Dictionary<string, int> InitMonthDayDictionary()
+    {
+        var dataDict = new Dictionary<string, int>();
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"01-0{i}" : $"01-{i}", 0);
+        for (var i = 1; i < 30; i++)
+            dataDict.Add(i < 10 ? $"02-0{i}" : $"02-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"03-0{i}" : $"03-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"04-0{i}" : $"04-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"05-0{i}" : $"05-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"06-0{i}" : $"06-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"07-0{i}" : $"07-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"08-0{i}" : $"08-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"09-0{i}" : $"09-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"10-0{i}" : $"10-{i}", 0);
+        for (var i = 1; i < 31; i++)
+            dataDict.Add(i < 10 ? $"11-0{i}" : $"11-{i}", 0);
+        for (var i = 1; i < 32; i++)
+            dataDict.Add(i < 10 ? $"12-0{i}" : $"12-{i}", 0);
+        return dataDict;
     }
 
     public void GeneratePoemVersesLengthBarChartDataFile(int? seasonId)
