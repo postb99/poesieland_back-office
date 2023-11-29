@@ -325,6 +325,8 @@ public class Program
             _engine.GeneratePoemsByDayRadarChartDataFile(null, null);
             _engine.GeneratePoemIntensityPieChartDataFile();
             Console.WriteLine("Poems by day and cie chart data file OK");
+            GeneratePoemsCategoriesAndTagsRadarChartDataFile();
+            Console.WriteLine("Categories and tags radar chart data file OK");
             return;
         }
 
