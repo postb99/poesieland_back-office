@@ -45,9 +45,19 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append("---");
         s.Append(Environment.NewLine);
+        s.Append("Catégories");
+        s.Append(Environment.NewLine);
         s.Append($"{{{{< chartjs id=\"season{Id}Pie\" width=\"75%\" jsFile=\"../../charts/season-{Id}-pie.js\" />}}}}");
         s.Append(Environment.NewLine);
+        s.Append("Longueur des vers");
+        s.Append(Environment.NewLine);
         s.Append($"{{{{< chartjs id=\"season{Id}VerseLengthBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}-verse-length-bar.js\" />}}}}");
+        s.Append(Environment.NewLine);
+        s.Append("Longueur des poèmes");
+        s.Append(Environment.NewLine);
+        s.Append($"{{{{< chartjs id=\"season{Id}PoemLengthBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}-poems-length-bar.js\" />}}}}");
+        s.Append(Environment.NewLine);
+        s.Append($"{{{{< chartjs id=\"season{Id}PoemLengthPie\" width=\"75%\" jsFile=\"../../charts/season-{Id}-poems-length-pie.js\" />}}}}");
         s.Append(Environment.NewLine);
         return s.ToString();
     }

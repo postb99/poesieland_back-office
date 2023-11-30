@@ -234,7 +234,7 @@ public class Program
 
     private static void GeneratePoemsLengthBarChartDataFile()
     {
-        _engine.GeneratePoemsLengthBarChartDataFile();
+        _engine.GeneratePoemsLengthBarChartDataFile(null);
         Console.WriteLine("Poems length bar chart data file OK");
     }
 
@@ -275,10 +275,11 @@ public class Program
 
     private static void GenerateDependantChartDataFiles(int seasonId)
     {
-        // Poem length
+        // Poem's and season's poems length
         GeneratePoemsLengthBarChartDataFile();
+        _engine.GeneratePoemsLengthBarChartDataFile(seasonId);
 
-        // Poem and season verse length
+        // Poem's and season's verse length
         GeneratePoemVersesLengthBarChartDataFile();
         _engine.GeneratePoemVersesLengthBarChartDataFile(seasonId);
 
