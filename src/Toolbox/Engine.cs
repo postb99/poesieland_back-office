@@ -301,7 +301,7 @@ public class Engine
         pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Nombre de vers non multiple de quatre",
             nbNotQuatrainImpossible, "rgba(67, 97, 238, 0.9)"));
         pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
-            "Pas de quatrain car rimes suivies, sonnet, acrostiche découpé différemment", nbNotQuatrainVoluntarily,
+            "Pas de quatrain car rimes suivies, acrostiche découpé différemment", nbNotQuatrainVoluntarily,
             "rgba(67, 97, 238, 0.7)"));
 
         chartDataFileHelper2.WriteData(pieChartDataLines, true);
