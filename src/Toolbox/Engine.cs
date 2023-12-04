@@ -521,7 +521,7 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" });
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, string.Empty, string.Empty);
         streamWriter.Close();
     }
 
