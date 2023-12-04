@@ -310,6 +310,12 @@ public class Program
 
         // Categories' and tags' radar
         GeneratePoemsCategoriesAndTagsRadarChartDataFile();
+        // Year tag's radar
+        for (var i = 1995; i < DateTime.Now.Year + 1; i++)
+        {
+            _engine.GeneratePoemsOfYearByDayRadarChartDataFile(i);
+        }
+        Console.WriteLine("Poems of years by day chart data files OK");
 
         // Acrostiche
         _engine.GenerateAcrosticheBarChartDataFile();

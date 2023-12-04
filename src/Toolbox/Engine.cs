@@ -488,6 +488,43 @@ public class Engine
         streamWriter2.Close();
     }
 
+    public void GeneratePoemsOfYearByDayRadarChartDataFile(int year)
+    {
+        var poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
+            .Where(x => x.Date.Year == year).Select(x => x.TextDate)
+            .ToList();
+
+        var dataDict = InitMonthDayDictionary();
+
+        foreach (var poemStringDate in poemStringDates)
+        {
+            var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
+            dataDict[day]++;
+        }
+
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        var fileName = $"poems-day-{year}-radar.js";
+        var chartId = $"poemDay-{year}Radar";
+
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
+        chartDataFileHelper.WriteBeforeData();
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+
+        foreach (var monthDay in dataDict.Keys)
+        {
+            var value = dataDict[monthDay];
+            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarChartLabel(monthDay), value));
+        }
+
+        chartDataFileHelper.WriteData(dataLines, true);
+
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" });
+        streamWriter.Close();
+    }
+
     private static Dictionary<string, int> InitMonthDayDictionary()
     {
         var dataDict = new Dictionary<string, int>();
