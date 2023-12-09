@@ -78,7 +78,7 @@ public class Engine
         season.Poems.ForEach(GeneratePoemFile);
     }
 
-    public bool ImportPoem(string poemId)
+    public Poem? ImportPoem(string poemId)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
@@ -86,14 +86,14 @@ public class Engine
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         if (seasonDirName == null)
         {
-            return false;
+            return null;
         }
 
         var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
         var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
         if (!File.Exists(poemContentPath))
         {
-            return false;
+            return null;
         }
 
         var (poem, position) =
@@ -108,7 +108,7 @@ public class Engine
             targetSeason.Poems.Add(poem);
 
         Save();
-        return true;
+        return poem;
     }
 
     public void ImportSeason(int seasonId)

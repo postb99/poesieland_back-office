@@ -155,7 +155,7 @@ public class Program
         {
             _engine.ImportSeason(seasonId);
             Console.WriteLine("Season import OK");
-            GenerateDependantChartDataFiles(seasonId);
+            GenerateDependantChartDataFiles(seasonId, null);
         }
         else
         {
@@ -185,12 +185,12 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label);
         var poemId = Console.ReadLine();
 
-        var ok = _engine.ImportPoem(poemId);
-        if (ok)
+        var importedPoem = _engine.ImportPoem(poemId);
+        if (importedPoem != null)
         {
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
-            GenerateDependantChartDataFiles(seasonId);
+            GenerateDependantChartDataFiles(seasonId, importedPoem.Date.Year);
 
             var missingYearInTags = _engine.CheckMissingYearTagInYamlMetadata();
             if (missingYearInTags.Any())
@@ -273,7 +273,7 @@ public class Program
         }
     }
 
-    private static void GenerateDependantChartDataFiles(int seasonId)
+    private static void GenerateDependantChartDataFiles(int seasonId, int? poemYear)
     {
         // Poem's and season's poems length
         GeneratePoemsLengthBarChartDataFile();
@@ -311,11 +311,11 @@ public class Program
         // Categories' and tags' radar
         GeneratePoemsCategoriesAndTagsRadarChartDataFile();
         // Year tag's radar
-        for (var i = 1995; i < DateTime.Now.Year + 1; i++)
+        if (poemYear != null)
         {
-            _engine.GeneratePoemsOfYearByDayRadarChartDataFile(i);
+            _engine.GeneratePoemsOfYearByDayRadarChartDataFile(poemYear.Value);
+            Console.WriteLine("Poem's year by day chart data file OK");
         }
-        Console.WriteLine("Poems of years by day chart data files OK");
 
         // Acrostiche
         _engine.GenerateAcrosticheBarChartDataFile();
@@ -355,12 +355,13 @@ public class Program
     {
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
-        foreach (var category in storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).Distinct())
+        foreach (var category in storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
+                     .Distinct())
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(category, null);
             Console.WriteLine($"Poems by day for '{category}' chart data file OK");
         }
-        
+
         foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(null, category);
