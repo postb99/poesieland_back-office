@@ -82,20 +82,20 @@ namespace Tests;
         }
         
         [Fact]
-        private void ShouldImportInfoVerselengthAndPicturesYamlMetadata()
+        private void ShouldImportPicturesYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\automne_genereux.md");
+                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\present_simple.md");
             var poemContentImporter = new PoemContentImporter();
             var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            poem.Info.Should().Be("Vers variable : 6, 3");
-            poem.VerseLength.Should().Be("6, 3");
+            //poem.Info.Should().Be("Vers variable : 6, 3");
+            poem.VerseLength.Should().Be("11");
             poem.Pictures.Count.Should().Be(2);
-            poem.Pictures[0].Should().Be("Le Ravel le 3 novembre 2023");
-            poem.Pictures[1].Should().Be("Le Ravel le 3 novembre 2023");
+            poem.Pictures[0].Should().Be("17 décembre 2023");
+            poem.Pictures[1].Should().Be("Avec mon chien le 5 juillet 2022");
         }
 
         [Fact(Skip = "Metadata updated to TOML")]

@@ -8,7 +8,7 @@ public class ContentProcessorTest
 {
     [Theory]
     [InlineData("16_seizieme_saison\\oiseaux_de_juillet.md", 3, 4)]
-    [InlineData("16_seizieme_saison\\souffle_matin.md", 1, 12)]
+    [InlineData("16_seizieme_saison\\sur_les_toits_la_pluie_16.md", 1, 16)]
     public void ShouldImportParagraphs(string poemContentPath, int paragraphs, int verses)
     {
         var configuration = Helpers.GetConfiguration();
