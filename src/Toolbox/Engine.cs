@@ -693,6 +693,47 @@ public class Engine
         chartDataFileHelper.WriteAfterData("poemIntensityPie", new[] { "Les jours de création sont-ils intenses ?" });
         streamWriter.Close();
     }
+    
+     public void GeneratePoemByDayOfWeekPieChartDataFile()
+    {
+        var dataDict = new Dictionary<int, int>();
+
+        foreach (var dayOfWeek in Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994").Select(x => x.Date.DayOfWeek)
+                     .ToList())
+        {
+            if (dataDict.ContainsKey((int)dayOfWeek))
+            {
+                dataDict[(int)dayOfWeek]++;
+            }
+            else
+            {
+                dataDict.Add((int)dayOfWeek, 1);
+            }
+        }
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var baseColor = "rgba(72, 149, 239, {0})";
+        var baseAlpha = 0.2;
+        int[] daysOfWeek = { 1, 2, 3, 4, 5, 6, 0 };
+        foreach (var key in daysOfWeek)
+        {
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine(key == 1 ? "Lundi" : key == 2 ? "Mardi": key == 3 ? "Mercredi" : key == 4 ? "Jeudi": key == 5 ? "Vendredi" : key == 6 ? "Samedi" : "Dimanche",
+                dataDict[key],
+                string.Format(baseColor,
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+        }
+
+        var fileName = "poem-dayofweek-pie.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", new[] { "Par jour de la semaine" });
+        streamWriter.Close();
+    }
 
     public void GenerateAcrosticheBarChartDataFile()
     {
