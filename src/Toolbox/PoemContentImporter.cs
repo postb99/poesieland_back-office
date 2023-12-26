@@ -51,7 +51,7 @@ public class PoemContentImporter
                     "When verse length is -1, info should give variable length: 'Vers variable : ...'");
             }
 
-            _poem.VerseLength = _poem.Info.Substring(16);
+            _poem.VerseLength = _poem.Info.IndexOf(".") > -1 ? _poem.Info.Substring(16, _poem.Info.IndexOf(".") - 16) : _poem.Info.Substring(16);
         }
 
         return (_poem, _position);
