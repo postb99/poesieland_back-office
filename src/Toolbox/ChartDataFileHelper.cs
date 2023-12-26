@@ -76,7 +76,7 @@ public class ChartDataFileHelper
     }
 
     public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
-        string radarChartBackgroundColor = null)
+        string radarChartBackgroundColor = null, string barChartOptions = "{}")
     {
         _streamWriter.WriteLine("  ];");
 
@@ -92,8 +92,8 @@ public class ChartDataFileHelper
                 chartTitlesBuilder.Remove(chartTitlesBuilder.Length - 1, 1);
 
                 _streamWriter.WriteLine(_nbDatasets == 1
-                    ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data]);"
-                    : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data);");
+                    ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data], {barChartOptions});"
+                    : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data, {barChartOptions});");
                 break;
             case ChartType.Pie:
                 _streamWriter.WriteLine($"  addPieChart('{chartId}', [data], '{chartTitles[0]}');");
