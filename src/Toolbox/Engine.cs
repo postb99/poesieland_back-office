@@ -284,7 +284,7 @@ public class Engine
         chartDataFileHelper.WriteData(nbVersesChartData, false);
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
-        chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" }, null, null, "{ scales: { y: { max: 300 } } }");
+        chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" }, null, null, seasonId == null ? "{ scales: { y: { max: 300 } } }" : "{}");
         streamWriter.Close();
 
         foreach (var key in nbVersesRange)
@@ -633,7 +633,7 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null, "{ scales: { y: { max: 200 } } }");
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null, seasonId == null ? "{ scales: { y: { max: 200 } } }" : "{}");
         streamWriter.Close();
     }
 
