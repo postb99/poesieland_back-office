@@ -633,7 +633,7 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null, seasonId == null ? "{ scales: { y: { max: 200 } } }" : "{}");
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null, seasonId == null ? "{ scales: { y: { max: 210 } } }" : "{}");
         streamWriter.Close();
     }
 

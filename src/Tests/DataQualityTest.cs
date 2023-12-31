@@ -107,4 +107,13 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
                 !string.IsNullOrEmpty(x.DoubleAcrostiche.Second)).Should()
             .BeTrue();
     }
+
+    [Fact]
+    public void ShouldHaveQuatrains()
+    {
+        var poem = _data.Seasons.SelectMany(x => x.Poems).First(x => x.Id == "les_chenes_16");
+        poem.VersesCount.Should().Be(12);
+        poem.Paragraphs.Count.Should().Be(3);
+        poem.HasQuatrains.Should().BeTrue();
+    }
 }
