@@ -59,6 +59,7 @@ public class Engine
             GenerateSeasonIndexFile(i);
             // useful once
             //GeneratePoemVersesLengthBarChartDataFile(i);
+            //GeneratePoemsLengthBarChartDataFile(i);
         }
     }
 
@@ -284,7 +285,8 @@ public class Engine
         chartDataFileHelper.WriteData(nbVersesChartData, false);
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
-        chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" }, null, null, seasonId == null ? "{ scales: { y: { max: 300 } } }" : "{}");
+        chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" }, null, null,
+            seasonId == null ? "{ scales: { y: { max: 300 } } }" : "{}");
         streamWriter.Close();
 
         foreach (var key in nbVersesRange)
@@ -298,11 +300,14 @@ public class Engine
                         { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
-        pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Nombre de vers non multiple de quatre",
-            nbNotQuatrainImpossible, "rgba(67, 97, 238, 0.9)"));
-        pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
-            "Pas de quatrain car rimes suivies, acrostiche découpé différemment", nbNotQuatrainVoluntarily,
-            "rgba(67, 97, 238, 0.7)"));
+        if (nbNotQuatrainImpossible > 0)
+            pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Nombre de vers non multiple de quatre",
+                nbNotQuatrainImpossible, "rgba(67, 97, 238, 0.9)"));
+        
+        if (nbNotQuatrainVoluntarily > 0)
+            pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
+                "Pas de quatrain car rimes suivies, acrostiche découpé différemment", nbNotQuatrainVoluntarily,
+                "rgba(67, 97, 238, 0.7)"));
 
         chartDataFileHelper2.WriteData(pieChartDataLines, true);
         chartDataFileHelper2.WriteAfterData(pieChartId, new[] { "En quatrains ?" });
@@ -521,7 +526,8 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, string.Empty, string.Empty);
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, string.Empty,
+            string.Empty);
         streamWriter.Close();
     }
 
@@ -633,7 +639,8 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null, seasonId == null ? "{ scales: { y: { max: 210 } } }" : "{}");
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null,
+            seasonId == null ? "{ scales: { y: { max: 210 } } }" : "{}");
         streamWriter.Close();
     }
 
@@ -693,12 +700,13 @@ public class Engine
         chartDataFileHelper.WriteAfterData("poemIntensityPie", new[] { "Les jours de création sont-ils intenses ?" });
         streamWriter.Close();
     }
-    
-     public void GeneratePoemByDayOfWeekPieChartDataFile()
+
+    public void GeneratePoemByDayOfWeekPieChartDataFile()
     {
         var dataDict = new Dictionary<int, int>();
 
-        foreach (var dayOfWeek in Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994").Select(x => x.Date.DayOfWeek)
+        foreach (var dayOfWeek in Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
+                     .Select(x => x.Date.DayOfWeek)
                      .ToList())
         {
             if (dataDict.ContainsKey((int)dayOfWeek))
@@ -717,7 +725,13 @@ public class Engine
         int[] daysOfWeek = { 1, 2, 3, 4, 5, 6, 0 };
         foreach (var key in daysOfWeek)
         {
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine(key == 1 ? "Lundi" : key == 2 ? "Mardi": key == 3 ? "Mercredi" : key == 4 ? "Jeudi": key == 5 ? "Vendredi" : key == 6 ? "Samedi" : "Dimanche",
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine(
+                key == 1 ? "Lundi" :
+                key == 2 ? "Mardi" :
+                key == 3 ? "Mercredi" :
+                key == 4 ? "Jeudi" :
+                key == 5 ? "Vendredi" :
+                key == 6 ? "Samedi" : "Dimanche",
                 dataDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
