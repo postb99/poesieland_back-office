@@ -15,18 +15,27 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         _data = data.Engine.Data;
     }
 
-    [Fact]
-    public void PoemsWithSpecifiedVerseLength()
+    [Theory]
+    [InlineData(2)]
+    [InlineData(3)]
+    [InlineData(14)]
+    public void PoemsWithSpecifiedVerseLength(int verseLength)
     {
-        var poems = _data.Seasons.SelectMany(x => x.Poems);
-        var poemsWithVerseLength = poems.Count(x => x.VerseLength != null);
-        int percentage = poemsWithVerseLength * 100 / poems.Count();
-        _testOutputHelper.WriteLine("{0}/{1} poems ({2} %) with verse length specified",
-            poemsWithVerseLength, poems.Count(), percentage);
-        _testOutputHelper.WriteLine("[INFO] First poem without verse length specified: {0}",
-            poems.FirstOrDefault(x => x.VerseLength == null)?.Id);
-        _testOutputHelper.WriteLine("[ERROR] First poem with verse length equal to '0': {0}",
-            poems.FirstOrDefault(x => x.VerseLength == "0")?.Id);
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.VerseLength == verseLength.ToString());
+        
+        _testOutputHelper.WriteLine("Verse length {0}: {1}",
+            verseLength, string.Join(' ', poems.Select(x => x.Id).ToList()));
+    }
+    
+    [Theory]
+    [InlineData(4)]
+    [InlineData(28)]
+    public void PoemsWithSpecifiedLength(int verseCount)
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.VersesCount == verseCount);
+        
+        _testOutputHelper.WriteLine("Verse count {0}: {1}",
+            verseCount, string.Join(' ', poems.Select(x => x.Id).ToList()));
     }
 
     [Fact]
