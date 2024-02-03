@@ -1,5 +1,4 @@
-﻿using System.Data.Common;
-using System.Text;
+﻿using System.Text;
 
 namespace Toolbox;
 
@@ -11,6 +10,9 @@ public class ChartDataFileHelper
         Pie,
         Radar
     }
+
+    public const int VERSE_LENGTH_MAX_Y = 210;
+    public const int NBVERSES_MAX_Y = 300;
 
     public class DataLine
     {

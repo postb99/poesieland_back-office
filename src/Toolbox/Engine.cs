@@ -286,7 +286,9 @@ public class Engine
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
         chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" }, null, null,
-            seasonId == null ? "{ scales: { y: { max: 300 } } }" : "{}");
+            seasonId == null
+                ? "{ scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } } }"
+                : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
 
         foreach (var key in nbVersesRange)
@@ -303,7 +305,7 @@ public class Engine
         if (nbNotQuatrainImpossible > 0)
             pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Nombre de vers non multiple de quatre",
                 nbNotQuatrainImpossible, "rgba(67, 97, 238, 0.9)"));
-        
+
         if (nbNotQuatrainVoluntarily > 0)
             pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
                 "Pas de quatrain car rimes suivies, acrostiche découpé différemment", nbNotQuatrainVoluntarily,
@@ -640,7 +642,9 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
         chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null,
-            seasonId == null ? "{ scales: { y: { max: 210 } } }" : "{}");
+            seasonId == null
+                ? "{ scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } } }"
+                : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
     }
 
