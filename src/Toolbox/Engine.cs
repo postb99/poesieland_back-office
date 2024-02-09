@@ -776,7 +776,7 @@ public class Engine
         chartDataFileHelper.WriteData(nonAcrosticheDataLines, false);
         chartDataFileHelper.WriteData(acrosticheDataLines, true);
 
-        chartDataFileHelper.WriteAfterData("acrosticheBar", new[] { "Ordinaire", "Acrostiche" });
+        chartDataFileHelper.WriteAfterData("acrosticheBar", new[] { "Non acrostiche", "Acrostiche" });
         streamWriter.Close();
     }
 

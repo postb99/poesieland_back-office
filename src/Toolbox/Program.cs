@@ -319,9 +319,9 @@ public class Program
             Console.WriteLine("Poem's year by day chart data file OK");
         }
 
-        // Acrostiche
-        _engine.GenerateAcrosticheBarChartDataFile();
-        Console.WriteLine("Acrostiche chart data file OK");
+        // Acrostiche - not anymore useful
+        // _engine.GenerateAcrosticheBarChartDataFile();
+        // Console.WriteLine("Acrostiche chart data file OK");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
