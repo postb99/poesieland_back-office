@@ -769,8 +769,8 @@ public class Engine
                 season.Poems.Count(x => !string.IsNullOrEmpty(x.Acrostiche) || x.DoubleAcrostiche != null);
             var nonAcrosticheCount = season.Poems.Count() - acrosticheCount;
 
-            nonAcrosticheDataLines.Add(new ChartDataFileHelper.DataLine(season.LongTitle, nonAcrosticheCount));
-            acrosticheDataLines.Add(new ChartDataFileHelper.DataLine(season.LongTitle, acrosticheCount));
+            nonAcrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})", nonAcrosticheCount));
+            acrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})", acrosticheCount));
         }
 
         chartDataFileHelper.WriteData(nonAcrosticheDataLines, false);

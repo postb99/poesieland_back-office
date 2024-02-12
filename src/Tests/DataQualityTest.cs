@@ -25,6 +25,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
         {
             _testOutputHelper.WriteLine($"[{season.Id} - {season.Name}]: {season.Poems.Count}");
         }
+
         seasons.Take(seasons.Count - 1).All(x => x.Poems.Count == 50).Should().BeTrue();
         seasons.Skip(seasons.Count - 1).Single(x => x.Poems.Count <= 50).Should().NotBeNull();
     }
@@ -38,6 +39,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
             _testOutputHelper.WriteLine("[{0}]: {1} words (info: {2} words)", season.Name,
                 season.Summary.Split(' ').Length, season.Introduction.Split(' ').Length);
         }
+
         seasons.All(x => x.Summary.Split(' ').Length <= 70).Should().BeTrue();
     }
 
@@ -64,7 +66,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     {
         var _ = _data.Seasons.SelectMany(x => x.Poems).Select(x => x.Date);
     }
-    
+
     [Fact]
     public void PoemShouldHaveCategory()
     {
@@ -76,29 +78,31 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).Should().BeTrue();
     }
-    
+
     [Fact]
     public void PoemShouldHaveSeasonId()
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0).Should().BeTrue();
     }
-    
+
     [Fact]
     public void ParagraphShouldHaveVerses()
     {
-        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).Should().BeTrue();
+        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).Should()
+            .BeTrue();
     }
-    
+
     [Fact]
     public void CategoryShouldHaveSubCategory()
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Any(y => y.SubCategories.Count == 0))
             .ToList();
-        poems.ForEach(x => _testOutputHelper.WriteLine("[{0}] {1}", x.Id, string.Join(',', x.Categories.Where(x => x.SubCategories.Count == 0).Select(x => x.Name))));
+        poems.ForEach(x => _testOutputHelper.WriteLine("[{0}] {1}", x.Id,
+            string.Join(',', x.Categories.Where(x => x.SubCategories.Count == 0).Select(x => x.Name))));
 
         poems.Count.Should().Be(0);
     }
-    
+
     [Fact]
     public void SpecialAcrosticheShouldBeConsistent()
     {
@@ -115,5 +119,16 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
         poem.VersesCount.Should().Be(12);
         poem.Paragraphs.Count.Should().Be(3);
         poem.HasQuatrains.Should().BeTrue();
+    }
+
+    [Theory]
+    [InlineData(1, "1994 - 1996")]
+    [InlineData(2, "1996")]
+    [InlineData(5, "1997 - 1998")]
+    [InlineData(19, "2024")]
+    public void ShouldGetYears(int seasonId, string expectedValue)
+    {
+        var season = _data.Seasons.First(x => x.Id == seasonId);
+        season.Years.Should().Be(expectedValue);
     }
 }
