@@ -286,8 +286,8 @@ public class Engine
         chartDataFileHelper.WriteData(nbVersesChartData, false);
         chartDataFileHelper.WriteData(isSonnetChartData, true);
 
-        chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" }, null, null,
-            seasonId == null
+        chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" },
+            barChartOptions: seasonId == null
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
@@ -642,8 +642,8 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" }, null, null,
-            seasonId == null
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" },
+            barChartOptions: seasonId == null
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
@@ -874,7 +874,8 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData(seasonId == null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
-            new[] { "Fréquence" });
+            new[] { "Fréquence" },
+            barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
     }
 
