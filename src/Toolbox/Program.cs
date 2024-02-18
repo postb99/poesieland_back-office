@@ -307,7 +307,8 @@ public class Program
         Console.WriteLine("Poems by day chart data file OK");
 
         // Poem interval
-        _engine.GeneratePoemIntervalBarChartDataFile();
+        _engine.GeneratePoemIntervalBarChartDataFile(null);
+        _engine.GeneratePoemIntervalBarChartDataFile(seasonId);
         Console.WriteLine("Poems interval chart data file OK");
 
         // Categories' and tags' radar

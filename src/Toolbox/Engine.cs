@@ -50,6 +50,7 @@ public class Engine
 
         // once
         //GeneratePoemsLengthBarChartDataFile(seasonId);
+        //GeneratePoemIntervalBarChartDataFile(seasonId);
     }
 
     public void GenerateAllSeasonsIndexFile()
@@ -769,8 +770,10 @@ public class Engine
                 season.Poems.Count(x => !string.IsNullOrEmpty(x.Acrostiche) || x.DoubleAcrostiche != null);
             var nonAcrosticheCount = season.Poems.Count() - acrosticheCount;
 
-            nonAcrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})", nonAcrosticheCount));
-            acrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})", acrosticheCount));
+            nonAcrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})",
+                nonAcrosticheCount));
+            acrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})",
+                acrosticheCount));
         }
 
         chartDataFileHelper.WriteData(nonAcrosticheDataLines, false);
@@ -780,9 +783,11 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GeneratePoemIntervalBarChartDataFile()
+    public void GeneratePoemIntervalBarChartDataFile(int? seasonId)
     {
-        var datesList = Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
+        var datesList =
+            (seasonId == null ? Data.Seasons.SelectMany(x => x.Poems) : Data.Seasons.First(x => x.Id == seasonId).Poems)
+            .Where(x => x.TextDate != "01.01.1994")
             .Select(x => x.Date).Order().ToList();
         var intervalDict = new Dictionary<int, int>();
 
@@ -849,23 +854,26 @@ public class Engine
             }
         }
 
-        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre un et trois mois", moreThanOneMonthCount,
-            upToThreeMonthsColor));
+        if (moreThanOneMonthCount > 0)
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre un et trois mois", moreThanOneMonthCount,
+                upToThreeMonthsColor));
 
-        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre trois mois et un an", moreThanThreeMonthsCount,
-            upToOneYearColor));
+        if (moreThanThreeMonthsCount > 0)
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre trois mois et un an", moreThanThreeMonthsCount,
+                upToOneYearColor));
 
-        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Plus d\\'un an", moreThanOneYearCount,
-            moreThanOneYearColor));
+        if (moreThanOneYearCount > 0)
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Plus d\\'un an", moreThanOneYearCount,
+                moreThanOneYearColor));
 
-        var fileName = "poem-interval-bar.js";
+        var fileName = seasonId == null ? "poem-interval-bar.js" : $"season-{seasonId}-poem-interval-bar.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
-        chartDataFileHelper.WriteAfterData("poemIntervalBar",
+        chartDataFileHelper.WriteAfterData(seasonId == null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
             new[] { "Fréquence" });
         streamWriter.Close();
     }

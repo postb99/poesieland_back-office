@@ -94,6 +94,10 @@ public class Season
         s.Append(
             $"{{{{< chartjs id=\"season{Id}PoemLengthPie\" width=\"75%\" jsFile=\"../../charts/season-{Id}-poems-length-pie.js\" />}}}}");
         s.Append(Environment.NewLine);
+        s.Append("Intervalle");
+        s.Append(Environment.NewLine);
+        s.Append($"{{{{< chartjs id=\"season{Id}PoemIntervalBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}-poem-interval-bar.js\" />}}}}");
+        s.Append(Environment.NewLine);
         return s.ToString();
     }
 }
