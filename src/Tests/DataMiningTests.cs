@@ -22,18 +22,18 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     public void PoemsWithSpecifiedVerseLength(int verseLength)
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.VerseLength == verseLength.ToString());
-        
+
         _testOutputHelper.WriteLine("Verse length {0}: {1}",
             verseLength, string.Join(' ', poems.Select(x => x.Id).ToList()));
     }
-    
+
     [Theory]
     [InlineData(4)]
     [InlineData(28)]
     public void PoemsWithSpecifiedLength(int verseCount)
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.VersesCount == verseCount);
-        
+
         _testOutputHelper.WriteLine("Verse count {0}: {1}",
             verseCount, string.Join(' ', poems.Select(x => x.Id).ToList()));
     }
@@ -171,14 +171,17 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
         {
-            var letter = poem.Paragraphs[0].Verses[1][0].ToString();
-            if (letter != letter.ToUpperInvariant())
+            foreach (var verse in poem.Paragraphs.SelectMany(x => x.Verses))
             {
-                _testOutputHelper.WriteLine(poem.Id);
+                var letter = verse[0].ToString();
+                if (letter != letter.ToUpperInvariant())
+                {
+                    _testOutputHelper.WriteLine(poem.Id);
+                }
             }
         }
     }
-    
+
     [Fact]
     public void PoemsThatCouldHaveQuatrainsButHaveNot()
     {

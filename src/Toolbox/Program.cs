@@ -236,6 +236,12 @@ public class Program
     {
         _engine.GeneratePoemsLengthBarChartDataFile(null);
         Console.WriteLine("Poems length bar chart data file OK");
+        
+        // Once
+        // for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
+        // {
+        //     _engine.GeneratePoemsLengthBarChartDataFile(i);
+        // }
     }
 
     private static void GeneratePoemVersesLengthBarChartDataFile()
