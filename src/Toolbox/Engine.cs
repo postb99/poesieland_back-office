@@ -283,10 +283,19 @@ public class Engine
                 (nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
         }
 
-        chartDataFileHelper.WriteData(nbVersesChartData, false);
-        chartDataFileHelper.WriteData(isSonnetChartData, true);
-
-        chartDataFileHelper.WriteAfterData(barChartId, new[] { "Poèmes", "Sonnets" },
+        string[] chartTitles;
+        if (nbSonnets > 0)
+        {
+            chartDataFileHelper.WriteData(nbVersesChartData, false);
+            chartDataFileHelper.WriteData(isSonnetChartData, true);
+            chartTitles = new[] { "Poèmes", "Sonnets" };
+        }
+        else
+        {
+            chartDataFileHelper.WriteData(nbVersesChartData, true);
+            chartTitles = new[] { "Poèmes" };
+        }
+        chartDataFileHelper.WriteAfterData(barChartId, chartTitles,
             barChartOptions: seasonId == null
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
@@ -308,9 +317,13 @@ public class Engine
                 nbNotQuatrainImpossible, "rgba(67, 97, 238, 0.9)"));
 
         if (nbNotQuatrainVoluntarily > 0)
+        {
+            var title = poems.Any(x => x.Acrostiche != null)
+                ? "Rimes suivies ou acrostiche découpé différemment" : "Rimes suivies";
             pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
-                "Pas de quatrain car rimes suivies, acrostiche découpé différemment", nbNotQuatrainVoluntarily,
+                title, nbNotQuatrainVoluntarily,
                 "rgba(67, 97, 238, 0.7)"));
+        }
 
         chartDataFileHelper2.WriteData(pieChartDataLines, true);
         chartDataFileHelper2.WriteAfterData(pieChartId, new[] { "En quatrains ?" });
