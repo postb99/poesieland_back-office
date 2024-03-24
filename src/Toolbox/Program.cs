@@ -329,6 +329,9 @@ public class Program
         // Acrostiche - not anymore useful
         // _engine.GenerateAcrosticheBarChartDataFile();
         // Console.WriteLine("Acrostiche chart data file OK");
+        
+        // Poem count
+        _engine.GeneratePoemCountFile();
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)

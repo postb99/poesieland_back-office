@@ -295,6 +295,7 @@ public class Engine
             chartDataFileHelper.WriteData(nbVersesChartData, true);
             chartTitles = new[] { "Poèmes" };
         }
+
         chartDataFileHelper.WriteAfterData(barChartId, chartTitles,
             barChartOptions: seasonId == null
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } } }"
@@ -319,7 +320,8 @@ public class Engine
         if (nbNotQuatrainVoluntarily > 0)
         {
             var title = poems.Any(x => x.Acrostiche != null)
-                ? "Rimes suivies ou acrostiche découpé différemment" : "Rimes suivies";
+                ? "Rimes suivies ou acrostiche découpé différemment"
+                : "Rimes suivies";
             pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
                 title, nbNotQuatrainVoluntarily,
                 "rgba(67, 97, 238, 0.7)"));
@@ -890,6 +892,14 @@ public class Engine
             new[] { "Fréquence" },
             barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
+    }
+
+    public void GeneratePoemCountFile()
+    {
+        var poemCount = Data.Seasons.Select(x => x.Poems.Count).Sum();
+        var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR], "../", "poem_count.md");
+        File.WriteAllText(poemCountFilePath, poemCount.ToString());
     }
 
     private string GetRadarChartLabel(string monthDay)
