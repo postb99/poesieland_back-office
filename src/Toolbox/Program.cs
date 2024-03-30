@@ -116,6 +116,9 @@ public class Program
             case MainMenuSettings.MenuChoices.CheckPoemsWithoutVerseLength:
                 _engine.CheckPoemsWithoutVerseLength();
                 return true;
+            case MainMenuSettings.MenuChoices.ImportEnPoems:
+                ImportEnPoemsContentFiles(menuChoice);
+                return true;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
                 Environment.Exit(0);
@@ -161,6 +164,15 @@ public class Program
         {
             Console.WriteLine("No matching season for input");
         }
+    }
+    
+    private static void ImportEnPoemsContentFiles(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label);
+        var year = Console.ReadLine();
+
+        _engine.ImportPoemsEn(year);
+        Console.WriteLine("Poems import OK");
     }
 
     private static void GeneratePoemContentFile(MenuItem menuChoice)

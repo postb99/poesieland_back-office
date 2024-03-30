@@ -11,6 +11,7 @@ public class Engine
 {
     private IConfiguration _configuration;
     public Root Data { get; private set; }
+    public Root DataEn { get; private set; }
     public XmlSerializer XmlSerializer { get; private set; }
 
     private PoemContentImporter? _poemContentImporter;
@@ -25,10 +26,14 @@ public class Engine
     public void Load()
     {
         var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]);
-        using var streamReader = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
+        using var streamReader = new StreamReader(xmlDocPath, Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
 
         Data = XmlSerializer.Deserialize(streamReader) as Root;
+        
+        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]);
+        using var streamReaderEn = new StreamReader(xmlDocPath, Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
+
+        DataEn = XmlSerializer.Deserialize(streamReaderEn) as Root;
     }
 
     public void Save()
@@ -37,6 +42,11 @@ public class Engine
         using var streamWriter = new StreamWriter(xmlDocPath);
         XmlSerializer.Serialize(streamWriter, Data);
         streamWriter.Close();
+        
+        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]);
+        using var streamWriterEn = new StreamWriter(xmlDocPath);
+        XmlSerializer.Serialize(streamWriterEn, DataEn);
+        streamWriterEn.Close();
     }
 
     public void GenerateSeasonIndexFile(int seasonId)
@@ -128,6 +138,34 @@ public class Engine
 
             poemsByPosition.Add(position, poem);
         }
+
+        targetSeason.Poems.Clear();
+
+        for (var i = 0; i < 50; i++)
+        {
+            if (poemsByPosition.TryGetValue(i, out var poem))
+                targetSeason.Poems.Add(poem);
+        }
+
+        Save();
+    }
+    
+    public void ImportPoemsEn(string year)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR_EN]);
+        var yearDirName = Directory.EnumerateDirectories(rootDir).FirstOrDefault(x => Path.GetFileName(x) == year);
+        var poemFilePaths = Directory.EnumerateFiles(yearDirName).Where(x => !x.EndsWith("_index.md"));
+        var poemsByPosition = new Dictionary<int, Poem>(50);
+        foreach (var poemContentPath in poemFilePaths)
+        {
+            var (poem, position) =
+                (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+
+            poemsByPosition.Add(position, poem);
+        }
+
+        var seasonId = poemsByPosition.First().Value.SeasonId;
+        var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
 
         targetSeason.Poems.Clear();
 
