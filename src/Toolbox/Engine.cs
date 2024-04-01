@@ -26,12 +26,14 @@ public class Engine
     public void Load()
     {
         var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]);
-        using var streamReader = new StreamReader(xmlDocPath, Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
+        using var streamReader = new StreamReader(xmlDocPath,
+            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
 
         Data = XmlSerializer.Deserialize(streamReader) as Root;
-        
+
         xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]);
-        using var streamReaderEn = new StreamReader(xmlDocPath, Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
+        using var streamReaderEn = new StreamReader(xmlDocPath,
+            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
 
         DataEn = XmlSerializer.Deserialize(streamReaderEn) as Root;
     }
@@ -42,7 +44,7 @@ public class Engine
         using var streamWriter = new StreamWriter(xmlDocPath);
         XmlSerializer.Serialize(streamWriter, Data);
         streamWriter.Close();
-        
+
         xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]);
         using var streamWriterEn = new StreamWriter(xmlDocPath);
         XmlSerializer.Serialize(streamWriterEn, DataEn);
@@ -149,7 +151,7 @@ public class Engine
 
         Save();
     }
-    
+
     public void ImportPoemsEn(string year)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR_EN]);
@@ -942,6 +944,66 @@ public class Engine
         poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "poem_count.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
+    }
+
+    public void GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile()
+    {
+        var poems = Data.Seasons.SelectMany(x => x.Poems);
+        var poemLengthByVerseLength = new Dictionary<KeyValuePair<int, int>, int>();
+
+        foreach (var poem in poems)
+        {
+            var poemLength = poem.VersesCount;
+            if (!int.TryParse(poem.VerseLength, out var verseLength)) continue;
+
+            var key = new KeyValuePair<int, int>(verseLength, poemLength);
+            if (poemLengthByVerseLength.ContainsKey(key))
+            {
+                poemLengthByVerseLength[key]++;
+            }
+            else
+            {
+                poemLengthByVerseLength[key] = 1;
+            }
+
+            // First chart
+            var fileName = "poem-length-by-verse-length.js";
+            var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+                _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+            var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble);
+            chartDataFileHelper.WriteBeforeData();
+
+            var dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+            foreach (var dataKey in poemLengthByVerseLength.Keys)
+            {
+                dataLines.Add(new ChartDataFileHelper.BubbleChartDataLine(dataKey.Key, dataKey.Value,
+                    poemLengthByVerseLength[dataKey]));
+            }
+
+            chartDataFileHelper.WriteData(dataLines);
+            chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
+                new[] { "Longueur du poème selon la longueur du vers" });
+            streamWriter.Close();
+
+            // Second chart
+            fileName = "verse-length-by-poem-length.js";
+            using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, fileName));
+            chartDataFileHelper = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bubble);
+            chartDataFileHelper.WriteBeforeData();
+
+            dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+            foreach (var dataKey in poemLengthByVerseLength.Keys)
+            {
+                dataLines.Add(new ChartDataFileHelper.BubbleChartDataLine(dataKey.Value, dataKey.Key,
+                    poemLengthByVerseLength[dataKey]));
+            }
+
+            chartDataFileHelper.WriteData(dataLines);
+            chartDataFileHelper.WriteAfterData("verseLengthByPoemLength",
+                new[] { "Longueur des vers selon la longueur du poème" });
+            streamWriter2.Close();
+        }
     }
 
     private string GetRadarChartLabel(string monthDay)

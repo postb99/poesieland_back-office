@@ -8,7 +8,8 @@ public class ChartDataFileHelper
     {
         Bar,
         Pie,
-        Radar
+        Radar,
+        Bubble
     }
 
     public const int VERSE_LENGTH_MAX_Y = 210;
@@ -43,6 +44,21 @@ public class ChartDataFileHelper
         }
     }
 
+    public class BubbleChartDataLine
+    {
+        public string Label { get; }
+        public int X { get; }
+        public int Y { get; }
+        public int Value { get; }
+
+        public BubbleChartDataLine(int x, int y, int value)
+        {
+            X = x;
+            Y = y;
+            Value = value;
+        }
+    }
+
     private readonly StreamWriter _streamWriter;
     private readonly ChartType _chartType;
     private readonly int _nbDatasets;
@@ -68,6 +84,9 @@ public class ChartDataFileHelper
                 break;
             case ChartType.Radar:
                 _streamWriter.WriteLine("import { addRadarChart } from './add-chart.js'");
+                break;
+            case ChartType.Bubble:
+                _streamWriter.WriteLine("import { addBubbleChart } from './add-chart.js'");
                 break;
         }
 
@@ -107,6 +126,9 @@ public class ChartDataFileHelper
                 else
                     _streamWriter.WriteLine($"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data]);");
                 break;
+            case ChartType.Bubble:
+                _streamWriter.WriteLine($"  addBubbleChart('{chartId}', [data], '{chartTitles[0]}');");
+                break;
         }
 
         _streamWriter.WriteLine("})();");
@@ -144,6 +166,16 @@ public class ChartDataFileHelper
                 $"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{dataLine.RgbaColor}' }},");
         }
 
+        _streamWriter.Flush();
+    }
+    
+    public void WriteData(IEnumerable<BubbleChartDataLine> dataLines)
+    {
+        foreach (var dataLine in dataLines)
+        {
+            _streamWriter.WriteLine(
+                $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {dataLine.Value} }},");
+        }
         _streamWriter.Flush();
     }
 }
