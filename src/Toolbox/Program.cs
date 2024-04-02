@@ -114,10 +114,9 @@ public class Program
                 _engine.Load();
                 return true;
             case MainMenuSettings.MenuChoices.CheckPoemsWithoutVerseLength:
+                _engine.CheckPoemsWithoutVerseLength();
                 // TEMP
-                //_engine.CheckPoemsWithoutVerseLength();
-                // TEMP
-                _engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
+                //_engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
                 return true;
             case MainMenuSettings.MenuChoices.ImportEnPoems:
                 ImportEnPoemsContentFiles(menuChoice);

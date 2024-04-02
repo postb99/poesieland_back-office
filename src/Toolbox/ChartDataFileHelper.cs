@@ -49,9 +49,13 @@ public class ChartDataFileHelper
         public string Label { get; }
         public int X { get; }
         public int Y { get; }
-        public int Value { get; }
 
-        public BubbleChartDataLine(int x, int y, int value)
+        /// <summary>
+        /// Bubble radius in pixels, with dot for decimal separator.
+        /// </summary>
+        public string Value { get; }
+
+        public BubbleChartDataLine(int x, int y, string value)
         {
             X = x;
             Y = y;
@@ -97,7 +101,7 @@ public class ChartDataFileHelper
     }
 
     public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
-        string radarChartBackgroundColor = null, string barChartOptions = "{}")
+        string radarChartBackgroundColor = null, string barChartOptions = "{}", string chartXAxisTitle = "", string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1)
     {
         _streamWriter.WriteLine("  ];");
 
@@ -127,7 +131,7 @@ public class ChartDataFileHelper
                     _streamWriter.WriteLine($"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data]);");
                 break;
             case ChartType.Bubble:
-                _streamWriter.WriteLine($"  addBubbleChart('{chartId}', [data], '{chartTitles[0]}');");
+                _streamWriter.WriteLine($"  addBubbleChart('{chartId}', '{chartTitles[0]}', data, {{scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}}});");
                 break;
         }
 

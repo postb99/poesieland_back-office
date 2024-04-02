@@ -966,6 +966,10 @@ public class Engine
                 poemLengthByVerseLength[key] = 1;
             }
 
+            decimal maxRadiusPixels = 30;
+            // Find max value
+            var maxValue = poemLengthByVerseLength.Values.Max();
+
             // First chart
             var fileName = "poem-length-by-verse-length.js";
             var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
@@ -978,12 +982,13 @@ public class Engine
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
                 dataLines.Add(new ChartDataFileHelper.BubbleChartDataLine(dataKey.Key, dataKey.Value,
-                    poemLengthByVerseLength[dataKey]));
+                    (poemLengthByVerseLength[dataKey] * maxRadiusPixels / maxValue).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 })));
             }
 
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
-                new[] { "Longueur du poème selon la longueur du vers" });
+                new[] { "Longueur du poème selon la longueur du vers" }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
             streamWriter.Close();
 
             // Second chart
@@ -996,12 +1001,13 @@ public class Engine
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
                 dataLines.Add(new ChartDataFileHelper.BubbleChartDataLine(dataKey.Value, dataKey.Key,
-                    poemLengthByVerseLength[dataKey]));
+                    (poemLengthByVerseLength[dataKey] * maxRadiusPixels / maxValue).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 })));
             }
 
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("verseLengthByPoemLength",
-                new[] { "Longueur des vers selon la longueur du poème" });
+                new[] { "Longueur des vers selon la longueur du poème" }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2);
             streamWriter2.Close();
         }
     }
