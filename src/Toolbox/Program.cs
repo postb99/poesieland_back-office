@@ -346,9 +346,11 @@ public class Program
         
         // Poem count
         _engine.GeneratePoemCountFile();
+        Console.WriteLine("Poem count file OK");
         
         // Poem length by verse length and vice versa
         _engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
+        Console.WriteLine("Poems bubble chart data files OK");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
