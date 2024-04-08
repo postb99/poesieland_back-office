@@ -101,7 +101,8 @@ public class ChartDataFileHelper
     }
 
     public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
-        string radarChartBackgroundColor = null, string barChartOptions = "{}", string chartXAxisTitle = "", string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1)
+        string radarChartBackgroundColor = null, string barChartOptions = "{}", string chartXAxisTitle = "",
+        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string borderColorsArray = "")
     {
         _streamWriter.WriteLine("  ];");
 
@@ -131,7 +132,13 @@ public class ChartDataFileHelper
                     _streamWriter.WriteLine($"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data]);");
                 break;
             case ChartType.Bubble:
-                _streamWriter.WriteLine($"  addBubbleChart('{chartId}', '{chartTitles[0]}', data, {{scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}}});");
+                if (borderColorsArray != string.Empty)
+                {
+                    _streamWriter.WriteLine($"  const borderColorsArray = {borderColorsArray};");
+                }
+
+                _streamWriter.WriteLine(
+                    $"  addBubbleChart('{chartId}', '{chartTitles[0]}', data, borderColorsArray, {{scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}}});");
                 break;
         }
 
@@ -172,7 +179,7 @@ public class ChartDataFileHelper
 
         _streamWriter.Flush();
     }
-    
+
     public void WriteData(IEnumerable<BubbleChartDataLine> dataLines)
     {
         foreach (var dataLine in dataLines)
@@ -180,6 +187,7 @@ public class ChartDataFileHelper
             _streamWriter.WriteLine(
                 $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {dataLine.Value} }},");
         }
+
         _streamWriter.Flush();
     }
 }

@@ -9,6 +9,8 @@ namespace Toolbox;
 
 public class Engine
 {
+    const decimal bubbleMaxRadiusPixels = 30;
+    
     private IConfiguration _configuration;
     public Root Data { get; private set; }
     public Root DataEn { get; private set; }
@@ -966,7 +968,7 @@ public class Engine
                 poemLengthByVerseLength[key] = 1;
             }
 
-            decimal maxRadiusPixels = 30;
+
             // Find max value
             var maxValue = poemLengthByVerseLength.Values.Max();
 
@@ -979,16 +981,17 @@ public class Engine
             chartDataFileHelper.WriteBeforeData();
 
             var dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+            var borderColorsArray = new StringBuilder("[");
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
-                dataLines.Add(new ChartDataFileHelper.BubbleChartDataLine(dataKey.Key, dataKey.Value,
-                    (poemLengthByVerseLength[dataKey] * maxRadiusPixels / maxValue).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 })));
+                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, borderColorsArray, maxValue);
             }
+
+            borderColorsArray.Append("]");
 
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
-                new[] { "Longueur du poème selon la longueur du vers" }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
+                new[] { "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2, borderColorsArray: borderColorsArray.ToString());
             streamWriter.Close();
 
             // Second chart
@@ -998,18 +1001,34 @@ public class Engine
             chartDataFileHelper.WriteBeforeData();
 
             dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+            borderColorsArray = new StringBuilder("[");
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
-                dataLines.Add(new ChartDataFileHelper.BubbleChartDataLine(dataKey.Value, dataKey.Key,
-                    (poemLengthByVerseLength[dataKey] * maxRadiusPixels / maxValue).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 })));
+                AddDataLine(dataKey.Value, dataKey.Key, poemLengthByVerseLength[dataKey], dataLines, borderColorsArray, maxValue);
             }
 
+            borderColorsArray.Append("]");
+            
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("verseLengthByPoemLength",
-                new[] { "Longueur des vers selon la longueur du poème" }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2);
+                new[] { "Longueur des vers selon la longueur du poème (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2, borderColorsArray: borderColorsArray.ToString());
             streamWriter2.Close();
         }
+    }
+
+    private void AddDataLine(int x, int y, int value, List<ChartDataFileHelper.BubbleChartDataLine> bubbleChartDatalines, StringBuilder borderColorsArray, int maxValue)
+    {
+        // Bubble radius
+        var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
+        var bubbleColor = "rgba(72, 149, 239, 1)";
+        if (bubbleSize < (bubbleMaxRadiusPixels / 2))
+        {
+            bubbleSize *= 2;
+            bubbleColor = "rgba(76, 201, 240, 1)";
+        }
+
+        bubbleChartDatalines.Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "."})));
+        borderColorsArray.AppendFormat($"'{bubbleColor}',");
     }
 
     private string GetRadarChartLabel(string monthDay)
