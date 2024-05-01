@@ -981,17 +981,15 @@ public class Engine
             chartDataFileHelper.WriteBeforeData();
 
             var dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-            var borderColorsArray = new StringBuilder("[");
+            var bubbleColors = new List<string>();
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
-                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, borderColorsArray, maxValue);
+                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors, maxValue);
             }
-
-            borderColorsArray.Append("]");
 
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
-                new[] { "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2, borderColorsArray: borderColorsArray.ToString());
+                new[] { "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2, bubbleColors: bubbleColors);
             streamWriter.Close();
 
             // Second chart
@@ -1001,22 +999,20 @@ public class Engine
             chartDataFileHelper.WriteBeforeData();
 
             dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-            borderColorsArray = new StringBuilder("[");
+            bubbleColors = new List<string>();
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
-                AddDataLine(dataKey.Value, dataKey.Key, poemLengthByVerseLength[dataKey], dataLines, borderColorsArray, maxValue);
+                AddDataLine(dataKey.Value, dataKey.Key, poemLengthByVerseLength[dataKey], dataLines, bubbleColors, maxValue);
             }
-
-            borderColorsArray.Append("]");
-            
+           
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("verseLengthByPoemLength",
-                new[] { "Longueur des vers selon la longueur du poème (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2, borderColorsArray: borderColorsArray.ToString());
+                new[] { "Longueur des vers selon la longueur du poème (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2, bubbleColors: bubbleColors);
             streamWriter2.Close();
         }
     }
 
-    private void AddDataLine(int x, int y, int value, List<ChartDataFileHelper.BubbleChartDataLine> bubbleChartDatalines, StringBuilder borderColorsArray, int maxValue)
+    private void AddDataLine(int x, int y, int value, List<ChartDataFileHelper.BubbleChartDataLine> bubbleChartDatalines, List<string> bubbleColors, int maxValue)
     {
         // Bubble radius
         var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
@@ -1028,7 +1024,7 @@ public class Engine
         }
 
         bubbleChartDatalines.Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "."})));
-        borderColorsArray.AppendFormat($"'{bubbleColor}',");
+        bubbleColors.Add(bubbleColor);
     }
 
     private string GetRadarChartLabel(string monthDay)

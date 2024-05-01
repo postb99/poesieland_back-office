@@ -102,7 +102,7 @@ public class ChartDataFileHelper
 
     public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
         string radarChartBackgroundColor = null, string barChartOptions = "{}", string chartXAxisTitle = "",
-        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string borderColorsArray = "")
+        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, List<string>? bubbleColors = null)
     {
         _streamWriter.WriteLine("  ];");
 
@@ -122,19 +122,24 @@ public class ChartDataFileHelper
                     : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data, {barChartOptions});");
                 break;
             case ChartType.Pie:
-                _streamWriter.WriteLine($"  addPieChart('{chartId}', [data], '{chartTitles[0]}');");
+                _streamWriter.WriteLine($"  addPieChart('{chartId}', [data], {{ plugins: {{ title: {{ display: true, text: '{chartTitles[0]}' }} }} }});");
                 break;
             case ChartType.Radar:
-                if (radarChartBorderColor != null)
-                    _streamWriter.WriteLine(
-                        $"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data], '{radarChartBorderColor}', '{radarChartBackgroundColor}');");
-                else
-                    _streamWriter.WriteLine($"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data]);");
+                var backgroundColor = string.IsNullOrEmpty(radarChartBackgroundColor) ? "rgba(76, 201, 240)" : radarChartBackgroundColor;
+                var borderColor = string.IsNullOrEmpty(radarChartBorderColor) ? "rgba(0, 0, 0, 0.1)" : radarChartBorderColor;
+               
+                _streamWriter.WriteLine(
+                        $"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data], {{ backgroundColor: '{backgroundColor}', borderColor: '{borderColor}', pointBackgroundColor: '{borderColor}', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgb(54, 162, 235)', elements: {{ line: {{ borderWidth: 1  }} }}, scales: {{ r: {{ ticks: {{ stepSize: 1 }} }} }} }});");
                 break;
             case ChartType.Bubble:
-                if (borderColorsArray != string.Empty)
+                if (bubbleColors != null)
                 {
-                    _streamWriter.WriteLine($"  const borderColorsArray = {borderColorsArray};");
+                    var sb = new StringBuilder();
+                    foreach (var color in bubbleColors)
+                    {
+                        sb.AppendFormat($"'{color}',");
+                    }
+                    _streamWriter.WriteLine($"  const borderColorsArray = [{sb}];");
                 }
 
                 _streamWriter.WriteLine(

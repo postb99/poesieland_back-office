@@ -117,6 +117,11 @@ public class Program
                 _engine.CheckPoemsWithoutVerseLength();
                 // TEMP
                 //_engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
+                // TEMP 2
+                // for (var i = 1995; i < 2025; i++)
+                // {
+                //     _engine.GeneratePoemsOfYearByDayRadarChartDataFile(i);
+                // }
                 return true;
             case MainMenuSettings.MenuChoices.ImportEnPoems:
                 ImportEnPoemsContentFiles(menuChoice);
@@ -349,6 +354,7 @@ public class Program
         Console.WriteLine("Poem count file OK");
         
         // Poem length by verse length and vice versa
+        Console.WriteLine("Poems bubble chart data files: starting...");
         _engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
         Console.WriteLine("Poems bubble chart data files OK");
     }
