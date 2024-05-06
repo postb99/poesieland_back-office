@@ -123,6 +123,9 @@ public class Program
                 //     _engine.GeneratePoemsOfYearByDayRadarChartDataFile(i);
                 // }
                 return true;
+            case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:
+                GenerateAllSeasonsPoemIntervalBarChartDataFile();
+                return true;
             case MainMenuSettings.MenuChoices.ImportEnPoems:
                 ImportEnPoemsContentFiles(menuChoice);
                 return true;
@@ -172,7 +175,7 @@ public class Program
             Console.WriteLine("No matching season for input");
         }
     }
-    
+
     private static void ImportEnPoemsContentFiles(MenuItem menuChoice)
     {
         Console.WriteLine(menuChoice.SubMenuItems.First().Label);
@@ -255,7 +258,7 @@ public class Program
     {
         _engine.GeneratePoemsLengthBarChartDataFile(null);
         Console.WriteLine("Poems length bar chart data file OK");
-        
+
         // Once
         // for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
         // {
@@ -348,11 +351,11 @@ public class Program
         // Acrostiche - not anymore useful
         // _engine.GenerateAcrosticheBarChartDataFile();
         // Console.WriteLine("Acrostiche chart data file OK");
-        
+
         // Poem count
         _engine.GeneratePoemCountFile();
         Console.WriteLine("Poem count file OK");
-        
+
         // Poem length by verse length and vice versa
         Console.WriteLine("Poems bubble chart data files: starting...");
         _engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
@@ -405,5 +408,13 @@ public class Program
             _engine.GeneratePoemsByDayRadarChartDataFile(null, category);
             Console.WriteLine($"Poems by day for '{category}' chart data file OK");
         }
+    }
+
+    private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
+    {
+        _engine.GeneratePoemIntervalBarChartDataFile(null);
+        for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
+            _engine.GeneratePoemIntervalBarChartDataFile(i);
+        Console.WriteLine("Poems interval chart data file OK");
     }
 }

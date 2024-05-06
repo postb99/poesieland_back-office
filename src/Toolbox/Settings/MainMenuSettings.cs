@@ -25,6 +25,7 @@ public class MainMenuSettings
         GeneratePoemsRadarChartDataFile = 430,
         GeneratePoemsRadarChartAskCategory = 431,
         GeneratePoemVersesLengthBarChartDataFile = 440,
+        GenerateAllSeasonsPoemIntervalBarChartDataFile = 450,
         CheckPoemsWithoutVerseLength = 500,
         ImportEnPoems = 600,
         ExitProgram = 99

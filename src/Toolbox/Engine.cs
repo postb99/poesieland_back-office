@@ -10,7 +10,7 @@ namespace Toolbox;
 public class Engine
 {
     const decimal bubbleMaxRadiusPixels = 30;
-    
+
     private IConfiguration _configuration;
     public Root Data { get; private set; }
     public Root DataEn { get; private set; }
@@ -842,10 +842,23 @@ public class Engine
 
     public void GeneratePoemIntervalBarChartDataFile(int? seasonId)
     {
-        var datesList =
+        var frDatesList =
             (seasonId == null ? Data.Seasons.SelectMany(x => x.Poems) : Data.Seasons.First(x => x.Id == seasonId).Poems)
             .Where(x => x.TextDate != "01.01.1994")
-            .Select(x => x.Date).Order().ToList();
+            .Select(x => x.Date);
+
+        // Add EN poems
+        var enDatesList = (seasonId == null
+                ? DataEn.Seasons.SelectMany(x => x.Poems)
+                : DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId)?.Poems)?
+            .Select(x => x.Date);
+
+        var datesList = new List<DateTime>();
+        datesList.AddRange(frDatesList);
+        if (enDatesList != null)
+            datesList.AddRange(enDatesList);
+        datesList.Sort();
+
         var intervalDict = new Dictionary<int, int>();
 
         int dateCount = datesList.Count();
@@ -984,12 +997,17 @@ public class Engine
             var bubbleColors = new List<string>();
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
-                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors, maxValue);
+                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors,
+                    maxValue);
             }
 
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
-                new[] { "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2, bubbleColors: bubbleColors);
+                new[]
+                {
+                    "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)"
+                }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
+                bubbleColors: bubbleColors);
             streamWriter.Close();
 
             // Second chart
@@ -1002,17 +1020,23 @@ public class Engine
             bubbleColors = new List<string>();
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
-                AddDataLine(dataKey.Value, dataKey.Key, poemLengthByVerseLength[dataKey], dataLines, bubbleColors, maxValue);
+                AddDataLine(dataKey.Value, dataKey.Key, poemLengthByVerseLength[dataKey], dataLines, bubbleColors,
+                    maxValue);
             }
-           
+
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("verseLengthByPoemLength",
-                new[] { "Longueur des vers selon la longueur du poème (en bleu plus foncé occurrence deux fois plus forte)" }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2, bubbleColors: bubbleColors);
+                new[]
+                {
+                    "Longueur des vers selon la longueur du poème (en bleu plus foncé occurrence deux fois plus forte)"
+                }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2,
+                bubbleColors: bubbleColors);
             streamWriter2.Close();
         }
     }
 
-    private void AddDataLine(int x, int y, int value, List<ChartDataFileHelper.BubbleChartDataLine> bubbleChartDatalines, List<string> bubbleColors, int maxValue)
+    private void AddDataLine(int x, int y, int value,
+        List<ChartDataFileHelper.BubbleChartDataLine> bubbleChartDatalines, List<string> bubbleColors, int maxValue)
     {
         // Bubble radius
         var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
@@ -1023,7 +1047,8 @@ public class Engine
             bubbleColor = "rgba(76, 201, 240, 1)";
         }
 
-        bubbleChartDatalines.Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "."})));
+        bubbleChartDatalines.Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+            bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." })));
         bubbleColors.Add(bubbleColor);
     }
 
