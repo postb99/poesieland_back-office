@@ -770,9 +770,13 @@ public class Engine
     {
         var dataDict = new Dictionary<int, int>();
 
-        foreach (var dayOfWeek in Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
-                     .Select(x => x.Date.DayOfWeek)
-                     .ToList())
+        var dayOfWeekData = Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
+            .Select(x => x.Date.DayOfWeek).ToList();
+        
+        // Add EN poems
+        dayOfWeekData.AddRange(DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.Date.DayOfWeek));
+        
+        foreach (var dayOfWeek in dayOfWeekData)
         {
             if (dataDict.ContainsKey((int)dayOfWeek))
             {
