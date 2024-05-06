@@ -443,6 +443,9 @@ public class Engine
         else
         {
             poemStringDates = Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
+            
+            // Add EN poems
+            poemStringDates.AddRange(DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
         }
 
         var dataDict = InitMonthDayDictionary();
