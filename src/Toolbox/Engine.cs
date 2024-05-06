@@ -713,8 +713,13 @@ public class Engine
     {
         var dataDict = new Dictionary<string, int>();
 
-        foreach (var fullDate in Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate)
-                     .Where(x => x != "01.01.1994").ToList())
+        var fullDates = Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate)
+            .Where(x => x != "01.01.1994").ToList();
+        
+        // Add EN poems
+        fullDates.AddRange(DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
+        
+        foreach (var fullDate in fullDates)
         {
             if (dataDict.ContainsKey(fullDate))
             {
