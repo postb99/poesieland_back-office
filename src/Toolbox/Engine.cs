@@ -851,6 +851,70 @@ public class Engine
         chartDataFileHelper.WriteAfterData("acrosticheBar", new[] { "Non acrostiche", "Acrostiche" });
         streamWriter.Close();
     }
+    
+    public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        var fileName = string.Empty;
+
+        var chartId = string.Empty;
+        var borderColor = string.Empty;
+
+        if (storageSubCategory != null)
+        {
+            fileName = $"poems-{storageSubCategory.UnaccentedCleaned()}-bar.js";
+            chartId = $"poems-{storageSubCategory.UnaccentedCleaned()}Bar";
+            borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
+                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory).Color;
+
+            switch (borderColor)
+            {
+                // Use some not too light colors
+                case "rgba(255, 229, 236, 1)":
+                    borderColor = "rgba(255, 194, 209, 1)";
+                    break;
+                case "rgba(247, 235, 253, 1)":
+                    borderColor = "rgba(234, 191, 250, 1)";
+                    break;
+            }
+        }
+        else if (storageCategory != null)
+        {
+            fileName = $"poems-{storageCategory.UnaccentedCleaned()}-bar.js";
+            chartId = $"poems-{storageCategory.UnaccentedCleaned()}Bar";
+            borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
+                .FirstOrDefault(x => x.Name == storageCategory).Color;
+        }
+        
+        var backgroundColor = borderColor?.Replace("1)", "0.5)");
+       
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
+        chartDataFileHelper.WriteBeforeData();
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+
+        foreach (var season in Data.Seasons)
+        {
+            var poemCount = 0;
+            if (storageSubCategory != null)
+            {
+                poemCount = season.Poems.Count(x => x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory)));
+            }
+            else if (storageCategory != null)
+            {
+                poemCount = season.Poems.Count(x => x.Categories.Any(x => x.Name == storageCategory));
+            }
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.LongTitle} ({season.Years})", poemCount, backgroundColor));
+        }
+
+        chartDataFileHelper.WriteData(dataLines, true);
+
+
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes au fil des saisons" }, barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+        streamWriter.Close();
+    }
 
     public void GeneratePoemIntervalBarChartDataFile(int? seasonId)
     {

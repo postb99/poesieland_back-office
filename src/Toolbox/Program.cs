@@ -360,6 +360,9 @@ public class Program
         Console.WriteLine("Poems bubble chart data files: starting...");
         _engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
         Console.WriteLine("Poems bubble chart data files OK");
+        
+        // Over seasons categories" and tags' bar
+        GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
@@ -375,6 +378,8 @@ public class Program
             Console.WriteLine("Poems by day and cie chart data file OK");
             GeneratePoemsCategoriesAndTagsRadarChartDataFile();
             Console.WriteLine("Categories and tags radar chart data file OK");
+            GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
+            Console.WriteLine("Categories and tags bar chart data file OK");
             return;
         }
 
@@ -407,6 +412,24 @@ public class Program
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(null, category);
             Console.WriteLine($"Poems by day for '{category}' chart data file OK");
+        }
+    }
+    
+    private static void GenerateOverSeasonsCategoriesAndTagsBarChartDataFile()
+    {
+        var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+
+        foreach (var category in storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
+                     .Distinct())
+        {
+            _engine.GenerateOverSeasonsChartDataFile(category, null);
+            Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");
+        }
+
+        foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
+        {
+            _engine.GenerateOverSeasonsChartDataFile(null, category);
+            Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");
         }
     }
 
