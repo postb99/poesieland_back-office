@@ -61,10 +61,10 @@ public class Engine
         var indexFile = Path.Combine(contentDir, "_index.md");
         Directory.CreateDirectory(contentDir);
         File.WriteAllText(indexFile, season.IndexFileContent());
-
-        // once
-        //GeneratePoemsLengthBarChartDataFile(seasonId);
-        //GeneratePoemIntervalBarChartDataFile(seasonId);
+        
+        rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        contentDir = Path.Combine(rootDir, $"season-{seasonId}");
+        Directory.CreateDirectory(contentDir);
     }
 
     public void GenerateAllSeasonsIndexFile()
@@ -72,9 +72,6 @@ public class Engine
         for (var i = 1; i < Data.Seasons.Count + 1; i++)
         {
             GenerateSeasonIndexFile(i);
-            // useful once
-            //GeneratePoemVersesLengthBarChartDataFile(i);
-            //GeneratePoemsLengthBarChartDataFile(i);
         }
     }
 
@@ -211,6 +208,9 @@ public class Engine
 
     public void CheckPoemsWithoutVerseLength()
     {
+        // TEMP
+        //GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
+        
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var poemsWithVerseLength = poems.Count(x => x.VerseLength != null && x.VerseLength != "0");
         int percentage = poemsWithVerseLength * 100 / poems.Count();
@@ -229,9 +229,7 @@ public class Engine
 
     public void GeneratePoemsLengthBarChartDataFile(int? seasonId)
     {
-        var barChartFileName = seasonId != null
-            ? $"season-{seasonId}-poems-length-bar.js"
-            : "poems-length-bar.js";
+        var barChartFileName = "poems-length-bar.js";
         var barChartId = seasonId != null ? $"season{seasonId}PoemLengthBar" : "poemLengthBar";
         var pieChartFileName = barChartFileName.Replace("bar", "pie");
         var pieChartId = barChartId.Replace("Bar", "Pie");
@@ -290,10 +288,12 @@ public class Engine
 
         var nbVersesRange = nbVersesData.Keys.Order().ToList();
 
+        
         // Bar chart
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, barChartFileName));
+        var subDir = seasonId != null ? $"season-{seasonId}" : "general";
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, barChartFileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 2);
         chartDataFileHelper.WriteBeforeData();
 
@@ -301,7 +301,7 @@ public class Engine
         var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
 
         // Pie chart
-        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, pieChartFileName));
+        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, subDir, pieChartFileName));
         var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper2.WriteBeforeData();
 
@@ -378,8 +378,9 @@ public class Engine
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        var subDir = $"season-{seasonId}";
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, $"season-{seasonId}-pie.js"));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, "categories-pie.js"));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         var byStorageSubcategoryCount = new Dictionary<string, int>();
@@ -468,6 +469,7 @@ public class Engine
 
         if (storageSubCategory != null)
         {
+            // categories
             fileName = $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js";
             chartId = $"poemDay-{storageSubCategory.UnaccentedCleaned()}Radar";
             borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
@@ -486,6 +488,7 @@ public class Engine
         }
         else if (storageCategory != null)
         {
+            // tags
             fileName = $"poems-day-{storageCategory.UnaccentedCleaned()}-radar.js";
             chartId = $"poemDay-{storageCategory.UnaccentedCleaned()}Radar";
             borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
@@ -493,11 +496,12 @@ public class Engine
         }
         else
         {
+            // general
             fileName = "poems-day-radar.js";
             chartId = "poemDayRadar";
         }
 
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -539,11 +543,11 @@ public class Engine
             backgroundColor);
         streamWriter.Close();
 
-        // Second chart
+        // Second chart (general
         if (storageSubCategory != null || storageCategory != null) return;
 
         fileName = "poem-day-pie.js";
-        var streamWriter2 = new StreamWriter(Path.Combine(rootDir, fileName));
+        var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         chartDataFileHelper = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         dataLines = new List<ChartDataFileHelper.DataLine>();
@@ -575,7 +579,7 @@ public class Engine
         var fileName = $"poems-day-{year}-radar.js";
         var chartId = $"poemDay-{year}Radar";
 
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -628,11 +632,10 @@ public class Engine
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        var fileName = seasonId != null
-            ? $"season-{seasonId}-verse-length-bar.js"
-            : "poems-verse-length-bar.js";
+        var fileName = "poems-verse-length-bar.js";
+        var subDir = seasonId != null ? $"season-{seasonId}" : "general";
         var chartId = seasonId != null ? $"season{seasonId}VerseLengthBar" : "poemVerseLengthBar";
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 1);
         chartDataFileHelper.WriteBeforeData();
         var regularVerseLengthData = new Dictionary<int, int>();
@@ -763,7 +766,7 @@ public class Engine
         var fileName = "poem-intensity-pie.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
@@ -815,7 +818,7 @@ public class Engine
         var fileName = "poem-dayofweek-pie.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
@@ -889,7 +892,7 @@ public class Engine
         
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
        
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -1012,10 +1015,11 @@ public class Engine
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Plus d\\'un an", moreThanOneYearCount,
                 moreThanOneYearColor));
 
-        var fileName = seasonId == null ? "poem-interval-bar.js" : $"season-{seasonId}-poem-interval-bar.js";
+        var fileName = "poem-interval-bar.js";
+        var subDir = seasonId != null ? $"season-{seasonId}" : "general";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
@@ -1023,6 +1027,13 @@ public class Engine
             new[] { "Fréquence" },
             barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
+
+        if (seasonId != null)
+        {
+            // Useful once
+            GeneratePoemVersesLengthBarChartDataFile(seasonId);
+            GeneratePoemsLengthBarChartDataFile(seasonId);
+        }
     }
 
     public void GeneratePoemCountFile()
@@ -1065,7 +1076,7 @@ public class Engine
             var fileName = "poem-length-by-verse-length.js";
             var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
                 _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-            using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+            using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
             var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble);
             chartDataFileHelper.WriteBeforeData();
 
@@ -1088,7 +1099,7 @@ public class Engine
 
             // Second chart
             fileName = "verse-length-by-poem-length.js";
-            using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, fileName));
+            using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
             chartDataFileHelper = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bubble);
             chartDataFileHelper.WriteBeforeData();
 

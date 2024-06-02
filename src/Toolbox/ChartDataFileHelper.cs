@@ -81,16 +81,16 @@ public class ChartDataFileHelper
         switch (_chartType)
         {
             case ChartType.Bar:
-                _streamWriter.WriteLine("import { addBarChart } from './add-chart.js'");
+                _streamWriter.WriteLine("import { addBarChart } from '../add-chart.js'");
                 break;
             case ChartType.Pie:
-                _streamWriter.WriteLine("import { addPieChart } from './add-chart.js'");
+                _streamWriter.WriteLine("import { addPieChart } from '../add-chart.js'");
                 break;
             case ChartType.Radar:
-                _streamWriter.WriteLine("import { addRadarChart } from './add-chart.js'");
+                _streamWriter.WriteLine("import { addRadarChart } from '../add-chart.js'");
                 break;
             case ChartType.Bubble:
-                _streamWriter.WriteLine("import { addBubbleChart } from './add-chart.js'");
+                _streamWriter.WriteLine("import { addBubbleChart } from '../add-chart.js'");
                 break;
         }
 
