@@ -32,6 +32,10 @@ public class Poem
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
+    [XmlIgnore] public bool IsSonnet => PoemType?.ToLowerInvariant() == Domain.PoemType.Sonnet.ToString().ToLowerInvariant();
+    
+    [XmlIgnore] public bool IsPantoun => PoemType?.ToLowerInvariant() == Domain.PoemType.Pantoun.ToString().ToLowerInvariant();
+    
     [XmlIgnore] public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
     [XmlIgnore] public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));

@@ -66,14 +66,12 @@ public class ChartDataFileHelper
     private readonly StreamWriter _streamWriter;
     private readonly ChartType _chartType;
     private readonly int _nbDatasets;
-    private int _datasetIndex;
 
     public ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType, int nbDatasets = 1)
     {
         _streamWriter = streamWriter;
         _chartType = chartType;
         _nbDatasets = nbDatasets;
-        _datasetIndex = 0;
     }
 
     public void WriteBeforeData()
@@ -170,7 +168,6 @@ public class ChartDataFileHelper
             _streamWriter.WriteLine(isLastDataLine ? "]" : "],");
         }
 
-        _datasetIndex++;
         _streamWriter.Flush();
     }
 

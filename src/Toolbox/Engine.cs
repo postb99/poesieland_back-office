@@ -61,7 +61,7 @@ public class Engine
         var indexFile = Path.Combine(contentDir, "_index.md");
         Directory.CreateDirectory(contentDir);
         File.WriteAllText(indexFile, season.IndexFileContent());
-        
+
         rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         contentDir = Path.Combine(rootDir, $"season-{seasonId}");
         Directory.CreateDirectory(contentDir);
@@ -210,7 +210,7 @@ public class Engine
     {
         // TEMP
         //GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
-        
+
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var poemsWithVerseLength = poems.Count(x => x.VerseLength != null && x.VerseLength != "0");
         int percentage = poemsWithVerseLength * 100 / poems.Count();
@@ -247,7 +247,6 @@ public class Engine
         {
             var nbVerses = poem.VersesCount;
             var hasQuatrains = poem.HasQuatrains;
-            var isSonnet = poem.PoemType?.ToLowerInvariant() == PoemType.Sonnet.ToString().ToLowerInvariant();
             if (nbVersesData.TryGetValue(nbVerses, out var _))
             {
                 nbVersesData[nbVerses]++;
@@ -280,7 +279,7 @@ public class Engine
                 }
             }
 
-            if (isSonnet)
+            if (poem.IsSonnet)
             {
                 nbSonnets++;
             }
@@ -288,7 +287,7 @@ public class Engine
 
         var nbVersesRange = nbVersesData.Keys.Order().ToList();
 
-        
+
         // Bar chart
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
@@ -444,7 +443,7 @@ public class Engine
         else
         {
             poemStringDates = Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
-            
+
             // Add EN poems
             poemStringDates.AddRange(DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
         }
@@ -501,7 +500,8 @@ public class Engine
             chartId = "poemDayRadar";
         }
 
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir,
+            storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -718,10 +718,10 @@ public class Engine
 
         var fullDates = Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate)
             .Where(x => x != "01.01.1994").ToList();
-        
+
         // Add EN poems
         fullDates.AddRange(DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
-        
+
         foreach (var fullDate in fullDates)
         {
             if (dataDict.ContainsKey(fullDate))
@@ -780,10 +780,10 @@ public class Engine
 
         var dayOfWeekData = Data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
             .Select(x => x.Date.DayOfWeek).ToList();
-        
+
         // Add EN poems
         dayOfWeekData.AddRange(DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.Date.DayOfWeek));
-        
+
         foreach (var dayOfWeek in dayOfWeekData)
         {
             if (dataDict.ContainsKey((int)dayOfWeek))
@@ -826,43 +826,15 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GenerateAcrosticheBarChartDataFile()
-    {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "acrostiche-bar.js"));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 2);
-        chartDataFileHelper.WriteBeforeData();
-        var nonAcrosticheDataLines = new List<ChartDataFileHelper.DataLine>();
-        var acrosticheDataLines = new List<ChartDataFileHelper.DataLine>();
-
-        foreach (var season in Data.Seasons)
-        {
-            var acrosticheCount =
-                season.Poems.Count(x => !string.IsNullOrEmpty(x.Acrostiche) || x.DoubleAcrostiche != null);
-            var nonAcrosticheCount = season.Poems.Count() - acrosticheCount;
-
-            nonAcrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})",
-                nonAcrosticheCount));
-            acrosticheDataLines.Add(new ChartDataFileHelper.DataLine($"{season.LongTitle} ({season.Years})",
-                acrosticheCount));
-        }
-
-        chartDataFileHelper.WriteData(nonAcrosticheDataLines, false);
-        chartDataFileHelper.WriteData(acrosticheDataLines, true);
-
-        chartDataFileHelper.WriteAfterData("acrosticheBar", new[] { "Non acrostiche", "Acrostiche" });
-        streamWriter.Close();
-    }
-    
-    public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory)
+    public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory,
+        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         var fileName = string.Empty;
 
         var chartId = string.Empty;
-        var borderColor = string.Empty;
+        var borderColor = "rgba(72, 149, 239, 1)";
 
         if (storageSubCategory != null)
         {
@@ -889,9 +861,24 @@ public class Engine
             borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
                 .FirstOrDefault(x => x.Name == storageCategory).Color;
         }
-        
+        else if (forAcrostiche)
+        {
+            fileName = $"poems-acrostiche-bar.js";
+            chartId = $"poems-acrosticheBar";
+        }
+        else if (forSonnet)
+        {
+            fileName = $"poems-sonnet-bar.js";
+            chartId = $"poems-sonnetBar";
+        }
+        else if (forPantoun)
+        {
+            fileName = $"poems-pantoun-bar.js";
+            chartId = $"poems-pantounBar";
+        }
+
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
-       
+
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
@@ -903,19 +890,34 @@ public class Engine
             var poemCount = 0;
             if (storageSubCategory != null)
             {
-                poemCount = season.Poems.Count(x => x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory)));
+                poemCount = season.Poems.Count(x =>
+                    x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory)));
             }
             else if (storageCategory != null)
             {
                 poemCount = season.Poems.Count(x => x.Categories.Any(x => x.Name == storageCategory));
+            } else if (forAcrostiche)
+            {
+                poemCount = season.Poems.Count(x => x.Acrostiche != null || x.DoubleAcrostiche != null);
             }
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.LongTitle} ({season.Years})", poemCount, backgroundColor));
+            else if (forSonnet)
+            {
+                poemCount = season.Poems.Count(x => x.IsSonnet);
+            }
+            else if (forPantoun)
+            {
+                poemCount = season.Poems.Count(x => x.IsPantoun);
+            }
+
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.LongTitle} ({season.Years})", poemCount,
+                backgroundColor));
         }
 
         chartDataFileHelper.WriteData(dataLines, true);
 
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes au fil des saisons" }, barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes au fil des saisons" },
+            barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
     }
 
@@ -1031,8 +1033,8 @@ public class Engine
         if (seasonId != null)
         {
             // Useful once
-            GeneratePoemVersesLengthBarChartDataFile(seasonId);
-            GeneratePoemsLengthBarChartDataFile(seasonId);
+            //GeneratePoemVersesLengthBarChartDataFile(seasonId);
+            //GeneratePoemsLengthBarChartDataFile(seasonId);
         }
     }
 

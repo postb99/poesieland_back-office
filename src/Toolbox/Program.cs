@@ -348,10 +348,6 @@ public class Program
             Console.WriteLine("Poem's year by day chart data file OK");
         }
 
-        // Acrostiche - not anymore useful
-        // _engine.GenerateAcrosticheBarChartDataFile();
-        // Console.WriteLine("Acrostiche chart data file OK");
-
         // Poem count
         _engine.GeneratePoemCountFile();
         Console.WriteLine("Poem count file OK");
@@ -361,7 +357,7 @@ public class Program
         _engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
         Console.WriteLine("Poems bubble chart data files OK");
         
-        // Over seasons categories" and tags' bar
+        // Over seasons categories' and tags' bar
         GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
     }
 
@@ -431,6 +427,15 @@ public class Program
             _engine.GenerateOverSeasonsChartDataFile(null, category);
             Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");
         }
+        
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forAcrostiche: true);
+        Console.WriteLine($"Poems over seasons for 'acrostiche' chart data file OK");
+        
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forSonnet: true);
+        Console.WriteLine($"Poems over seasons for 'sonnet' chart data file OK");
+        
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
+        Console.WriteLine($"Poems over seasons for 'pantoun' chart data file OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
