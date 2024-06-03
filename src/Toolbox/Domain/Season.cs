@@ -77,6 +77,7 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append($"{{{{% include \"./includes/season_{Id}.md\" true %}}}}");
         s.Append(Environment.NewLine);
+        s.Append(Environment.NewLine);
         s.Append("---");
         s.Append(Environment.NewLine);
         s.Append("Catégories");
