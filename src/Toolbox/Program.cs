@@ -436,6 +436,9 @@ public class Program
         
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
         Console.WriteLine($"Poems over seasons for 'pantoun' chart data file OK");
+        
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableVerse: true);
+        Console.WriteLine($"Poems over seasons for 'versVariable' chart data file OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()

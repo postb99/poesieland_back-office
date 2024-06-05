@@ -827,7 +827,7 @@ public class Engine
     }
 
     public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory,
-        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false)
+        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableVerse = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
@@ -876,6 +876,11 @@ public class Engine
             fileName = $"poems-pantoun-bar.js";
             chartId = $"poems-pantounBar";
         }
+        else if (forVariableVerse)
+        {
+            fileName = $"poems-versVariable-bar.js";
+            chartId = $"poems-versVariableBar";
+        }
 
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
 
@@ -908,7 +913,10 @@ public class Engine
             {
                 poemCount = season.Poems.Count(x => x.IsPantoun);
             }
-
+            else if (forVariableVerse)
+            {
+                poemCount = season.Poems.Count(x => x.VerseLength.Contains(","));
+            }
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.LongTitle} ({season.Years})", poemCount,
                 backgroundColor));
         }

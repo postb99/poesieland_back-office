@@ -68,7 +68,7 @@ public class Poem
         s.Append("]");
         s.Append(Environment.NewLine);
 
-        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year
+        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, verse variable length
         s.Append("tags = [");
         foreach (var categoryName in Categories.Select(x => x.Name).Distinct())
         {
@@ -87,9 +87,14 @@ public class Poem
             s.Append($"\"doubleAcrostiche\", ");
         }
 
-        if (PoemType != null)
+        if (PoemType != null && PoemType.ToLowerInvariant() != "default")
         {
             s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
+        }
+        
+        if (VerseLength.Contains(","))
+        {
+            s.Append($"\"versVariable\", ");
         }
 
         s.Remove(s.Length - 2, 2);
@@ -115,7 +120,7 @@ public class Poem
             s.Append(Environment.NewLine);
         }
 
-        if (PoemType != null)
+        if (PoemType != null && PoemType.ToLowerInvariant() != "default")
         {
             s.Append($"type = \"{PoemType.ToLowerInvariant()}\"");
             s.Append(Environment.NewLine);
@@ -132,16 +137,17 @@ public class Poem
             s.Append($"doubleAcrostiche = \"{DoubleAcrostiche.First} | {DoubleAcrostiche.Second}\"");
             s.Append(Environment.NewLine);
         }
-
+        
         if (VerseLength != null)
         {
             var verseLength = VerseLength.Contains(',') ? "-1" : VerseLength;
             s.Append($"verseLength = {verseLength}");
             s.Append(Environment.NewLine);
         }
-
+        
         s.Append("LastModifierDisplayName = \"Barbara Post\"");
         s.Append(Environment.NewLine);
+        
         s.Append("+++");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);
