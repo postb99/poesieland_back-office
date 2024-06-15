@@ -559,6 +559,44 @@ public class Engine
         chartDataFileHelper.WriteAfterData("poemDayPie", new[] { "Avec ou sans création ?" });
         streamWriter2.Close();
     }
+    
+    public void GeneratePoemsEnByDayRadarChartDataFile()
+    {
+        var poemStringDates = DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
+
+        var dataDict = InitMonthDayDictionary();
+
+        foreach (var poemStringDate in poemStringDates)
+        {
+            var year = poemStringDate.Substring(6);
+            var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
+            dataDict[day]++;
+        }
+
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR_EN], "../charts/general");
+        
+        var fileName = "poems-en-day-radar.js";
+        var chartId = "poemEnDayRadar";
+        
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
+        chartDataFileHelper.WriteBeforeData();
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+
+        foreach (var monthDay in dataDict.Keys)
+        {
+            var value = dataDict[monthDay];
+            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarEnChartLabel(monthDay), value
+            ));
+        }
+
+        chartDataFileHelper.WriteData(dataLines, true);
+
+        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poems by day of year" }, string.Empty, string.Empty);
+        streamWriter.Close();
+    }
 
     public void GeneratePoemsOfYearByDayRadarChartDataFile(int year)
     {
@@ -823,6 +861,54 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", new[] { "Par jour de la semaine" });
+        streamWriter.Close();
+    }
+    
+     public void GenerateEnPoemByDayOfWeekPieChartDataFile()
+    {
+        var dataDict = new Dictionary<int, int>();
+
+        var dayOfWeekData = DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.Date.DayOfWeek);
+
+        foreach (var dayOfWeek in dayOfWeekData)
+        {
+            if (dataDict.ContainsKey((int)dayOfWeek))
+            {
+                dataDict[(int)dayOfWeek]++;
+            }
+            else
+            {
+                dataDict.Add((int)dayOfWeek, 1);
+            }
+        }
+
+        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var baseColor = "rgba(72, 149, 239, {0})";
+        var baseAlpha = 0.2;
+        int[] daysOfWeek = { 1, 2, 3, 4, 5, 6, 0 };
+        foreach (var key in daysOfWeek)
+        {
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine(
+                key == 1 ? "Monday" :
+                key == 2 ? "Tuesday" :
+                key == 3 ? "Wednesday" :
+                key == 4 ? "Thursday" :
+                key == 5 ? "Friday" :
+                key == 6 ? "Saturday" : "Sunday",
+                dataDict[key],
+                string.Format(baseColor,
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+        }
+
+        var fileName = "poem-en-dayofweek-pie.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR_EN]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "../charts/general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemEnDayOfWeekPie", new[] { "By day of week" });
         streamWriter.Close();
     }
 
@@ -1179,6 +1265,41 @@ public class Engine
                 return day == "01" ? "Novembre" : string.Empty;
             case "12":
                 return day == "01" ? "Décembre" : day == "21" ? "Hiver" : string.Empty;
+            default:
+                return string.Empty;
+        }
+    }
+    
+    private string GetRadarEnChartLabel(string monthDay)
+    {
+        var day = monthDay.Substring(3);
+        var month = monthDay.Substring(0, 2);
+        switch (month)
+        {
+            case "01":
+                return day == "01" ? "January" : string.Empty;
+            case "02":
+                return day == "01" ? "February" : string.Empty;
+            case "03":
+                return day == "01" ? "March" : day == "20" ? "Spring" : string.Empty;
+            case "04":
+                return day == "01" ? "April" : string.Empty;
+            case "05":
+                return day == "01" ? "May" : string.Empty;
+            case "06":
+                return day == "01" ? "June" : day == "21" ? "Summer" : string.Empty;
+            case "07":
+                return day == "01" ? "July" : string.Empty;
+            case "08":
+                return day == "01" ? "August" : string.Empty;
+            case "09":
+                return day == "01" ? "September" : day == "23" ? "Fall" : string.Empty;
+            case "10":
+                return day == "01" ? "October" : string.Empty;
+            case "11":
+                return day == "01" ? "November" : string.Empty;
+            case "12":
+                return day == "01" ? "December" : day == "21" ? "Winter" : string.Empty;
             default:
                 return string.Empty;
         }

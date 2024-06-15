@@ -183,6 +183,12 @@ public class Program
 
         _engine.ImportPoemsEn(year);
         Console.WriteLine("Poems import OK");
+
+        _engine.GeneratePoemsEnByDayRadarChartDataFile();
+        Console.WriteLine("Chart for day radar OK");
+        
+        _engine.GenerateEnPoemByDayOfWeekPieChartDataFile();
+        Console.WriteLine("Chart for day of week OK");
     }
 
     private static void GeneratePoemContentFile(MenuItem menuChoice)
