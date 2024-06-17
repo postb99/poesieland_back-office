@@ -178,10 +178,7 @@ public class Program
 
     private static void ImportEnPoemsContentFiles(MenuItem menuChoice)
     {
-        Console.WriteLine(menuChoice.SubMenuItems.First().Label);
-        var year = Console.ReadLine();
-
-        _engine.ImportPoemsEn(year);
+        _engine.ImportPoemsEn();
         Console.WriteLine("Poems import OK");
 
         _engine.GeneratePoemEnCountFile();

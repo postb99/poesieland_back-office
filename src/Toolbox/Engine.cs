@@ -151,29 +151,44 @@ public class Engine
         Save();
     }
 
-    public void ImportPoemsEn(string year)
+    public void ImportPoemsEn()
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR_EN]);
-        var yearDirName = Directory.EnumerateDirectories(rootDir).FirstOrDefault(x => Path.GetFileName(x) == year);
-        var poemFilePaths = Directory.EnumerateFiles(yearDirName).Where(x => !x.EndsWith("_index.md"));
-        var poemsByPosition = new Dictionary<int, Poem>(50);
-        foreach (var poemContentPath in poemFilePaths)
-        {
-            var (poem, position) =
-                (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
 
-            poemsByPosition.Add(position, poem);
+        foreach (var season in DataEn.Seasons)
+        {
+            season.Poems.Clear();
         }
 
-        var seasonId = poemsByPosition.First().Value.SeasonId;
-        var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
+        var yearDirNames = Directory.EnumerateDirectories(rootDir);
 
-        targetSeason.Poems.Clear();
-
-        for (var i = 0; i < 50; i++)
+        foreach (var yearDirName in yearDirNames)
         {
-            if (poemsByPosition.TryGetValue(i, out var poem))
-                targetSeason.Poems.Add(poem);
+            var poemFilePaths = Directory.EnumerateFiles(yearDirName).Where(x => !x.EndsWith("_index.md"));
+            var poemsByPosition = new Dictionary<int, Poem>(50);
+
+            foreach (var poemContentPath in poemFilePaths)
+            {
+                var (poem, position) =
+                    (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+
+                poemsByPosition.Add(position, poem);
+            }
+
+            for (var i = 0; i < 50; i++)
+            {
+                if (poemsByPosition.TryGetValue(i, out var poem))
+                {
+                    var seasonId = poem.SeasonId;
+                    var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
+                    var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poem.Id);
+
+                    if (existingPosition > -1)
+                        targetSeason.Poems[existingPosition] = poem;
+                    else
+                        targetSeason.Poems.Add(poem);
+                }
+            }
         }
 
         Save();
@@ -559,7 +574,7 @@ public class Engine
         chartDataFileHelper.WriteAfterData("poemDayPie", new[] { "Avec ou sans création ?" });
         streamWriter2.Close();
     }
-    
+
     public void GeneratePoemsEnByDayRadarChartDataFile()
     {
         var poemStringDates = DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
@@ -575,10 +590,10 @@ public class Engine
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CONTENT_ROOT_DIR_EN], "../charts/general");
-        
+
         var fileName = "poems-en-day-radar.js";
         var chartId = "poemEnDayRadar";
-        
+
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
@@ -863,8 +878,8 @@ public class Engine
         chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", new[] { "Par jour de la semaine" });
         streamWriter.Close();
     }
-    
-     public void GenerateEnPoemByDayOfWeekPieChartDataFile()
+
+    public void GenerateEnPoemByDayOfWeekPieChartDataFile()
     {
         var dataDict = new Dictionary<int, int>();
 
@@ -987,7 +1002,8 @@ public class Engine
             else if (storageCategory != null)
             {
                 poemCount = season.Poems.Count(x => x.Categories.Any(x => x.Name == storageCategory));
-            } else if (forAcrostiche)
+            }
+            else if (forAcrostiche)
             {
                 poemCount = season.Poems.Count(x => x.Acrostiche != null || x.DoubleAcrostiche != null);
             }
@@ -1003,6 +1019,7 @@ public class Engine
             {
                 poemCount = season.Poems.Count(x => x.VerseLength.Contains(","));
             }
+
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.LongTitle} ({season.Years})", poemCount,
                 backgroundColor));
         }
@@ -1273,7 +1290,7 @@ public class Engine
                 return string.Empty;
         }
     }
-    
+
     private string GetRadarEnChartLabel(string monthDay)
     {
         var day = monthDay.Substring(3);
