@@ -1138,9 +1138,13 @@ public class Engine
         var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "poem_count.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
-        // EN
-        poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "poem_count.md");
+    }
+
+    public void GeneratePoemEnCountFile()
+    {
+        var poemCount = DataEn.Seasons.Select(x => x.Poems.Count).Sum();
+        var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "poem_count_en.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
     }
 

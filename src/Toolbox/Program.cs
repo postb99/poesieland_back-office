@@ -184,6 +184,9 @@ public class Program
         _engine.ImportPoemsEn(year);
         Console.WriteLine("Poems import OK");
 
+        _engine.GeneratePoemEnCountFile();
+        Console.WriteLine("Poems count OK");
+
         _engine.GeneratePoemsEnByDayRadarChartDataFile();
         Console.WriteLine("Chart for day radar OK");
         
