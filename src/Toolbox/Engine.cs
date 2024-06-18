@@ -246,8 +246,6 @@ public class Engine
     {
         var barChartFileName = "poems-length-bar.js";
         var barChartId = seasonId != null ? $"season{seasonId}PoemLengthBar" : "poemLengthBar";
-        var pieChartFileName = barChartFileName.Replace("bar", "pie");
-        var pieChartId = barChartId.Replace("Bar", "Pie");
 
         var poems = seasonId != null
             ? Data.Seasons.First(x => x.Id == seasonId).Poems
@@ -314,14 +312,8 @@ public class Engine
         var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
         var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
 
-        // Pie chart
-        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, subDir, pieChartFileName));
-        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Pie);
-        chartDataFileHelper2.WriteBeforeData();
-
         var baseColor = "rgba(72, 149, 239, {0})";
         var baseAlpha = 0.4;
-        var pieChartDataLines = new List<ChartDataFileHelper.DataLine>();
 
         foreach (var nbVerses in nbVersesRange)
         {
@@ -357,35 +349,6 @@ public class Engine
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
-
-        foreach (var key in nbVersesRange)
-        {
-            if (!quatrainsData.ContainsKey(key)) continue;
-            pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
-                $"{key / 4} {(key == 4 ? "quatrain" : "quatrains")}",
-                quatrainsData[key],
-                string.Format(baseColor,
-                    (baseAlpha + 0.1 * (key / 4 - 1)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
-        }
-
-        if (nbNotQuatrainImpossible > 0)
-            pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Nombre de vers non multiple de quatre",
-                nbNotQuatrainImpossible, "rgba(67, 97, 238, 0.9)"));
-
-        if (nbNotQuatrainVoluntarily > 0)
-        {
-            var title = poems.Any(x => x.Acrostiche != null)
-                ? "Rimes suivies ou acrostiche découpé différemment"
-                : "Rimes suivies";
-            pieChartDataLines.Add(new ChartDataFileHelper.ColoredDataLine(
-                title, nbNotQuatrainVoluntarily,
-                "rgba(67, 97, 238, 0.7)"));
-        }
-
-        chartDataFileHelper2.WriteData(pieChartDataLines, true);
-        chartDataFileHelper2.WriteAfterData(pieChartId, new[] { "En quatrains ?" });
-        streamWriter2.Close();
     }
 
     public void GenerateSeasonCategoriesPieChartDataFile(int seasonId)
@@ -522,8 +485,7 @@ public class Engine
 
         var dataLines = new List<ChartDataFileHelper.DataLine>();
 
-        var dayWithPoems = 0;
-        var dayWithoutPoems = 0;
+        var dayWithoutPoems = new List<string>();
 
         foreach (var monthDay in dataDict.Keys)
         {
@@ -532,22 +494,8 @@ public class Engine
             ));
             if (value == 0)
             {
-                dayWithoutPoems++;
+                dayWithoutPoems.Add(monthDay);
             }
-            else
-            {
-                dayWithPoems++;
-            }
-        }
-
-        var specialValue = dataDict["02-29"];
-        if (specialValue == 0)
-        {
-            dayWithoutPoems--;
-        }
-        else
-        {
-            dayWithPoems--;
         }
 
         chartDataFileHelper.WriteData(dataLines, true);
@@ -558,20 +506,22 @@ public class Engine
             backgroundColor);
         streamWriter.Close();
 
-        // Second chart (general
         if (storageSubCategory != null || storageCategory != null) return;
 
-        fileName = "poem-day-pie.js";
-        var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        chartDataFileHelper = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Pie);
-        chartDataFileHelper.WriteBeforeData();
-        dataLines = new List<ChartDataFileHelper.DataLine>();
-        dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Jours sans écrire", dayWithoutPoems,
-            "rgba(72, 149, 239, 1)"));
-        dataLines.Add(
-            new ChartDataFileHelper.ColoredDataLine("Jours de création", dayWithPoems, "rgba(76, 201, 240, 1)"));
-        chartDataFileHelper.WriteData(dataLines, true);
-        chartDataFileHelper.WriteAfterData("poemDayPie", new[] { "Avec ou sans création ?" });
+        // Days without poems listing
+        
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR], "../includes/days_without_creation.md");
+        var streamWriter2 = new StreamWriter(filePath);
+
+        streamWriter2.WriteLine("+++");
+        streamWriter2.WriteLine("title = \"Les jours sans\"");
+        streamWriter2.WriteLine("+++");
+
+        foreach (var monthDay in dayWithoutPoems)
+        {
+            var splitted = monthDay.Split('-');
+            streamWriter2.WriteLine($"- {splitted[1]} {GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
+        }
         streamWriter2.Close();
     }
 
