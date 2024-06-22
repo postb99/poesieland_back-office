@@ -520,7 +520,7 @@ public class Engine
         foreach (var monthDay in dayWithoutPoems)
         {
             var splitted = monthDay.Split('-');
-            streamWriter2.WriteLine($"- {splitted[1]} {GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
+            streamWriter2.WriteLine($"- {splitted[1].TrimStart('0')} {GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
         }
         streamWriter2.Close();
     }
