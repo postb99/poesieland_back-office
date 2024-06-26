@@ -53,7 +53,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public string? GetAcrostiche(string line)
     {
-        var value = line?.Substring(12).CleanedContent();
+        var value = line?.Substring(12);
         return value == "\"\"" ? null : value;
     }
 
