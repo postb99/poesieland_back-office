@@ -113,8 +113,10 @@ public class Program
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
                 return true;
-            case MainMenuSettings.MenuChoices.CheckPoemsWithoutVerseLength:
+            case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
                 _engine.CheckPoemsWithoutVerseLength();
+                _engine.VerifySeasonHaveCorrectPoemCount();
+                _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
                 // TEMP
                 //_engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
                 // TEMP 2

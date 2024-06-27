@@ -509,7 +509,7 @@ public class Engine
         if (storageSubCategory != null || storageCategory != null) return;
 
         // Days without poems listing
-        
+
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR], "../includes/days_without_creation.md");
         var streamWriter2 = new StreamWriter(filePath);
 
@@ -599,6 +599,50 @@ public class Engine
         chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, string.Empty,
             string.Empty);
         streamWriter.Close();
+    }
+
+    public void VerifySeasonHaveCorrectPoemCount()
+    {
+        var seasons = Data.Seasons.ToList();
+        for (int i = 0; i < seasons.Count; i++)
+        {
+            var season = seasons[i];
+            var desc = $"[{season.Id} - {season.Name}]: {season.Poems.Count}";
+            if (i < seasons.Count - 1 && season.Poems.Count != 50)
+            {
+                throw new Exception($"Not 50 poems for {desc}!");
+            }
+            else if (i == seasons.Count - 1 && season.Poems.Count >= 50)
+            {
+                throw new Exception($"Not max 50 poems for {desc}!");
+            }
+        }
+    }
+
+    public void VerifySeasonHaveCorrectWeightInPoemFile(int? seasonId)
+    {
+
+        if (seasonId == null)
+        {
+            VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id);
+            VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id - 1);
+            return;
+        }
+        var season = Data.Seasons.First(s => s.Id == seasonId);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var seasonDirName = Directory.EnumerateDirectories(rootDir).FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+        var poemFiles = Directory.EnumerateFiles(seasonDirName).Where(x => !x.EndsWith("index.md"));
+
+        foreach (var poemFile in poemFiles)
+        {
+            var (poem, position) = (_poemContentImporter ??= new PoemContentImporter()).Import(poemFile, _configuration);
+            var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
+            var poemIndex = season.Poems.IndexOf(poemInSeason);
+            if (poemIndex != position - 1)
+            {
+                throw new Exception($"Poem {poem.Id} should have weight {poemIndex + 1}!");
+            }
+        }
     }
 
     private static Dictionary<string, int> InitMonthDayDictionary()
@@ -763,7 +807,7 @@ public class Engine
                 intensityDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
         var fileName = "poem-intensity-pie.js";
@@ -815,7 +859,7 @@ public class Engine
                 dataDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
         var fileName = "poem-dayofweek-pie.js";
@@ -863,7 +907,7 @@ public class Engine
                 dataDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
         var fileName = "poem-en-dayofweek-pie.js";
