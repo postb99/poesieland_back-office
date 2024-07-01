@@ -223,23 +223,14 @@ public class Engine
 
     public void CheckPoemsWithoutVerseLength()
     {
-        // TEMP
-        //GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
-
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var poemsWithVerseLength = poems.Count(x => x.VerseLength != null && x.VerseLength != "0");
-        int percentage = poemsWithVerseLength * 100 / poems.Count();
-        Console.WriteLine("{0}/{1} poems ({2} %) with verse length specified",
-            poemsWithVerseLength, poems.Count(), percentage);
-        Console.WriteLine("[INFO] First poem without verse length specified: {0}",
-            poems.FirstOrDefault(x => x.VerseLength == null)?.Id);
-        Console.WriteLine("[ERROR] First poem with verse length equal to '0': {0}",
-            poems.FirstOrDefault(x => x.VerseLength == "0")?.Id);
+        if (poemsWithVerseLength == poems.Count())
+            return;
 
-        var seasonWithoutAllVerseLength =
-            Data.Seasons.Where(x => x.Poems.Any(x => x.VerseLength == null || x.VerseLength == "0")).ToList();
-        Console.WriteLine("[INFO] IDs of seasons without all verse length specified: {0}",
-            string.Join(',', seasonWithoutAllVerseLength.Select(x => x.Id)));
+        var incorrectPoem = poems.FirstOrDefault(x => x.VerseLength == null || x.VerseLength == "0");
+        if (incorrectPoem != null)
+            throw new Exception($"[ERROR] First poem with verse length unspecified or equal to '0': {incorrectPoem.Id}");
     }
 
     public void GeneratePoemsLengthBarChartDataFile(int? seasonId)
@@ -638,7 +629,7 @@ public class Engine
             var (poem, position) = (_poemContentImporter ??= new PoemContentImporter()).Import(poemFile, _configuration);
             var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
             var poemIndex = season.Poems.IndexOf(poemInSeason);
-            if (poemIndex != position - 1)
+            if (poemIndex != -1 && poemIndex != position)
             {
                 throw new Exception($"Poem {poem.Id} should have weight {poemIndex + 1}!");
             }

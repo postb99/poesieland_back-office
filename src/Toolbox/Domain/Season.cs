@@ -20,7 +20,7 @@ public class Season
 
     [XmlIgnore] public string ContentDirectoryName => $"{Id}_{NumberedName.UnaccentedCleaned()}_saison";
 
-    [XmlIgnore] public string LongTitle => $"{NumberedName} Saison : {Name}";
+    [XmlIgnore] public string LongTitle => $"{NumberedName} Saison : {Name.Replace("'", "\\'")}";
 
     [XmlIgnore]
     public string Years

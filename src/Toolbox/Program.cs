@@ -117,6 +117,7 @@ public class Program
                 _engine.CheckPoemsWithoutVerseLength();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
+                Console.WriteLine("Content metadata quality OK");
                 // TEMP
                 //_engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
                 // TEMP 2
@@ -367,6 +368,12 @@ public class Program
         
         // Over seasons categories' and tags' bar
         GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
+
+        // And check data quality
+        _engine.CheckPoemsWithoutVerseLength();
+        _engine.VerifySeasonHaveCorrectPoemCount();
+        _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
+        Console.WriteLine("Content metadata quality OK");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
