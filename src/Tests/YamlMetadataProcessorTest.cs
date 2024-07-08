@@ -113,7 +113,7 @@ namespace Tests;
             poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.Count.Should().Be(1);
             poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.FirstOrDefault().Should().Be("Eté");
             poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault().Should()
-                .Be("Animaux");
+                .Be("Faune");
         }
 
         [Fact(Skip = "Metadata updated to TOML")]

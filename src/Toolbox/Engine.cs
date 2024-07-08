@@ -87,6 +87,13 @@ public class Engine
 
     public void GenerateSeasonAllPoemFiles(int seasonId)
     {
+        // if (seasonId == -1)
+        // {
+        //     var poems = Data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.SelectMany(x => x.SubCategories).Any(x => x == "Faune")).ToList();
+        //     poems.ForEach(GeneratePoemFile);
+        //     return;
+        // }
+        
         var season = Data.Seasons.First(x => x.Id == seasonId);
         season.Poems.ForEach(GeneratePoemFile);
     }
