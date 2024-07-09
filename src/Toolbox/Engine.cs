@@ -459,6 +459,9 @@ public class Engine
                 case "rgba(247, 235, 253, 1)":
                     borderColor = "rgba(234, 191, 250, 1)";
                     break;
+                case "rgba(244, 254, 254, 1)":
+                    borderColor = "rgba(119, 181, 254, 1)";
+                    break;
             }
         }
         else if (storageCategory != null)
@@ -944,6 +947,9 @@ public class Engine
                     break;
                 case "rgba(247, 235, 253, 1)":
                     borderColor = "rgba(234, 191, 250, 1)";
+                    break;
+                case "rgba(244, 254, 254, 1)":
+                    borderColor = "rgba(119, 181, 254, 1)";
                     break;
             }
         }
