@@ -118,13 +118,6 @@ public class Program
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
                 Console.WriteLine("Content metadata quality OK");
-                // TEMP
-                //_engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
-                // TEMP 2
-                // for (var i = 1995; i < 2025; i++)
-                // {
-                //     _engine.GeneratePoemsOfYearByDayRadarChartDataFile(i);
-                // }
                 return true;
             case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:
                 GenerateAllSeasonsPoemIntervalBarChartDataFile();
@@ -267,12 +260,6 @@ public class Program
     {
         _engine.GeneratePoemsLengthBarChartDataFile(null);
         Console.WriteLine("Poems length bar chart data file OK");
-
-        // Once
-        // for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
-        // {
-        //     _engine.GeneratePoemsLengthBarChartDataFile(i);
-        // }
     }
 
     private static void GeneratePoemVersesLengthBarChartDataFile()
@@ -294,6 +281,12 @@ public class Program
                 {
                     _engine.GenerateSeasonCategoriesPieChartDataFile(i);
                 }
+
+                // Categories' and tags' radar
+                GeneratePoemsCategoriesAndTagsRadarChartDataFile();
+
+                // Over seasons categories' and tags' bar
+                GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
             }
             else
             {
