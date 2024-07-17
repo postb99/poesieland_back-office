@@ -453,7 +453,7 @@ public class Engine
             switch (borderColor)
             {
                 // Use some not too light colors
-                case "rgba(255, 229, 236, 1)":
+                case "rgba(254, 231, 240, 1)":
                     borderColor = "rgba(255, 194, 209, 1)";
                     break;
                 case "rgba(247, 235, 253, 1)":
@@ -942,7 +942,7 @@ public class Engine
             switch (borderColor)
             {
                 // Use some not too light colors
-                case "rgba(255, 229, 236, 1)":
+                case "rgba(254, 231, 240, 1)":
                     borderColor = "rgba(255, 194, 209, 1)";
                     break;
                 case "rgba(247, 235, 253, 1)":
