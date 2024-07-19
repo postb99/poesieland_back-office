@@ -115,6 +115,7 @@ public class Program
                 return true;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
                 _engine.CheckPoemsWithoutVerseLength();
+                _engine.CheckPoemsWithVariableVerseLength();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
                 Console.WriteLine("Content metadata quality OK");
@@ -216,10 +217,10 @@ public class Program
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
             GenerateDependantChartDataFiles(seasonId, importedPoem.Date.Year);
 
-            var missingYearInTags = _engine.CheckMissingYearTagInYamlMetadata();
-            if (missingYearInTags.Any())
+            var missingTags = _engine.CheckMissingTagsInYamlMetadata();
+            if (missingTags.Any())
             {
-                Console.WriteLine($"Missing year in tags for poems: {string.Join(',', missingYearInTags)}");
+                Console.WriteLine($"[ERROR] Missing tags for poems: {string.Join(',', missingTags)}, check these tags: year, versVariable");
             }
         }
         else

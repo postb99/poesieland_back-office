@@ -57,7 +57,7 @@ public class PoemContentImporter
         return (_poem, _position);
     }
 
-    public (List<string>, int, string) GetTagsAndYear(string contentFilePath, IConfiguration configuration)
+    public (List<string>, int, string, string) GetTagsYearVariableVerseLength(string contentFilePath, IConfiguration configuration)
     {
         _configuration = configuration;
         _poem = new Poem();
@@ -75,7 +75,7 @@ public class PoemContentImporter
             ProcessLine(line);
         } while (line != null);
 
-        return (_metadataProcessor.GetTags(), _poem.Date.Year, _poem.Id);
+        return (_metadataProcessor.GetTags(), _poem.Date.Year, _poem.Id, _poem.VerseLength == "-1" ? _poem.Info.Substring(16) : null);
     }
 
     private void ProcessLine(string? line)

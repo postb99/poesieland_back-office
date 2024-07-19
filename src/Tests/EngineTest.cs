@@ -191,7 +191,7 @@ public class EngineTest
         public void CheckMissingYearTagInYamlMetadata()
         {
             var engine = Helpers.CreateEngine();
-            var anomalies = engine.CheckMissingYearTagInYamlMetadata();
+            var anomalies = engine.CheckMissingTagsInYamlMetadata();
             TestOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
             anomalies.Count().Should().Be(0);
         }

@@ -207,7 +207,7 @@ public class Engine
         poems.ForEach(GeneratePoemFile);
     }
 
-    public IEnumerable<string> CheckMissingYearTagInYamlMetadata()
+    public IEnumerable<string> CheckMissingTagsInYamlMetadata()
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
         var seasonMaxId = Data.Seasons.Count;
@@ -219,10 +219,18 @@ public class Engine
             var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
             foreach (var poemContentPath in poemContentPaths)
             {
-                var (tags, year, poemId) = poemContentImporter.GetTagsAndYear(poemContentPath, _configuration);
-                if (poemContentImporter.HasYamlMetadata && !tags.Contains(year.ToString()))
+                var (tags, year, poemId, variableVerseLength) = poemContentImporter.GetTagsYearVariableVerseLength(poemContentPath, _configuration);
+                if (poemContentImporter.HasYamlMetadata)
                 {
-                    yield return poemId;
+                    if (!tags.Contains(year.ToString()))
+                    {
+                        yield return poemId;
+                    }
+
+                    if (variableVerseLength != null && !tags.Contains("versVariable"))
+                    {
+                        yield return poemId;
+                    }
                 }
             }
         }
@@ -238,6 +246,15 @@ public class Engine
         var incorrectPoem = poems.FirstOrDefault(x => x.VerseLength == null || x.VerseLength == "0");
         if (incorrectPoem != null)
             throw new Exception($"[ERROR] First poem with verse length unspecified or equal to '0': {incorrectPoem.Id}");
+    }
+
+    public void CheckPoemsWithVariableVerseLength()
+    {
+        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == "-1"));
+
+        var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Vers variable : "));
+        if (incorrectPoem != null)
+            throw new Exception($"[ERROR] First poem with variable verse length unspecified in Info: {incorrectPoem.Id}");
     }
 
     public void GeneratePoemsLengthBarChartDataFile(int? seasonId)

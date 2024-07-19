@@ -142,7 +142,7 @@ namespace Tests;
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
                 configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
             var poemContentImporter = new PoemContentImporter();
-            var (tags, year, poemId) = poemContentImporter.GetTagsAndYear(poemContentFilePath, configuration);
+            var (tags, year, poemId, _) = poemContentImporter.GetTagsYearVariableVerseLength(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
             tags.Count.Should().Be(2);
