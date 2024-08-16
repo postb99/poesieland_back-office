@@ -18,6 +18,8 @@ public class Poem
 
     [XmlAttribute("longueurVers")] public string? VerseLength { get; set; }
 
+    [XmlIgnore] public bool HasVariableVerseLength => VerseLength.Contains(",");
+
     [XmlElement("info")] public string? Info { get; set; }
 
     [XmlElement("picture")] public List<string>? Pictures { get; set; }
@@ -140,7 +142,7 @@ public class Poem
         
         if (VerseLength != null)
         {
-            var verseLength = VerseLength.Contains(',') ? "-1" : VerseLength;
+            var verseLength = HasVariableVerseLength ? "-1" : VerseLength;
             s.Append($"verseLength = {verseLength}");
             s.Append(Environment.NewLine);
         }

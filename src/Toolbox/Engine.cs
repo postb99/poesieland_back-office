@@ -250,7 +250,7 @@ public class Engine
 
     public void CheckPoemsWithVariableVerseLength()
     {
-        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == "-1"));
+        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableVerseLength));
 
         var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Vers variable : "));
         if (incorrectPoem != null)
@@ -1170,6 +1170,12 @@ public class Engine
         var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "poem_count.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
+
+        // And for variable verse
+        var variableVersePoemCount = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableVerseLength)).Count();
+        var variableVersePoemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "variableVerse_poem_count.md");
+        File.WriteAllText(variableVersePoemCountFilePath, variableVersePoemCount.ToString());
     }
 
     public void GeneratePoemEnCountFile()
