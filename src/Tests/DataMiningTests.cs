@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using System.Text.RegularExpressions;
 using Toolbox.Domain;
 using Xunit.Abstractions;
 
@@ -190,6 +191,35 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             if (poem.VersesCount % 4 == 0 && !poem.HasQuatrains)
             {
                 _testOutputHelper.WriteLine(poem.Id);
+            }
+        }
+    }
+
+    [Fact]
+    public void PossibleProperNouns()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            var poemIdPrinted = false;
+            foreach (var verse in poem.Paragraphs.SelectMany(x => x.Verses))
+            {
+                if (poemIdPrinted)
+                    break;
+                var matches = Regex.Matches(verse, "\\b[A-Z].*?\\b");
+                //Match match = Regex.Match(verse, "[A-Z]\\S*\\s");
+                foreach (Match match in matches)
+                {
+                    if (match is { Success: true, Index: > 0 } && match.Index - 2 > 0)
+                    {
+                        var previousChar = verse[match.Index - 1];
+                        var penultimateChar = verse[match.Index - 2];
+                        if (previousChar == '"') continue;
+                        if (penultimateChar == '.' || penultimateChar == '!') continue;
+                        _testOutputHelper.WriteLine($"{poem.Id} : {match.Value}");
+                        poemIdPrinted = true;
+                        break;
+                    }
+                }
             }
         }
     }
