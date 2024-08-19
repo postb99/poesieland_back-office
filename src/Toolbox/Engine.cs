@@ -413,7 +413,7 @@ public class Engine
         chartDataFileHelper.WriteAfterData($"season{seasonId}Pie",
             new[]
             {
-                $"{season.LongTitle} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}"
+                $"{season.EscapedLongTitle} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}"
             });
         streamWriter.Close();
     }
@@ -1035,7 +1035,7 @@ public class Engine
                 poemCount = season.Poems.Count(x => x.VerseLength.Contains(","));
             }
 
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.LongTitle} ({season.Years})", poemCount,
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedLongTitle} ({season.Years})", poemCount,
                 backgroundColor));
         }
 
