@@ -188,12 +188,11 @@ public class Engine
                 {
                     var seasonId = poem.SeasonId;
                     var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
-                    var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poem.Id);
-
-                    if (existingPosition > -1)
-                        targetSeason.Poems[existingPosition] = poem;
-                    else
-                        targetSeason.Poems.Add(poem);
+                    if (targetSeason == null)    {
+                        targetSeason = new Season { Id = seasonId };
+                        DataEn.Seasons.Add(targetSeason);
+                    }
+                    targetSeason.Poems.Add(poem);
                 }
             }
         }
