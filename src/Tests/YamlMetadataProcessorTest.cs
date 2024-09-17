@@ -56,17 +56,33 @@ namespace Tests;
         }
 
         [Fact]
-        private void ShouldImportInfoYamlMetadata()
+         private void ShouldImportInfoYamlMetadata()
+         {
+             var configuration = Helpers.GetConfiguration();
+             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+                 configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
+             var poemContentImporter = new PoemContentImporter();
+             var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+             poemContentImporter.HasYamlMetadata.Should().BeTrue();
+             poemContentImporter.HasTomlMetadata.Should().BeFalse();
+             poem.Info.Should().Be("Reprise des deux premiers vers d'un [poème de 1997](../3_troisieme_saison/est_ce_un_automne) mais pour exprimer une autre idée");
+         }
+         
+        [Fact]
+        private void ShouldImportMultilineInfoYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-                configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
+                configuration[Constants.CONTENT_ROOT_DIR], "22_vingt_deuxieme_saison\\l_automne_est_venu.md");
             var poemContentImporter = new PoemContentImporter();
             var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            poem.Info.Should().Be("Reprise des deux premiers vers d'un [poème de 1997](../3_troisieme_saison/est_ce_un_automne) mais pour exprimer une autre idée");
+            // TODO poem.Info...
         }
+        
+        // UT for no info / mono-line info / multiline info.
+        // Then also for TOML. Edit a TOML file.
         
         [Fact]
         private void ShouldImportNullInfoYamlMetadata()

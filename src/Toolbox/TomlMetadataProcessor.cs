@@ -82,6 +82,11 @@ public class TomlMetadataProcessor : IMetadataProcessor
         }
     }
 
+    public void BuildInfoLines(string line)
+    {
+        throw new NotImplementedException("TODO");
+    }
+
     public void AddValue(string line, int nbSpaces)
     {
         var lineValue = line.Substring(nbSpaces + 2);
@@ -106,5 +111,10 @@ public class TomlMetadataProcessor : IMetadataProcessor
     public List<string> GetPictures()
     {
         return _pictures;
+    }
+    
+    public List<string> GetInfoLines()
+    {
+        throw new NotImplementedException("TODO");
     }
 }
