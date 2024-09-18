@@ -91,13 +91,18 @@ public class YamlMetadataProcessor : IMetadataProcessor
     
     public void BuildInfoLines(string line)
     {
+        // FIXME when IsProcessingList.InfoLines then a null line should become a line break
         _isProcessingList = IsProcessingList.InfoLines;
         var inlineInfo = GetInfo(line);
-        if (inlineInfo != "|-")
+        if (inlineInfo == null)
         {
-            AddValue(inlineInfo, 0);
             _isProcessingList = IsProcessingList.None;
+            return;
         }
+
+        if (inlineInfo == "|-") return;
+        AddValue(inlineInfo, -2);
+        _isProcessingList = IsProcessingList.None;
     }
     
     public void BuildPictures(string line)

@@ -41,7 +41,7 @@ public class PoemContentImporter
 
         _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
         _poem.Pictures = _metadataProcessor.GetPictures();
-        _poem.Info = string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+        _poem.Info = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
 
         if (_poem.VerseLength == "-1")

@@ -19,10 +19,12 @@ namespace Tests;
             poem.Title.Should().Be("Saisons");
             poem.Id.Should().Be("saisons_18");
             poem.TextDate.Should().Be("01.11.2023");
-            poem.Categories.Count.Should().Be(1);
-            poem.Categories.First().Name.Should().Be("Saisons");
-            poem.Categories.First().SubCategories.Count.Should().Be(4);
-            poem.Categories.First().SubCategories.First().Should().Be("Automne");
+            poem.Categories.Count.Should().Be(2);
+            var saisonsCategorieIndex = poem.Categories.FindIndex(x => x.Name == "Saisons");
+            var natureCategorieIndex = poem.Categories.FindIndex(x => x.Name == "Nature");
+            poem.Categories[saisonsCategorieIndex].SubCategories.Count.Should().Be(4);
+            poem.Categories[saisonsCategorieIndex].SubCategories.First().Should().Be("Automne");
+            poem.Categories[natureCategorieIndex].SubCategories.First().Should().Be("Climat");
             poem.VerseLength.Should().Be("8");
             poem.PoemType.Should().BeNull();
             position.Should().Be(11);
@@ -42,30 +44,30 @@ namespace Tests;
             poem.DoubleAcrostiche.Second.Should().Be("destin");
         }
 
-        [Fact(Skip = "Metadata updated to TOML")]
+        [Fact]
         private void ShouldImportTypeYamlMetadata()
         {
             var configuration = Helpers.GetConfiguration();
             var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-                configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\pantoun_du_reve.md");
+                configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\a_bacchus.md");
             var poemContentImporter = new PoemContentImporter();
             var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            poem.PoemType.Should().Be("pantoun");
+            poem.PoemType.Should().Be("sonnet");
         }
 
         [Fact]
-         private void ShouldImportInfoYamlMetadata()
+         private void ShouldImportSingleLineInfoYamlMetadata()
          {
              var configuration = Helpers.GetConfiguration();
              var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-                 configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
+                 configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\a_bacchus.md");
              var poemContentImporter = new PoemContentImporter();
              var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
              poemContentImporter.HasYamlMetadata.Should().BeTrue();
              poemContentImporter.HasTomlMetadata.Should().BeFalse();
-             poem.Info.Should().Be("Reprise des deux premiers vers d'un [poème de 1997](../3_troisieme_saison/est_ce_un_automne) mais pour exprimer une autre idée");
+             poem.Info.Should().Be("Reprise d'un poème-chanson de 1994");
          }
          
         [Fact]
@@ -78,7 +80,18 @@ namespace Tests;
             var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            // TODO poem.Info...
+            /*
+            {{% notice style="primary" %}}
+            Acrostiche : l'automne venu.
+
+            Les poèmes qui commencent par ce vers...
+            {{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
+            {{% /notice %}}
+            */
+            var infoLines = poem.Info.Split(Environment.NewLine);
+            infoLines.Length.Should().Be(6);
+            infoLines[0].Should().Be("{{% notice style=\"primary\" %}}");
+            infoLines[5].Should().Be("{{% /notice %}}");
         }
         
         // UT for no info / mono-line info / multiline info.
@@ -161,8 +174,9 @@ namespace Tests;
             var (tags, year, poemId, _) = poemContentImporter.GetTagsYearVariableVerseLength(poemContentFilePath, configuration);
             poemContentImporter.HasYamlMetadata.Should().BeTrue();
             poemContentImporter.HasTomlMetadata.Should().BeFalse();
-            tags.Count.Should().Be(2);
+            tags.Count.Should().Be(3);
             tags[0].Should().Be("2023");
             tags[1].Should().Be("saisons");
+            tags[2].Should().Be("nature");
         }
     }
