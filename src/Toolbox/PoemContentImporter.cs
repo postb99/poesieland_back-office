@@ -41,6 +41,7 @@ public class PoemContentImporter
 
         _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
         _poem.Pictures = _metadataProcessor.GetPictures();
+        _poem.Info = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
 
         if (_poem.VerseLength == "-1")
@@ -128,6 +129,10 @@ public class PoemContentImporter
         {
             _metadataProcessor!.BuildPictures(line);
         }
+        else if (line.StartsWith("info"))
+        {
+            _metadataProcessor!.BuildInfoLines(line);
+        }
         else if (line.StartsWith("    - "))
         {
             _metadataProcessor!.AddValue(line, 4);
@@ -136,13 +141,17 @@ public class PoemContentImporter
         {
             _metadataProcessor!.AddValue(line, 2);
         }
-        else if (line.StartsWith("  ")) // double space only
+        else if (line.StartsWith("    ")) // 4 spaces
         {
             _metadataProcessor!.AddValue(line, 0);
         }
-        else if (line.StartsWith("info"))
+        else if (line.StartsWith("  ")) // double space
         {
-            _poem.Info = _metadataProcessor!.GetInfo(line);
+            _metadataProcessor!.AddValue(line, 0);
+        }
+        else if (line == "") // empty line
+        {
+            _metadataProcessor!.AddValue(line, 0);
         }
         else if (line.StartsWith("acrostiche"))
         {

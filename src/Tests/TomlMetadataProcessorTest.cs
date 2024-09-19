@@ -6,6 +6,7 @@ namespace Tests;
 
 public class TomlMetadataProcessorTest
 {
+    // TODO a test for null, single-line or multiline info metadata. Edit a TOML file to get a test case.
     [Fact]
     private void ShouldImportTomlMetadata()
     {

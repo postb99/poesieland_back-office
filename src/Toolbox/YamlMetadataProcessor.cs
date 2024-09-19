@@ -7,15 +7,18 @@ public class YamlMetadataProcessor : IMetadataProcessor
 {
     private enum IsProcessingList
     {
+        None,
         Categories,
         Tags,
-        Pictures
+        Pictures,
+        InfoLines
     }
 
     private IsProcessingList _isProcessingList;
     private readonly List<string> _categories = new();
     private readonly List<string> _tags = new();
     private readonly List<string> _pictures = new();
+    private readonly List<string> _infoLines = new();
 
     public string GetTitle(string line)
     {
@@ -86,6 +89,17 @@ public class YamlMetadataProcessor : IMetadataProcessor
         _isProcessingList = IsProcessingList.Tags;
     }
     
+    public void BuildInfoLines(string line)
+    {
+        _isProcessingList = IsProcessingList.InfoLines;
+        var inlineInfo = GetInfo(line);
+        if (inlineInfo != null && inlineInfo != "|-")
+        {
+            AddValue(inlineInfo, -2);
+            _isProcessingList = IsProcessingList.None;
+        }
+    }
+    
     public void BuildPictures(string line)
     {
         _isProcessingList = IsProcessingList.Pictures;
@@ -93,7 +107,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public void AddValue(string line, int nbSpaces)
     {
-        var lineValue = line.Substring(nbSpaces + 2);
+        var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
         switch (_isProcessingList)
         {
             case IsProcessingList.Categories:
@@ -104,6 +118,9 @@ public class YamlMetadataProcessor : IMetadataProcessor
                 break;
             case IsProcessingList.Pictures:
                 _pictures.Add(lineValue);
+                break;
+            case IsProcessingList.InfoLines:
+                _infoLines.Add(lineValue.TrimStart(' '));
                 break;
         }
     }
@@ -121,5 +138,10 @@ public class YamlMetadataProcessor : IMetadataProcessor
     public List<string> GetPictures()
     {
         return _pictures;
+    }
+    
+    public List<string> GetInfoLines()
+    {
+        return _infoLines;
     }
 }
