@@ -145,7 +145,11 @@ public class PoemContentImporter
         {
             _metadataProcessor!.AddValue(line, 0);
         }
-        else if (line.StartsWith("  ")) // double space only
+        else if (line.StartsWith("  ")) // double space
+        {
+            _metadataProcessor!.AddValue(line, 0);
+        }
+        else if (line == "") // empty line
         {
             _metadataProcessor!.AddValue(line, 0);
         }

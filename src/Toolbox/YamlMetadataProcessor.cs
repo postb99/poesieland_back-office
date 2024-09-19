@@ -91,18 +91,13 @@ public class YamlMetadataProcessor : IMetadataProcessor
     
     public void BuildInfoLines(string line)
     {
-        // FIXME when IsProcessingList.InfoLines then a null line should become a line break
         _isProcessingList = IsProcessingList.InfoLines;
         var inlineInfo = GetInfo(line);
-        if (inlineInfo == null)
+        if (inlineInfo != null && inlineInfo != "|-")
         {
+            AddValue(inlineInfo, -2);
             _isProcessingList = IsProcessingList.None;
-            return;
         }
-
-        if (inlineInfo == "|-") return;
-        AddValue(inlineInfo, -2);
-        _isProcessingList = IsProcessingList.None;
     }
     
     public void BuildPictures(string line)
@@ -112,7 +107,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public void AddValue(string line, int nbSpaces)
     {
-        var lineValue = line.Substring(nbSpaces + 2);
+        var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
         switch (_isProcessingList)
         {
             case IsProcessingList.Categories:
@@ -125,7 +120,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
                 _pictures.Add(lineValue);
                 break;
             case IsProcessingList.InfoLines:
-                _infoLines.Add(lineValue);
+                _infoLines.Add(lineValue.TrimStart(' '));
                 break;
         }
     }
