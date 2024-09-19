@@ -12,11 +12,13 @@ public class TomlMetadataProcessor : IMetadataProcessor
     }
     private List<string> _categories = new();
     private List<string> _pictures = new();
+    private List<string> _infoLines = new();
 
     public string GetTitle(string line)
     {
         return line.Substring(8).CleanedContent()!;
     }
+
 
     public string GetId(string line)
     {
@@ -84,7 +86,8 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildInfoLines(string line)
     {
-        throw new NotImplementedException("TODO");
+        //throw new NotImplementedException("TODO");
+        _infoLines.Add(line.Substring(7).Trim('"'));
     }
 
     public void AddValue(string line, int nbSpaces)
@@ -115,6 +118,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
     
     public List<string> GetInfoLines()
     {
-        throw new NotImplementedException("TODO");
+        //throw new NotImplementedException("TODO");
+        return _infoLines;
     }
 }

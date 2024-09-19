@@ -41,7 +41,8 @@ public class PoemContentImporter
 
         _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
         _poem.Pictures = _metadataProcessor.GetPictures();
-        _poem.Info = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+        _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
 
         if (_poem.VerseLength == "-1")
@@ -52,7 +53,7 @@ public class PoemContentImporter
                     "When verse length is -1, info should give variable length: 'Vers variable : ...'");
             }
 
-            _poem.VerseLength = _poem.Info.IndexOf(".") > -1 ? _poem.Info.Substring(16, _poem.Info.IndexOf(".") - 16) : _poem.Info.Substring(16);
+            _poem.VerseLength = poemInfo.IndexOf(".") > -1 ? poemInfo.Substring(16, poemInfo.IndexOf(".") - 16) : poemInfo.Substring(16);
         }
 
         return (_poem, _position);
