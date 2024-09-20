@@ -15,7 +15,8 @@ public class PoemContentImporterTest
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poem.Info.Should().Be("Vers variable : 8, 6, 4, 2");
-        poem.VerseLength.Should().NotBe("-1");
+        poem.DetailedVerseLength.Should().Be("8, 6, 4, 2");
+        // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.Should().Be("8, 6, 4, 2");
     }
 }

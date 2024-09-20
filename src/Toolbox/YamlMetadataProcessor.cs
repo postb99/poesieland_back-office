@@ -5,16 +5,7 @@ namespace Toolbox;
 
 public class YamlMetadataProcessor : IMetadataProcessor
 {
-    private enum IsProcessingList
-    {
-        None,
-        Categories,
-        Tags,
-        Pictures,
-        InfoLines
-    }
-
-    private IsProcessingList _isProcessingList;
+    public ProcessingListType ProcessingListType { get; private set; }
     private readonly List<string> _categories = new();
     private readonly List<string> _tags = new();
     private readonly List<string> _pictures = new();
@@ -41,7 +32,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
         var value = line?.Substring(6).Trim('"');
         return string.IsNullOrEmpty(value) ? null : value;
     }
-    
+
     public string? GetPicture(string line)
     {
         var value = line?.Substring(9).Trim('"');
@@ -65,7 +56,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
         var value = line.Substring(13);
         return value == "\"\"" ? null : value;
     }
-    
+
     public int GetWeight(string line)
     {
         return int.Parse(line.Substring(8));
@@ -81,45 +72,45 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public void BuildCategories(string line)
     {
-        _isProcessingList = IsProcessingList.Categories;
+        ProcessingListType = ProcessingListType.Categories;
     }
 
     public void BuildTags()
     {
-        _isProcessingList = IsProcessingList.Tags;
+        ProcessingListType = ProcessingListType.Tags;
     }
-    
+
     public void BuildInfoLines(string line)
     {
-        _isProcessingList = IsProcessingList.InfoLines;
+        ProcessingListType = ProcessingListType.InfoLines;
         var inlineInfo = GetInfo(line);
         if (inlineInfo != null && inlineInfo != "|-")
         {
             AddValue(inlineInfo, -2);
-            _isProcessingList = IsProcessingList.None;
+            ProcessingListType = ProcessingListType.None;
         }
     }
-    
+
     public void BuildPictures(string line)
     {
-        _isProcessingList = IsProcessingList.Pictures;
+        ProcessingListType = ProcessingListType.Pictures;
     }
 
     public void AddValue(string line, int nbSpaces)
     {
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
-        switch (_isProcessingList)
+        switch (ProcessingListType)
         {
-            case IsProcessingList.Categories:
+            case ProcessingListType.Categories:
                 _categories.Add(lineValue);
                 break;
-            case IsProcessingList.Tags:
+            case ProcessingListType.Tags:
                 _tags.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
                 break;
-            case IsProcessingList.Pictures:
+            case ProcessingListType.Pictures:
                 _pictures.Add(lineValue);
                 break;
-            case IsProcessingList.InfoLines:
+            case ProcessingListType.InfoLines:
                 _infoLines.Add(lineValue.TrimStart(' '));
                 break;
         }
@@ -134,12 +125,12 @@ public class YamlMetadataProcessor : IMetadataProcessor
     {
         return _tags;
     }
-    
+
     public List<string> GetPictures()
     {
         return _pictures;
     }
-    
+
     public List<string> GetInfoLines()
     {
         return _infoLines;

@@ -714,15 +714,15 @@ public class Engine
             {
                 nbUndefinedVerseLength++;
             }
-            else if (poem.VerseLength.Contains(',') || poem.VerseLength.Contains(' '))
+            else if (poem.HasVariableVerseLength)
             {
-                if (variableVerseLengthData.TryGetValue(poem.VerseLength, out var _))
+                if (variableVerseLengthData.TryGetValue(poem.DetailedVerseLength, out var _))
                 {
-                    variableVerseLengthData[poem.VerseLength]++;
+                    variableVerseLengthData[poem.DetailedVerseLength]++;
                 }
                 else
                 {
-                    variableVerseLengthData[poem.VerseLength] = 1;
+                    variableVerseLengthData[poem.DetailedVerseLength] = 1;
                 }
             }
             else
@@ -1031,7 +1031,7 @@ public class Engine
             }
             else if (forVariableVerse)
             {
-                poemCount = season.Poems.Count(x => x.VerseLength.Contains(","));
+                poemCount = season.Poems.Count(x => x.HasVariableVerseLength);
             }
 
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedLongTitle} ({season.Years})", poemCount,
@@ -1193,7 +1193,7 @@ public class Engine
         foreach (var poem in poems)
         {
             var poemLength = poem.VersesCount;
-            if (!int.TryParse(poem.VerseLength, out var verseLength)) continue;
+            if (!int.TryParse(poem.DetailedVerseLength, out var verseLength)) continue;
 
             var key = new KeyValuePair<int, int>(verseLength, poemLength);
             if (poemLengthByVerseLength.ContainsKey(key))

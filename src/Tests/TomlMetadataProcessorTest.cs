@@ -6,7 +6,6 @@ namespace Tests;
 
 public class TomlMetadataProcessorTest
 {
-    // TODO a test for null, single-line or multiline info metadata. Edit a TOML file to get a test case.
     [Fact]
     private void ShouldImportTomlMetadata()
     {
@@ -23,9 +22,10 @@ public class TomlMetadataProcessorTest
         poem.Categories.Count.Should().Be(1);
         poem.Categories.First().Name.Should().Be("Amour");
         poem.Categories.First().SubCategories.Count.Should().Be(1);
-        poem.Categories.First().SubCategories.First().Should().Be("Femme");
+        poem.Categories.First().SubCategories.First().Should().Be("Amour platonique");
         poem.PoemType.Should().Be("sonnet");
         poem.VerseLength.Should().Be("12");
+        poem.Info.Should().BeNull();
         position.Should().Be(0);
     }
 
@@ -44,7 +44,29 @@ public class TomlMetadataProcessorTest
         poem.Categories.First().SubCategories.First().Should().Be("Musique et chant");
         poem.Info.Should().Be("Inspiré par l'air homonyme d'Offenbach.");
     }
-
+    
+    [Fact]
+    private void ShouldImportMultiLineInfoTomlMetadata()
+    {
+        var configuration = Helpers.GetConfiguration();
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR], "3_troisieme_saison\\est_ce_un_automne.md");
+        var poemContentImporter = new PoemContentImporter();
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        poemContentImporter.HasTomlMetadata.Should().BeTrue();
+        poemContentImporter.HasYamlMetadata.Should().BeFalse();
+        /*
+        {{% notice style="primary" %}}
+        Encore une variation sur cette question que j'adore...
+        {{% include "../../includes/est_ce_un_automne" hidefirstheading %}}
+        {{% /notice %}}
+        */
+        poem.Info.Should().StartWith("{{% notice style=\"primary\" %}}");
+        poem.Info.Should().EndWith("{{% /notice %}}");
+        poem.Info.Should().Be(
+            $"{{{{% notice style=\"primary\" %}}}}{Environment.NewLine}Encore une variation sur cette question que j'adore...{Environment.NewLine}{{{{% include \"../../includes/est_ce_un_automne\" hidefirstheading %}}}}{Environment.NewLine}{{{{% /notice %}}}}");
+    }
+    
     [Fact]
     private void ShouldImportDoubleAcrosticheTomlMetadata()
     {
@@ -111,5 +133,21 @@ public class TomlMetadataProcessorTest
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         poem.Pictures.Count.Should().Be(4);
         poem.Pictures[0].Should().Be("Le puits du château de Ham-sous-Varsberg");
+    }
+    
+    [Fact]
+    private void ShouldImportVariableVerseTomlMetadata()
+    {
+        var configuration = Helpers.GetConfiguration();
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\a_quai.md");
+        var poemContentImporter = new PoemContentImporter();
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        poemContentImporter.HasTomlMetadata.Should().BeTrue();
+        poemContentImporter.HasYamlMetadata.Should().BeFalse();
+        poem.Info.Should().Be("Vers variable : 5, 2");
+        poem.DetailedVerseLength.Should().Be("5, 2");
+        // Because it has been copied from DetailedVerseLength by poemContentImporter.
+        poem.VerseLength.Should().Be("5, 2");
     }
 }

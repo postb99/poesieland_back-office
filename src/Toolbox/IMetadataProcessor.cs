@@ -26,4 +26,5 @@ public interface IMetadataProcessor
     List<string> GetTags();
     List<string> GetPictures();
     List<string> GetInfoLines();
+    ProcessingListType ProcessingListType { get; }
 }

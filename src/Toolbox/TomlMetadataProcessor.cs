@@ -5,11 +5,8 @@ namespace Toolbox;
 
 public class TomlMetadataProcessor : IMetadataProcessor
 {
- private IsProcessingList _isProcessingList;
-    private enum IsProcessingList
-    {
-        Pictures
-    }
+    public ProcessingListType ProcessingListType { get; private set; }
+
     private List<string> _categories = new();
     private List<string> _pictures = new();
     private List<string> _infoLines = new();
@@ -18,7 +15,6 @@ public class TomlMetadataProcessor : IMetadataProcessor
     {
         return line.Substring(8).CleanedContent()!;
     }
-
 
     public string GetId(string line)
     {
@@ -75,28 +71,37 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildPictures(string line)
     {
-        _isProcessingList = IsProcessingList.Pictures;
+        ProcessingListType = ProcessingListType.Pictures;
         _pictures = new List<string>();
         if (line.Contains("\""))
         {
-            _pictures.AddRange(line.Substring(11).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != "" && x != ", ")
+            _pictures.AddRange(line.Substring(11).Trim('[').Trim(']').Trim(' ').Split('"')
+                .Where(x => x != "" && x != ", ")
                 .ToList());
         }
     }
 
     public void BuildInfoLines(string line)
     {
-        //throw new NotImplementedException("TODO");
-        _infoLines.Add(line.Substring(7).Trim('"'));
+        ProcessingListType = ProcessingListType.InfoLines;
+        var inlineInfo = GetInfo(line);
+        if (inlineInfo != null && inlineInfo != "\"")
+        {
+            AddValue(inlineInfo, -2);
+            ProcessingListType = ProcessingListType.None;
+        }
     }
 
     public void AddValue(string line, int nbSpaces)
     {
-        var lineValue = line.Substring(nbSpaces + 2);
-        switch (_isProcessingList)
+        var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
+        switch (ProcessingListType)
         {
-            case IsProcessingList.Pictures:
+            case ProcessingListType.Pictures:
                 _pictures.Add(lineValue.TrimEnd(',').CleanedContent());
+                break;
+            case ProcessingListType.InfoLines:
+                _infoLines.Add(lineValue);
                 break;
         }
     }
@@ -115,10 +120,9 @@ public class TomlMetadataProcessor : IMetadataProcessor
     {
         return _pictures;
     }
-    
+
     public List<string> GetInfoLines()
     {
-        //throw new NotImplementedException("TODO");
         return _infoLines;
     }
 }

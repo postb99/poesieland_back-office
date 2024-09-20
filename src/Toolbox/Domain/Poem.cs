@@ -16,9 +16,34 @@ public class Poem
 
     [XmlElement("categorie")] public List<Category> Categories { get; set; }
 
-    [XmlAttribute("longueurVers")] public string? VerseLength { get; set; }
+    /// <summary>
+    /// Mathematical verse length, either an integer or -1 when value is variable, in this case check DetailedVerseLength property.
+    /// </summary>
+    [XmlAttribute("longueurVers")]
+    public string? VerseLength { get; set; }
 
-    [XmlIgnore] public bool HasVariableVerseLength => VerseLength.Contains(",");
+    [XmlIgnore] public bool HasVariableVerseLength => VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" ");
+
+    /// <summary>
+    /// Real verse length, either an integer or integers separated by comma + space.
+    /// </summary>
+    [XmlIgnore]
+    public string DetailedVerseLength
+    {
+        get
+        {
+            if (!HasVariableVerseLength)
+                return VerseLength;
+            
+            if (Info == null || !Info.StartsWith("Vers variable : "))
+            {
+                throw new InvalidOperationException(
+                    $"When verse length is -1, info should begin with variable length indication: 'Vers variable : ...'. Poem id: {Id}");
+            }
+
+            return Info.IndexOf(".") > -1 ? Info.Substring(16, Info.IndexOf(".") - 16) : Info.Substring(16);
+        }
+    }
 
     [XmlElement("info")] public string? Info { get; set; }
 
@@ -34,10 +59,12 @@ public class Poem
     public DateTime Date =>
         DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 
-    [XmlIgnore] public bool IsSonnet => PoemType?.ToLowerInvariant() == Domain.PoemType.Sonnet.ToString().ToLowerInvariant();
-    
-    [XmlIgnore] public bool IsPantoun => PoemType?.ToLowerInvariant() == Domain.PoemType.Pantoun.ToString().ToLowerInvariant();
-    
+    [XmlIgnore]
+    public bool IsSonnet => PoemType?.ToLowerInvariant() == Domain.PoemType.Sonnet.ToString().ToLowerInvariant();
+
+    [XmlIgnore]
+    public bool IsPantoun => PoemType?.ToLowerInvariant() == Domain.PoemType.Pantoun.ToString().ToLowerInvariant();
+
     [XmlIgnore] public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
     [XmlIgnore] public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
@@ -93,8 +120,8 @@ public class Poem
         {
             s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
         }
-        
-        if (VerseLength.Contains(","))
+
+        if (HasVariableVerseLength)
         {
             s.Append($"\"versVariable\", ");
         }
@@ -139,17 +166,17 @@ public class Poem
             s.Append($"doubleAcrostiche = \"{DoubleAcrostiche.First} | {DoubleAcrostiche.Second}\"");
             s.Append(Environment.NewLine);
         }
-        
+
         if (VerseLength != null)
         {
             var verseLength = HasVariableVerseLength ? "-1" : VerseLength;
             s.Append($"verseLength = {verseLength}");
             s.Append(Environment.NewLine);
         }
-        
+
         s.Append("LastModifierDisplayName = \"Barbara Post\"");
         s.Append(Environment.NewLine);
-        
+
         s.Append("+++");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);

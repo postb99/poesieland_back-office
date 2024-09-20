@@ -45,16 +45,8 @@ public class PoemContentImporter
         _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
 
-        if (_poem.VerseLength == "-1")
-        {
-            if (_poem.Info == null || !_poem.Info!.StartsWith("Vers variable : "))
-            {
-                throw new InvalidOperationException(
-                    "When verse length is -1, info should give variable length: 'Vers variable : ...'");
-            }
-
-            _poem.VerseLength = poemInfo.IndexOf(".") > -1 ? poemInfo.Substring(16, poemInfo.IndexOf(".") - 16) : poemInfo.Substring(16);
-        }
+        // Copy for XML save
+        _poem.VerseLength = _poem.DetailedVerseLength;
 
         return (_poem, _position);
     }
@@ -76,8 +68,11 @@ public class PoemContentImporter
             line = streamReader.ReadLine();
             ProcessLine(line);
         } while (line != null);
+        
+        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+        _poem.Info = poemInfo;
 
-        return (_metadataProcessor.GetTags(), _poem.Date.Year, _poem.Id, _poem.VerseLength == "-1" ? _poem.Info.Substring(16) : null);
+        return (_metadataProcessor.GetTags(), _poem.Date.Year, _poem.Id, _poem.DetailedVerseLength);
     }
 
     private void ProcessLine(string? line)
@@ -142,18 +137,6 @@ public class PoemContentImporter
         {
             _metadataProcessor!.AddValue(line, 2);
         }
-        else if (line.StartsWith("    ")) // 4 spaces
-        {
-            _metadataProcessor!.AddValue(line, 0);
-        }
-        else if (line.StartsWith("  ")) // double space
-        {
-            _metadataProcessor!.AddValue(line, 0);
-        }
-        else if (line == "") // empty line
-        {
-            _metadataProcessor!.AddValue(line, 0);
-        }
         else if (line.StartsWith("acrostiche"))
         {
             _poem.Acrostiche = _metadataProcessor!.GetAcrostiche(line);
@@ -173,6 +156,18 @@ public class PoemContentImporter
         else if (line.StartsWith("weight"))
         {
             _position = _metadataProcessor!.GetWeight(line) - 1;
+        }
+        else if (line.StartsWith("    ")) // 4 spaces
+        {
+            _metadataProcessor!.AddValue(line, 0);
+        }
+        else if (line.StartsWith("  ")) // double space
+        {
+            _metadataProcessor!.AddValue(line, 0);
+        }
+        else if (line == "") // empty line
+        {
+            _metadataProcessor!.AddValue(line, 0);
         }
     }
 
