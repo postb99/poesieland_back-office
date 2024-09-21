@@ -226,7 +226,7 @@ public class Engine
                         yield return poemId;
                     }
 
-                    if (variableVerseLength != null && !tags.Contains("versVariable"))
+                    if (variableVerseLength && !tags.Contains("versVariable"))
                     {
                         yield return poemId;
                     }
