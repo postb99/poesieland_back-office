@@ -86,7 +86,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
         var inlineInfo = GetInfo(line);
         if (inlineInfo != null && inlineInfo != "|-")
         {
-            AddValue(inlineInfo, -2);
+            _infoLines.Add(inlineInfo);
             ProcessingListType = ProcessingListType.None;
         }
     }
@@ -98,6 +98,11 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public void AddValue(string line, int nbSpaces)
     {
+        if (nbSpaces == -2 && line.Length > 0 && line[0] != ' ')
+        { 
+            // A value in YAML cannot start at beginning of line so ignore lines not starting with at least a space
+            return;
+        }
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
         switch (ProcessingListType)
         {

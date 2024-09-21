@@ -129,14 +129,6 @@ public class PoemContentImporter
         {
             _metadataProcessor!.BuildInfoLines(line);
         }
-        else if (line.StartsWith("    - "))
-        {
-            _metadataProcessor!.AddValue(line, 4);
-        }
-        else if (line.StartsWith("  - "))
-        {
-            _metadataProcessor!.AddValue(line, 2);
-        }
         else if (line.StartsWith("acrostiche"))
         {
             _poem.Acrostiche = _metadataProcessor!.GetAcrostiche(line);
@@ -157,17 +149,18 @@ public class PoemContentImporter
         {
             _position = _metadataProcessor!.GetWeight(line) - 1;
         }
-        else if (line.StartsWith("    ")) // 4 spaces
+        else if (line.StartsWith("    - "))
         {
-            _metadataProcessor!.AddValue(line, 0);
+            _metadataProcessor!.AddValue(line, 4);
         }
-        else if (line.StartsWith("  ")) // double space
+        else if (line.StartsWith("  - "))
         {
-            _metadataProcessor!.AddValue(line, 0);
+            _metadataProcessor!.AddValue(line, 2);
         }
-        else if (line == "") // empty line
+        else
         {
-            _metadataProcessor!.AddValue(line, 0);
+            // blank line or any text line, starting with spaces or not
+            _metadataProcessor!.AddValue(line, -2);
         }
     }
 

@@ -71,14 +71,10 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildPictures(string line)
     {
-        ProcessingListType = ProcessingListType.Pictures;
-        _pictures = new List<string>();
-        if (line.Contains("\""))
-        {
-            _pictures.AddRange(line.Substring(11).Trim('[').Trim(']').Trim(' ').Split('"')
-                .Where(x => x != "" && x != ", ")
-                .ToList());
-        }
+        // Always single-line
+        _pictures = line.Substring(11).Trim('[').Trim(']').Trim(' ').Split('"')
+            .Where(x => x != "" && x != ", ")
+            .ToList();
     }
 
     public void BuildInfoLines(string line)
@@ -97,11 +93,19 @@ public class TomlMetadataProcessor : IMetadataProcessor
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
         switch (ProcessingListType)
         {
-            case ProcessingListType.Pictures:
-                _pictures.Add(lineValue.TrimEnd(',').CleanedContent());
-                break;
             case ProcessingListType.InfoLines:
-                _infoLines.Add(lineValue);
+
+                if (lineValue.EndsWith("\"\"\""))
+                {
+                    // Encountered """ end marker
+                    _infoLines.Add(lineValue.Substring(0, lineValue.Length - 3));
+                    ProcessingListType = ProcessingListType.None;
+                }
+                else
+                {
+                    _infoLines.Add(lineValue);
+                }
+
                 break;
         }
     }
