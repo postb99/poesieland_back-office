@@ -6,6 +6,7 @@ namespace Tests;
 public class PoemTest
 {
     [Fact]
+    [Trait("UnitTest", "Computation")]
     public void ShouldHaveIntegerDetailedVerseLength()
     {
         var poem = new Poem
@@ -17,6 +18,7 @@ public class PoemTest
     }
     
     [Theory]
+    [Trait("UnitTest", "Computation")]
     [InlineData("Vers variable : 6, 3")]
     [InlineData("Vers variable : 6, 3.")]
     [InlineData("Vers variable : 6, 3. Autre info.")]
@@ -32,6 +34,7 @@ public class PoemTest
     }
 
     [Fact]
+    [Trait("UnitTest", "Computation")]
     public void ShouldThrowNullInfo()
     {
         var poem = new Poem
@@ -45,6 +48,7 @@ public class PoemTest
     }
     
     [Fact]
+    [Trait("UnitTest", "Computation")]
     public void ShouldThrowInfoWithoutVersVariable()
     {
         var poem = new Poem

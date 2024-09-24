@@ -7,6 +7,7 @@ namespace Tests;
 public class PoemContentImporterTest
 {
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     public void ShouldImportVariableVerseLength()
     {
         var configuration = Helpers.GetConfiguration();

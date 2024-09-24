@@ -7,6 +7,7 @@ namespace Tests;
 public class TomlMetadataProcessorTest
 {
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportTomlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -30,6 +31,7 @@ public class TomlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportInfoTomlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -46,6 +48,7 @@ public class TomlMetadataProcessorTest
     }
     
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportMultiLineInfoTomlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -68,6 +71,7 @@ public class TomlMetadataProcessorTest
     }
     
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportDoubleAcrosticheTomlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -82,6 +86,7 @@ public class TomlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportMultipleCategoriesTomlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -103,6 +108,7 @@ public class TomlMetadataProcessorTest
     }
 
     [Theory]
+    [Trait("UnitTest", "Computation")]
     [InlineData("categories = [\"First\", \"Here and there\"]")]
     [InlineData("categories = [ \"First\", \"Here and there\" ]")]
     private void ShouldProperlyParseCategories(string categoriesLine)
@@ -113,6 +119,7 @@ public class TomlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "Computation")]
     private void ShouldProperlyParseInfoWithQuotes()
     {
         var info = "info = \"It is a \\\"quoted text\\\"\"";
@@ -122,6 +129,7 @@ public class TomlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportPictures()
     {
         var configuration = Helpers.GetConfiguration();
@@ -136,6 +144,7 @@ public class TomlMetadataProcessorTest
     }
     
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportVariableVerseTomlMetadata()
     {
         var configuration = Helpers.GetConfiguration();

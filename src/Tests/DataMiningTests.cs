@@ -17,6 +17,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Theory]
+    [Trait("DataMining", "Lookup")]
     [InlineData(2)]
     [InlineData(3)]
     [InlineData(14)]
@@ -29,6 +30,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Theory]
+    [Trait("DataMining", "Lookup")]
     [InlineData(4)]
     [InlineData(28)]
     public void PoemsWithSpecifiedLength(int verseCount)
@@ -40,6 +42,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
     public void PoemsWithAdditionalData()
     {
         using var outputFileStream = File.Open("PoemsWithAdditionalData.txt", FileMode.Create);
@@ -74,6 +77,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
     public void CategoriesAndSubcategories()
     {
         using var outputFileStream = File.Open("CategoriesAndSubcategories.txt", FileMode.Create);
@@ -106,6 +110,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
     public void PoemType()
     {
         using var outputFileStream = File.Open("PoemTypes.txt", FileMode.Create);
@@ -121,6 +126,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
     public void SeasonDatesAndLastPoem()
     {
         var seasons = _data.Seasons.ToList();
@@ -135,6 +141,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
     public void PoemWithMultipleSubcategory()
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Any(x => x.SubCategories.Count > 1));
@@ -143,6 +150,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
     public void PoemWithMultipleSameCategory()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
@@ -156,6 +164,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
     public void PoemsWithStrangeVerseCount()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
@@ -168,6 +177,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Quality")]
     public void PoemsWithoutCapitalLetterAtVerseBeginning()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
@@ -184,6 +194,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Quality")]
     public void PoemsThatCouldHaveQuatrainsButHaveNot()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
@@ -196,6 +207,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Output")]
     public void PossibleProperNouns()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))

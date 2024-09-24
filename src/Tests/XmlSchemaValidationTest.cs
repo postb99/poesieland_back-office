@@ -19,6 +19,7 @@ public class XmlSchemaValidationTest
     }
 
     [Theory]
+    [Trait("UnitTest", "XmlSchema")]
     [InlineData("XmlStorageFile", "Latin1")]
     public void ShouldValidateSchema(string xmlFileKey, string encoding)
     {

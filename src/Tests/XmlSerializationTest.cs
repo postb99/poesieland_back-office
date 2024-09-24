@@ -14,6 +14,7 @@ public class XmlSerializationTest
     }
 
     [Fact]
+    [Trait("UnitTest", "XmlSerialization")]
     public void ShouldSerializeToStream()
     {
         var poem = new Poem

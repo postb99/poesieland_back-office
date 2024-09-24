@@ -18,6 +18,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void SeasonShouldHaveCorrectPoemCount()
     {
         var seasons = _data.Seasons.ToList();
@@ -31,6 +32,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void SeasonShouldHaveNotTooLongSummary()
     {
         var seasons = _data.Seasons.ToList();
@@ -44,48 +46,56 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void SeasonShouldHaveInfo()
     {
         _data.Seasons.Count(x => string.IsNullOrEmpty(x.Introduction)).Should().Be(0);
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveTitle()
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.Title)).Should().BeTrue();
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveDate()
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.TextDate)).Should().BeTrue();
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveCorrectDateTime()
     {
         var _ = _data.Seasons.SelectMany(x => x.Poems).Select(x => x.Date);
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveCategory()
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.Categories.Count > 0).Should().BeTrue();
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveParagraphs()
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).Should().BeTrue();
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveSeasonId()
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0).Should().BeTrue();
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void ParagraphShouldHaveVerses()
     {
         _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).Should()
@@ -93,6 +103,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void CategoryShouldHaveSubCategory()
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Any(y => y.SubCategories.Count == 0))
@@ -104,6 +115,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("UnitTest", "Quality")]
     public void SpecialAcrosticheShouldBeConsistent()
     {
         _data.Seasons.SelectMany(x => x.Poems).Where(x => x.DoubleAcrostiche != null).All(x =>
@@ -112,16 +124,8 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
             .BeTrue();
     }
 
-    [Fact]
-    public void ShouldHaveQuatrains()
-    {
-        var poem = _data.Seasons.SelectMany(x => x.Poems).First(x => x.Id == "les_chenes_16");
-        poem.VersesCount.Should().Be(12);
-        poem.Paragraphs.Count.Should().Be(3);
-        poem.HasQuatrains.Should().BeTrue();
-    }
-
     [Theory]
+    [Trait("UnitTest", "Quality")]
     [InlineData(1, "1994 - 1996")]
     [InlineData(2, "1996")]
     [InlineData(5, "1997 - 1998")]

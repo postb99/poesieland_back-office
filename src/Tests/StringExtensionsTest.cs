@@ -16,6 +16,7 @@ public class StringExtensionsTest
     }
 
     [Theory]
+    [Trait("UnitTest", "Computation")]
     [InlineData("Simple", "simple")]
     [InlineData("Au matin", "au_matin")]
     [InlineData("A la dérive", "a_la_derive")]
@@ -31,6 +32,7 @@ public class StringExtensionsTest
     }
 
     [Theory]
+    [Trait("UnitTest", "Computation")]
     [InlineData("Simple", "Simple")]
     [InlineData("Vivere nell'arte", "Vivere nell'arte")]
     [InlineData("\"Vivere nell'arte\", en italien", "\\\"Vivere nell'arte\\\", en italien")]
@@ -41,6 +43,7 @@ public class StringExtensionsTest
     }
     
     [Theory]
+    [Trait("UnitTest", "Computation")]
     [InlineData(null, "")]
     [InlineData("Simple", "Simple")]
     [InlineData("Vivere nell'arte", "Vivere nell'arte")]
@@ -52,6 +55,7 @@ public class StringExtensionsTest
     }
     
     [Theory]
+    [Trait("UnitTest", "Computation")]
     [InlineData("\"Test1\"", "Test1")]
     [InlineData("\"Text2 with a \\\"quote\\\" into\"", "Text2 with a \"quote\" into")]
     [InlineData("\"Text3 with an end \\\"quote\\\"\"", "Text3 with an end \"quote\"")]

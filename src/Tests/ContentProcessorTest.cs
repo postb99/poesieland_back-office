@@ -7,8 +7,9 @@ namespace Tests;
 public class ContentProcessorTest
 {
     [Theory]
+    [Trait("UnitTest", "Import")]
     [InlineData("16_seizieme_saison\\oiseaux_de_juillet.md", 3, 4)]
-    [InlineData("16_seizieme_saison\\sur_les_toits_la_pluie_16.md", 1, 16)]
+    [InlineData("16_seizieme_saison\\sur_les_toits_la_pluie.md", 1, 18)]
     public void ShouldImportParagraphs(string poemContentPath, int paragraphs, int verses)
     {
         var configuration = Helpers.GetConfiguration();

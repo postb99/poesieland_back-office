@@ -22,6 +22,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "XmlRead")]
         public void ShouldLoad()
         {
             var engine = Helpers.CreateEngine();
@@ -29,6 +30,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "XmlRead")]
         public void ShouldLoadAcrostiche()
         {
             var engine = Helpers.CreateEngine();
@@ -38,6 +40,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "XmlRead")]
         public void ShouldLoadDoubleAcrostiche()
         {
             var engine = Helpers.CreateEngine();
@@ -50,10 +53,11 @@ public class EngineTest
         }
 
         [Theory]
+        [Trait("UnitTest", "XmlRead")]
         [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, 14)]
         [InlineData("grand_sud_1", 1, 12)]
         [InlineData("illusion_1", 1, 8)]
-        public void ShouldVersesCount(string poemId, int seasonId, int expectedCount)
+        public void ShouldHaveVersesCount(string poemId, int seasonId, int expectedCount)
         {
             var engine = Helpers.CreateEngine();
             var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
@@ -61,16 +65,22 @@ public class EngineTest
         }
         
         [Theory]
+        [Trait("UnitTest", "XmlRead")]
         [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, false)]
         [InlineData("grand_sud_1", 1, true)]
         [InlineData("illusion_1", 1, false)]
         [InlineData("matin_privilege_15", 15, false)]
-        [InlineData("ombres_et_lumieres_15", 15, false)]
-        public void ShouldHasQuatrains(string poemId, int seasonId, bool expectedHasQuatrain)
+        [InlineData("ombres_et_lumieres_15", 15, true)]
+        [InlineData("les_chenes_16", 16, true)]
+        public void ShouldHaveQuatrains(string poemId, int seasonId, bool expectedHasQuatrain)
         {
             var engine = Helpers.CreateEngine();
             var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
             poem.HasQuatrains.Should().Be(expectedHasQuatrain);
+            if (expectedHasQuatrain)
+            {
+                poem.Paragraphs.Count.Should().Be(poem.VersesCount / 4);
+            }
             TestOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
         }
     }
@@ -83,6 +93,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "ContentFiles")]
         public void ShouldBeSeasonContentDirectoryName()
         {
             var engine = Helpers.CreateEngine();
@@ -90,6 +101,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "ContentFiles")]
         public void ShouldCreateFirstSeasonIndexFile()
         {
             var engine = Helpers.CreateEngine();
@@ -97,6 +109,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "ContentFiles")]
         public void ShouldBePoemContentFileName()
         {
             var engine = Helpers.CreateEngine();
@@ -104,6 +117,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "XmlRead")]
         public void ShouldBePoemSeasonId()
         {
             var engine = Helpers.CreateEngine();
@@ -111,6 +125,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "ContentFiles")]
         public void ShouldCreateFirstPoemFile()
         {
             var engine = Helpers.CreateEngine();
@@ -118,6 +133,7 @@ public class EngineTest
         }
 
         [Theory(Skip = "Validated")]
+        [Trait("UnitTest", "ContentFiles")]
         [InlineData("simplest", false, null, false, false)]
         [InlineData("only_info", false, null, false, true)]
         [InlineData("only_type", false, PoemType.Sonnet, false, false)]
@@ -163,6 +179,7 @@ public class EngineTest
         }
 
         [Fact(Skip = "Validated")]
+        [Trait("UnitTest", "ContentImport")]
         public void ShouldImportPoem()
         {
             var engine = Helpers.CreateEngine();
@@ -173,6 +190,7 @@ public class EngineTest
         }
 
         [Fact(Skip = "Validated")]
+        [Trait("UnitTest", "ContentImport")]
         public void ShouldImportSeason()
         {
             var engine = Helpers.CreateEngine();
@@ -188,6 +206,7 @@ public class EngineTest
         }
 
         [Fact]
+        [Trait("UnitTest", "MetadataCheck")]
         public void CheckMissingYearTagInYamlMetadata()
         {
             var engine = Helpers.CreateEngine();

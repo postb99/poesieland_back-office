@@ -7,6 +7,7 @@ namespace Tests;
 public class YamlMetadataProcessorTest
 {
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -31,6 +32,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact(Skip = "Metadata updated to TOML, no more test case available")]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportDoubleAcrosticheYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -45,6 +47,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportTypeYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -58,6 +61,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportSingleLineInfoYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -71,6 +75,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportMultilineInfoYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -95,6 +100,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportNullInfoYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -108,6 +114,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportPicturesYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -125,6 +132,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldImportMultipleCategoriesWithMoreSpacesYamlMetadata()
     {
         var configuration = Helpers.GetConfiguration();
@@ -144,6 +152,7 @@ public class YamlMetadataProcessorTest
     }
 
     [Fact]
+    [Trait("UnitTest", "ContentImport")]
     private void ShouldExtractTags()
     {
         var configuration = Helpers.GetConfiguration();
