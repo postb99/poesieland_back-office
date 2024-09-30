@@ -39,7 +39,7 @@ public class Season
                 foreach (var match in matches)
                 {
                     years.Add(match.ToString());
-                } 
+                }
             }
 
             switch (years.Count)
@@ -53,6 +53,16 @@ public class Season
             }
 
             return null;
+        }
+    }
+
+    [XmlIgnore]
+    public string Period
+    {
+        get
+        {
+            var summaryLastDot = Summary.LastIndexOf('.');
+            return Summary.Substring(summaryLastDot == -1 ? 0 : summaryLastDot + 2);
         }
     }
 

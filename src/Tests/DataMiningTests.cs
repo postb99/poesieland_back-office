@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using FluentAssertions;
 using Toolbox.Domain;
 using Xunit.Abstractions;
 
@@ -233,6 +234,33 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                     }
                 }
             }
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void SeasonDuration()
+    {
+        foreach (var season in _data.Seasons)
+        {
+            var dates = season.Poems.Select(x => x.Date).OrderBy(x => x.Date).ToList();
+            var duration = dates[dates.Count() - 1] - dates[0];
+            decimal nbDays = int.Parse(duration.ToString("%d"));
+            var value = nbDays;
+            var unit = "days";
+            if (value > 30)
+            {
+                value = value / 30;
+                unit = "months";
+
+                if (value > 12)
+                {
+                    value = value / 12;
+                    unit = "years";
+                }
+            }
+
+            _testOutputHelper.WriteLine($"{season.NumberedName} ({season.Period}): {value} {unit}");
         }
     }
 }

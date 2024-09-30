@@ -408,11 +408,10 @@ public class Engine
 
         chartDataFileHelper.WriteData(pieChartData);
 
-        var seasonSummaryLastDot = season.Summary.LastIndexOf('.');
         chartDataFileHelper.WriteAfterData($"season{seasonId}Pie",
             new[]
             {
-                $"{season.EscapedLongTitle} - {season.Summary.Substring(seasonSummaryLastDot == -1 ? 0 : seasonSummaryLastDot + 2).Replace("'", "\\'")}"
+                $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}"
             });
         streamWriter.Close();
     }
