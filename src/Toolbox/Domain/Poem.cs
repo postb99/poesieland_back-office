@@ -22,7 +22,7 @@ public class Poem
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }
 
-    [XmlIgnore] public bool HasVariableVerseLength => VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" ");
+    [XmlIgnore] public bool HasVariableVerseLength => VerseLength == null ? false : (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
 
     /// <summary>
     /// Real verse length, either an integer or integers separated by comma + space.

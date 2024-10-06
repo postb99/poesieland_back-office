@@ -189,7 +189,7 @@ public class Engine
                     var seasonId = poem.SeasonId;
                     var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
                     if (targetSeason == null)    {
-                        targetSeason = new Season { Id = seasonId };
+                        targetSeason = new Season { Id = seasonId, Poems = new List<Poem>() };
                         DataEn.Seasons.Add(targetSeason);
                     }
                     targetSeason.Poems.Add(poem);
