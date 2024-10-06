@@ -773,6 +773,22 @@ public class Engine
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
+        
+        // Second chart for variable length
+        fileName = "variable-verse-length-bar.js";
+        chartId = "variableVerseLengthBar";
+        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bar, 1);
+        chartDataFileHelper2.WriteBeforeData();
+        
+        dataLines = [];
+        dataLines.AddRange(variableVerseLengthChartData);
+
+        chartDataFileHelper2.WriteData(dataLines, true);
+
+        chartDataFileHelper2.WriteAfterData(chartId, new[] { "Poèmes" },
+            barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+        streamWriter2.Close();
     }
 
     public void GeneratePoemIntensityPieChartDataFile()
@@ -996,7 +1012,12 @@ public class Engine
             chartId = $"poems-versVariableBar";
         }
 
-        var backgroundColor = borderColor?.Replace("1)", "0.5)");
+        var backgroundColor = borderColor.Replace("1)", "0.5)");
+        if (forVariableVerse)
+        {
+            // For this one, same color to look nice below other bar chart
+            backgroundColor = borderColor;
+        }
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
