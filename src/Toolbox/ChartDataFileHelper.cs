@@ -12,7 +12,7 @@ public class ChartDataFileHelper
         Bubble
     }
 
-    public const int VERSE_LENGTH_MAX_Y = 250;
+    public const int VERSE_LENGTH_MAX_Y = 260;
     public const int NBVERSES_MAX_Y = 300;
 
     public class DataLine
