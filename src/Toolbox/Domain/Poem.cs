@@ -151,7 +151,7 @@ public class Poem
 
         if (PoemType != null && PoemType.ToLowerInvariant() != "default")
         {
-            s.Append($"type = \"{PoemType.ToLowerInvariant()}\"");
+            s.Append($"poemType = \"{PoemType.ToLowerInvariant()}\"");
             s.Append(Environment.NewLine);
         }
 

@@ -49,7 +49,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public string? GetType(string line)
     {
-        return line.Substring(7).CleanedContent();
+        return line.Substring(11).CleanedContent();
     }
 
     public DoubleAcrostiche GetDoubleAcrostiche(string line)

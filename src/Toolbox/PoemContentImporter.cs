@@ -141,7 +141,7 @@ public class PoemContentImporter
         {
             _poem.VerseLength = _metadataProcessor!.GetVerseLength(line);
         }
-        else if (line.StartsWith("type"))
+        else if (line.StartsWith("poemType"))
         {
             _poem.PoemType = _metadataProcessor!.GetType(line);
         }
