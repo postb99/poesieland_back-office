@@ -93,7 +93,7 @@ public class Engine
         //     poems.ForEach(GeneratePoemFile);
         //     return;
         // }
-        
+
         var season = Data.Seasons.First(x => x.Id == seasonId);
         season.Poems.ForEach(GeneratePoemFile);
     }
@@ -188,7 +188,8 @@ public class Engine
                 {
                     var seasonId = poem.SeasonId;
                     var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
-                    if (targetSeason == null)    {
+                    if (targetSeason == null)
+                    {
                         targetSeason = new Season { Id = seasonId, Poems = new List<Poem>() };
                         DataEn.Seasons.Add(targetSeason);
                     }
@@ -773,22 +774,25 @@ public class Engine
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
-        
-        // Second chart for variable length
-        fileName = "variable-verse-length-bar.js";
-        chartId = "variableVerseLengthBar";
-        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bar, 1);
-        chartDataFileHelper2.WriteBeforeData();
-        
-        dataLines = [];
-        dataLines.AddRange(variableVerseLengthChartData);
 
-        chartDataFileHelper2.WriteData(dataLines, true);
+        // Second chart for variable length, when no season ID is given
+        if (seasonId == null)
+        {
+            fileName = "variable-verse-length-bar.js";
+            chartId = "variableVerseLengthBar";
+            using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+            var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bar, 1);
+            chartDataFileHelper2.WriteBeforeData();
 
-        chartDataFileHelper2.WriteAfterData(chartId, new[] { "Poèmes" },
-            barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
-        streamWriter2.Close();
+            dataLines = [];
+            dataLines.AddRange(variableVerseLengthChartData);
+
+            chartDataFileHelper2.WriteData(dataLines, true);
+
+            chartDataFileHelper2.WriteAfterData(chartId, new[] { "Poèmes" },
+                barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+            streamWriter2.Close();
+        }
     }
 
     public void GeneratePoemIntensityPieChartDataFile()
