@@ -1233,7 +1233,6 @@ public class Engine
             // Find max value
             var maxValue = poemLengthByVerseLength.Values.Max();
 
-            // First chart
             var fileName = "poem-length-by-verse-length.js";
             var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
                 _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
@@ -1251,35 +1250,11 @@ public class Engine
 
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
-                new[]
-                {
+                [
                     "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)"
-                }, chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
+                ], chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
                 bubbleColors: bubbleColors);
             streamWriter.Close();
-
-            // Second chart
-            fileName = "verse-length-by-poem-length.js";
-            using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-            chartDataFileHelper = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bubble);
-            chartDataFileHelper.WriteBeforeData();
-
-            dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-            bubbleColors = new List<string>();
-            foreach (var dataKey in poemLengthByVerseLength.Keys)
-            {
-                AddDataLine(dataKey.Value, dataKey.Key, poemLengthByVerseLength[dataKey], dataLines, bubbleColors,
-                    maxValue);
-            }
-
-            chartDataFileHelper.WriteData(dataLines);
-            chartDataFileHelper.WriteAfterData("verseLengthByPoemLength",
-                new[]
-                {
-                    "Longueur des vers selon la longueur du poème (en bleu plus foncé occurrence deux fois plus forte)"
-                }, chartXAxisTitle: "Nombre de vers", chartYAxisTitle: "Longueur du vers", xAxisStep: 2,
-                bubbleColors: bubbleColors);
-            streamWriter2.Close();
         }
     }
 
