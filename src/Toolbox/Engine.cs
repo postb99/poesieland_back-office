@@ -1213,11 +1213,19 @@ public class Engine
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var poemLengthByVerseLength = new Dictionary<KeyValuePair<int, int>, int>();
-
+        var variableVerseLength = new Dictionary<int, int>();
         foreach (var poem in poems)
         {
             var poemLength = poem.VersesCount;
-            if (!int.TryParse(poem.DetailedVerseLength, out var verseLength)) continue;
+            if (!int.TryParse(poem.DetailedVerseLength, out var verseLength)) 
+            {
+                if (variableVerseLength.ContainsKey(poemLength)) {
+                    variableVerseLength[poemLength]++;
+                } else {
+                    variableVerseLength[poemLength] = 1;
+                }
+                continue;
+            }
 
             var key = new KeyValuePair<int, int>(verseLength, poemLength);
             if (poemLengthByVerseLength.ContainsKey(key))
@@ -1228,7 +1236,7 @@ public class Engine
             {
                 poemLengthByVerseLength[key] = 1;
             }
-
+        }
 
             // Find max value
             var maxValue = poemLengthByVerseLength.Values.Max();
@@ -1244,18 +1252,20 @@ public class Engine
             var bubbleColors = new List<string>();
             foreach (var dataKey in poemLengthByVerseLength.Keys)
             {
-                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors,
-                    maxValue);
+                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors, maxValue);
+            }
+            foreach (var dataKey in variableVerseLength.Keys)
+            {
+                AddDataLine(0, dataKey, variableVerseLength[dataKey], dataLines, bubbleColors, maxValue);
             }
 
             chartDataFileHelper.WriteData(dataLines);
             chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
                 [
                     "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)"
-                ], chartXAxisTitle: "Longueur du vers", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
+                ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
                 bubbleColors: bubbleColors);
             streamWriter.Close();
-        }
     }
 
     private void AddDataLine(int x, int y, int value,
