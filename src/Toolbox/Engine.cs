@@ -1217,7 +1217,7 @@ public class Engine
         foreach (var poem in poems)
         {
             var poemLength = poem.VersesCount;
-            if (!int.TryParse(poem.DetailedVerseLength, out var verseLength)) 
+            if (poem.HasVariableVerseLength) 
             {
                 if (variableVerseLength.ContainsKey(poemLength)) {
                     variableVerseLength[poemLength]++;
@@ -1227,7 +1227,7 @@ public class Engine
                 continue;
             }
 
-            var key = new KeyValuePair<int, int>(verseLength, poemLength);
+            var key = new KeyValuePair<int, int>(int.Parse(poem.VerseLength), poemLength);
             if (poemLengthByVerseLength.ContainsKey(key))
             {
                 poemLengthByVerseLength[key]++;
