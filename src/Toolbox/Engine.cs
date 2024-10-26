@@ -193,6 +193,7 @@ public class Engine
                         targetSeason = new Season { Id = seasonId, Poems = new List<Poem>() };
                         DataEn.Seasons.Add(targetSeason);
                     }
+
                     targetSeason.Poems.Add(poem);
                 }
             }
@@ -219,7 +220,8 @@ public class Engine
             var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
             foreach (var poemContentPath in poemContentPaths)
             {
-                var (tags, year, poemId, variableVerseLength) = poemContentImporter.GetTagsYearVariableVerseLength(poemContentPath, _configuration);
+                var (tags, year, poemId, variableVerseLength) =
+                    poemContentImporter.GetTagsYearVariableVerseLength(poemContentPath, _configuration);
                 if (poemContentImporter.HasYamlMetadata)
                 {
                     if (!tags.Contains(year.ToString()))
@@ -245,7 +247,8 @@ public class Engine
 
         var incorrectPoem = poems.FirstOrDefault(x => x.VerseLength == null || x.VerseLength == "0");
         if (incorrectPoem != null)
-            throw new Exception($"[ERROR] First poem with verse length unspecified or equal to '0': {incorrectPoem.Id}");
+            throw new Exception(
+                $"[ERROR] First poem with verse length unspecified or equal to '0': {incorrectPoem.Id}");
     }
 
     public void CheckPoemsWithVariableVerseLength()
@@ -254,7 +257,8 @@ public class Engine
 
         var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Vers variable : "));
         if (incorrectPoem != null)
-            throw new Exception($"[ERROR] First poem with variable verse length unspecified in Info: {incorrectPoem.Id}");
+            throw new Exception(
+                $"[ERROR] First poem with variable verse length unspecified in Info: {incorrectPoem.Id}");
     }
 
     public void GeneratePoemsLengthBarChartDataFile(int? seasonId)
@@ -527,7 +531,8 @@ public class Engine
 
         // Days without poems listing
 
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR], "../includes/days_without_creation.md");
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
+            "../includes/days_without_creation.md");
         var streamWriter2 = new StreamWriter(filePath);
 
         streamWriter2.WriteLine("+++");
@@ -537,8 +542,10 @@ public class Engine
         foreach (var monthDay in dayWithoutPoems)
         {
             var splitted = monthDay.Split('-');
-            streamWriter2.WriteLine($"- {splitted[1].TrimStart('0')} {GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
+            streamWriter2.WriteLine(
+                $"- {splitted[1].TrimStart('0')} {GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
         }
+
         streamWriter2.Close();
     }
 
@@ -638,21 +645,23 @@ public class Engine
 
     public void VerifySeasonHaveCorrectWeightInPoemFile(int? seasonId)
     {
-
         if (seasonId == null)
         {
             VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id);
             VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id - 1);
             return;
         }
+
         var season = Data.Seasons.First(s => s.Id == seasonId);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
-        var seasonDirName = Directory.EnumerateDirectories(rootDir).FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+        var seasonDirName = Directory.EnumerateDirectories(rootDir)
+            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         var poemFiles = Directory.EnumerateFiles(seasonDirName).Where(x => !x.EndsWith("index.md"));
 
         foreach (var poemFile in poemFiles)
         {
-            var (poem, position) = (_poemContentImporter ??= new PoemContentImporter()).Import(poemFile, _configuration);
+            var (poem, position) =
+                (_poemContentImporter ??= new PoemContentImporter()).Import(poemFile, _configuration);
             var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
             var poemIndex = season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != position)
@@ -843,7 +852,7 @@ public class Engine
                 intensityDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo
-                    { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
         var fileName = "poem-intensity-pie.js";
@@ -895,7 +904,7 @@ public class Engine
                 dataDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                    { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
         var fileName = "poem-dayofweek-pie.js";
@@ -943,7 +952,7 @@ public class Engine
                 dataDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                    { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
         var fileName = "poem-en-dayofweek-pie.js";
@@ -1058,7 +1067,8 @@ public class Engine
                 poemCount = season.Poems.Count(x => x.HasVariableVerseLength);
             }
 
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedLongTitle} ({season.Years})", poemCount,
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedLongTitle} ({season.Years})",
+                poemCount,
                 backgroundColor));
         }
 
@@ -1090,6 +1100,7 @@ public class Engine
         datesList.Sort();
 
         var intervalDict = new Dictionary<int, int>();
+        var seriesDict = new Dictionary<DateTime, int>(); // end date, duration
 
         int dateCount = datesList.Count();
         for (var i = 1; i < dateCount; i++)
@@ -1105,7 +1116,19 @@ public class Engine
             {
                 intervalDict.Add(dayDiff, 1);
             }
+
+            if (!seriesDict.ContainsKey(previous))
+                seriesDict.Add(previous, 1);
+
+            if (dayDiff == 1)
+            {
+                var duration = seriesDict[previous];
+                seriesDict.Remove(previous);
+                seriesDict[current] = ++duration;
+            }
         }
+
+        // Interval chart
 
         var dataLines = new List<ChartDataFileHelper.ColoredDataLine>();
         var orderedIntervalKeys = intervalDict.Keys.Order();
@@ -1179,12 +1202,45 @@ public class Engine
             barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
 
-        if (seasonId != null)
+        if (seasonId.HasValue) return;
+
+        // Series chart (general chart)
+
+        var seriesLengthDict = new Dictionary<int, int>();
+        foreach (var seriesLength in seriesDict.Values)
         {
-            // Useful once
-            //GeneratePoemVersesLengthBarChartDataFile(seasonId);
-            //GeneratePoemsLengthBarChartDataFile(seasonId);
+            if (seriesLengthDict.ContainsKey(seriesLength))
+            {
+                seriesLengthDict[seriesLength]++;
+            }
+            else
+            {
+                seriesLengthDict[seriesLength] = 1;
+            }
         }
+
+        var seriesDataLines = new List<ChartDataFileHelper.ColoredDataLine>();
+        var sortedKeys = seriesLengthDict.Keys.ToList();
+        sortedKeys.Sort();
+
+        foreach (var key in sortedKeys.Skip(1))
+        {
+            seriesDataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", seriesLengthDict[key],
+                "rgba(72, 149, 239, 1)"));
+        }
+
+        fileName = "poem-series-bar.js";
+        subDir = "general";
+        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
+        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bar);
+        chartDataFileHelper2.WriteBeforeData();
+        chartDataFileHelper2.WriteData(seriesDataLines, true);
+        chartDataFileHelper2.WriteAfterData("poemSeriesBar",
+            new[] { "Séries" },
+            barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+        streamWriter2.Close();
+
+        // TODO series content file for longest durations
     }
 
     public void GeneratePoemCountFile()
@@ -1217,13 +1273,17 @@ public class Engine
         foreach (var poem in poems)
         {
             var poemLength = poem.VersesCount;
-            if (poem.HasVariableVerseLength) 
+            if (poem.HasVariableVerseLength)
             {
-                if (variableVerseLength.ContainsKey(poemLength)) {
+                if (variableVerseLength.ContainsKey(poemLength))
+                {
                     variableVerseLength[poemLength]++;
-                } else {
+                }
+                else
+                {
                     variableVerseLength[poemLength] = 1;
                 }
+
                 continue;
             }
 
@@ -1238,34 +1298,36 @@ public class Engine
             }
         }
 
-            // Find max value
-            var maxValue = poemLengthByVerseLength.Values.Max();
+        // Find max value
+        var maxValue = poemLengthByVerseLength.Values.Max();
 
-            var fileName = "poem-length-by-verse-length.js";
-            var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-                _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-            using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-            var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble);
-            chartDataFileHelper.WriteBeforeData();
+        var fileName = "poem-length-by-verse-length.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble);
+        chartDataFileHelper.WriteBeforeData();
 
-            var dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-            var bubbleColors = new List<string>();
-            foreach (var dataKey in poemLengthByVerseLength.Keys)
-            {
-                AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors, maxValue);
-            }
-            foreach (var dataKey in variableVerseLength.Keys)
-            {
-                AddDataLine(0, dataKey, variableVerseLength[dataKey], dataLines, bubbleColors, maxValue);
-            }
+        var dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var bubbleColors = new List<string>();
+        foreach (var dataKey in poemLengthByVerseLength.Keys)
+        {
+            AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors,
+                maxValue);
+        }
 
-            chartDataFileHelper.WriteData(dataLines);
-            chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
-                [
-                    "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)"
-                ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
-                bubbleColors: bubbleColors);
-            streamWriter.Close();
+        foreach (var dataKey in variableVerseLength.Keys)
+        {
+            AddDataLine(0, dataKey, variableVerseLength[dataKey], dataLines, bubbleColors, maxValue);
+        }
+
+        chartDataFileHelper.WriteData(dataLines);
+        chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
+            [
+                "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)"
+            ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
+            bubbleColors: bubbleColors);
+        streamWriter.Close();
     }
 
     private void AddDataLine(int x, int y, int value,
