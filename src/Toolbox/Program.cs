@@ -282,6 +282,8 @@ public class Program
                 {
                     _engine.GenerateSeasonCategoriesPieChartDataFile(i);
                 }
+                // General chart
+                _engine.GenerateSeasonCategoriesPieChartDataFile(null);
 
                 // Categories' and tags' radar
                 GeneratePoemsCategoriesAndTagsRadarChartDataFile();
@@ -292,6 +294,8 @@ public class Program
             else
             {
                 _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+                // General chart
+                _engine.GenerateSeasonCategoriesPieChartDataFile(null);
             }
 
             Console.WriteLine(seasonId == 0
@@ -315,17 +319,9 @@ public class Program
         _engine.GeneratePoemVersesLengthBarChartDataFile(seasonId);
 
         // Season's pie
-        if (seasonId == 0)
-        {
-            for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
-            {
-                _engine.GenerateSeasonCategoriesPieChartDataFile(i);
-            }
-        }
-        else
-        {
-            _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
-        }
+        _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+        // General chart
+        _engine.GenerateSeasonCategoriesPieChartDataFile(null);
 
         Console.WriteLine(seasonId == 0
             ? "All seasons categories pie chart data file OK"

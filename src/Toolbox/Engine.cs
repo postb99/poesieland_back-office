@@ -366,19 +366,19 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GenerateSeasonCategoriesPieChartDataFile(int seasonId)
+    public void GenerateSeasonCategoriesPieChartDataFile(int? seasonId)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
-        var subDir = $"season-{seasonId}";
+        var subDir = seasonId.HasValue ? $"season-{seasonId}" : "general";
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, "categories-pie.js"));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         var byStorageSubcategoryCount = new Dictionary<string, int>();
 
-        var season = Data.Seasons.First(x => x.Id == seasonId);
-        foreach (var poem in season.Poems)
+        var season = seasonId.HasValue ? Data.Seasons.First(x => x.Id == seasonId) : null;
+        foreach (var poem in season?.Poems ?? Data.Seasons.SelectMany(x => x.Poems))
         {
             foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
             {
@@ -409,10 +409,10 @@ public class Engine
 
         chartDataFileHelper.WriteData(pieChartData);
 
-        chartDataFileHelper.WriteAfterData($"season{seasonId}Pie",
+        chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
             new[]
             {
-                $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}"
+                seasonId.HasValue ? $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}" : ""
             });
         streamWriter.Close();
     }
