@@ -1099,7 +1099,8 @@ public class Engine
             datesList.AddRange(enDatesList);
         datesList.Sort();
 
-        var intervalDict = new Dictionary<int, int>();
+        var intervalDict = new Dictionary<DateTime, int>(); // end date, duration
+        var intervalLengthDict = new Dictionary<int, int>(); // duration, occurrence
         var seriesDict = new Dictionary<DateTime, int>(); // end date, duration
 
         int dateCount = datesList.Count();
@@ -1108,14 +1109,18 @@ public class Engine
             var current = datesList[i];
             var previous = datesList[i - 1];
             var dayDiff = (int)(current - previous).TotalDays;
-            if (intervalDict.ContainsKey(dayDiff))
+
+            if (intervalLengthDict.ContainsKey(dayDiff))
             {
-                intervalDict[dayDiff]++;
+                intervalLengthDict[dayDiff]++;
             }
             else
             {
-                intervalDict.Add(dayDiff, 1);
+                intervalLengthDict.Add(dayDiff, 1);
             }
+
+            if (!intervalDict.ContainsKey(current))
+                intervalDict.Add(current, dayDiff);
 
             if (!seriesDict.ContainsKey(previous))
                 seriesDict.Add(previous, 1);
@@ -1128,10 +1133,10 @@ public class Engine
             }
         }
 
-        // Interval chart
+        // Interval length charts
 
         var dataLines = new List<ChartDataFileHelper.ColoredDataLine>();
-        var orderedIntervalKeys = intervalDict.Keys.Order();
+        var orderedIntervalKeys = intervalLengthDict.Keys.Order().ToList();
         var zeroDayColor = "rgba(72, 149, 239, 1)";
         var oneDayColor = "rgba(72, 149, 239, 0.9)";
         var upToSevenDayColor = "rgba(72, 149, 239, 0.7)";
@@ -1147,20 +1152,21 @@ public class Engine
             if (key == 0)
             {
                 dataLines.Add(
-                    new ChartDataFileHelper.ColoredDataLine("Moins d\\'un jour", intervalDict[key], zeroDayColor));
+                    new ChartDataFileHelper.ColoredDataLine("Moins d\\'un jour", intervalLengthDict[key],
+                        zeroDayColor));
             }
             else if (key == 1)
             {
-                dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Un jour", intervalDict[key], oneDayColor));
+                dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Un jour", intervalLengthDict[key], oneDayColor));
             }
             else if (key < 8)
             {
                 dataLines.Add(
-                    new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key], upToSevenDayColor));
+                    new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalLengthDict[key], upToSevenDayColor));
             }
             else if (key < 31)
             {
-                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalDict[key],
+                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalLengthDict[key],
                     upToOneMonthColor));
             }
             else if (key < 91)
@@ -1204,7 +1210,57 @@ public class Engine
 
         if (seasonId.HasValue) return;
 
-        // Series chart (general chart)
+        // Longest intervals content file
+
+        var longestIntervalKeys = orderedIntervalKeys.OrderDescending().ToList();
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
+            "../includes/longest_intervals.md");
+        var streamWriter3b = new StreamWriter(filePath);
+
+        streamWriter3b.WriteLine("+++");
+        streamWriter3b.WriteLine("title = \"Les plus longs intervalles\"");
+        streamWriter3b.WriteLine("+++");
+
+        var moreThanOneYearDates = new List<KeyValuePair<DateTime, DateTime>>();
+        var moreThanThreeMonthsDates = new List<KeyValuePair<DateTime, DateTime>>();
+
+        foreach (var key in longestIntervalKeys)
+        {
+            if (key < 91) break;
+            var matchingSeries = intervalDict.Where(x => x.Value == key).ToList();
+            foreach (var pair in matchingSeries)
+            {
+                if (key < 366)
+                {
+                    moreThanThreeMonthsDates.Add(
+                        new KeyValuePair<DateTime, DateTime>(pair.Key.AddDays(-key), pair.Key));
+                }
+                else
+                {
+                    moreThanOneYearDates.Add(new KeyValuePair<DateTime, DateTime>(pair.Key.AddDays(-key), pair.Key));
+                }
+            }
+        }
+
+        streamWriter3b.WriteLine($"- Plus d'un an, du plus long au plus court :");
+
+        foreach (var data in moreThanOneYearDates)
+        {
+            streamWriter3b.WriteLine(
+                $"  - Du {data.Key.ToString("dd.MM.yyyy")} au {data.Value.ToString("dd.MM.yyyy")}");
+        }
+
+        streamWriter3b.WriteLine($"- Plus de trois mois, du plus long au plus court :");
+
+        foreach (var data in moreThanThreeMonthsDates)
+        {
+            streamWriter3b.WriteLine(
+                $"  - Du {data.Key.ToString("dd.MM.yyyy")} au {data.Value.ToString("dd.MM.yyyy")}");
+        }
+
+        streamWriter3b.Close();
+
+        // Series length chart (general chart)
 
         var seriesLengthDict = new Dictionary<int, int>();
         foreach (var seriesLength in seriesDict.Values)
@@ -1220,8 +1276,7 @@ public class Engine
         }
 
         var seriesDataLines = new List<ChartDataFileHelper.ColoredDataLine>();
-        var sortedKeys = seriesLengthDict.Keys.ToList();
-        sortedKeys.Sort();
+        var sortedKeys = seriesLengthDict.Keys.Order().ToList();
 
         foreach (var key in sortedKeys.Skip(1))
         {
@@ -1241,9 +1296,9 @@ public class Engine
         streamWriter2.Close();
 
         // longest series content file
-        sortedKeys.Reverse();
-        var longestSeriesKeys = sortedKeys.Take(5);
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
+
+        var longestSeriesKeys = sortedKeys.OrderDescending().Take(5);
+        filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
             "../includes/longest_series.md");
         var streamWriter3 = new StreamWriter(filePath);
 
@@ -1257,7 +1312,8 @@ public class Engine
             streamWriter3.WriteLine($"- {key} jours :");
             foreach (var pair in matchingSeries)
             {
-                streamWriter3.WriteLine($"  - Du {pair.Key.AddDays(-key).ToString("dd.MM.yyyy")} au {pair.Key.ToString("dd.MM.yyyy")}");
+                streamWriter3.WriteLine(
+                    $"  - Du {pair.Key.AddDays(-key).ToString("dd.MM.yyyy")} au {pair.Key.ToString("dd.MM.yyyy")}");
             }
         }
 
