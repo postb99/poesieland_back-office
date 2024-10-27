@@ -1240,7 +1240,28 @@ public class Engine
             barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter2.Close();
 
-        // TODO series content file for longest durations
+        // longest series content file
+        sortedKeys.Reverse();
+        var longestSeriesKeys = sortedKeys.Take(5);
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
+            "../includes/longest_series.md");
+        var streamWriter3 = new StreamWriter(filePath);
+
+        streamWriter3.WriteLine("+++");
+        streamWriter3.WriteLine("title = \"Les plus longues séries\"");
+        streamWriter3.WriteLine("+++");
+
+        foreach (var key in longestSeriesKeys)
+        {
+            var matchingSeries = seriesDict.Where(x => x.Value == key);
+            streamWriter3.WriteLine($"- {key} jours :");
+            foreach (var pair in matchingSeries)
+            {
+                streamWriter3.WriteLine($"  - Du {pair.Key.AddDays(-key).ToString("dd.MM.yyyy")} au {pair.Key.ToString("dd.MM.yyyy")}");
+            }
+        }
+
+        streamWriter3.Close();
     }
 
     public void GeneratePoemCountFile()
