@@ -1342,7 +1342,7 @@ public class Engine
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
     }
 
-    public void GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile()
+    public void GeneratePoemLengthByVerseLengthBubbleChartDataFile()
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var poemLengthByVerseLength = new Dictionary<KeyValuePair<int, int>, int>();
@@ -1401,7 +1401,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines);
         chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
             [
-                "Longueur du poème selon la longueur du vers (en bleu plus foncé occurrence deux fois plus forte)"
+                "Longueur du poème selon la longueur du vers (bleu clair à foncé selon le quartile)"
             ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
             bubbleColors: bubbleColors);
         streamWriter.Close();
@@ -1410,13 +1410,31 @@ public class Engine
     private void AddDataLine(int x, int y, int value,
         List<ChartDataFileHelper.BubbleChartDataLine> bubbleChartDatalines, List<string> bubbleColors, int maxValue)
     {
-        // Bubble radius
+        // Bubble radius and color
         var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
-        var bubbleColor = "rgba(72, 149, 239, 1)";
-        if (bubbleSize < (bubbleMaxRadiusPixels / 2))
+        var bubbleColor = "rgba(72, 149, 239, {0})";
+        if (bubbleSize < (bubbleMaxRadiusPixels / 4))
         {
+            // First quartile
+            bubbleColor = string.Format(bubbleColor, "0.2");
+            bubbleSize *= 4;
+        }
+        else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
+        {
+            // Second quartile
             bubbleSize *= 2;
-            bubbleColor = "rgba(76, 201, 240, 1)";
+            bubbleColor = string.Format(bubbleColor, "0.5");
+        }
+        else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
+        {
+            // Third quartile
+            bubbleSize *= 0.75m;
+            bubbleColor = string.Format(bubbleColor, "0.7");
+        }
+        else
+        {
+            // Fourth quartile
+            bubbleColor = string.Format(bubbleColor, "1");
         }
 
         bubbleChartDatalines.Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,

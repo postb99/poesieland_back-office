@@ -110,6 +110,9 @@ public class Program
             case MainMenuSettings.MenuChoices.GeneratePoemsRadarChartDataFile:
                 GeneratePoemsRadarChartDataFile(menuChoice);
                 return true;
+            case MainMenuSettings.MenuChoices.GenerateBubbleChartDataFile:
+                GenerateBubbleChartDataFile();
+                return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
                 return true;
@@ -183,7 +186,7 @@ public class Program
 
         _engine.GeneratePoemsEnByDayRadarChartDataFile();
         Console.WriteLine("Chart for day radar OK");
-        
+
         _engine.GenerateEnPoemByDayOfWeekPieChartDataFile();
         Console.WriteLine("Chart for day of week OK");
     }
@@ -220,7 +223,8 @@ public class Program
             var missingTags = _engine.CheckMissingTagsInYamlMetadata();
             if (missingTags.Any())
             {
-                Console.WriteLine($"[ERROR] Missing tags for poems: {string.Join(',', missingTags)}, check these tags: year, versVariable");
+                Console.WriteLine(
+                    $"[ERROR] Missing tags for poems: {string.Join(',', missingTags)}, check these tags: year, versVariable");
             }
         }
         else
@@ -282,6 +286,7 @@ public class Program
                 {
                     _engine.GenerateSeasonCategoriesPieChartDataFile(i);
                 }
+
                 // General chart
                 _engine.GenerateSeasonCategoriesPieChartDataFile(null);
 
@@ -353,9 +358,9 @@ public class Program
 
         // Poem length by verse length and vice versa
         Console.WriteLine("Poems bubble chart data files: starting...");
-        _engine.GeneratePoemLengthByVerseLengthAndViceVersaBubbleChartDataFile();
+        _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
         Console.WriteLine("Poems bubble chart data files OK");
-        
+
         // Over seasons categories' and tags' bar
         GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
 
@@ -398,6 +403,12 @@ public class Program
         }
     }
 
+    private static void GenerateBubbleChartDataFile()
+    {
+        _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
+        Console.WriteLine("Bubble chart data file OK");
+    }
+
     private static void GeneratePoemsCategoriesAndTagsRadarChartDataFile()
     {
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
@@ -415,7 +426,7 @@ public class Program
             Console.WriteLine($"Poems by day for '{category}' chart data file OK");
         }
     }
-    
+
     private static void GenerateOverSeasonsCategoriesAndTagsBarChartDataFile()
     {
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
@@ -432,16 +443,16 @@ public class Program
             _engine.GenerateOverSeasonsChartDataFile(null, category);
             Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");
         }
-        
+
         _engine.GenerateOverSeasonsChartDataFile(null, null, forAcrostiche: true);
         Console.WriteLine($"Poems over seasons for 'acrostiche' chart data file OK");
-        
+
         _engine.GenerateOverSeasonsChartDataFile(null, null, forSonnet: true);
         Console.WriteLine($"Poems over seasons for 'sonnet' chart data file OK");
-        
+
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
         Console.WriteLine($"Poems over seasons for 'pantoun' chart data file OK");
-        
+
         _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableVerse: true);
         Console.WriteLine($"Poems over seasons for 'versVariable' chart data file OK");
     }
