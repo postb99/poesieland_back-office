@@ -1382,64 +1382,67 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
 
-        var dataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var bubbleColors = new List<string>();
+        var firstQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var secondQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var thirdQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        
         foreach (var dataKey in poemLengthByVerseLength.Keys)
         {
-            AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], dataLines, bubbleColors,
-                maxValue);
+            AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], maxValue);
         }
 
         foreach (var dataKey in variableVerseLength.Keys)
         {
-            AddDataLine(0, dataKey, variableVerseLength[dataKey], dataLines, bubbleColors, maxValue);
+            AddDataLine(0, dataKey, variableVerseLength[dataKey], [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], maxValue);
         }
 
-        chartDataFileHelper.WriteData(dataLines);
+        chartDataFileHelper.WriteData(firstQuartileDataLines, false);
+        chartDataFileHelper.WriteData(secondQuartileDataLines, false);
+        chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
+        chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
         chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
             [
-                "Longueur du poème selon la longueur du vers (bleu clair à foncé selon le quartile)"
-            ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2,
-            bubbleColors: bubbleColors);
+                "Longueur du poème selon la longueur du vers (premier quartile)",
+                "Longueur du poème selon la longueur du vers (deuxième quartile)",
+                "Longueur du poème selon la longueur du vers (troisième quartile)",
+                "Longueur du poème selon la longueur du vers (quatrième quartile)"
+            ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
         streamWriter.Close();
     }
 
     private void AddDataLine(int x, int y, int value,
-        List<ChartDataFileHelper.BubbleChartDataLine> bubbleChartDatalines, List<string> bubbleColors, int maxValue)
+        List<ChartDataFileHelper.BubbleChartDataLine>[] quartileBubbleChartDatalines, int maxValue)
     {
         // Bubble radius and color
         var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
-        var bubbleColor = "rgba(72, 149, 239, {0})";
+        var bubbleBaseColor = "rgba(72, 149, 239, {0})";
         if (bubbleSize < (bubbleMaxRadiusPixels / 4))
         {
             // First quartile
-            bubbleColor = string.Format(bubbleColor, "0.2");
             bubbleSize *= 4;
+            quartileBubbleChartDatalines[0].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "0.2")));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
         {
             // Second quartile
             bubbleSize *= 2;
-            bubbleColor = string.Format(bubbleColor, "0.5");
+            quartileBubbleChartDatalines[1].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "0.5")));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
         {
             // Third quartile
-            bubbleSize *= 0.75m;
-            bubbleColor = string.Format(bubbleColor, "0.7");
+            bubbleSize *= 1.5m;
+            quartileBubbleChartDatalines[2].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "0.7")));
         }
         else
         {
             // Fourth quartile
-            bubbleColor = string.Format(bubbleColor, "1");
+            quartileBubbleChartDatalines[3].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "1")));
         }
-
-        bubbleChartDatalines.Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
-            bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." })));
-        bubbleColors.Add(bubbleColor);
     }
 
     private string GetRadarChartLabel(string monthDay)

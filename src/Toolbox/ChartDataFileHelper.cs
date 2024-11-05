@@ -54,12 +54,15 @@ public class ChartDataFileHelper
         /// Bubble radius in pixels, with dot for decimal separator.
         /// </summary>
         public string Value { get; }
+        
+        public string RgbaColor { get; }
 
-        public BubbleChartDataLine(int x, int y, string value)
+        public BubbleChartDataLine(int x, int y, string value, string rgbaColor)
         {
             X = x;
             Y = y;
             Value = value;
+            RgbaColor = rgbaColor;
         }
     }
 
@@ -100,21 +103,21 @@ public class ChartDataFileHelper
 
     public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
         string radarChartBackgroundColor = null, string barChartOptions = "{}", string chartXAxisTitle = "",
-        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, List<string>? bubbleColors = null)
+        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1)
     {
         _streamWriter.WriteLine("  ];");
+        
+        var chartTitlesBuilder = new StringBuilder();
+        foreach (var chartTitle in chartTitles)
+        {
+            chartTitlesBuilder.Append("'").Append(chartTitle).Append("',");
+        }
+
+        chartTitlesBuilder.Remove(chartTitlesBuilder.Length - 1, 1);
 
         switch (_chartType)
         {
             case ChartType.Bar:
-                var chartTitlesBuilder = new StringBuilder();
-                foreach (var chartTitle in chartTitles)
-                {
-                    chartTitlesBuilder.Append("'").Append(chartTitle).Append("',");
-                }
-
-                chartTitlesBuilder.Remove(chartTitlesBuilder.Length - 1, 1);
-
                 _streamWriter.WriteLine(_nbDatasets == 1
                     ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data], {barChartOptions});"
                     : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data, {barChartOptions});");
@@ -130,18 +133,8 @@ public class ChartDataFileHelper
                         $"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data], {{ backgroundColor: '{backgroundColor}', borderColor: '{borderColor}', pointBackgroundColor: '{borderColor}', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgb(54, 162, 235)', elements: {{ line: {{ borderWidth: 1  }} }}, scales: {{ r: {{ ticks: {{ stepSize: 1 }} }} }} }});");
                 break;
             case ChartType.Bubble:
-                if (bubbleColors != null)
-                {
-                    var sb = new StringBuilder();
-                    foreach (var color in bubbleColors)
-                    {
-                        sb.AppendFormat($"'{color}',");
-                    }
-                    _streamWriter.WriteLine($"  const borderColorsArray = [{sb}];");
-                }
-
                 _streamWriter.WriteLine(
-                    $"  addBubbleChart('{chartId}', '{chartTitles[0]}', data, borderColorsArray, {{scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}}});");
+                    $"  addBubbleChart('{chartId}', [{chartTitlesBuilder}], data, {{scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}}});");
                 break;
         }
 
@@ -182,13 +175,17 @@ public class ChartDataFileHelper
         _streamWriter.Flush();
     }
 
-    public void WriteData(IEnumerable<BubbleChartDataLine> dataLines)
+    public void WriteData(IEnumerable<BubbleChartDataLine> dataLines, bool isLastDataLine)
     {
+        _streamWriter.WriteLine("[");
+        
         foreach (var dataLine in dataLines)
         {
             _streamWriter.WriteLine(
-                $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {dataLine.Value} }},");
+                $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {dataLine.Value}, color: '{dataLine.RgbaColor}' }},");
         }
+        
+        _streamWriter.WriteLine(isLastDataLine ? "]" : "],");
 
         _streamWriter.Flush();
     }
