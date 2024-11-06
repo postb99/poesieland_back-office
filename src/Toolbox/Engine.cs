@@ -1406,10 +1406,10 @@ public class Engine
         chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
         chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
             [
-                "Longueur du poème selon la longueur du vers (premier quartile)",
-                "Longueur du poème selon la longueur du vers (deuxième quartile)",
-                "Longueur du poème selon la longueur du vers (troisième quartile)",
-                "Longueur du poème selon la longueur du vers (quatrième quartile)"
+                "Premier quartile",
+                "Deuxième quartile",
+                "Troisième quartile",
+                "Quatrième quartile"
             ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
         streamWriter.Close();
     }
@@ -1419,29 +1419,33 @@ public class Engine
     {
         // Bubble radius and color
         var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
-        var bubbleBaseColor = "rgba(72, 149, 239, {0})";
+        var bubbleColor = "";
         if (bubbleSize < (bubbleMaxRadiusPixels / 4))
         {
             // First quartile
             bubbleSize *= 4;
-            quartileBubbleChartDatalines[0].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "0.2")));
+            bubbleColor = "rgba(121, 248, 248, 1)";
+            quartileBubbleChartDatalines[0].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
         {
             // Second quartile
             bubbleSize *= 2;
-            quartileBubbleChartDatalines[1].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "0.5")));
+            bubbleColor = "rgba(119, 181, 254, 1)";
+            quartileBubbleChartDatalines[1].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
         {
             // Third quartile
             bubbleSize *= 1.5m;
-            quartileBubbleChartDatalines[2].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "0.7")));
+            bubbleColor = "rgba(0, 127, 255, 1)";
+            quartileBubbleChartDatalines[2].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else
         {
             // Fourth quartile
-            quartileBubbleChartDatalines[3].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), string.Format(bubbleBaseColor, "1")));
+            bubbleColor = "rgba(50, 122, 183, 1)";
+            quartileBubbleChartDatalines[3].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
     }
 
