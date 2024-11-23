@@ -106,7 +106,7 @@ public class Engine
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         if (seasonDirName == null)
         {
-            return null;
+            throw new Exception("Create season directory before importing poem");
         }
 
         var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
@@ -120,6 +120,13 @@ public class Engine
             (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
+        if (targetSeason == null)
+        {
+            targetSeason = new Season
+                { Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Introduction = "TODO", Summary = "TODO", Poems = []
+                };
+            Data.Seasons.Add(targetSeason);
+        }
         var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poemId);
 
         if (existingPosition > -1)
@@ -190,7 +197,7 @@ public class Engine
                     var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
                     if (targetSeason == null)
                     {
-                        targetSeason = new Season { Id = seasonId, Poems = new List<Poem>() };
+                        targetSeason = new Season { Id = seasonId, Poems = [] };
                         DataEn.Seasons.Add(targetSeason);
                     }
 
@@ -321,10 +328,11 @@ public class Engine
 
 
         // Bar chart
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         var subDir = seasonId != null ? $"season-{seasonId}" : "general";
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, barChartFileName));
+        var subDirPath = Path.Combine(rootDir, subDir);
+        Directory.CreateDirectory(subDirPath);
+        using var streamWriter = new StreamWriter(Path.Combine(subDirPath, barChartFileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 2);
         chartDataFileHelper.WriteBeforeData();
 
@@ -355,12 +363,12 @@ public class Engine
         {
             chartDataFileHelper.WriteData(nbVersesChartData, false);
             chartDataFileHelper.WriteData(isSonnetChartData, true);
-            chartTitles = new[] { "Poèmes", "Sonnets" };
+            chartTitles = ["Poèmes", "Sonnets"];
         }
         else
         {
             chartDataFileHelper.WriteData(nbVersesChartData, true);
-            chartTitles = new[] { "Poèmes" };
+            chartTitles = ["Poèmes"];
         }
 
         chartDataFileHelper.WriteAfterData(barChartId, chartTitles,
@@ -414,10 +422,9 @@ public class Engine
         chartDataFileHelper.WriteData(pieChartData);
 
         chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
-            new[]
-            {
-                seasonId.HasValue ? $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}" : ""
-            });
+        [
+            seasonId.HasValue ? $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}" : ""
+        ]);
         streamWriter.Close();
     }
 
@@ -523,7 +530,7 @@ public class Engine
 
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, borderColor,
+        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l\\\'année"], borderColor,
             backgroundColor);
         streamWriter.Close();
 
@@ -583,7 +590,7 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poems by day of year" }, string.Empty, string.Empty);
+        chartDataFileHelper.WriteAfterData(chartId, ["Poems by day of year"], string.Empty, string.Empty);
         streamWriter.Close();
     }
 
@@ -620,7 +627,7 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes selon le jour de l\\\'année" }, string.Empty,
+        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l\\\'année"], string.Empty,
             string.Empty);
         streamWriter.Close();
     }
@@ -628,17 +635,18 @@ public class Engine
     public void VerifySeasonHaveCorrectPoemCount()
     {
         var seasons = Data.Seasons.ToList();
-        for (int i = 0; i < seasons.Count; i++)
+        var seasonCount = seasons.Count;
+        for (int i = 0; i < seasonCount; i++)
         {
             var season = seasons[i];
             var desc = $"[{season.Id} - {season.Name}]: {season.Poems.Count}";
-            if (i < seasons.Count - 1 && season.Poems.Count != 50)
+            if (i < seasonCount - 1 && season.Poems.Count != 50)
             {
-                throw new Exception($"Not 50 poems for {desc}!");
+                throw new Exception($"Not last season. Not 50 poems for {desc}!");
             }
-            else if (i == seasons.Count - 1 && season.Poems.Count >= 50)
+            if (i == seasonCount - 1 && season.Poems.Count > 50)
             {
-                throw new Exception($"Not max 50 poems for {desc}!");
+                throw new Exception($"Last season. Not max 50 poems for {desc}!");
             }
         }
     }
@@ -778,7 +786,7 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes" },
+        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
             barChartOptions: seasonId == null
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
@@ -798,7 +806,7 @@ public class Engine
 
             chartDataFileHelper2.WriteData(dataLines, true);
 
-            chartDataFileHelper2.WriteAfterData(chartId, new[] { "Poèmes" },
+            chartDataFileHelper2.WriteAfterData(chartId, ["Poèmes"],
                 barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
             streamWriter2.Close();
         }
@@ -862,7 +870,7 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
-        chartDataFileHelper.WriteAfterData("poemIntensityPie", new[] { "Les jours de création sont-ils intenses ?" });
+        chartDataFileHelper.WriteAfterData("poemIntensityPie", ["Les jours de création sont-ils intenses ?"]);
         streamWriter.Close();
     }
 
@@ -891,7 +899,7 @@ public class Engine
         var dataLines = new List<ChartDataFileHelper.DataLine>();
         var baseColor = "rgba(72, 149, 239, {0})";
         var baseAlpha = 0.2;
-        int[] daysOfWeek = { 1, 2, 3, 4, 5, 6, 0 };
+        int[] daysOfWeek = [1, 2, 3, 4, 5, 6, 0];
         foreach (var key in daysOfWeek)
         {
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine(
@@ -914,7 +922,7 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
-        chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", new[] { "Par jour de la semaine" });
+        chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", ["Par jour de la semaine"]);
         streamWriter.Close();
     }
 
@@ -939,7 +947,7 @@ public class Engine
         var dataLines = new List<ChartDataFileHelper.DataLine>();
         var baseColor = "rgba(72, 149, 239, {0})";
         var baseAlpha = 0.2;
-        int[] daysOfWeek = { 1, 2, 3, 4, 5, 6, 0 };
+        int[] daysOfWeek = [1, 2, 3, 4, 5, 6, 0];
         foreach (var key in daysOfWeek)
         {
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine(
@@ -962,7 +970,7 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
-        chartDataFileHelper.WriteAfterData("poemEnDayOfWeekPie", new[] { "By day of week" });
+        chartDataFileHelper.WriteAfterData("poemEnDayOfWeekPie", ["By day of week"]);
         streamWriter.Close();
     }
 
@@ -1075,7 +1083,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
 
-        chartDataFileHelper.WriteAfterData(chartId, new[] { "Poèmes au fil des saisons" },
+        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes au fil des saisons"],
             barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
     }
@@ -1204,7 +1212,7 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData(seasonId == null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
-            new[] { "Fréquence" },
+            ["Fréquence"],
             barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
 
@@ -1291,7 +1299,7 @@ public class Engine
         chartDataFileHelper2.WriteBeforeData();
         chartDataFileHelper2.WriteData(seriesDataLines, true);
         chartDataFileHelper2.WriteAfterData("poemSeriesBar",
-            new[] { "Séries" },
+            ["Séries"],
             barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter2.Close();
 
