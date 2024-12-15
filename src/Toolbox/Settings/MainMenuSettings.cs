@@ -27,6 +27,7 @@ public class MainMenuSettings
         GeneratePoemVersesLengthBarChartDataFile = 440,
         GenerateAllSeasonsPoemIntervalBarChartDataFile = 450,
         GenerateBubbleChartDataFile = 460,
+        GenerateLineChartDataFile = 470,
         CheckContentMetadataQuality = 500,
         ImportEnPoems = 600,
         ExitProgram = 99

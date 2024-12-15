@@ -113,6 +113,9 @@ public class Program
             case MainMenuSettings.MenuChoices.GenerateBubbleChartDataFile:
                 GenerateBubbleChartDataFile();
                 return true;
+            case MainMenuSettings.MenuChoices.GenerateLineChartDataFile:
+                GenerateLineChartDataFile();
+                return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
                 return true;
@@ -407,6 +410,12 @@ public class Program
     {
         _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
         Console.WriteLine("Bubble chart data file OK");
+    }
+    
+    private static void GenerateLineChartDataFile()
+    {
+        _engine.GenerateVerseLengthOverSeasonsLineChartDataFile();
+        Console.WriteLine("Line chart data file OK");
     }
 
     private static void GeneratePoemsCategoriesAndTagsRadarChartDataFile()

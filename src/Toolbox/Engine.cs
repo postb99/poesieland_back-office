@@ -123,10 +123,13 @@ public class Engine
         if (targetSeason == null)
         {
             targetSeason = new Season
-                { Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Introduction = "TODO", Summary = "TODO", Poems = []
-                };
+            {
+                Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Introduction = "TODO", Summary = "TODO",
+                Poems = []
+            };
             Data.Seasons.Add(targetSeason);
         }
+
         var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poemId);
 
         if (existingPosition > -1)
@@ -328,7 +331,8 @@ public class Engine
 
 
         // Bar chart
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
         var subDir = seasonId != null ? $"season-{seasonId}" : "general";
         var subDirPath = Path.Combine(rootDir, subDir);
         Directory.CreateDirectory(subDirPath);
@@ -644,6 +648,7 @@ public class Engine
             {
                 throw new Exception($"Not last season. Not 50 poems for {desc}!");
             }
+
             if (i == seasonCount - 1 && season.Poems.Count > 50)
             {
                 throw new Exception($"Last season. Not max 50 poems for {desc}!");
@@ -1082,7 +1087,6 @@ public class Engine
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-
         chartDataFileHelper.WriteAfterData(chartId, ["Poèmes au fil des saisons"],
             barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
@@ -1397,15 +1401,19 @@ public class Engine
         var secondQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
         var thirdQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
         var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        
+
         foreach (var dataKey in poemLengthByVerseLength.Keys)
         {
-            AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey], [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], maxValue);
+            AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
+                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+                maxValue);
         }
 
         foreach (var dataKey in variableVerseLength.Keys)
         {
-            AddDataLine(0, dataKey, variableVerseLength[dataKey], [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], maxValue);
+            AddDataLine(0, dataKey, variableVerseLength[dataKey],
+                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+                maxValue);
         }
 
         chartDataFileHelper.WriteData(firstQuartileDataLines, false);
@@ -1413,12 +1421,70 @@ public class Engine
         chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
         chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
         chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
-            [
-                "Premier quartile",
-                "Deuxième quartile",
-                "Troisième quartile",
-                "Quatrième quartile"
-            ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
+        [
+            "Premier quartile",
+            "Deuxième quartile",
+            "Troisième quartile",
+            "Quatrième quartile"
+        ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
+        streamWriter.Close();
+    }
+
+    public void GenerateVerseLengthOverSeasonsLineChartDataFile()
+    {
+        var verseLengthRange = Enumerable.Range(2, 13);
+        var dataDict = new Dictionary<int, List<int>>();
+        dataDict.Add(0, new List<int>()); // For variable verse length
+
+        var xLabels = new List<string>();
+        foreach (var verseLength in verseLengthRange)
+        {
+            dataDict.Add(verseLength, new List<int>());
+        }
+
+        foreach (var season in Data.Seasons)
+        {
+            xLabels.Add($"{season.EscapedLongTitle} ({season.Years})");
+            foreach (var verseLength in verseLengthRange)
+            {
+                dataDict[verseLength].Add(season.Poems.Count(x => x.VerseLength == verseLength.ToString()));
+                dataDict[0].Add(season.Poems.Count(x => x.HasVariableVerseLength));
+            }
+        }
+
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+
+        var fileName = $"poems-verseLength-line.js";
+
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 14);
+        chartDataFileHelper.WriteBeforeData();
+
+        var variableVerseDataLines = new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "black");
+        var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 pieds", dataDict[2], "red");
+        // TODO
+        
+        chartDataFileHelper.WriteData(variableVerseDataLines, false);
+        chartDataFileHelper.WriteData(twoFeetDataLines, true); // TODO
+        
+        chartDataFileHelper.WriteAfterData("poemsVerseLengthLine",
+        [
+            "Vers variable",
+            "2 pieds",
+            "3 pieds",
+            "4 pieds",
+            "5 pieds",
+            "6 pieds",
+            "7 pieds",
+            "8 pieds",
+            "9 pieds",
+            "10 pieds",
+            "11 pieds",
+            "12 pieds",
+            "13 pieds",
+            "14 pieds"
+        ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons", xLabels: xLabels.ToArray());
         streamWriter.Close();
     }
 
@@ -1433,27 +1499,31 @@ public class Engine
             // First quartile
             bubbleSize *= 4;
             bubbleColor = "rgba(121, 248, 248, 1)";
-            quartileBubbleChartDatalines[0].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+            quartileBubbleChartDatalines[0].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
         {
             // Second quartile
             bubbleSize *= 2;
             bubbleColor = "rgba(119, 181, 254, 1)";
-            quartileBubbleChartDatalines[1].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+            quartileBubbleChartDatalines[1].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
         {
             // Third quartile
             bubbleSize *= 1.5m;
             bubbleColor = "rgba(0, 127, 255, 1)";
-            quartileBubbleChartDatalines[2].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+            quartileBubbleChartDatalines[2].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else
         {
             // Fourth quartile
             bubbleColor = "rgba(50, 122, 183, 1)";
-            quartileBubbleChartDatalines[3].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y, bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+            quartileBubbleChartDatalines[3].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
     }
 
