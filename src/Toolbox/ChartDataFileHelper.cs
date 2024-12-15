@@ -122,7 +122,7 @@ public class ChartDataFileHelper
 
     public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
         string radarChartBackgroundColor = null, string barChartOptions = "{}", string chartXAxisTitle = "",
-        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string[] xLabels = null)
+        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string[] xLabels = null, string stack = null)
     {
         _streamWriter.WriteLine("  ];");
 
@@ -169,7 +169,7 @@ public class ChartDataFileHelper
 
                 xLabelsBuilder.Remove(xLabelsBuilder.Length - 1, 1);
                 _streamWriter.WriteLine(
-                    $"    addLineChart('{chartId}', [{chartTitlesBuilder}], data, [{xLabelsBuilder}], {barChartOptions});");
+                    $"    addLineChart('{chartId}', [{chartTitlesBuilder}], data, [{xLabelsBuilder}], '{stack}', {barChartOptions});");
                 break;
         }
 
@@ -234,7 +234,7 @@ public class ChartDataFileHelper
         _streamWriter.Flush();
     }
 
-    public void WriteData(LineChartDataLine dataLine, bool isLastDataLine)
+    public void WriteData(LineChartDataLine dataLine)
     {
         _streamWriter.WriteLine(
             $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values)}], borderColor: '{dataLine.RgbaColor}' }},");

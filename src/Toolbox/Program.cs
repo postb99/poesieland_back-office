@@ -114,7 +114,7 @@ public class Program
                 GenerateBubbleChartDataFile();
                 return true;
             case MainMenuSettings.MenuChoices.GenerateLineChartDataFile:
-                GenerateLineChartDataFile();
+                GenerateOverSeasonsVerseLengthLineChartDataFile();
                 return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
@@ -364,8 +364,9 @@ public class Program
         _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
         Console.WriteLine("Poems bubble chart data files OK");
 
-        // Over seasons categories' and tags' bar
+        // Over seasons categories', tags' bar, vers length's line
         GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
+        GenerateOverSeasonsVerseLengthLineChartDataFile();
 
         // And check data quality
         _engine.CheckPoemsWithoutVerseLength();
@@ -412,9 +413,9 @@ public class Program
         Console.WriteLine("Bubble chart data file OK");
     }
     
-    private static void GenerateLineChartDataFile()
+    private static void GenerateOverSeasonsVerseLengthLineChartDataFile()
     {
-        _engine.GenerateVerseLengthOverSeasonsLineChartDataFile();
+        _engine.GenerateOverSeasonsVerseLengthLineChartDataFile();
         Console.WriteLine("Line chart data file OK");
     }
 

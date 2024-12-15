@@ -427,7 +427,7 @@ public class Engine
 
         chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
         [
-            seasonId.HasValue ? $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}" : ""
+            seasonId.HasValue ? $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}" : string.Empty
         ]);
         streamWriter.Close();
     }
@@ -1430,7 +1430,7 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GenerateVerseLengthOverSeasonsLineChartDataFile()
+    public void GenerateOverSeasonsVerseLengthLineChartDataFile()
     {
         var verseLengthRange = Enumerable.Range(2, 13);
         var dataDict = new Dictionary<int, List<int>>();
@@ -1445,10 +1445,11 @@ public class Engine
         foreach (var season in Data.Seasons)
         {
             xLabels.Add($"{season.EscapedLongTitle} ({season.Years})");
+            dataDict[0].Add(season.Poems.Count(x => x.HasVariableVerseLength));
+
             foreach (var verseLength in verseLengthRange)
             {
                 dataDict[verseLength].Add(season.Poems.Count(x => x.VerseLength == verseLength.ToString()));
-                dataDict[0].Add(season.Poems.Count(x => x.HasVariableVerseLength));
             }
         }
 
@@ -1462,11 +1463,34 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
 
         var variableVerseDataLines = new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "black");
-        var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 pieds", dataDict[2], "red");
-        // TODO
+        var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 pieds", dataDict[2], "cyan");
+        var threeFeetDataLines = new ChartDataFileHelper.LineChartDataLine("3 pieds", dataDict[3], "blue");
+        var fourFeetDataLines = new ChartDataFileHelper.LineChartDataLine("4 pieds", dataDict[4], "teal");
+        var fiveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("5 pieds", dataDict[5], "green");
+        var sixFeetDataLines = new ChartDataFileHelper.LineChartDataLine("6 pieds", dataDict[6], "magenta");
+        var sevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("7 pieds", dataDict[7], "purple");
+        var eightFeetDataLines = new ChartDataFileHelper.LineChartDataLine("8 pieds", dataDict[8], "yellow");
+        var nineFeetDataLines = new ChartDataFileHelper.LineChartDataLine("9 pieds", dataDict[9], "brown");
+        var tenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("10 pieds", dataDict[10], "lime");
+        var elevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("11 pieds", dataDict[11], "gray");
+        var twelveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("12 pieds", dataDict[12], "red");
+        var thirteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("13 pieds", dataDict[13], "navy");
+        var fourteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("14 pieds", dataDict[14], "olive");
         
-        chartDataFileHelper.WriteData(variableVerseDataLines, false);
-        chartDataFileHelper.WriteData(twoFeetDataLines, true); // TODO
+        chartDataFileHelper.WriteData(variableVerseDataLines);
+        chartDataFileHelper.WriteData(twoFeetDataLines);
+        chartDataFileHelper.WriteData(threeFeetDataLines);
+        chartDataFileHelper.WriteData(fourFeetDataLines);
+        chartDataFileHelper.WriteData(fiveFeetDataLines);
+        chartDataFileHelper.WriteData(sixFeetDataLines);
+        chartDataFileHelper.WriteData(sevenFeetDataLines);
+        chartDataFileHelper.WriteData(eightFeetDataLines);
+        chartDataFileHelper.WriteData(nineFeetDataLines);
+        chartDataFileHelper.WriteData(tenFeetDataLines);
+        chartDataFileHelper.WriteData(elevenFeetDataLines);
+        chartDataFileHelper.WriteData(twelveFeetDataLines);
+        chartDataFileHelper.WriteData(thirteenFeetDataLines);
+        chartDataFileHelper.WriteData(fourteenFeetDataLines);
         
         chartDataFileHelper.WriteAfterData("poemsVerseLengthLine",
         [
@@ -1484,7 +1508,7 @@ public class Engine
             "12 pieds",
             "13 pieds",
             "14 pieds"
-        ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons", xLabels: xLabels.ToArray());
+        ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons", xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
     }
 
@@ -1493,7 +1517,7 @@ public class Engine
     {
         // Bubble radius and color
         var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
-        var bubbleColor = "";
+        var bubbleColor = string.Empty;
         if (bubbleSize < (bubbleMaxRadiusPixels / 4))
         {
             // First quartile
