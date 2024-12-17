@@ -237,7 +237,7 @@ public class ChartDataFileHelper
     public void WriteData(LineChartDataLine dataLine)
     {
         _streamWriter.WriteLine(
-            $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values)}], borderColor: '{dataLine.RgbaColor}' }},");
+            $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values)}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
 
         _streamWriter.Flush();
     }
