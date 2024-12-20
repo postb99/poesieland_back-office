@@ -1462,20 +1462,20 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 14);
         chartDataFileHelper.WriteBeforeData();
 
-        var variableVerseDataLines = new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "rgb(240, 243, 244)");
-        var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 pieds", dataDict[2], "rgb(93, 173, 226)");
-        var threeFeetDataLines = new ChartDataFileHelper.LineChartDataLine("3 pieds", dataDict[3], "rgb(84, 153, 199)");
-        var fourFeetDataLines = new ChartDataFileHelper.LineChartDataLine("4 pieds", dataDict[4], "rgb(245, 176, 65)");
-        var fiveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("5 pieds", dataDict[5], "rgb(88, 214, 141)");
-        var sixFeetDataLines = new ChartDataFileHelper.LineChartDataLine("6 pieds", dataDict[6], "rgb(236, 112, 99)");
-        var sevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("7 pieds", dataDict[7], "rgb(175, 122, 197)");
-        var eightFeetDataLines = new ChartDataFileHelper.LineChartDataLine("8 pieds", dataDict[8], "rgb(244, 208, 63)");
-        var nineFeetDataLines = new ChartDataFileHelper.LineChartDataLine("9 pieds", dataDict[9], "rgb(220, 118, 51)");
-        var tenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("10 pieds", dataDict[10], "rgb(88, 214, 141)");
-        var elevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("11 pieds", dataDict[11], "rgb(170, 183, 184)");
-        var twelveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("12 pieds", dataDict[12], "rgb(205, 97, 85)");
-        var thirteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("13 pieds", dataDict[13], "rgb(202, 207, 210)");
-        var fourteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("14 pieds", dataDict[14], "rgb(86, 101, 115)");
+        var variableVerseDataLines = new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "rgb(247, 249, 249)");
+        var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 pieds", dataDict[2], "rgb(230, 176, 170)");
+        var threeFeetDataLines = new ChartDataFileHelper.LineChartDataLine("3 pieds", dataDict[3], "rgb(245, 183, 177)");
+        var fourFeetDataLines = new ChartDataFileHelper.LineChartDataLine("4 pieds", dataDict[4], "rgb(215, 189, 226)");
+        var fiveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("5 pieds", dataDict[5], "rgb(169, 204, 227)");
+        var sixFeetDataLines = new ChartDataFileHelper.LineChartDataLine("6 pieds", dataDict[6], "rgb(174, 214, 241)");
+        var sevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("7 pieds", dataDict[7], "rgb(163, 228, 215)");
+        var eightFeetDataLines = new ChartDataFileHelper.LineChartDataLine("8 pieds", dataDict[8], "rgb(162, 217, 206)");
+        var nineFeetDataLines = new ChartDataFileHelper.LineChartDataLine("9 pieds", dataDict[9], "rgb(171, 235, 198)");
+        var tenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("10 pieds", dataDict[10], "rgb(249, 231, 159)");
+        var elevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("11 pieds", dataDict[11], "rgb(250, 215, 160)");
+        var twelveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("12 pieds", dataDict[12], "rgb(237, 187, 153)");
+        var thirteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("13 pieds", dataDict[13], "rgb(229, 231, 233)");
+        var fourteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("14 pieds", dataDict[14], "rgb(204, 209, 209)");
         
         chartDataFileHelper.WriteData(variableVerseDataLines);
         chartDataFileHelper.WriteData(twoFeetDataLines);
