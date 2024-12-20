@@ -196,6 +196,20 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
 
     [Fact]
     [Trait("DataMining", "Quality")]
+    public void PoemsWithoutMoreThanOneCapitalLetterInTitle()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            var partialTitle = poem.Title.Substring(1);
+            if (partialTitle != partialTitle.ToLowerInvariant())
+            {
+                _testOutputHelper.WriteLine(poem.Id);
+            }
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Quality")]
     public void PoemsThatCouldHaveQuatrainsButHaveNot()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
