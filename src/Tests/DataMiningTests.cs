@@ -209,6 +209,24 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void MissedAcrostichesLookup()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            if (poem.Acrostiche != null || poem.DoubleAcrostiche != null)
+                continue;
+            StringBuilder sb = new StringBuilder();
+            foreach (var verse in poem.Paragraphs.SelectMany(x => x.Verses))
+            {
+                sb.Append(verse[0]);
+            }
+
+            _testOutputHelper.WriteLine($"[{poem.Id}] {sb}");
+        }
+    }
+
+    [Fact]
     [Trait("DataMining", "Quality")]
     public void PoemsThatCouldHaveQuatrainsButHaveNot()
     {
