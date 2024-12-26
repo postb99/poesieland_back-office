@@ -6,6 +6,10 @@ namespace Toolbox.Domain;
 
 public class Season
 {
+    public Season()
+    {
+        Poems = [];
+    }
     [XmlAttribute("id")] public int Id { get; set; }
 
     [XmlAttribute("name")] public string Name { get; set; }

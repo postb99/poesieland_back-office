@@ -651,7 +651,7 @@ public class Engine
 
             if (i == seasonCount - 1 && season.Poems.Count > 50)
             {
-                throw new Exception($"Last season. Not max 50 poems for {desc}!");
+                throw new Exception($"Last season. More than 50 poems for {desc}!");
             }
         }
     }
@@ -1051,7 +1051,7 @@ public class Engine
 
         var dataLines = new List<ChartDataFileHelper.DataLine>();
 
-        foreach (var season in Data.Seasons)
+        foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
         {
             var poemCount = 0;
             if (storageSubCategory != null)
@@ -1442,7 +1442,7 @@ public class Engine
             dataDict.Add(verseLength, new List<int>());
         }
 
-        foreach (var season in Data.Seasons)
+        foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
         {
             xLabels.Add($"{season.EscapedLongTitle} ({season.Years})");
             dataDict[0].Add(season.Poems.Count(x => x.HasVariableVerseLength));
