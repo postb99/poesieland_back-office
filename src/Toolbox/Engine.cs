@@ -1309,7 +1309,7 @@ public class Engine
 
         // longest series content file
 
-        var longestSeriesKeys = sortedKeys.OrderDescending().Take(5);
+        var longestSeriesKeys = sortedKeys.OrderDescending().Where(x => x > 6);
         filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
             "../includes/longest_series.md");
         var streamWriter3 = new StreamWriter(filePath);
