@@ -1459,7 +1459,7 @@ public class Engine
         var fileName = $"poems-verseLength-line.js";
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 14);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 13);
         chartDataFileHelper.WriteBeforeData();
 
         var variableVerseDataLines = new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "rgb(247, 249, 249)");
@@ -1474,7 +1474,7 @@ public class Engine
         var tenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("10 pieds", dataDict[10], "rgb(249, 231, 159)");
         var elevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("11 pieds", dataDict[11], "rgb(250, 215, 160)");
         var twelveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("12 pieds", dataDict[12], "rgb(237, 187, 153)");
-        var thirteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("13 pieds", dataDict[13], "rgb(229, 231, 233)");
+        //var thirteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("13 pieds", dataDict[13], "rgb(229, 231, 233)");
         var fourteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("14 pieds", dataDict[14], "rgb(204, 209, 209)");
         
         chartDataFileHelper.WriteData(variableVerseDataLines);
@@ -1489,7 +1489,7 @@ public class Engine
         chartDataFileHelper.WriteData(tenFeetDataLines);
         chartDataFileHelper.WriteData(elevenFeetDataLines);
         chartDataFileHelper.WriteData(twelveFeetDataLines);
-        chartDataFileHelper.WriteData(thirteenFeetDataLines);
+        //chartDataFileHelper.WriteData(thirteenFeetDataLines);
         chartDataFileHelper.WriteData(fourteenFeetDataLines);
         
         chartDataFileHelper.WriteAfterData("poemsVerseLengthLine",
@@ -1506,10 +1506,35 @@ public class Engine
             "10 pieds",
             "11 pieds",
             "12 pieds",
-            "13 pieds",
+            //"13 pieds",
             "14 pieds"
         ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons", xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
+    }
+
+    public void OutputSeasonsDuration()
+    {
+        foreach (var season in Data.Seasons)
+        {
+            var dates = season.Poems.Select(x => x.Date).OrderBy(x => x.Date).ToList();
+            var duration = dates[dates.Count() - 1] - dates[0];
+            decimal nbDays = int.Parse(duration.ToString("%d"));
+            var value = nbDays;
+            var unit = "days";
+            if (value > 30)
+            {
+                value = value / 30;
+                unit = "months";
+
+                if (value > 12)
+                {
+                    value = value / 12;
+                    unit = "years";
+                }
+            }
+
+            Console.WriteLine($"{season.NumberedName} ({season.Period}): {value} {unit}");
+        }
     }
 
     private void AddDataLine(int x, int y, int value,

@@ -132,6 +132,9 @@ public class Program
             case MainMenuSettings.MenuChoices.ImportEnPoems:
                 ImportEnPoemsContentFiles(menuChoice);
                 return true;
+            case MainMenuSettings.MenuChoices.OutputSeasonsDuration:
+                _engine.OutputSeasonsDuration();
+                return true;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
                 Environment.Exit(0);

@@ -30,6 +30,7 @@ public class MainMenuSettings
         GenerateLineChartDataFile = 470,
         CheckContentMetadataQuality = 500,
         ImportEnPoems = 600,
+        OutputSeasonsDuration = 700,
         ExitProgram = 99
     }
     
