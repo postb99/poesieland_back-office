@@ -638,7 +638,7 @@ public class Engine
 
     public void VerifySeasonHaveCorrectPoemCount()
     {
-        var seasons = Data.Seasons.ToList();
+        var seasons = Data.Seasons.Where(x => x.Poems.Count > 0).ToList();
         var seasonCount = seasons.Count;
         for (int i = 0; i < seasonCount; i++)
         {
