@@ -1433,8 +1433,7 @@ public class Engine
     public void GenerateOverSeasonsVerseLengthLineChartDataFile()
     {
         var verseLengthRange = Enumerable.Range(2, 13);
-        var dataDict = new Dictionary<int, List<int>>();
-        dataDict.Add(0, new List<int>()); // For variable verse length
+        var dataDict = new Dictionary<int, List<int>> { { 0, [] } }; // For variable verse length
 
         var xLabels = new List<string>();
         foreach (var verseLength in verseLengthRange)
@@ -1444,19 +1443,21 @@ public class Engine
 
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
         {
+            // Multiplicator to get 100%
+            var multiple = 100 / season.Poems.Count;
             xLabels.Add($"{season.EscapedLongTitle} ({season.Years})");
-            dataDict[0].Add(season.Poems.Count(x => x.HasVariableVerseLength));
+            dataDict[0].Add(season.Poems.Count(x => x.HasVariableVerseLength) * multiple);
 
             foreach (var verseLength in verseLengthRange)
             {
-                dataDict[verseLength].Add(season.Poems.Count(x => x.VerseLength == verseLength.ToString()));
+                dataDict[verseLength].Add(season.Poems.Count(x => x.VerseLength == verseLength.ToString()) * multiple);
             }
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
 
-        var fileName = $"poems-verseLength-line.js";
+        var fileName = "poems-verseLength-line.js";
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 13);
