@@ -1432,27 +1432,7 @@ public class Engine
 
     public void GenerateOverSeasonsVerseLengthLineChartDataFile()
     {
-        var verseLengthRange = Enumerable.Range(2, 13);
-        var dataDict = new Dictionary<int, List<int>> { { 0, [] } }; // For variable verse length
-
-        var xLabels = new List<string>();
-        foreach (var verseLength in verseLengthRange)
-        {
-            dataDict.Add(verseLength, new List<int>());
-        }
-
-        foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
-        {
-            // Multiplicator to get 100%
-            var multiple = 100 / season.Poems.Count;
-            xLabels.Add($"{season.EscapedLongTitle} ({season.Years})");
-            dataDict[0].Add(season.Poems.Count(x => x.HasVariableVerseLength) * multiple);
-
-            foreach (var verseLength in verseLengthRange)
-            {
-                dataDict[verseLength].Add(season.Poems.Count(x => x.VerseLength == verseLength.ToString()) * multiple);
-            }
-        }
+        var dataDict = FillVerseLengthDataDict(out var xLabels);
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
@@ -1511,6 +1491,33 @@ public class Engine
             "14 pieds"
         ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons", xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
+    }
+
+    public Dictionary<int, List<decimal>> FillVerseLengthDataDict(out List<string> xLabels)
+    {
+        var verseLengthRange = Enumerable.Range(2, 13);
+        var dataDict = new Dictionary<int, List<decimal>> { { 0, [] } }; // For variable verse length
+
+        xLabels = new List<string>();
+        foreach (var verseLength in verseLengthRange)
+        {
+            dataDict.Add(verseLength, new List<decimal>());
+        }
+
+        foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
+        {
+            // Multiplicator to get 100%
+            var multiple = 100m / season.Poems.Count;
+            xLabels.Add($"{season.EscapedLongTitle} ({season.Years})");
+            dataDict[0].Add(Decimal.Round(season.Poems.Count(x => x.HasVariableVerseLength) * multiple, 1));
+
+            foreach (var verseLength in verseLengthRange)
+            {
+                dataDict[verseLength].Add(Decimal.Round(season.Poems.Count(x => x.VerseLength == verseLength.ToString()) * multiple, 1));
+            }
+        }
+
+        return dataDict;
     }
 
     public void OutputSeasonsDuration()

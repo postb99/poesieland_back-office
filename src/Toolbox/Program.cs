@@ -124,6 +124,7 @@ public class Program
                 _engine.CheckPoemsWithVariableVerseLength();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
+                Console.WriteLine($"Verse length last season computed values sum: {_engine.FillVerseLengthDataDict(out var _).Values.Sum(x => x.Last())}");
                 Console.WriteLine("Content metadata quality OK");
                 return true;
             case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:

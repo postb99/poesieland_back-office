@@ -70,11 +70,11 @@ public class ChartDataFileHelper
     {
         public string Label { get; }
 
-        public List<int> Values { get; }
+        public List<decimal> Values { get; }
 
         public string RgbaColor { get; }
 
-        public LineChartDataLine(string label, List<int> values, string rgbaColor)
+        public LineChartDataLine(string label, List<decimal> values, string rgbaColor)
         {
             Label = label;
             Values = values;
@@ -237,7 +237,7 @@ public class ChartDataFileHelper
     public void WriteData(LineChartDataLine dataLine)
     {
         _streamWriter.WriteLine(
-            $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values)}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
+            $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values.Select(x => x.ToString().Replace(',', '.')))}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
 
         _streamWriter.Flush();
     }

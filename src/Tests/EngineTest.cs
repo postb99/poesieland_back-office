@@ -169,6 +169,17 @@ public class EngineTest
             engine.GenerateSeasonIndexFile(fictiveSeason.Id);
             engine.GeneratePoemFile(poem);
         }
+        
+        [Fact]
+        [Trait("UnitTest", "Computation")]
+        public void ShouldCorrectlyComputeVerseLengthDataDict()
+        {
+            var engine = Helpers.CreateEngine();
+            var dataDict = engine.FillVerseLengthDataDict(out var _);
+            TestOutputHelper.WriteLine($"Last non-empty season poem count: {engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
+            TestOutputHelper.WriteLine($"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
+            TestOutputHelper.WriteLine($"Computed values sum: {dataDict.Values.Sum(x => x.Last())}");
+        }
     }
 
     public class ContentImportTest : EngineTest
