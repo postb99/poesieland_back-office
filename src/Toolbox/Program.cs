@@ -446,8 +446,7 @@ public class Program
     {
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
-        foreach (var category in storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
-                     .Distinct())
+        foreach (var category in storageSettings.SubcategorieNames)
         {
             _engine.GenerateOverSeasonsChartDataFile(category, null);
             Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");

@@ -1492,6 +1492,64 @@ public class Engine
         ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons", xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
     }
+    
+       public void GenerateCategoriesBubbleChartDataFile()
+    {
+        var poems = Data.Seasons.SelectMany(x => x.Poems);
+        var categoriesDataDictionary = new Dictionary<KeyValuePair<string, string>, int>();
+        foreach (var poem in poems)
+        {
+            var categories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
+            foreach (var category in categories)
+            {
+                // TODO we can have up to 5 categories so have to manage all combinations :D => 32
+                // Total data : 35^2 = 1225 bubbles :D
+            }
+        }
+
+        // Find max value
+        // var maxValue = poemLengthByVerseLength.Values.Max();
+        //
+        // var fileName = "poem-length-by-verse-length.js";
+        // var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+        //     _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        // using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        // var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
+        // chartDataFileHelper.WriteBeforeData();
+        //
+        // var firstQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        // var secondQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        // var thirdQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        // var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        //
+        // foreach (var dataKey in poemLengthByVerseLength.Keys)
+        // {
+        //     AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
+        //         [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+        //         maxValue);
+        // }
+        //
+        // foreach (var dataKey in variableVerseLength.Keys)
+        // {
+        //     AddDataLine(0, dataKey, variableVerseLength[dataKey],
+        //         [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+        //         maxValue);
+        // }
+        //
+        // chartDataFileHelper.WriteData(firstQuartileDataLines, false);
+        // chartDataFileHelper.WriteData(secondQuartileDataLines, false);
+        // chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
+        // chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
+        // chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
+        // [
+        //     "Premier quartile",
+        //     "Deuxième quartile",
+        //     "Troisième quartile",
+        //     "Quatrième quartile"
+        // ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
+        // streamWriter.Close();
+    }
+
 
     public Dictionary<int, List<decimal>> FillVerseLengthDataDict(out List<string> xLabels)
     {

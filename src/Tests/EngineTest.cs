@@ -1,40 +1,41 @@
 ﻿using AutoFixture;
 using FluentAssertions;
+using Toolbox;
 using Toolbox.Domain;
 using Xunit.Abstractions;
+using Xunit.Sdk;
 
 namespace Tests;
 
-public class EngineTest
+public class EngineTest : IClassFixture<LoadDataFixture>
 {
-    protected ITestOutputHelper TestOutputHelper;
+    private readonly ITestOutputHelper _testOutputHelper;
+    private readonly Engine _engine;
 
-    public EngineTest(ITestOutputHelper testOutputHelper)
+    public EngineTest(LoadDataFixture data, ITestOutputHelper testOutputHelper)
     {
-        TestOutputHelper = testOutputHelper;
+        _testOutputHelper = testOutputHelper;
+        _engine = data.Engine;
     }
 
     public class StorageLoadTest : EngineTest
     {
-        public StorageLoadTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public StorageLoadTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
         {
-            TestOutputHelper = testOutputHelper;
         }
 
         [Fact]
         [Trait("UnitTest", "XmlRead")]
         public void ShouldLoad()
         {
-            var engine = Helpers.CreateEngine();
-            engine.Data.Should().NotBeNull();
+            _engine.Data.Should().NotBeNull();
         }
 
         [Fact]
         [Trait("UnitTest", "XmlRead")]
         public void ShouldLoadAcrostiche()
         {
-            var engine = Helpers.CreateEngine();
-            var poemWithAcrostiche = engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "resurrection_14");
+            var poemWithAcrostiche = _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "resurrection_14");
             poemWithAcrostiche.Should().NotBeNull();
             poemWithAcrostiche!.Acrostiche.Should().Be("Résurrection");
         }
@@ -43,9 +44,7 @@ public class EngineTest
         [Trait("UnitTest", "XmlRead")]
         public void ShouldLoadDoubleAcrostiche()
         {
-            var engine = Helpers.CreateEngine();
-            var poemWithFirstAndSecondAcrostiche =
-                engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
+            var poemWithFirstAndSecondAcrostiche = _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
             poemWithFirstAndSecondAcrostiche.Should().NotBeNull();
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche.Should().NotBeNull();
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.Should().Be("L'air");
@@ -59,8 +58,7 @@ public class EngineTest
         [InlineData("illusion_1", 1, 8)]
         public void ShouldHaveVersesCount(string poemId, int seasonId, int expectedCount)
         {
-            var engine = Helpers.CreateEngine();
-            var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
+            var poem = _engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
             poem.VersesCount.Should().Be(expectedCount);
         }
         
@@ -74,62 +72,55 @@ public class EngineTest
         [InlineData("les_chenes_16", 16, true)]
         public void ShouldHaveQuatrains(string poemId, int seasonId, bool expectedHasQuatrain)
         {
-            var engine = Helpers.CreateEngine();
-            var poem = engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
+            var poem = _engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
             poem.HasQuatrains.Should().Be(expectedHasQuatrain);
             if (expectedHasQuatrain)
             {
                 poem.Paragraphs.Count.Should().Be(poem.VersesCount / 4);
             }
-            TestOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
+            _testOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
         }
     }
 
     public class ContentGenerationTest : EngineTest
     {
-        public ContentGenerationTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public ContentGenerationTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
         {
-            TestOutputHelper = testOutputHelper;
         }
 
         [Fact]
         [Trait("UnitTest", "ContentFiles")]
         public void ShouldBeSeasonContentDirectoryName()
         {
-            var engine = Helpers.CreateEngine();
-            engine.Data.Seasons[0].ContentDirectoryName.Should().Be("1_premiere_saison");
+            _engine.Data.Seasons[0].ContentDirectoryName.Should().Be("1_premiere_saison");
         }
 
         [Fact]
         [Trait("UnitTest", "ContentFiles")]
         public void ShouldCreateFirstSeasonIndexFile()
         {
-            var engine = Helpers.CreateEngine();
-            engine.GenerateSeasonIndexFile(1);
+            _engine.GenerateSeasonIndexFile(1);
         }
 
         [Fact]
         [Trait("UnitTest", "ContentFiles")]
         public void ShouldBePoemContentFileName()
         {
-            var engine = Helpers.CreateEngine();
-            engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir.md");
+            _engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir.md");
         }
 
         [Fact]
         [Trait("UnitTest", "XmlRead")]
         public void ShouldBePoemSeasonId()
         {
-            var engine = Helpers.CreateEngine();
-            engine.Data.Seasons[0].Poems[0].SeasonId.Should().Be(1);
+            _engine.Data.Seasons[0].Poems[0].SeasonId.Should().Be(1);
         }
 
         [Fact]
         [Trait("UnitTest", "ContentFiles")]
         public void ShouldCreateFirstPoemFile()
         {
-            var engine = Helpers.CreateEngine();
-            engine.GeneratePoemFile(engine.Data.Seasons[0].Poems[0]);
+            _engine.GeneratePoemFile(_engine.Data.Seasons[0].Poems[0]);
         }
 
         [Theory(Skip = "Validated")]
@@ -164,65 +155,58 @@ public class EngineTest
             var fictiveSeason = new Season
                 { Id = 99, Name = "Test", NumberedName = "Test", Summary = "Test", Poems = new List<Poem> { poem } };
 
-            var engine = Helpers.CreateEngine();
-            engine.Data.Seasons.Add(fictiveSeason);
-            engine.GenerateSeasonIndexFile(fictiveSeason.Id);
-            engine.GeneratePoemFile(poem);
+            _engine.Data.Seasons.Add(fictiveSeason);
+            _engine.GenerateSeasonIndexFile(fictiveSeason.Id);
+            _engine.GeneratePoemFile(poem);
         }
         
         [Fact]
         [Trait("UnitTest", "Computation")]
         public void ShouldCorrectlyComputeVerseLengthDataDict()
         {
-            var engine = Helpers.CreateEngine();
-            var dataDict = engine.FillVerseLengthDataDict(out var _);
-            TestOutputHelper.WriteLine($"Last non-empty season poem count: {engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
-            TestOutputHelper.WriteLine($"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
-            TestOutputHelper.WriteLine($"Computed values sum: {dataDict.Values.Sum(x => x.Last())}");
+            var dataDict = _engine.FillVerseLengthDataDict(out var _);
+            _testOutputHelper.WriteLine($"Last non-empty season poem count: {_engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
+            _testOutputHelper.WriteLine($"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
+            _testOutputHelper.WriteLine($"Computed values sum: {dataDict.Values.Sum(x => x.Last())}");
         }
     }
 
     public class ContentImportTest : EngineTest
     {
-        public ContentImportTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public ContentImportTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
         {
-            TestOutputHelper = testOutputHelper;
         }
 
         [Fact(Skip = "Validated")]
         [Trait("UnitTest", "ContentImport")]
         public void ShouldImportPoem()
         {
-            var engine = Helpers.CreateEngine();
-            //engine.ImportPoem("j_avais_l_heur_de_m_asseoir_1");
-            engine.ImportPoem("par_omission_16");
-            engine.ImportPoem("le_jour_16");
-            engine.ImportPoem("accords_finis_16");
+            //_engine.ImportPoem("j_avais_l_heur_de_m_asseoir_1");
+            _engine.ImportPoem("par_omission_16");
+            _engine.ImportPoem("le_jour_16");
+            _engine.ImportPoem("accords_finis_16");
         }
 
         [Fact(Skip = "Validated")]
         [Trait("UnitTest", "ContentImport")]
         public void ShouldImportSeason()
         {
-            var engine = Helpers.CreateEngine();
-            engine.ImportSeason(16);
+            _engine.ImportSeason(16);
         }
     }
 
     public class ContentCheckTest : EngineTest
     {
-        public ContentCheckTest(ITestOutputHelper testOutputHelper) : base(testOutputHelper)
+        public ContentCheckTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
         {
-            TestOutputHelper = testOutputHelper;
         }
 
         [Fact]
         [Trait("UnitTest", "MetadataCheck")]
         public void CheckMissingYearTagInYamlMetadata()
         {
-            var engine = Helpers.CreateEngine();
-            var anomalies = engine.CheckMissingTagsInYamlMetadata();
-            TestOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
+            var anomalies = _engine.CheckMissingTagsInYamlMetadata();
+            _testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
             anomalies.Count().Should().Be(0);
         }
     }

@@ -21,14 +21,14 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     [Trait("UnitTest", "Quality")]
     public void SeasonShouldHaveCorrectPoemCount()
     {
-        var seasons = _data.Seasons.ToList();
-        foreach (var season in seasons)
+        var notEmptySeasons = _data.Seasons.Where(x => x.Poems.Count > 0).ToList();
+        foreach (var season in notEmptySeasons)
         {
             _testOutputHelper.WriteLine($"[{season.Id} - {season.Name}]: {season.Poems.Count}");
         }
 
-        seasons.Take(seasons.Count - 1).All(x => x.Poems.Count == 50).Should().BeTrue();
-        seasons.Skip(seasons.Count - 1).Single(x => x.Poems.Count <= 50).Should().NotBeNull();
+        notEmptySeasons.Take(notEmptySeasons.Count - 1).All(x => x.Poems.Count == 50).Should().BeTrue();
+        notEmptySeasons.Skip(notEmptySeasons.Count - 1).Single(x => x.Poems.Count <= 50).Should().NotBeNull();
     }
 
     [Fact]

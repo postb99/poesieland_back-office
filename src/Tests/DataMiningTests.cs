@@ -163,6 +163,33 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             }
         }
     }
+    
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void PoemWithMoreThanTwoSubCategories()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Sum(x => x.SubCategories.Count) > 2);
+        foreach (var poem in poems)
+            _testOutputHelper.WriteLine(poem.Id);
+    }
+    
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void PoemWithMoreThanThreeSubCategories()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Sum(x => x.SubCategories.Count) > 3);
+        foreach (var poem in poems)
+            _testOutputHelper.WriteLine(poem.Id);
+    }
+    
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void PoemWithMoreThanFourSubCategories()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Sum(x => x.SubCategories.Count) > 4);
+        foreach (var poem in poems)
+            _testOutputHelper.WriteLine(poem.Id);
+    }
 
     [Fact]
     [Trait("DataMining", "Lookup")]

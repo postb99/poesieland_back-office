@@ -3,6 +3,8 @@
 public class StorageSettings
 {
     public List<Category> Categories { get; set; }
+
+    public List<string> SubcategorieNames => Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).ToList();
 }
 
 public class Category
