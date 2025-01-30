@@ -374,9 +374,10 @@ public class Program
 
         // And check data quality
         _engine.CheckPoemsWithoutVerseLength();
+        _engine.CheckPoemsWithVariableVerseLength();
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
-        Console.WriteLine("Content metadata quality OK");
+        Console.WriteLine($"Content metadata quality OK. Info: verse length last season computed values sum: {_engine.FillVerseLengthDataDict(out var _).Values.Sum(x => x.Last())}");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
