@@ -241,4 +241,24 @@ public class ChartDataFileHelper
 
         _streamWriter.Flush();
     }
+    
+    public string FormatCategoriesBubbleChartLabelOptions(List<string> xAxisLabels, List<string> yAxisLabels)
+    {
+        var sb = new StringBuilder("scales: {{ x: {{ type: 'category', labels: [");
+        sb.Append(string.Join(',', xAxisLabels.Select(x => $"'{x}'")));
+        sb.Append("] }}, y: {{ type: 'category', labels: [");
+        sb.Append(string.Join(',', yAxisLabels.Select(x => $"'{x}'")));
+        sb.Append("] }} }}");
+        return sb.ToString();
+        // scales: {
+        //     x: {
+        //         type: 'category',
+        //         labels: ["Mon", "Tue", "wed", "Thu"]
+        //     },
+        //     y: {
+        //         type: 'category',
+        //         labels: ["Mon", "Tue", "wed", "Thu"]
+        //     }
+        // }
+    }
 }
