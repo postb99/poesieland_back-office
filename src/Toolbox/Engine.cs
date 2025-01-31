@@ -1443,21 +1443,29 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 13);
         chartDataFileHelper.WriteBeforeData();
 
-        var variableVerseDataLines = new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "rgb(247, 249, 249)");
+        var variableVerseDataLines =
+            new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "rgb(247, 249, 249)");
         var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 pieds", dataDict[2], "rgb(230, 176, 170)");
-        var threeFeetDataLines = new ChartDataFileHelper.LineChartDataLine("3 pieds", dataDict[3], "rgb(245, 183, 177)");
+        var threeFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("3 pieds", dataDict[3], "rgb(245, 183, 177)");
         var fourFeetDataLines = new ChartDataFileHelper.LineChartDataLine("4 pieds", dataDict[4], "rgb(215, 189, 226)");
         var fiveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("5 pieds", dataDict[5], "rgb(169, 204, 227)");
         var sixFeetDataLines = new ChartDataFileHelper.LineChartDataLine("6 pieds", dataDict[6], "rgb(174, 214, 241)");
-        var sevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("7 pieds", dataDict[7], "rgb(163, 228, 215)");
-        var eightFeetDataLines = new ChartDataFileHelper.LineChartDataLine("8 pieds", dataDict[8], "rgb(162, 217, 206)");
+        var sevenFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("7 pieds", dataDict[7], "rgb(163, 228, 215)");
+        var eightFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("8 pieds", dataDict[8], "rgb(162, 217, 206)");
         var nineFeetDataLines = new ChartDataFileHelper.LineChartDataLine("9 pieds", dataDict[9], "rgb(171, 235, 198)");
-        var tenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("10 pieds", dataDict[10], "rgb(249, 231, 159)");
-        var elevenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("11 pieds", dataDict[11], "rgb(250, 215, 160)");
-        var twelveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("12 pieds", dataDict[12], "rgb(237, 187, 153)");
+        var tenFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("10 pieds", dataDict[10], "rgb(249, 231, 159)");
+        var elevenFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("11 pieds", dataDict[11], "rgb(250, 215, 160)");
+        var twelveFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("12 pieds", dataDict[12], "rgb(237, 187, 153)");
         //var thirteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("13 pieds", dataDict[13], "rgb(229, 231, 233)");
-        var fourteenFeetDataLines = new ChartDataFileHelper.LineChartDataLine("14 pieds", dataDict[14], "rgb(204, 209, 209)");
-        
+        var fourteenFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("14 pieds", dataDict[14], "rgb(204, 209, 209)");
+
         chartDataFileHelper.WriteData(variableVerseDataLines);
         chartDataFileHelper.WriteData(twoFeetDataLines);
         chartDataFileHelper.WriteData(threeFeetDataLines);
@@ -1472,28 +1480,29 @@ public class Engine
         chartDataFileHelper.WriteData(twelveFeetDataLines);
         //chartDataFileHelper.WriteData(thirteenFeetDataLines);
         chartDataFileHelper.WriteData(fourteenFeetDataLines);
-        
+
         chartDataFileHelper.WriteAfterData("poemsVerseLengthLine",
-        [
-            "Vers variable",
-            "2 pieds",
-            "3 pieds",
-            "4 pieds",
-            "5 pieds",
-            "6 pieds",
-            "7 pieds",
-            "8 pieds",
-            "9 pieds",
-            "10 pieds",
-            "11 pieds",
-            "12 pieds",
-            //"13 pieds",
-            "14 pieds"
-        ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons", xLabels: xLabels.ToArray(), stack: "stack0");
+            [
+                "Vers variable",
+                "2 pieds",
+                "3 pieds",
+                "4 pieds",
+                "5 pieds",
+                "6 pieds",
+                "7 pieds",
+                "8 pieds",
+                "9 pieds",
+                "10 pieds",
+                "11 pieds",
+                "12 pieds",
+                //"13 pieds",
+                "14 pieds"
+            ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons",
+            xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
     }
-    
-       public void GenerateCategoriesBubbleChartDataFile()
+
+    public void GenerateCategoriesBubbleChartDataFile()
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var categoriesDataDictionary = new Dictionary<KeyValuePair<string, string>, int>();
@@ -1550,6 +1559,33 @@ public class Engine
         // streamWriter.Close();
     }
 
+    public void FillCategoriesBubbleChartDataDict(Dictionary<KeyValuePair<string, string>, int> dictionary, Poem poem)
+    {
+        var subCategories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
+
+        if (subCategories.Count == 1)
+        {
+            return;
+        }
+
+        for (var i = 0; i < subCategories.Count; i++)
+        {
+            for (var j = subCategories.Count - 1; j > -1; j--)
+            {
+                if (string.Compare(subCategories[i], subCategories[j]) >= 0) continue;
+                var key = new KeyValuePair<string, string>(subCategories[i], subCategories[j]);
+                if (dictionary.TryGetValue(key, out var _))
+                {
+                    dictionary[key]++;
+                }
+                else
+                {
+                    dictionary.Add(key, 1);
+                }
+            }
+        }
+    }
+
 
     public Dictionary<int, List<decimal>> FillVerseLengthDataDict(out List<string> xLabels)
     {
@@ -1571,7 +1607,8 @@ public class Engine
 
             foreach (var verseLength in verseLengthRange)
             {
-                dataDict[verseLength].Add(Decimal.Round(season.Poems.Count(x => x.VerseLength == verseLength.ToString()) * multiple, 1));
+                dataDict[verseLength]
+                    .Add(Decimal.Round(season.Poems.Count(x => x.VerseLength == verseLength.ToString()) * multiple, 1));
             }
         }
 

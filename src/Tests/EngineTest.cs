@@ -44,7 +44,8 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         [Trait("UnitTest", "XmlRead")]
         public void ShouldLoadDoubleAcrostiche()
         {
-            var poemWithFirstAndSecondAcrostiche = _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
+            var poemWithFirstAndSecondAcrostiche =
+                _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
             poemWithFirstAndSecondAcrostiche.Should().NotBeNull();
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche.Should().NotBeNull();
             poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.Should().Be("L'air");
@@ -61,7 +62,7 @@ public class EngineTest : IClassFixture<LoadDataFixture>
             var poem = _engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
             poem.VersesCount.Should().Be(expectedCount);
         }
-        
+
         [Theory]
         [Trait("UnitTest", "XmlRead")]
         [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, false)]
@@ -78,13 +79,22 @@ public class EngineTest : IClassFixture<LoadDataFixture>
             {
                 poem.Paragraphs.Count.Should().Be(poem.VersesCount / 4);
             }
+
             _testOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
+        }
+
+        [Fact]
+        [Trait("UnitTest", "XmlRead")]
+        public void ShouldBePoemSeasonId()
+        {
+            _engine.Data.Seasons[0].Poems[0].SeasonId.Should().Be(1);
         }
     }
 
     public class ContentGenerationTest : EngineTest
     {
-        public ContentGenerationTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
+        public ContentGenerationTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data,
+            testOutputHelper)
         {
         }
 
@@ -107,13 +117,6 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         public void ShouldBePoemContentFileName()
         {
             _engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir.md");
-        }
-
-        [Fact]
-        [Trait("UnitTest", "XmlRead")]
-        public void ShouldBePoemSeasonId()
-        {
-            _engine.Data.Seasons[0].Poems[0].SeasonId.Should().Be(1);
         }
 
         [Fact]
@@ -159,21 +162,94 @@ public class EngineTest : IClassFixture<LoadDataFixture>
             _engine.GenerateSeasonIndexFile(fictiveSeason.Id);
             _engine.GeneratePoemFile(poem);
         }
-        
+    }
+
+    public class ComputationTest : EngineTest
+    {
+        public ComputationTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
+        {
+        }
+
         [Fact]
         [Trait("UnitTest", "Computation")]
         public void ShouldCorrectlyComputeVerseLengthDataDict()
         {
             var dataDict = _engine.FillVerseLengthDataDict(out var _);
-            _testOutputHelper.WriteLine($"Last non-empty season poem count: {_engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
-            _testOutputHelper.WriteLine($"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
-            _testOutputHelper.WriteLine($"Computed values sum: {dataDict.Values.Sum(x => x.Last())}");
+            _testOutputHelper.WriteLine(
+                $"Last non-empty season poem count: {_engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
+            _testOutputHelper.WriteLine(
+                $"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
+            var sum = dataDict.Values.Sum(x => x.Last());
+            _testOutputHelper.WriteLine($"Computed values sum: {sum}");
+            sum.Should().BeInRange(99.9m, 100.1m);
+        }
+
+        [Fact]
+        [Trait("UnitTest", "Computation")]
+        public void ShouldCorrectlyFillCategoriesBubbleChartDataDict()
+        {
+            Dictionary<KeyValuePair<string, string>, int> dict = new();
+
+            // Poem with single subcategory
+            var poem = new Poem { Categories = [new Category { SubCategories = ["A"] }] };
+            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
+
+            dict.Should().BeEmpty();
+
+            // Poem with two categories
+            poem = new Poem { Categories = [new Category { SubCategories = ["A", "B"] }] };
+            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
+
+            var expectedKey = new KeyValuePair<string, string>("A", "B");
+            dict.TryGetValue(expectedKey, out var counter).Should().BeTrue();
+            counter.Should().Be(1);
+
+            var unExpectedKey = new KeyValuePair<string, string>("B", "A");
+            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
+
+            // Poem with three categories
+            poem = new Poem { Categories = [new Category { SubCategories = ["A", "B", "C"] }] };
+            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
+
+            expectedKey = new KeyValuePair<string, string>("A", "B");
+            dict.TryGetValue(expectedKey, out var counter2).Should().BeTrue();
+            counter2.Should().Be(2);
+
+            unExpectedKey = new KeyValuePair<string, string>("B", "A");
+            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
+
+            expectedKey = new KeyValuePair<string, string>("A", "C");
+            dict.TryGetValue(expectedKey, out var counter3).Should().BeTrue();
+            counter3.Should().Be(1);
+
+            expectedKey = new KeyValuePair<string, string>("B", "C");
+            dict.TryGetValue(expectedKey, out var counter4).Should().BeTrue();
+            counter4.Should().Be(1);
+
+            unExpectedKey = new KeyValuePair<string, string>("C", "B");
+            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
+
+            unExpectedKey = new KeyValuePair<string, string>("C", "A");
+            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
+
+            // Poem with two categories, one per category
+            poem = new Poem
+                { Categories = [new Category { SubCategories = ["A"] }, new Category() { SubCategories = ["B"] }] };
+            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
+
+            expectedKey = new KeyValuePair<string, string>("A", "B");
+            dict.TryGetValue(expectedKey, out var counter5).Should().BeTrue();
+            counter5.Should().Be(3);
+
+            unExpectedKey = new KeyValuePair<string, string>("B", "A");
+            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
         }
     }
 
     public class ContentImportTest : EngineTest
     {
-        public ContentImportTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
+        public ContentImportTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data,
+            testOutputHelper)
         {
         }
 
