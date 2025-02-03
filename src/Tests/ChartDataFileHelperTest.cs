@@ -14,7 +14,7 @@ public class ChartDataFileHelperTest
                 ["A", "B", "C"]);
         formattedString.Should()
             .Be(
-                "scales: {{ x: {{ type: 'category', labels: ['A','B','D'] }}, y: {{ type: 'category', labels: ['A','B','C'] }} }}");
+                "scales: { x: { type: 'category', labels: ['A','B','D'] }, y: { type: 'category', labels: ['A','B','C'] } }");
 
         // scales: {
         //     x: {

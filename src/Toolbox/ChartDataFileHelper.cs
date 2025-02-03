@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Globalization;
+using System.Text;
 
 namespace Toolbox;
 
@@ -120,9 +121,24 @@ public class ChartDataFileHelper
         _streamWriter.Flush();
     }
 
-    public void WriteAfterData(string chartId, string[] chartTitles, string radarChartBorderColor = null,
-        string radarChartBackgroundColor = null, string barChartOptions = "{}", string chartXAxisTitle = "",
-        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string[] xLabels = null, string stack = null)
+    /// <summary>
+    /// Write addXXXChart() javascript declaration.
+    /// </summary>
+    /// <param name="chartId">Mandatory and unique</param>
+    /// <param name="chartTitles">Used for bar, pie (but single), line and bubble charts</param>
+    /// <param name="radarChartBorderColor">Radar chart option</param>
+    /// <param name="radarChartBackgroundColor">Radar chart option</param>
+    /// <param name="chartXAxisTitle">Option for bubble chart</param>
+    /// <param name="chartYAxisTitle">Option for bubble chart</param>
+    /// <param name="xAxisStep">Option for bubble chart</param>
+    /// <param name="yAxisStep">Option for bubble chart</param>
+    /// <param name="xLabels">Option for line chart</param>
+    /// <param name="stack">Option for line chart</param>
+    /// <param name="customScalesOptions">Option for bar, line, bubble chart: "scales: { ... }"</param>
+    public void WriteAfterData(string chartId, string[] chartTitles, string? radarChartBorderColor = null,
+        string? radarChartBackgroundColor = null, string chartXAxisTitle = "",
+        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string[]? xLabels = null, string? stack = null, 
+        string? customScalesOptions = null)
     {
         _streamWriter.WriteLine("  ];");
 
@@ -138,8 +154,8 @@ public class ChartDataFileHelper
         {
             case ChartType.Bar:
                 _streamWriter.WriteLine(_nbDatasets == 1
-                    ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data], {barChartOptions});"
-                    : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data, {barChartOptions});");
+                    ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data], {{{customScalesOptions ?? ""}}});"
+                    : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data, {{{customScalesOptions ?? ""}}});");
                 break;
             case ChartType.Pie:
                 _streamWriter.WriteLine(
@@ -157,8 +173,10 @@ public class ChartDataFileHelper
                     $"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data], {{ backgroundColor: '{backgroundColor}', borderColor: '{borderColor}', pointBackgroundColor: '{borderColor}', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgb(54, 162, 235)', elements: {{ line: {{ borderWidth: 1  }} }}, scales: {{ r: {{ ticks: {{ stepSize: 1 }} }} }} }});");
                 break;
             case ChartType.Bubble:
+                var scalesOptions = customScalesOptions ??
+                                    $"scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}";
                 _streamWriter.WriteLine(
-                    $"  addBubbleChart('{chartId}', [{chartTitlesBuilder}], data, {{scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}}});");
+                    $"  addBubbleChart('{chartId}', [{chartTitlesBuilder}], data, {{{scalesOptions}}});");
                 break;
             case ChartType.Line:
                 var xLabelsBuilder = new StringBuilder();
@@ -169,7 +187,7 @@ public class ChartDataFileHelper
 
                 xLabelsBuilder.Remove(xLabelsBuilder.Length - 1, 1);
                 _streamWriter.WriteLine(
-                    $"    addLineChart('{chartId}', [{chartTitlesBuilder}], data, [{xLabelsBuilder}], '{stack}', {barChartOptions});");
+                    $"    addLineChart('{chartId}', [{chartTitlesBuilder}], data, [{xLabelsBuilder}], '{stack}', {{{customScalesOptions ?? ""}}});");
                 break;
         }
 
@@ -237,18 +255,23 @@ public class ChartDataFileHelper
     public void WriteData(LineChartDataLine dataLine)
     {
         _streamWriter.WriteLine(
-            $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values.Select(x => x.ToString().Replace(',', '.')))}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
+            $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values.Select(x => x.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." })))}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
 
         _streamWriter.Flush();
     }
     
     public string FormatCategoriesBubbleChartLabelOptions(List<string> xAxisLabels, List<string> yAxisLabels)
     {
-        var sb = new StringBuilder("scales: {{ x: {{ type: 'category', labels: [");
-        sb.Append(string.Join(',', xAxisLabels.Select(x => $"'{x}'")));
-        sb.Append("] }}, y: {{ type: 'category', labels: [");
-        sb.Append(string.Join(',', yAxisLabels.Select(x => $"'{x}'")));
-        sb.Append("] }} }}");
+        // TODO need more tries.
+        var sb = new StringBuilder("scales: { x: { ")
+            .Append("type: 'category', ticks: { stepSize: 1 }, ")
+            .Append("labels: [")
+            .Append(string.Join(',', xAxisLabels.Select(x => $"'{x}'")))
+            .Append("] }, y: { ")
+            .Append("type: 'category', ticks: { stepSize: 1 }, ")
+            .Append("labels: [")
+            .Append(string.Join(',', yAxisLabels.Select(x => $"'{x}'")))
+            .Append("] } }");
         return sb.ToString();
         // scales: {
         //     x: {

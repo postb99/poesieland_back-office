@@ -9,8 +9,6 @@ namespace Toolbox;
 
 public class Engine
 {
-    const decimal bubbleMaxRadiusPixels = 30;
-
     private IConfiguration _configuration;
     public Root Data { get; private set; }
     public Root DataEn { get; private set; }
@@ -376,7 +374,7 @@ public class Engine
         }
 
         chartDataFileHelper.WriteAfterData(barChartId, chartTitles,
-            barChartOptions: seasonId == null
+            customScalesOptions: seasonId == null
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
@@ -792,7 +790,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
         chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
-            barChartOptions: seasonId == null
+            customScalesOptions: seasonId == null
                 ? "{ scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } } }"
                 : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
@@ -812,7 +810,7 @@ public class Engine
             chartDataFileHelper2.WriteData(dataLines, true);
 
             chartDataFileHelper2.WriteAfterData(chartId, ["Poèmes"],
-                barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+                customScalesOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
             streamWriter2.Close();
         }
     }
@@ -1088,7 +1086,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
         chartDataFileHelper.WriteAfterData(chartId, ["Poèmes au fil des saisons"],
-            barChartOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+            customScalesOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
     }
 
@@ -1217,7 +1215,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData(seasonId == null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
             ["Fréquence"],
-            barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+            customScalesOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter.Close();
 
         if (seasonId.HasValue) return;
@@ -1304,7 +1302,7 @@ public class Engine
         chartDataFileHelper2.WriteData(seriesDataLines, true);
         chartDataFileHelper2.WriteAfterData("poemSeriesBar",
             ["Séries"],
-            barChartOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+            customScalesOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
         streamWriter2.Close();
 
         // longest series content file
@@ -1405,15 +1403,15 @@ public class Engine
         foreach (var dataKey in poemLengthByVerseLength.Keys)
         {
             AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
-                maxValue);
+                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], 
+                maxValue, 30);
         }
 
         foreach (var dataKey in variableVerseLength.Keys)
         {
             AddDataLine(0, dataKey, variableVerseLength[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
-                maxValue);
+                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], 
+                maxValue, 30);
         }
 
         chartDataFileHelper.WriteData(firstQuartileDataLines, false);
@@ -1504,12 +1502,14 @@ public class Engine
 
     public void GenerateCategoriesBubbleChartDataFile()
     {
-        // TODO add menu entry (480) to call this method
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var categoriesDataDictionary = new Dictionary<KeyValuePair<string, string>, int>();
+        var xAxisLabels = new HashSet<string>();
+        var yAxisLabels = new HashSet<string>();
+
         foreach (var poem in poems)
         {
-            FillCategoriesBubbleChartDataDict(categoriesDataDictionary, poem);
+            FillCategoriesBubbleChartDataDict(categoriesDataDictionary, xAxisLabels, yAxisLabels, poem);
         }
 
         // Find max value
@@ -1528,10 +1528,10 @@ public class Engine
         var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
 
         // Get the values for x-axis
-        var xAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Key).ToList();
+        var xAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
         xAxisKeys.Sort();
 
-        var yAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Value).ToList();
+        var yAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Value).Distinct().ToList();
         yAxisKeys.Sort();
 
         foreach (var dataKey in categoriesDataDictionary.Keys)
@@ -1540,7 +1540,7 @@ public class Engine
             var yAxisValue = yAxisKeys.IndexOf(dataKey.Value);
             AddDataLine(xAxisValue, yAxisValue, categoriesDataDictionary[dataKey],
                 [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
-                maxValue);
+                maxValue, 10);
         }
 
         chartDataFileHelper.WriteData(firstQuartileDataLines, false);
@@ -1553,11 +1553,12 @@ public class Engine
             "Deuxième quartile",
             "Troisième quartile",
             "Quatrième quartile"
-        ], chartXAxisTitle: "Catégorie", chartYAxisTitle: "Catégorie", yAxisStep: 1);
+        ], customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(), yAxisLabels.ToList()));
         streamWriter.Close();
     }
 
-    public void FillCategoriesBubbleChartDataDict(Dictionary<KeyValuePair<string, string>, int> dictionary, Poem poem)
+    public void FillCategoriesBubbleChartDataDict(Dictionary<KeyValuePair<string, string>, int> dictionary,
+        HashSet<string> xLabels, HashSet<string> yLabels, Poem poem)
     {
         var subCategories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
 
@@ -1579,6 +1580,8 @@ public class Engine
                 else
                 {
                     dictionary.Add(key, 1);
+                    xLabels.Add(key.Key);
+                   yLabels.Add(key.Value);
                 }
             }
         }
@@ -1637,11 +1640,10 @@ public class Engine
         }
     }
 
-    private void AddDataLine(int x, int y, int value,
-        List<ChartDataFileHelper.BubbleChartDataLine>[] quartileBubbleChartDatalines, int maxValue)
+    private void AddDataLine(int x, int y, int value, List<ChartDataFileHelper.BubbleChartDataLine>[] quartileBubbleChartDatalines, int maxValue, int bubbleMaxRadiusPixels)
     {
         // Bubble radius and color
-        var bubbleSize = bubbleMaxRadiusPixels * value / maxValue;
+        decimal bubbleSize = (decimal) bubbleMaxRadiusPixels * value / maxValue;
         var bubbleColor = string.Empty;
         if (bubbleSize < (bubbleMaxRadiusPixels / 4))
         {

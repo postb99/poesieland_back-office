@@ -116,6 +116,9 @@ public class Program
             case MainMenuSettings.MenuChoices.GenerateLineChartDataFile:
                 GenerateOverSeasonsVerseLengthLineChartDataFile();
                 return true;
+            case MainMenuSettings.MenuChoices.GenerateCategoriesBubbleChartDataFile:
+                _engine.GenerateCategoriesBubbleChartDataFile();
+                return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
                 return true;
@@ -371,6 +374,9 @@ public class Program
         // Over seasons categories', tags' bar, vers length's line
         GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
         GenerateOverSeasonsVerseLengthLineChartDataFile();
+        
+        // Categories bubble chart
+        _engine.GenerateCategoriesBubbleChartDataFile();
 
         // And check data quality
         _engine.CheckPoemsWithoutVerseLength();

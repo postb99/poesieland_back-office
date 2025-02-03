@@ -189,27 +189,34 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         public void ShouldCorrectlyFillCategoriesBubbleChartDataDict()
         {
             Dictionary<KeyValuePair<string, string>, int> dict = new();
+            var xAxisLabels = new HashSet<string>();
+            var yAxisLabels = new HashSet<string>();
 
             // Poem with single subcategory
             var poem = new Poem { Categories = [new Category { SubCategories = ["A"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
+            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+            xAxisLabels.Should().BeEmpty();
+            yAxisLabels.Should().BeEmpty();
 
             dict.Should().BeEmpty();
 
             // Poem with two categories
             poem = new Poem { Categories = [new Category { SubCategories = ["A", "B"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
-
+            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+            
             var expectedKey = new KeyValuePair<string, string>("A", "B");
             dict.TryGetValue(expectedKey, out var counter).Should().BeTrue();
             counter.Should().Be(1);
 
             var unExpectedKey = new KeyValuePair<string, string>("B", "A");
             dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
+            
+            xAxisLabels.ToList().Should().BeEquivalentTo(["A"]);
+            yAxisLabels.ToList().Should().BeEquivalentTo(["B"]);
 
             // Poem with three categories
             poem = new Poem { Categories = [new Category { SubCategories = ["A", "B", "C"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
+            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
             expectedKey = new KeyValuePair<string, string>("A", "B");
             dict.TryGetValue(expectedKey, out var counter2).Should().BeTrue();
@@ -231,11 +238,14 @@ public class EngineTest : IClassFixture<LoadDataFixture>
 
             unExpectedKey = new KeyValuePair<string, string>("C", "A");
             dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
+            
+            xAxisLabels.ToList().Should().BeEquivalentTo(["A", "B"]);
+            yAxisLabels.ToList().Should().BeEquivalentTo(["B", "C"]);
 
             // Poem with two categories, one per category
             poem = new Poem
                 { Categories = [new Category { SubCategories = ["A"] }, new Category() { SubCategories = ["B"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, poem);
+            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
             expectedKey = new KeyValuePair<string, string>("A", "B");
             dict.TryGetValue(expectedKey, out var counter5).Should().BeTrue();
@@ -243,6 +253,9 @@ public class EngineTest : IClassFixture<LoadDataFixture>
 
             unExpectedKey = new KeyValuePair<string, string>("B", "A");
             dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
+            
+            xAxisLabels.ToList().Should().BeEquivalentTo(["A", "B"]);
+            yAxisLabels.ToList().Should().BeEquivalentTo(["B", "C"]);
         }
     }
 
