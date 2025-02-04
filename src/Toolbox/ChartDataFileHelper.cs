@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using Microsoft.Extensions.Primitives;
 
 namespace Toolbox;
 
@@ -262,26 +263,15 @@ public class ChartDataFileHelper
     
     public string FormatCategoriesBubbleChartLabelOptions(List<string> xAxisLabels, List<string> yAxisLabels)
     {
-        // TODO need more tries.
+        // https://www.chartjs.org/docs/latest/axes/labelling.html
         var sb = new StringBuilder("scales: { x: { ")
-            .Append("type: 'category', ticks: { stepSize: 1 }, ")
-            .Append("labels: [")
+            .Append("ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return [")
             .Append(string.Join(',', xAxisLabels.Select(x => $"'{x}'")))
-            .Append("] }, y: { ")
-            .Append("type: 'category', ticks: { stepSize: 1 }, ")
-            .Append("labels: [")
+            .Append("][value]; } } }, ")
+            .Append("y: { ")
+            .Append("ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return [")
             .Append(string.Join(',', yAxisLabels.Select(x => $"'{x}'")))
-            .Append("] } }");
+            .Append("][value]; } } } }");
         return sb.ToString();
-        // scales: {
-        //     x: {
-        //         type: 'category',
-        //         labels: ["Mon", "Tue", "wed", "Thu"]
-        //     },
-        //     y: {
-        //         type: 'category',
-        //         labels: ["Mon", "Tue", "wed", "Thu"]
-        //     }
-        // }
     }
 }
