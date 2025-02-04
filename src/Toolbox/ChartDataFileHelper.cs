@@ -267,11 +267,11 @@ public class ChartDataFileHelper
         var sb = new StringBuilder("scales: { x: { ")
             .Append("ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return [")
             .Append(string.Join(',', xAxisLabels.Select(x => $"'{x}'")))
-            .Append("][value]; } } }, ")
+            .Append("][index]; } } }, ")
             .Append("y: { ")
             .Append("ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return [")
             .Append(string.Join(',', yAxisLabels.Select(x => $"'{x}'")))
-            .Append("][value]; } } } }");
+            .Append("][index]; } } } }");
         return sb.ToString();
     }
 }

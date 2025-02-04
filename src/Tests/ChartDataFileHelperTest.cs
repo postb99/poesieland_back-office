@@ -17,6 +17,6 @@ public class ChartDataFileHelperTest
         formattedString.Count(x => x == '{').Should().Be(formattedString.Count(x => x == '}'));
         formattedString.Should()
             .Be(
-                "scales: { x: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','D'][value]; } } }, y: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','C'][value]; } } } }");
+                "scales: { x: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','D'][index]; } } }, y: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','C'][index]; } } } }");
     }
 }

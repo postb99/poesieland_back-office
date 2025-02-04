@@ -1504,8 +1504,8 @@ public class Engine
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var categoriesDataDictionary = new Dictionary<KeyValuePair<string, string>, int>();
-        var xAxisLabels = new HashSet<string>();
-        var yAxisLabels = new HashSet<string>();
+        var xAxisLabels = new SortedSet<string>();
+        var yAxisLabels = new SortedSet<string>();
 
         foreach (var poem in poems)
         {
@@ -1558,7 +1558,7 @@ public class Engine
     }
 
     public void FillCategoriesBubbleChartDataDict(Dictionary<KeyValuePair<string, string>, int> dictionary,
-        HashSet<string> xLabels, HashSet<string> yLabels, Poem poem)
+        SortedSet<string> xLabels, SortedSet<string> yLabels, Poem poem)
     {
         var subCategories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
 

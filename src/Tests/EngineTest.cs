@@ -189,8 +189,8 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         public void ShouldCorrectlyFillCategoriesBubbleChartDataDict()
         {
             Dictionary<KeyValuePair<string, string>, int> dict = new();
-            var xAxisLabels = new HashSet<string>();
-            var yAxisLabels = new HashSet<string>();
+            var xAxisLabels = new SortedSet<string>();
+            var yAxisLabels = new SortedSet<string>();
 
             // Poem with single subcategory
             var poem = new Poem { Categories = [new Category { SubCategories = ["A"] }] };
