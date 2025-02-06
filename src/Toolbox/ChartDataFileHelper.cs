@@ -138,9 +138,13 @@ public class ChartDataFileHelper
     /// <param name="customScalesOptions">Option for bar, line, bubble chart: "scales: { ... }"</param>
     public void WriteAfterData(string chartId, string[] chartTitles, string? radarChartBorderColor = null,
         string? radarChartBackgroundColor = null, string chartXAxisTitle = "",
-        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string[]? xLabels = null, string? stack = null, 
+        string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string[]? xLabels = null,
+        string? stack = null,
         string? customScalesOptions = null)
     {
+        if (customScalesOptions?.Count(x => x == '{') != customScalesOptions?.Count(x => x == '}'))
+            throw new ArgumentException("Not the same number of { and } for custom scale options!");
+
         _streamWriter.WriteLine("  ];");
 
         var chartTitlesBuilder = new StringBuilder();
@@ -260,7 +264,7 @@ public class ChartDataFileHelper
 
         _streamWriter.Flush();
     }
-    
+
     public string FormatCategoriesBubbleChartLabelOptions(List<string> xAxisLabels, List<string> yAxisLabels)
     {
         // https://www.chartjs.org/docs/latest/axes/labelling.html

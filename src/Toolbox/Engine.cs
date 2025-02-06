@@ -375,8 +375,8 @@ public class Engine
 
         chartDataFileHelper.WriteAfterData(barChartId, chartTitles,
             customScalesOptions: seasonId == null
-                ? "{ scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } } }"
-                : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+                ? "scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } }"
+                : "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter.Close();
     }
 
@@ -425,7 +425,7 @@ public class Engine
 
         chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
         [
-            seasonId.HasValue ? $"{season.EscapedLongTitle} - {season.Period.Replace("'", "\\'")}" : string.Empty
+            seasonId.HasValue ? $"{season.EscapedTitleForCharts} - {season.Period.Replace("'", "\\'")}" : string.Empty
         ]);
         streamWriter.Close();
     }
@@ -791,8 +791,8 @@ public class Engine
 
         chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
             customScalesOptions: seasonId == null
-                ? "{ scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } } }"
-                : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+                ? "scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } }"
+                : "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter.Close();
 
         // Second chart for variable length, when no season ID is given
@@ -810,7 +810,7 @@ public class Engine
             chartDataFileHelper2.WriteData(dataLines, true);
 
             chartDataFileHelper2.WriteAfterData(chartId, ["Poèmes"],
-                customScalesOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+                customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
             streamWriter2.Close();
         }
     }
@@ -1078,7 +1078,7 @@ public class Engine
                 poemCount = season.Poems.Count(x => x.HasVariableVerseLength);
             }
 
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedLongTitle} ({season.Years})",
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedTitleForCharts} ({season.Years})",
                 poemCount,
                 backgroundColor));
         }
@@ -1086,7 +1086,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
         chartDataFileHelper.WriteAfterData(chartId, ["Poèmes au fil des saisons"],
-            customScalesOptions: "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+            customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter.Close();
     }
 
@@ -1215,7 +1215,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData(seasonId == null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
             ["Fréquence"],
-            customScalesOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+            customScalesOptions: seasonId == null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter.Close();
 
         if (seasonId.HasValue) return;
@@ -1302,7 +1302,7 @@ public class Engine
         chartDataFileHelper2.WriteData(seriesDataLines, true);
         chartDataFileHelper2.WriteAfterData("poemSeriesBar",
             ["Séries"],
-            customScalesOptions: seasonId == null ? "{}" : "{ scales: { y: { ticks: { stepSize: 1 } } } }");
+            customScalesOptions: seasonId == null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter2.Close();
 
         // longest series content file
@@ -1602,7 +1602,7 @@ public class Engine
         {
             // Multiplicator to get 100%
             var multiple = 100m / season.Poems.Count;
-            xLabels.Add($"{season.EscapedLongTitle} ({season.Years})");
+            xLabels.Add($"{season.EscapedTitleForCharts} ({season.Years})");
             dataDict[0].Add(Decimal.Round(season.Poems.Count(x => x.HasVariableVerseLength) * multiple, 1));
 
             foreach (var verseLength in verseLengthRange)
