@@ -425,7 +425,7 @@ public class Engine
 
         chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
         [
-            seasonId.HasValue ? $"{season.EscapedTitleForCharts} - {season.Period.Replace("'", "\\'")}" : string.Empty
+            seasonId.HasValue ? $"{season.EscapedTitleForChartsWithPeriod}" : string.Empty
         ]);
         streamWriter.Close();
     }
@@ -1078,7 +1078,7 @@ public class Engine
                 poemCount = season.Poems.Count(x => x.HasVariableVerseLength);
             }
 
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedTitleForCharts} ({season.Years})",
+            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
                 poemCount,
                 backgroundColor));
         }
@@ -1602,7 +1602,7 @@ public class Engine
         {
             // Multiplicator to get 100%
             var multiple = 100m / season.Poems.Count;
-            xLabels.Add($"{season.EscapedTitleForCharts} ({season.Years})");
+            xLabels.Add($"{season.EscapedTitleForChartsWithYears}");
             dataDict[0].Add(Decimal.Round(season.Poems.Count(x => x.HasVariableVerseLength) * multiple, 1));
 
             foreach (var verseLength in verseLengthRange)

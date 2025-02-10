@@ -10,6 +10,7 @@ public class Season
     {
         Poems = [];
     }
+
     [XmlAttribute("id")] public int Id { get; set; }
 
     [XmlAttribute("name")] public string Name { get; set; }
@@ -26,37 +27,29 @@ public class Season
 
     [XmlIgnore] public string LongTitle => $"{NumberedName} Saison : {Name}";
 
-    [XmlIgnore] public string EscapedTitleForCharts => $"{Name.Replace("'", "\\'")} ({Id})";
+    [XmlIgnore] public string EscapedTitleForChartsWithYears => $"{Name.Replace("'", "\\'")} ({Id}) {Years}";
+    [XmlIgnore] public string EscapedTitleForChartsWithPeriod => $"{Name.Replace("'", "\\'")} ({Id}) {Period}";
 
     [XmlIgnore]
     public string Years
     {
         get
         {
-            var infoWords = Summary.Split(' ');
-            var infoLastWords = infoWords.Skip(infoWords.Length - 6).Take(6).ToList();
-            var regex = new Regex("^\\d+$");
-            var years = new List<string>();
-            foreach (var word in infoLastWords)
-            {
-                var matches = regex.Matches(word);
-                foreach (var match in matches)
-                {
-                    years.Add(match.ToString());
-                }
-            }
+            var years = Poems.Select(x => x.Date.Year.ToString()).Distinct().ToList();
+            years.Sort();
 
             switch (years.Count)
             {
+                case 0:
+                    return string.Empty;
                 case 1:
                     return years[0];
                 case 2 when years[0] == years[1]:
                     return years[0];
-                case 2:
-                    return $"{years[0]} - {years[1]}";
+                default:
+                    // Same century or not
+                    return years[0][0] == years[^1][0] ? $"{years[0]}-{years[^1][2..4]}" : $"{years[0]}-{years[^1]}";
             }
-
-            return null;
         }
     }
 
@@ -65,8 +58,14 @@ public class Season
     {
         get
         {
-            var summaryLastDot = Summary.LastIndexOf('.');
-            return Summary.Substring(summaryLastDot == -1 ? 0 : summaryLastDot + 2);
+            var years = Poems.Select(x => x.Date).Distinct().ToList();
+            years.Sort();
+            if (years.Count == 0)
+                return string.Empty;
+
+            return years[0].Year == years[^1].Year
+                ? $"{years[0]:MMMM} à {years[^1]:MMMM yyyy}"
+                : $"{years[0]:MMMM yyyy} à {years[^1]:MMMM yyyy}";
         }
     }
 
@@ -98,7 +97,8 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append("## Catégories");
         s.Append(Environment.NewLine);
-        s.Append($"{{{{< chartjs id=\"season{Id}Pie\" width=\"75%\" jsFile=\"../../charts/season-{Id}/categories-pie.js\" />}}}}");
+        s.Append(
+            $"{{{{< chartjs id=\"season{Id}Pie\" width=\"75%\" jsFile=\"../../charts/season-{Id}/categories-pie.js\" />}}}}");
         s.Append(Environment.NewLine);
         s.Append("## Longueur des vers");
         s.Append(Environment.NewLine);
@@ -112,7 +112,8 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append("## Intervalle");
         s.Append(Environment.NewLine);
-        s.Append($"{{{{< chartjs id=\"season{Id}PoemIntervalBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}/poem-interval-bar.js\" />}}}}");
+        s.Append(
+            $"{{{{< chartjs id=\"season{Id}PoemIntervalBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}/poem-interval-bar.js\" />}}}}");
         s.Append(Environment.NewLine);
         return s.ToString();
     }
