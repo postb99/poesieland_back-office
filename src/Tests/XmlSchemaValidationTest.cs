@@ -2,7 +2,6 @@
 using System.Xml;
 using System.Xml.Schema;
 using FluentAssertions;
-using Toolbox;
 using Toolbox.Settings;
 using Xunit.Abstractions;
 

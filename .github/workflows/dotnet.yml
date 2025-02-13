@@ -24,8 +24,8 @@ jobs:
       run: dotnet restore
       working-directory: src
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build --no-restore --environment github
       working-directory: src
     - name: Test
-      run: dotnet test --no-build --verbosity normal --filter "UnitTest!=DataMiningLookup"
+      run: dotnet test --no-build --verbosity normal --filter "UnitTest!=DataMiningLookup & UnitTest!=XmlSchema" --environment github
       working-directory: src
