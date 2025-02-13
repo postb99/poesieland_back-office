@@ -67,7 +67,18 @@ public class Poem
 
     [XmlIgnore] public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
-    [XmlIgnore] public int SeasonId => int.Parse(Id.Substring(Id.LastIndexOf('_') + 1));
+    [XmlIgnore] public int SeasonId
+    {
+        get
+        {
+            if (int.TryParse(Id.Substring(Id.LastIndexOf('_') + 1), out var id))
+            {
+                return id;
+            }
+
+            throw new InvalidOperationException($"No season ID can be guessed from poem ID {Id}");
+        }
+    }
 
     [XmlIgnore] public int VersesCount => Paragraphs.SelectMany(x => x.Verses).Count();
 

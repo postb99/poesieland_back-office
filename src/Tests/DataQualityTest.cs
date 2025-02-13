@@ -89,7 +89,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
 
     [Fact]
     [Trait("UnitTest", "Quality")]
-    public void PoemShouldHaveSeasonId()
+    public void PoemIdShouldEndWithSeasonId()
     {
         _data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0).Should().BeTrue();
     }
@@ -126,9 +126,9 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
 
     [Theory]
     [Trait("UnitTest", "Quality")]
-    [InlineData(1, "1994 - 1996")]
+    [InlineData(1, "1994-96")]
     [InlineData(2, "1996")]
-    [InlineData(5, "1997 - 1998")]
+    [InlineData(5, "1997-98")]
     [InlineData(19, "2024")]
     public void ShouldGetYears(int seasonId, string expectedValue)
     {
