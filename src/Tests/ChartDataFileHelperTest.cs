@@ -11,7 +11,7 @@ public class ChartDataFileHelperTest
     {
         // https://www.chartjs.org/docs/latest/axes/labelling.html
         var formattedString =
-            new ChartDataFileHelper(default, default).FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"],
+            new ChartDataFileHelper(default!, default).FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"],
                 ["A", "B", "C"]);
 
         formattedString.Count(x => x == '{').Should().Be(formattedString.Count(x => x == '}'));

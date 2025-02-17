@@ -405,7 +405,7 @@ public class Program
         }
 
         var colorSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
-        var color = colorSettings.Categories.SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == choice);
+        var color = colorSettings!.Categories.SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == choice);
 
         if (color == null)
         {
@@ -434,7 +434,7 @@ public class Program
     {
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
-        foreach (var category in storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
+        foreach (var category in storageSettings!.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
                      .Distinct())
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(category, null);
@@ -452,7 +452,7 @@ public class Program
     {
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
-        foreach (var category in storageSettings.SubcategorieNames)
+        foreach (var category in storageSettings!.SubcategorieNames)
         {
             _engine.GenerateOverSeasonsChartDataFile(category, null);
             Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");

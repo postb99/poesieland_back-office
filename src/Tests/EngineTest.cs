@@ -98,35 +98,35 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         }
 
         [Fact]
-        [Trait("UnitTest", "ContentFiles")]
+        [Trait("UnitTest", "ContentGeneration")]
         public void ShouldBeSeasonContentDirectoryName()
         {
             _engine.Data.Seasons[0].ContentDirectoryName.Should().Be("1_premiere_saison");
         }
 
         [Fact]
-        [Trait("UnitTest", "ContentFiles")]
+        [Trait("UnitTest", "ContentGeneration")]
         public void ShouldCreateFirstSeasonIndexFile()
         {
             _engine.GenerateSeasonIndexFile(1);
         }
 
         [Fact]
-        [Trait("UnitTest", "ContentFiles")]
+        [Trait("UnitTest", "ContentGeneration")]
         public void ShouldBePoemContentFileName()
         {
             _engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir.md");
         }
 
         [Fact]
-        [Trait("UnitTest", "ContentFiles")]
+        [Trait("UnitTest", "ContentGeneration")]
         public void ShouldCreateFirstPoemFile()
         {
             _engine.GeneratePoemFile(_engine.Data.Seasons[0].Poems[0]);
         }
 
-        [Theory(Skip = "Validated")]
-        [Trait("UnitTest", "ContentFiles")]
+        [Trait("UnitTest", "ContentGeneration")]
+        [Theory]
         [InlineData("simplest", false, null, false, false)]
         [InlineData("only_info", false, null, false, true)]
         [InlineData("only_type", false, PoemType.Sonnet, false, false)]
@@ -265,17 +265,6 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         {
         }
 
-        [Fact(Skip = "Validated")]
-        [Trait("UnitTest", "ContentImport")]
-        public void ShouldImportPoem()
-        {
-            //_engine.ImportPoem("j_avais_l_heur_de_m_asseoir_1");
-            _engine.ImportPoem("par_omission_16");
-            _engine.ImportPoem("le_jour_16");
-            _engine.ImportPoem("accords_finis_16");
-        }
-
-        [Fact(Skip = "Validated")]
         [Trait("UnitTest", "ContentImport")]
         public void ShouldImportSeason()
         {

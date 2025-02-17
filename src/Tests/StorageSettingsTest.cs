@@ -11,6 +11,7 @@ public class StorageSettingsTest
     public void ShouldGetCorrectSubcategorieNames()
     {
         var storageSettings = Helpers.GetConfiguration().GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
-        storageSettings.SubcategorieNames.Count.Should().Be(35);
+        storageSettings.Should().NotBeNull();
+        storageSettings!.SubcategorieNames.Count.Should().Be(35);
     }
 }

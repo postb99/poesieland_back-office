@@ -6,15 +6,15 @@ namespace Toolbox.Domain;
 
 public class Poem
 {
-    [XmlAttribute("id")] public string Id { get; set; }
+    [XmlAttribute("id")] public string Id { get; set; } = string.Empty;
 
     [XmlAttribute("type")] public string? PoemType { get; set; }
 
-    [XmlElement("titre")] public string Title { get; set; }
+    [XmlElement("titre")] public string Title { get; set; } = string.Empty;
 
-    [XmlElement("date")] public string TextDate { get; set; }
+    [XmlElement("date")] public string TextDate { get; set; } = string.Empty;
 
-    [XmlElement("categorie")] public List<Category> Categories { get; set; }
+    [XmlElement("categorie")] public List<Category> Categories { get; set; } = [];
 
     /// <summary>
     /// Mathematical verse length, either an integer or -1 when value is variable, in this case check DetailedVerseLength property.
@@ -22,7 +22,7 @@ public class Poem
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }
 
-    [XmlIgnore] public bool HasVariableVerseLength => VerseLength == null ? false : (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
+    [XmlIgnore] public bool HasVariableVerseLength => VerseLength != null && (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
 
     /// <summary>
     /// Real verse length, either an integer or integers separated by comma + space.
@@ -33,7 +33,7 @@ public class Poem
         get
         {
             if (!HasVariableVerseLength)
-                return VerseLength;
+                return VerseLength!;
             
             if (Info == null || !Info.StartsWith("Vers variable : "))
             {
@@ -53,7 +53,7 @@ public class Poem
 
     [XmlElement("acrosticheDouble")] public DoubleAcrostiche? DoubleAcrostiche { get; set; }
 
-    [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; }
+    [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; } = [];
 
     [XmlIgnore]
     public DateTime Date =>

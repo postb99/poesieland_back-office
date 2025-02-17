@@ -13,7 +13,8 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    environment: github
+    if: "!contains(github.event.head_commit.message, 'skip ci')"
+    env: github
 
     steps:
     - uses: actions/checkout@v4
@@ -28,5 +29,14 @@ jobs:
       run: dotnet build --no-restore
       working-directory: src
     - name: Test
-      run: dotnet test --no-build --verbosity normal --filter "UnitTest!=DataMiningLookup & UnitTest!=XmlSchema"
+      run: dotnet test --no-build --filter "UnitTest=Computation"
+      working-directory: src
+    - name: Test
+      run: dotnet test --no-build --filter "UnitTest=ContentImport"
+      working-directory: src
+    - name: Test
+      run: dotnet test --no-build --filter "UnitTest=XmlSerialization"
+      working-directory: src
+    - name: Test
+      run: dotnet test --no-build --filter "UnitTest=ContentGeneration"
       working-directory: src

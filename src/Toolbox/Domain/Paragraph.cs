@@ -5,7 +5,7 @@ namespace Toolbox.Domain;
 
 public class Paragraph
 {
-    [XmlElement("vers")] public List<string> Verses { get; set; }
+    [XmlElement("vers")] public List<string> Verses { get; set; } = [];
 
     public string FileContent()
     {

@@ -6,22 +6,17 @@ namespace Toolbox.Domain;
 
 public class Season
 {
-    public Season()
-    {
-        Poems = [];
-    }
-
     [XmlAttribute("id")] public int Id { get; set; }
 
-    [XmlAttribute("name")] public string Name { get; set; }
+    [XmlAttribute("name")] public string Name { get; set; } = string.Empty;
 
-    [XmlAttribute("nombre")] public string NumberedName { get; set; }
+    [XmlAttribute("nombre")] public string NumberedName { get; set; } = string.Empty;
 
-    [XmlElement("summary")] public string Summary { get; set; }
+    [XmlElement("summary")] public string Summary { get; set; } = string.Empty;
 
-    [XmlElement("info")] public string Introduction { get; set; }
+    [XmlElement("info")] public string Introduction { get; set; } = string.Empty;
 
-    [XmlElement("poeme")] public List<Poem> Poems { get; set; }
+    [XmlElement("poeme")] public List<Poem> Poems { get; set; } = [];
 
     [XmlIgnore] public string ContentDirectoryName => $"{Id}_{NumberedName.UnaccentedCleaned()}_saison";
 

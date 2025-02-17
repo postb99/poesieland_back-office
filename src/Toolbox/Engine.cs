@@ -9,10 +9,10 @@ namespace Toolbox;
 
 public class Engine
 {
-    private IConfiguration _configuration;
-    public Root Data { get; private set; }
-    public Root DataEn { get; private set; }
-    public XmlSerializer XmlSerializer { get; private set; }
+    private readonly IConfiguration _configuration;
+    public Root Data { get; private set; } = default!;
+    public Root DataEn { get; private set; } = default!;
+    public XmlSerializer XmlSerializer { get; }
 
     private PoemContentImporter? _poemContentImporter;
 
@@ -25,27 +25,27 @@ public class Engine
 
     public void Load()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]);
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]!);
         using var streamReader = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
+            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]!));
 
         Data = XmlSerializer.Deserialize(streamReader) as Root;
 
-        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]);
+        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]!);
         using var streamReaderEn = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]));
+            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]!));
 
         DataEn = XmlSerializer.Deserialize(streamReaderEn) as Root;
     }
 
     public void Save()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]);
+        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]!);
         using var streamWriter = new StreamWriter(xmlDocPath);
         XmlSerializer.Serialize(streamWriter, Data);
         streamWriter.Close();
 
-        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]);
+        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]!);
         using var streamWriterEn = new StreamWriter(xmlDocPath);
         XmlSerializer.Serialize(streamWriterEn, DataEn);
         streamWriterEn.Close();
@@ -54,13 +54,13 @@ public class Engine
     public void GenerateSeasonIndexFile(int seasonId)
     {
         var season = Data.Seasons.First(x => x.Id == seasonId);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
         var indexFile = Path.Combine(contentDir, "_index.md");
         Directory.CreateDirectory(contentDir);
         File.WriteAllText(indexFile, season.IndexFileContent());
 
-        rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+        rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         contentDir = Path.Combine(rootDir, $"season-{seasonId}");
         Directory.CreateDirectory(contentDir);
     }
@@ -77,7 +77,7 @@ public class Engine
     {
         var season = Data.Seasons.First(x => x.Id == poem.SeasonId);
         var poemIndex = season.Poems.IndexOf(poem);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
         var indexFile = Path.Combine(contentDir, poem.ContentFileName);
         File.WriteAllText(indexFile, poem.FileContent(poemIndex));
@@ -85,20 +85,13 @@ public class Engine
 
     public void GenerateSeasonAllPoemFiles(int seasonId)
     {
-        // if (seasonId == -1)
-        // {
-        //     var poems = Data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.SelectMany(x => x.SubCategories).Any(x => x == "Faune")).ToList();
-        //     poems.ForEach(GeneratePoemFile);
-        //     return;
-        // }
-
         var season = Data.Seasons.First(x => x.Id == seasonId);
         season.Poems.ForEach(GeneratePoemFile);
     }
 
     public Poem? ImportPoem(string poemId)
     {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
@@ -141,11 +134,11 @@ public class Engine
 
     public void ImportSeason(int seasonId)
     {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == seasonId);
-        var poemFilePaths = Directory.EnumerateFiles(seasonDirName).Where(x => !x.EndsWith("_index.md"));
+        var poemFilePaths = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("_index.md"));
         var poemsByPosition = new Dictionary<int, Poem>(50);
         foreach (var poemContentPath in poemFilePaths)
         {
@@ -218,7 +211,7 @@ public class Engine
 
     public IEnumerable<string> CheckMissingTagsInYamlMetadata()
     {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonMaxId = Data.Seasons.Count;
         var poemContentImporter = new PoemContentImporter();
         for (var i = 17; i < seasonMaxId + 1; i++)
@@ -330,7 +323,7 @@ public class Engine
 
         // Bar chart
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var subDir = seasonId != null ? $"season-{seasonId}" : "general";
         var subDirPath = Path.Combine(rootDir, subDir);
         Directory.CreateDirectory(subDirPath);
@@ -383,7 +376,7 @@ public class Engine
     public void GenerateSeasonCategoriesPieChartDataFile(int? seasonId)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var subDir = seasonId.HasValue ? $"season-{seasonId}" : "general";
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, "categories-pie.js"));
@@ -413,9 +406,9 @@ public class Engine
 
         foreach (var subcategory in orderedSubcategories)
         {
-            if (byStorageSubcategoryCount.ContainsKey(subcategory))
+            if (byStorageSubcategoryCount.TryGetValue(subcategory, out var value))
                 pieChartData.Add(new ChartDataFileHelper.ColoredDataLine
-                (subcategory, byStorageSubcategoryCount[subcategory],
+                (subcategory, value,
                     storageSettings.Categories.SelectMany(x => x.Subcategories)
                         .First(x => x.Name == subcategory).Color
                 ));
@@ -465,7 +458,7 @@ public class Engine
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = string.Empty;
 
         var chartId = string.Empty;
@@ -540,7 +533,7 @@ public class Engine
 
         // Days without poems listing
 
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/days_without_creation.md");
         var streamWriter2 = new StreamWriter(filePath);
 
@@ -611,7 +604,7 @@ public class Engine
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = $"poems-day-{year}-radar.js";
         var chartId = $"poemDay-{year}Radar";
 
@@ -664,10 +657,10 @@ public class Engine
         }
 
         var season = Data.Seasons.First(s => s.Id == seasonId);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
-        var poemFiles = Directory.EnumerateFiles(seasonDirName).Where(x => !x.EndsWith("index.md"));
+        var poemFiles = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("index.md"));
 
         foreach (var poemFile in poemFiles)
         {
@@ -715,7 +708,7 @@ public class Engine
     public void GeneratePoemVersesLengthBarChartDataFile(int? seasonId)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = "poems-verse-length-bar.js";
         var subDir = seasonId != null ? $"season-{seasonId}" : "general";
         var chartId = seasonId != null ? $"season{seasonId}VerseLengthBar" : "poemVerseLengthBar";
@@ -827,13 +820,9 @@ public class Engine
 
         foreach (var fullDate in fullDates)
         {
-            if (dataDict.ContainsKey(fullDate))
+            if (!dataDict.TryAdd(fullDate, 1))
             {
                 dataDict[fullDate]++;
-            }
-            else
-            {
-                dataDict.Add(fullDate, 1);
             }
         }
 
@@ -842,13 +831,9 @@ public class Engine
         foreach (var data in dataDict)
         {
             var value = data.Value;
-            if (intensityDict.ContainsKey(value))
+            if (!intensityDict.TryAdd(value, 1))
             {
                 intensityDict[value]++;
-            }
-            else
-            {
-                intensityDict.Add(value, 1);
             }
         }
 
@@ -868,7 +853,7 @@ public class Engine
 
         var fileName = "poem-intensity-pie.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
@@ -889,13 +874,9 @@ public class Engine
 
         foreach (var dayOfWeek in dayOfWeekData)
         {
-            if (dataDict.ContainsKey((int)dayOfWeek))
+            if (!dataDict.TryAdd((int)dayOfWeek, 1))
             {
                 dataDict[(int)dayOfWeek]++;
-            }
-            else
-            {
-                dataDict.Add((int)dayOfWeek, 1);
             }
         }
 
@@ -920,7 +901,7 @@ public class Engine
 
         var fileName = "poem-dayofweek-pie.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
@@ -937,13 +918,9 @@ public class Engine
 
         foreach (var dayOfWeek in dayOfWeekData)
         {
-            if (dataDict.ContainsKey((int)dayOfWeek))
+            if (!dataDict.TryAdd((int)dayOfWeek, 1))
             {
                 dataDict[(int)dayOfWeek]++;
-            }
-            else
-            {
-                dataDict.Add((int)dayOfWeek, 1);
             }
         }
 
@@ -981,7 +958,7 @@ public class Engine
         bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableVerse = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = string.Empty;
 
         var chartId = string.Empty;
@@ -1120,27 +1097,20 @@ public class Engine
             var previous = datesList[i - 1];
             var dayDiff = (int)(current - previous).TotalDays;
 
-            if (intervalLengthDict.ContainsKey(dayDiff))
+            if (!intervalLengthDict.TryAdd(dayDiff, 1))
             {
                 intervalLengthDict[dayDiff]++;
             }
-            else
-            {
-                intervalLengthDict.Add(dayDiff, 1);
-            }
 
-            if (!intervalDict.ContainsKey(current))
-                intervalDict.Add(current, dayDiff);
+            intervalDict.TryAdd(current, dayDiff);
 
-            if (!seriesDict.ContainsKey(previous))
-                seriesDict.Add(previous, 1);
+            seriesDict.TryAdd(previous, 1);
 
-            if (dayDiff == 1)
-            {
-                var duration = seriesDict[previous];
-                seriesDict.Remove(previous);
-                seriesDict[current] = ++duration;
-            }
+            if (dayDiff != 1) continue;
+            
+            var duration = seriesDict[previous];
+            seriesDict.Remove(previous);
+            seriesDict[current] = ++duration;
         }
 
         // Interval length charts
@@ -1208,7 +1178,7 @@ public class Engine
         var fileName = "poem-interval-bar.js";
         var subDir = seasonId != null ? $"season-{seasonId}" : "general";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
@@ -1223,7 +1193,7 @@ public class Engine
         // Longest intervals content file
 
         var longestIntervalKeys = orderedIntervalKeys.OrderDescending().ToList();
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR!],
             "../includes/longest_intervals.md");
         var streamWriter3b = new StreamWriter(filePath);
 
@@ -1275,13 +1245,9 @@ public class Engine
         var seriesLengthDict = new Dictionary<int, int>();
         foreach (var seriesLength in seriesDict.Values)
         {
-            if (seriesLengthDict.ContainsKey(seriesLength))
+            if (!seriesLengthDict.TryAdd(seriesLength, 1))
             {
                 seriesLengthDict[seriesLength]++;
-            }
-            else
-            {
-                seriesLengthDict[seriesLength] = 1;
             }
         }
 
@@ -1308,7 +1274,7 @@ public class Engine
         // longest series content file
 
         var longestSeriesKeys = sortedKeys.OrderDescending().Where(x => x > 6);
-        filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR],
+        filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/longest_series.md");
         var streamWriter3 = new StreamWriter(filePath);
 
@@ -1334,13 +1300,13 @@ public class Engine
     {
         var poemCount = Data.Seasons.Select(x => x.Poems.Count).Sum();
         var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "poem_count.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
 
         // And for variable verse
         var variableVersePoemCount = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableVerseLength)).Count();
         var variableVersePoemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "variableVerse_poem_count.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "variableVerse_poem_count.md");
         File.WriteAllText(variableVersePoemCountFilePath, variableVersePoemCount.ToString());
     }
 
@@ -1348,7 +1314,7 @@ public class Engine
     {
         var poemCount = DataEn.Seasons.Select(x => x.Poems.Count).Sum();
         var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CONTENT_ROOT_DIR], "../../common", "poem_count_en.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count_en.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
     }
 
@@ -1362,26 +1328,18 @@ public class Engine
             var poemLength = poem.VersesCount;
             if (poem.HasVariableVerseLength)
             {
-                if (variableVerseLength.ContainsKey(poemLength))
+                if (!variableVerseLength.TryAdd(poemLength, 1))
                 {
                     variableVerseLength[poemLength]++;
-                }
-                else
-                {
-                    variableVerseLength[poemLength] = 1;
                 }
 
                 continue;
             }
 
-            var key = new KeyValuePair<int, int>(int.Parse(poem.VerseLength), poemLength);
-            if (poemLengthByVerseLength.ContainsKey(key))
+            var key = new KeyValuePair<int, int>(int.Parse(poem.VerseLength!), poemLength);
+            if (!poemLengthByVerseLength.TryAdd(key, 1))
             {
                 poemLengthByVerseLength[key]++;
-            }
-            else
-            {
-                poemLengthByVerseLength[key] = 1;
             }
         }
 
@@ -1390,7 +1348,7 @@ public class Engine
 
         var fileName = "poem-length-by-verse-length.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
@@ -1433,7 +1391,7 @@ public class Engine
         var dataDict = FillVerseLengthDataDict(out var xLabels);
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
 
         var fileName = "poems-verseLength-line.js";
 
@@ -1517,7 +1475,7 @@ public class Engine
 
         var fileName = "associated-categories.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();

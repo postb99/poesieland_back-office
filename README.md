@@ -1,3 +1,5 @@
+![Unit Tests](https://github.com/postb99/poesieland_back-office/actions/workflows/dotnet.yml/badge.svg)
+
 # Poesieland's back-office toolbox
 
 ## Why

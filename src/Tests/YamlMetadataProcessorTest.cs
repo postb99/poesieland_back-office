@@ -12,7 +12,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\saisons.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -37,12 +37,12 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "16_seizieme_saison\\les_chenes.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "16_seizieme_saison\\les_chenes.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
         poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        poem.DoubleAcrostiche.First.Should().Be("Chênes");
+        poem.DoubleAcrostiche!.First.Should().Be("Chênes");
         poem.DoubleAcrostiche.Second.Should().Be("destin");
     }
 
@@ -52,7 +52,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\a_bacchus.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\a_bacchus.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -66,7 +66,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "17_dix_septieme_saison\\a_bacchus.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\a_bacchus.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -80,7 +80,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "22_vingt_deuxieme_saison\\l_automne_est_venu.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "22_vingt_deuxieme_saison\\l_automne_est_venu.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -105,7 +105,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\novembre.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\novembre.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -119,7 +119,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\present_simple.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\present_simple.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -137,7 +137,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "21_vingt_et_unieme_saison\\soir_parfait.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison\\soir_parfait.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -157,7 +157,7 @@ public class YamlMetadataProcessorTest
     {
         var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR], "18_dix_huitieme_saison\\saisons.md");
+            configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\saisons.md");
         var poemContentImporter = new PoemContentImporter();
         var (tags, year, poemId, _) =
             poemContentImporter.GetTagsYearVariableVerseLength(poemContentFilePath, configuration);

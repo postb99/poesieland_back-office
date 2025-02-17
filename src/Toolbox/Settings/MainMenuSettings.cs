@@ -34,13 +34,13 @@ public class MainMenuSettings
         OutputSeasonsDuration = 700,
         ExitProgram = 99
     }
-    
-    public List<MenuItem> MenuItems { get; set; }
+
+    public List<MenuItem> MenuItems { get; set; } = [];
 }
 
 public class MenuItem
 {
     public int Key { get; set; }
-    public string Label { get; set; }
-    public List<MenuItem> SubMenuItems { get; set; }
+    public string Label { get; set; } = string.Empty;
+    public List<MenuItem> SubMenuItems { get; set; } = [];
 }
