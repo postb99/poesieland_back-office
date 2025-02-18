@@ -19,6 +19,7 @@ public class Engine
     public Engine(IConfiguration configuration)
     {
         _configuration = configuration;
+        Data = new Root { Seasons = [] };
         XmlSerializer = new XmlSerializer(typeof(Root));
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
@@ -148,7 +149,15 @@ public class Engine
             poemsByPosition.Add(position, poem);
         }
 
-        targetSeason.Poems.Clear();
+        if (targetSeason != null)
+        {
+            targetSeason.Poems.Clear();
+        }
+        else
+        {
+            targetSeason = new Season { Id = seasonId, Poems = [] };
+            Data.Seasons.Add(targetSeason);
+        }
 
         for (var i = 0; i < 50; i++)
         {
@@ -524,7 +533,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
-        
+
         // TODO determine top 4 months and use it for title
 
         chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l\\\'année"], borderColor,
@@ -1109,7 +1118,7 @@ public class Engine
             seriesDict.TryAdd(previous, 1);
 
             if (dayDiff != 1) continue;
-            
+
             var duration = seriesDict[previous];
             seriesDict.Remove(previous);
             seriesDict[current] = ++duration;
@@ -1363,14 +1372,14 @@ public class Engine
         foreach (var dataKey in poemLengthByVerseLength.Keys)
         {
             AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], 
+                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
                 maxValue, 30);
         }
 
         foreach (var dataKey in variableVerseLength.Keys)
         {
             AddDataLine(0, dataKey, variableVerseLength[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines], 
+                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
                 maxValue, 30);
         }
 
@@ -1508,12 +1517,14 @@ public class Engine
         chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
         chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
         chartDataFileHelper.WriteAfterData("associatedCategories",
-        [
-            "Premier quartile",
-            "Deuxième quartile",
-            "Troisième quartile",
-            "Quatrième quartile"
-        ], customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(), yAxisLabels.ToList()));
+            [
+                "Premier quartile",
+                "Deuxième quartile",
+                "Troisième quartile",
+                "Quatrième quartile"
+            ],
+            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
+                yAxisLabels.ToList()));
         streamWriter.Close();
     }
 
@@ -1541,7 +1552,7 @@ public class Engine
                 {
                     dictionary.Add(key, 1);
                     xLabels.Add(key.Key);
-                   yLabels.Add(key.Value);
+                    yLabels.Add(key.Value);
                 }
             }
         }
@@ -1600,10 +1611,12 @@ public class Engine
         }
     }
 
-    private void AddDataLine(int x, int y, int value, List<ChartDataFileHelper.BubbleChartDataLine>[] quartileBubbleChartDatalines, int maxValue, int bubbleMaxRadiusPixels)
+    private void AddDataLine(int x, int y, int value,
+        List<ChartDataFileHelper.BubbleChartDataLine>[] quartileBubbleChartDatalines, int maxValue,
+        int bubbleMaxRadiusPixels)
     {
         // Bubble radius and color
-        decimal bubbleSize = (decimal) bubbleMaxRadiusPixels * value / maxValue;
+        decimal bubbleSize = (decimal)bubbleMaxRadiusPixels * value / maxValue;
         var bubbleColor = string.Empty;
         if (bubbleSize < (bubbleMaxRadiusPixels / 4))
         {

@@ -163,7 +163,8 @@ public class EngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHel
         }
     }
 
-    public class ComputationTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper) : IClassFixture<BasicFixture>
+    public class ComputationTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
+        : IClassFixture<BasicFixture>
     {
         [Fact]
         [Trait("UnitTest", "Computation")]
@@ -242,12 +243,14 @@ public class EngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHel
         }
     }
 
-    public class ContentImportTest(BasicFixture basicFixture): IClassFixture<BasicFixture>
+    public class ContentImportTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
     {
         [Fact]
         [Trait("UnitTest", "ContentImport")]
         public void ShouldImportSeason()
         {
+            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "github")
+                return;
             var engine = new Engine(basicFixture.Configuration);
             engine.ImportSeason(16);
         }
