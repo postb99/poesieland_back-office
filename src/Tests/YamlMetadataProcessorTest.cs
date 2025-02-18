@@ -11,7 +11,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\saisons.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/saisons.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -35,7 +35,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportDoubleAcrosticheYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "16_seizieme_saison\\les_chenes.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "16_seizieme_saison/les_chenes.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -49,7 +49,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportTypeYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\a_bacchus.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_bacchus.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -62,7 +62,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportSingleLineInfoYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\a_bacchus.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_bacchus.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -75,7 +75,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportMultilineInfoYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "22_vingt_deuxieme_saison\\l_automne_est_venu.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "22_vingt_deuxieme_saison/l_automne_est_venu.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -99,7 +99,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportNullInfoYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\novembre.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/novembre.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -112,7 +112,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportPicturesYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\present_simple.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/present_simple.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -129,7 +129,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldImportMultipleCategoriesWithMoreSpacesYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison\\soir_parfait.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/soir_parfait.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.Should().BeTrue();
@@ -148,7 +148,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
     private void ShouldExtractTags()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison\\saisons.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/saisons.md");
         var poemContentImporter = new PoemContentImporter();
         var (tags, year, poemId, _) =
             poemContentImporter.GetTagsYearVariableVerseLength(poemContentFilePath, basicFixture.Configuration);

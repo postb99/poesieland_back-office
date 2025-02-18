@@ -8,8 +8,8 @@ public class ContentProcessorTest(BasicFixture basicFixture) : IClassFixture<Bas
 {
     [Theory]
     [Trait("UnitTest", "ContentImport")]
-    [InlineData("16_seizieme_saison\\oiseaux_de_juillet.md", 3, 4)]
-    [InlineData("16_seizieme_saison\\sur_les_toits_la_pluie.md", 1, 18)]
+    [InlineData("16_seizieme_saison/oiseaux_de_juillet.md", 3, 4)]
+    [InlineData("16_seizieme_saison/sur_les_toits_la_pluie.md", 1, 18)]
     public void ShouldImportParagraphs(string poemContentPath, int paragraphs, int verses)
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),

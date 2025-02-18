@@ -11,7 +11,7 @@ public class PoemContentImporterTest(BasicFixture basicFixture): IClassFixture<B
     public void ShouldImportVariableVerseLength()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison\\jeux_de_nuits.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/jeux_de_nuits.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poem.Info.Should().Be("Vers variable : 8, 6, 4, 2");
