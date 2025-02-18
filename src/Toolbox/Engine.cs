@@ -453,8 +453,8 @@ public class Engine
             var year = poemStringDate.Substring(6);
             if (year == "1994")
                 continue;
-            var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
-            dataDict[day]++;
+            var monthDay = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
+            dataDict[monthDay]++;
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
@@ -524,6 +524,8 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
 
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
+        
+        // TODO determine top 4 months and use it for title
 
         chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l\\\'année"], borderColor,
             backgroundColor);
