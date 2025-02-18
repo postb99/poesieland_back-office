@@ -4,16 +4,10 @@ using Xunit.Abstractions;
 
 namespace Tests;
 
-public class DataQualityTest : IClassFixture<LoadDataFixture>
+public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<LoadDataFixture>
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-    private readonly Root _data;
-
-    public DataQualityTest(LoadDataFixture data, ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-        _data = data.Engine.Data;
-    }
+    private readonly Root _data = fixture.Engine.Data;
 
     [Fact]
     [Trait("UnitTest", "Quality")]
@@ -22,7 +16,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
         var notEmptySeasons = _data.Seasons.Where(x => x.Poems.Count > 0).ToList();
         foreach (var season in notEmptySeasons)
         {
-            _testOutputHelper.WriteLine($"[{season.Id} - {season.Name}]: {season.Poems.Count}");
+            testOutputHelper.WriteLine($"[{season.Id} - {season.Name}]: {season.Poems.Count}");
         }
 
         notEmptySeasons.Take(notEmptySeasons.Count - 1).All(x => x.Poems.Count == 50).Should().BeTrue();
@@ -36,7 +30,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
         var seasons = _data.Seasons.ToList();
         foreach (var season in seasons)
         {
-            _testOutputHelper.WriteLine("[{0}]: {1} words (info: {2} words)", season.Name,
+            testOutputHelper.WriteLine("[{0}]: {1} words (info: {2} words)", season.Name,
                 season.Summary.Split(' ').Length, season.Introduction.Split(' ').Length);
         }
 
@@ -106,7 +100,7 @@ public class DataQualityTest : IClassFixture<LoadDataFixture>
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Any(y => y.SubCategories.Count == 0))
             .ToList();
-        poems.ForEach(x => _testOutputHelper.WriteLine("[{0}] {1}", x.Id,
+        poems.ForEach(x => testOutputHelper.WriteLine("[{0}] {1}", x.Id,
             string.Join(',', x.Categories.Where(x => x.SubCategories.Count == 0).Select(x => x.Name))));
 
         poems.Count.Should().Be(0);

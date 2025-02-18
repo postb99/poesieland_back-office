@@ -6,23 +6,27 @@ using Xunit.Abstractions;
 
 namespace Tests;
 
-public class EngineTest : IClassFixture<LoadDataFixture>
+public class EngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper) : IClassFixture<LoadDataFixture>
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-    private readonly Engine _engine;
+    private readonly Engine _engine = fixture.Engine;
 
-    public EngineTest(LoadDataFixture data, ITestOutputHelper testOutputHelper)
+    [Fact]
+    [Trait("UnitTest", "Quality")]
+    public void ShouldCorrectlyComputeVerseLengthDataDict()
     {
-        _testOutputHelper = testOutputHelper;
-        _engine = data.Engine;
+        var dataDict = _engine.FillVerseLengthDataDict(out var _);
+        testOutputHelper.WriteLine(
+            $"Last non-empty season poem count: {_engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
+        testOutputHelper.WriteLine(
+            $"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
+        var sum = dataDict.Values.Sum(x => x.Last());
+        testOutputHelper.WriteLine($"Computed values sum: {sum}");
+        sum.Should().BeInRange(99.6m, 100.4m);
     }
 
-    public class StorageLoadTest : EngineTest
+    public class StorageLoadTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
+        : EngineTest(fixture, testOutputHelper)
     {
-        public StorageLoadTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
-        {
-        }
-
         [Fact]
         [Trait("UnitTest", "XmlRead")]
         public void ShouldLoad()
@@ -79,7 +83,7 @@ public class EngineTest : IClassFixture<LoadDataFixture>
                 poem.Paragraphs.Count.Should().Be(poem.VersesCount / 4);
             }
 
-            _testOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
+            testOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
         }
 
         [Fact]
@@ -90,13 +94,9 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         }
     }
 
-    public class ContentGenerationTest : EngineTest
+    public class ContentGenerationTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
+        : EngineTest(fixture, testOutputHelper)
     {
-        public ContentGenerationTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data,
-            testOutputHelper)
-        {
-        }
-
         [Fact]
         [Trait("UnitTest", "ContentGeneration")]
         public void ShouldBeSeasonContentDirectoryName()
@@ -163,26 +163,8 @@ public class EngineTest : IClassFixture<LoadDataFixture>
         }
     }
 
-    public class ComputationTest : EngineTest
+    public class ComputationTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper) : IClassFixture<BasicFixture>
     {
-        public ComputationTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
-        {
-        }
-
-        [Fact]
-        [Trait("UnitTest", "Computation")]
-        public void ShouldCorrectlyComputeVerseLengthDataDict()
-        {
-            var dataDict = _engine.FillVerseLengthDataDict(out var _);
-            _testOutputHelper.WriteLine(
-                $"Last non-empty season poem count: {_engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
-            _testOutputHelper.WriteLine(
-                $"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
-            var sum = dataDict.Values.Sum(x => x.Last());
-            _testOutputHelper.WriteLine($"Computed values sum: {sum}");
-            sum.Should().BeInRange(99.9m, 100.1m);
-        }
-
         [Fact]
         [Trait("UnitTest", "Computation")]
         public void ShouldCorrectlyFillCategoriesBubbleChartDataDict()
@@ -191,9 +173,11 @@ public class EngineTest : IClassFixture<LoadDataFixture>
             var xAxisLabels = new SortedSet<string>();
             var yAxisLabels = new SortedSet<string>();
 
+            var engine = new Engine(basicFixture.Configuration);
+
             // Poem with single subcategory
             var poem = new Poem { Categories = [new Category { SubCategories = ["A"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
             xAxisLabels.Should().BeEmpty();
             yAxisLabels.Should().BeEmpty();
 
@@ -201,21 +185,21 @@ public class EngineTest : IClassFixture<LoadDataFixture>
 
             // Poem with two categories
             poem = new Poem { Categories = [new Category { SubCategories = ["A", "B"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
-            
+            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+
             var expectedKey = new KeyValuePair<string, string>("A", "B");
             dict.TryGetValue(expectedKey, out var counter).Should().BeTrue();
             counter.Should().Be(1);
 
             var unExpectedKey = new KeyValuePair<string, string>("B", "A");
             dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-            
+
             xAxisLabels.ToList().Should().BeEquivalentTo(["A"]);
             yAxisLabels.ToList().Should().BeEquivalentTo(["B"]);
 
             // Poem with three categories
             poem = new Poem { Categories = [new Category { SubCategories = ["A", "B", "C"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
             expectedKey = new KeyValuePair<string, string>("A", "B");
             dict.TryGetValue(expectedKey, out var counter2).Should().BeTrue();
@@ -237,14 +221,14 @@ public class EngineTest : IClassFixture<LoadDataFixture>
 
             unExpectedKey = new KeyValuePair<string, string>("C", "A");
             dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-            
+
             xAxisLabels.ToList().Should().BeEquivalentTo(["A", "B"]);
             yAxisLabels.ToList().Should().BeEquivalentTo(["B", "C"]);
 
             // Poem with two categories, one per category
             poem = new Poem
                 { Categories = [new Category { SubCategories = ["A"] }, new Category() { SubCategories = ["B"] }] };
-            _engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
             expectedKey = new KeyValuePair<string, string>("A", "B");
             dict.TryGetValue(expectedKey, out var counter5).Should().BeTrue();
@@ -252,38 +236,31 @@ public class EngineTest : IClassFixture<LoadDataFixture>
 
             unExpectedKey = new KeyValuePair<string, string>("B", "A");
             dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-            
+
             xAxisLabels.ToList().Should().BeEquivalentTo(["A", "B"]);
             yAxisLabels.ToList().Should().BeEquivalentTo(["B", "C"]);
         }
     }
 
-    public class ContentImportTest : EngineTest
+    public class ContentImportTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
     {
-        public ContentImportTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data,
-            testOutputHelper)
-        {
-        }
-
         [Trait("UnitTest", "ContentImport")]
         public void ShouldImportSeason()
         {
-            _engine.ImportSeason(16);
+            var engine = new Engine(basicFixture.Configuration);
+            engine.ImportSeason(16);
         }
     }
 
-    public class ContentCheckTest : EngineTest
+    public class ContentCheckTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
+        : EngineTest(fixture, testOutputHelper)
     {
-        public ContentCheckTest(LoadDataFixture data, ITestOutputHelper testOutputHelper) : base(data, testOutputHelper)
-        {
-        }
-
         [Fact]
         [Trait("UnitTest", "MetadataCheck")]
         public void CheckMissingYearTagInYamlMetadata()
         {
             var anomalies = _engine.CheckMissingTagsInYamlMetadata();
-            _testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
+            testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
             anomalies.Count().Should().Be(0);
         }
     }

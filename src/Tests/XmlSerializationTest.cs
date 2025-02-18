@@ -4,15 +4,8 @@ using Xunit.Abstractions;
 
 namespace Tests;
 
-public class XmlSerializationTest
+public class XmlSerializationTest(ITestOutputHelper testOutputHelper) : IClassFixture<BasicFixture>
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-
-    public XmlSerializationTest(ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-    }
-
     [Fact]
     [Trait("UnitTest", "XmlSerialization")]
     public void ShouldSerializeToStream()
@@ -27,14 +20,15 @@ public class XmlSerializationTest
             VerseLength = "8"
         };
 
-        var data = new Root();
-        data.Seasons = [new Season()];
-        data.Seasons.First().Poems = [poem];
-        
+        var data = new Root
+        {
+            Seasons = [new Season { Poems = [poem] }]
+        };
+
         var xmlSerializer = new XmlSerializer(typeof(Root));
         using var memoryStream = new MemoryStream();
         xmlSerializer.Serialize(memoryStream, data);
         memoryStream.Position = 0;
-        _testOutputHelper.WriteLine(new StreamReader(memoryStream).ReadToEnd());
+        testOutputHelper.WriteLine(new StreamReader(memoryStream).ReadToEnd());
     }
 }

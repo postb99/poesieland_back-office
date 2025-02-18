@@ -6,7 +6,7 @@ public static class StringExtensions
 {
     public static string Escaped(this string s) => s.Replace("\"", "\\\"");
     
-    public static string Unescaped(this string s) => string.IsNullOrEmpty(s) ? string.Empty : s.Replace("\\\"", "\"");
+    public static string? Unescaped(this string s) => string.IsNullOrEmpty(s) ? null : s.Replace("\\\"", "\"");
 
     public static string UnaccentedCleaned(this string s)
     {

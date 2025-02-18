@@ -38,6 +38,3 @@ jobs:
     - name: Test
       run: dotnet test --no-build --filter "UnitTest=XmlSerialization"
       working-directory: src
-    - name: Test
-      run: dotnet test --no-build --filter "UnitTest=ContentGeneration"
-      working-directory: src

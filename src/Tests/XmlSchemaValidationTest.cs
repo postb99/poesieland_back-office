@@ -2,19 +2,22 @@
 using System.Xml;
 using System.Xml.Schema;
 using FluentAssertions;
+using Microsoft.Extensions.Configuration;
 using Toolbox.Settings;
 using Xunit.Abstractions;
 
 namespace Tests;
 
-public class XmlSchemaValidationTest
+public class XmlSchemaValidationTest : IClassFixture<BasicFixture>
 {
-    private readonly ITestOutputHelper _testOutputHelper;
     private static int _errorsCount = 0;
+    private static ITestOutputHelper _testOutputHelper;
+    private IConfiguration _configuration;
 
-    public XmlSchemaValidationTest(ITestOutputHelper testOutputHelper)
+    public XmlSchemaValidationTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
+        _configuration = basicFixture.Configuration;
     }
 
     [Theory]
@@ -23,25 +26,17 @@ public class XmlSchemaValidationTest
     public void ShouldValidateSchema(string xmlFileKey, string encoding)
     {
         _errorsCount = 0;
-        new Validator(_testOutputHelper).Validate(xmlFileKey, encoding);
+        new Validator(_configuration).Validate(xmlFileKey, encoding);
 
         _errorsCount.Should().Be(0);
     }
 
-    private class Validator
+    private class Validator(IConfiguration configuration)
     {
-        private static ITestOutputHelper _testOutputHelper;
-
-        public Validator(ITestOutputHelper testOutputHelper)
-        {
-            _testOutputHelper = testOutputHelper;
-        }
-
         public void Validate(string xmlFileKey, string encoding)
         {
-            var configuration = Helpers.GetConfiguration();
             XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
-            xmlReaderSettings.Schemas.Add("https://github.com/Xarkam/poesieland/ns",
+            xmlReaderSettings.Schemas.Add("https://github.com/postb99/poesieland/ns",
                 configuration[Constants.XML_SCHEMA_FILE]);
             xmlReaderSettings.ValidationType = ValidationType.Schema;
             xmlReaderSettings.ValidationEventHandler += ValidationEventHandler;

@@ -5,16 +5,10 @@ using Xunit.Abstractions;
 
 namespace Tests;
 
-public class DataMiningTests : IClassFixture<LoadDataFixture>
+public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<LoadDataFixture>
 {
-    private readonly ITestOutputHelper _testOutputHelper;
-    private readonly Root _data;
-
-    public DataMiningTests(LoadDataFixture data, ITestOutputHelper testOutputHelper)
-    {
-        _testOutputHelper = testOutputHelper;
-        _data = data.Engine.Data;
-    }
+    private readonly Root _data = fixture.Engine.Data;
 
     [Theory]
     [Trait("DataMining", "Lookup")]
@@ -25,7 +19,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.VerseLength == verseLength.ToString());
 
-        _testOutputHelper.WriteLine("Verse length {0}: {1}",
+        testOutputHelper.WriteLine("Verse length {0}: {1}",
             verseLength, string.Join(' ', poems.Select(x => x.Id).ToList()));
     }
 
@@ -37,7 +31,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.VersesCount == verseCount);
 
-        _testOutputHelper.WriteLine("Verse count {0}: {1}",
+        testOutputHelper.WriteLine("Verse count {0}: {1}",
             verseCount, string.Join(' ', poems.Select(x => x.Id).ToList()));
     }
 
@@ -134,7 +128,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         {
             var poems = season.Poems.OrderBy(x => x.Date).ToList();
             var lastPoem = poems.LastOrDefault();
-            _testOutputHelper.WriteLine("[{0} - {4}]: {1} - {2} ({3})", season.Name, poems.FirstOrDefault()?.TextDate,
+            testOutputHelper.WriteLine("[{0} - {4}]: {1} - {2} ({3})", season.Name, poems.FirstOrDefault()?.TextDate,
                 lastPoem?.TextDate,
                 lastPoem?.Id, poems.Count);
         }
@@ -146,7 +140,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Any(x => x.SubCategories.Count > 1));
         foreach (var poem in poems)
-            _testOutputHelper.WriteLine(poem.Id);
+            testOutputHelper.WriteLine(poem.Id);
     }
 
     [Fact]
@@ -158,36 +152,36 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             var categoryNames = poem.Categories.Select(x => x.Name);
             if (categoryNames.Count() > categoryNames.Distinct().Count())
             {
-                _testOutputHelper.WriteLine(poem.Id);
+                testOutputHelper.WriteLine(poem.Id);
             }
         }
     }
-    
+
     [Fact]
     [Trait("DataMining", "Lookup")]
     public void PoemWithMoreThanTwoSubCategories()
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Sum(x => x.SubCategories.Count) > 2);
         foreach (var poem in poems)
-            _testOutputHelper.WriteLine(poem.Id);
+            testOutputHelper.WriteLine(poem.Id);
     }
-    
+
     [Fact]
     [Trait("DataMining", "Lookup")]
     public void PoemWithMoreThanThreeSubCategories()
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Sum(x => x.SubCategories.Count) > 3);
         foreach (var poem in poems)
-            _testOutputHelper.WriteLine(poem.Id);
+            testOutputHelper.WriteLine(poem.Id);
     }
-    
+
     [Fact]
     [Trait("DataMining", "Lookup")]
     public void PoemWithMoreThanFourSubCategories()
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.Categories.Sum(x => x.SubCategories.Count) > 4);
         foreach (var poem in poems)
-            _testOutputHelper.WriteLine(poem.Id);
+            testOutputHelper.WriteLine(poem.Id);
     }
 
     [Fact]
@@ -198,7 +192,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         {
             if (poem.VersesCount % 2 != 0)
             {
-                _testOutputHelper.WriteLine(poem.Id);
+                testOutputHelper.WriteLine(poem.Id);
             }
         }
     }
@@ -214,7 +208,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                 var letter = verse[0].ToString();
                 if (letter != letter.ToUpperInvariant())
                 {
-                    _testOutputHelper.WriteLine(poem.Id);
+                    testOutputHelper.WriteLine(poem.Id);
                 }
             }
         }
@@ -229,7 +223,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
             var partialTitle = poem.Title.Substring(1);
             if (partialTitle != partialTitle.ToLowerInvariant())
             {
-                _testOutputHelper.WriteLine(poem.Id);
+                testOutputHelper.WriteLine(poem.Id);
             }
         }
     }
@@ -248,7 +242,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                 sb.Append(verse[0]);
             }
 
-            _testOutputHelper.WriteLine($"[{poem.Id}] {sb}");
+            testOutputHelper.WriteLine($"[{poem.Id}] {sb}");
         }
     }
 
@@ -260,7 +254,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
         {
             if (poem.VersesCount % 4 == 0 && !poem.HasQuatrains)
             {
-                _testOutputHelper.WriteLine(poem.Id);
+                testOutputHelper.WriteLine(poem.Id);
             }
         }
     }
@@ -286,7 +280,7 @@ public class DataMiningTests : IClassFixture<LoadDataFixture>
                         var penultimateChar = verse[match.Index - 2];
                         if (previousChar == '"') continue;
                         if (penultimateChar == '.' || penultimateChar == '!') continue;
-                        _testOutputHelper.WriteLine($"{poem.Id} : {match.Value}");
+                        testOutputHelper.WriteLine($"{poem.Id} : {match.Value}");
                         poemIdPrinted = true;
                         break;
                     }

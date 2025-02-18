@@ -2,14 +2,14 @@
 
 namespace Tests;
 
-public class LoadDataFixture : IDisposable
+public class LoadDataFixture : BasicFixture
 {
     public Engine Engine { get; private set; }
 
     public LoadDataFixture()
     {
         // Do "global" initialization here; Only called once.
-        Engine = new Engine(Helpers.GetConfiguration());
+        Engine = new Engine(Configuration);
         Engine.Load();
     }
 

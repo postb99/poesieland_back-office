@@ -4,13 +4,13 @@ using Toolbox.Settings;
 
 namespace Tests;
 
-public class StorageSettingsTest
+public class StorageSettingsTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
 {
     [Fact]
     [Trait("UnitTest", "Computation")]
     public void ShouldGetCorrectSubcategorieNames()
     {
-        var storageSettings = Helpers.GetConfiguration().GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+        var storageSettings = basicFixture.Configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
         storageSettings.Should().NotBeNull();
         storageSettings!.SubcategorieNames.Count.Should().Be(35);
     }

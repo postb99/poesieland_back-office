@@ -4,17 +4,17 @@ using Toolbox.Settings;
 
 namespace Tests;
 
-public class TomlMetadataProcessorTest
+public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
 {
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     private void ShouldImportTomlMetadata()
     {
-        var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "1_premiere_saison\\j_avais_l_heur_de_m_asseoir.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!,
+            "1_premiere_saison\\j_avais_l_heur_de_m_asseoir.md");
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasTomlMetadata.Should().BeTrue();
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         poem.Title.Should().Be("J'avais l'heur de m'asseoir...");
@@ -34,11 +34,10 @@ public class TomlMetadataProcessorTest
     [Trait("UnitTest", "ContentImport")]
     private void ShouldImportInfoTomlMetadata()
     {
-        var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison\\barcarolle.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison\\barcarolle.md");
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasTomlMetadata.Should().BeTrue();
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         poem.Categories.Count.Should().Be(1);
@@ -46,16 +45,15 @@ public class TomlMetadataProcessorTest
         poem.Categories.First().SubCategories.First().Should().Be("Musique et chant");
         poem.Info.Should().Be("Inspiré par l'air homonyme d'Offenbach.");
     }
-    
+
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     private void ShouldImportMultiLineInfoTomlMetadata()
     {
-        var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison\\est_ce_un_automne.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison\\est_ce_un_automne.md");
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasTomlMetadata.Should().BeTrue();
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         /*
@@ -69,16 +67,15 @@ public class TomlMetadataProcessorTest
         poem.Info.Should().Be(
             $"{{{{% notice style=\"primary\" %}}}}{Environment.NewLine}Encore une variation sur cette question que j'adore...{Environment.NewLine}{{{{% include \"../../includes/est_ce_un_automne\" hidefirstheading %}}}}{Environment.NewLine}{{{{% /notice %}}}}");
     }
-    
+
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     private void ShouldImportDoubleAcrosticheTomlMetadata()
     {
-        var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "10_dixieme_saison\\cathedrale_de_lumieres.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "10_dixieme_saison\\cathedrale_de_lumieres.md");
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasTomlMetadata.Should().BeTrue();
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         poem.DoubleAcrostiche!.First.Should().Be("Cathédrale");
@@ -89,11 +86,10 @@ public class TomlMetadataProcessorTest
     [Trait("UnitTest", "ContentImport")]
     private void ShouldImportMultipleCategoriesTomlMetadata()
     {
-        var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "15_quinzieme_saison\\du_gris_au_noir.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "15_quinzieme_saison\\du_gris_au_noir.md");
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasTomlMetadata.Should().BeTrue();
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         poem.Acrostiche.Should().Be("Du gris au noir");
@@ -132,26 +128,24 @@ public class TomlMetadataProcessorTest
     [Trait("UnitTest", "ContentImport")]
     private void ShouldImportPictures()
     {
-        var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\une_derniere_visite.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\une_derniere_visite.md");
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasTomlMetadata.Should().BeTrue();
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         poem.Pictures.Count.Should().Be(4);
         poem.Pictures[0].Should().Be("Le puits du château de Ham-sous-Varsberg");
     }
-    
+
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     private void ShouldImportVariableVerseTomlMetadata()
     {
-        var configuration = Helpers.GetConfiguration();
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\a_quai.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison\\a_quai.md");
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, configuration);
+        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasTomlMetadata.Should().BeTrue();
         poemContentImporter.HasYamlMetadata.Should().BeFalse();
         poem.Info.Should().Be("Vers variable : 5, 2");

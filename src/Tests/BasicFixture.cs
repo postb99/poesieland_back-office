@@ -2,14 +2,22 @@
 
 namespace Tests;
 
-public static class Helpers
+public class BasicFixture : IDisposable
 {
-    public static IConfiguration GetConfiguration()
+    public IConfiguration Configuration { get; }
+
+    public BasicFixture()
     {
+        // Do "global" initialization here; Only called once.
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
         configurationBuilder.AddJsonFile("appsettings.Test.json", optional: false, reloadOnChange: true);
         configurationBuilder.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true);
-        return configurationBuilder.Build();
+        Configuration = configurationBuilder.Build();
+    }
+
+    public void Dispose()
+    {
+        // Do "global" teardown here; Only called once.
     }
 }
