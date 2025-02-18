@@ -1,3 +1,4 @@
+using System.Globalization;
 using FluentAssertions;
 using Toolbox.Domain;
 
@@ -35,6 +36,7 @@ public class SeasonTest
     [InlineData("01.03.2002", "01.11.2004", "mars 2002 à novembre 2004")]
     public void ShouldComputePeriod(string firstDate, string secondDate, string expectedPeriod)
     {
+        Thread.CurrentThread.CurrentCulture = new CultureInfo("fr");
         var season = new Season
         {
             Poems =

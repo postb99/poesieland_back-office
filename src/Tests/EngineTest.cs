@@ -242,8 +242,9 @@ public class EngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHel
         }
     }
 
-    public class ContentImportTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
+    public class ContentImportTest(BasicFixture basicFixture): IClassFixture<BasicFixture>
     {
+        [Fact]
         [Trait("UnitTest", "ContentImport")]
         public void ShouldImportSeason()
         {
