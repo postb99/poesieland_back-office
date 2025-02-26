@@ -1588,7 +1588,7 @@ public class Engine
 
     public void OutputSeasonsDuration()
     {
-        foreach (var season in Data.Seasons)
+        foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
         {
             var dates = season.Poems.Select(x => x.Date).OrderBy(x => x.Date).ToList();
             var duration = dates[dates.Count() - 1] - dates[0];
