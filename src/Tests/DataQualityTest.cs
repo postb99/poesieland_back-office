@@ -1,5 +1,6 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Toolbox.Domain;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Tests;
@@ -19,8 +20,8 @@ public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutp
             testOutputHelper.WriteLine($"[{season.Id} - {season.Name}]: {season.Poems.Count}");
         }
 
-        notEmptySeasons.Take(notEmptySeasons.Count - 1).All(x => x.Poems.Count == 50).Should().BeTrue();
-        notEmptySeasons.Skip(notEmptySeasons.Count - 1).Single(x => x.Poems.Count <= 50).Should().NotBeNull();
+        notEmptySeasons.Take(notEmptySeasons.Count - 1).All(x => x.Poems.Count == 50).ShouldBeTrue();
+        notEmptySeasons.Skip(notEmptySeasons.Count - 1).Single(x => x.Poems.Count <= 50).ShouldNotBeNull();
     }
 
     [Fact]
@@ -34,28 +35,28 @@ public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutp
                 season.Summary.Split(' ').Length, season.Introduction.Split(' ').Length);
         }
 
-        seasons.All(x => x.Summary.Split(' ').Length <= 70).Should().BeTrue();
+        seasons.All(x => x.Summary.Split(' ').Length <= 70).ShouldBeTrue();
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void SeasonShouldHaveInfo()
     {
-        _data.Seasons.Count(x => string.IsNullOrEmpty(x.Introduction)).Should().Be(0);
+        _data.Seasons.Count(x => string.IsNullOrEmpty(x.Introduction)).ShouldBe(0);
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveTitle()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.Title)).Should().BeTrue();
+        _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.Title)).ShouldBeTrue();
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveDate()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.TextDate)).Should().BeTrue();
+        _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.TextDate)).ShouldBeTrue();
     }
 
     [Fact]
@@ -69,29 +70,28 @@ public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutp
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveCategory()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Categories.Count > 0).Should().BeTrue();
+        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Categories.Count > 0).ShouldBeTrue();
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveParagraphs()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).Should().BeTrue();
+        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).ShouldBeTrue();
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemIdShouldEndWithSeasonId()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0).Should().BeTrue();
+        _data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0).ShouldBeTrue();
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void ParagraphShouldHaveVerses()
     {
-        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).Should()
-            .BeTrue();
+        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).ShouldBeTrue();
     }
 
     [Fact]
@@ -103,7 +103,7 @@ public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutp
         poems.ForEach(x => testOutputHelper.WriteLine("[{0}] {1}", x.Id,
             string.Join(',', x.Categories.Where(x => x.SubCategories.Count == 0).Select(x => x.Name))));
 
-        poems.Count.Should().Be(0);
+        poems.Count.ShouldBe(0);
     }
 
     [Fact]
@@ -112,8 +112,7 @@ public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutp
     {
         _data.Seasons.SelectMany(x => x.Poems).Where(x => x.DoubleAcrostiche != null).All(x =>
                 !string.IsNullOrEmpty(x.DoubleAcrostiche!.First) &&
-                !string.IsNullOrEmpty(x.DoubleAcrostiche.Second)).Should()
-            .BeTrue();
+                !string.IsNullOrEmpty(x.DoubleAcrostiche.Second)).ShouldBeTrue();
     }
 
     [Theory]
@@ -125,6 +124,6 @@ public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutp
     public void ShouldGetYears(int seasonId, string expectedValue)
     {
         var season = _data.Seasons.First(x => x.Id == seasonId);
-        season.Years.Should().Be(expectedValue);
+        season.Years.ShouldBe(expectedValue);
     }
 }

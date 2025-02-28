@@ -1,6 +1,7 @@
 ﻿using System.Text;
-using FluentAssertions;
+using Shouldly;
 using Toolbox.Domain;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Tests;
@@ -28,7 +29,7 @@ public class StringExtensionsTest
     [InlineData("Sur un air, souffles", "sur_un_air_souffles")]
     public void ShouldBeUnaccentedCleaned(string input, string expected)
     {
-        input.UnaccentedCleaned().Should().Be(expected);
+        input.UnaccentedCleaned().ShouldBe(expected);
     }
 
     [Theory]
@@ -39,7 +40,7 @@ public class StringExtensionsTest
     public void ShouldBeEscaped(string input, string expected)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
-        input.Escaped().Should().Be(expected);
+        input.Escaped().ShouldBe(expected);
     }
     
     [Theory]
@@ -51,7 +52,7 @@ public class StringExtensionsTest
     public void ShouldBeUnescaped(string expected, string input)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
-        input.Unescaped().Should().Be(expected);
+        input.Unescaped().ShouldBe(expected);
     }
     
     [Theory]
@@ -63,6 +64,6 @@ public class StringExtensionsTest
     public void ShouldBeCleanedContent(string input, string expected)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
-        input.CleanedContent().Should().Be(expected);
+        input.CleanedContent().ShouldBe(expected);
     }
 }

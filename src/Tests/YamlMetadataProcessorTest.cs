@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Toolbox;
 using Toolbox.Settings;
+using Xunit;
 
 namespace Tests;
 
@@ -14,20 +15,20 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/saisons.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        poem.Title.Should().Be("Saisons");
-        poem.Id.Should().Be("saisons_18");
-        poem.TextDate.Should().Be("01.11.2023");
-        poem.Categories.Count.Should().Be(2);
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Title.ShouldBe("Saisons");
+        poem.Id.ShouldBe("saisons_18");
+        poem.TextDate.ShouldBe("01.11.2023");
+        poem.Categories.Count.ShouldBe(2);
         var saisonsCategorieIndex = poem.Categories.FindIndex(x => x.Name == "Saisons");
         var natureCategorieIndex = poem.Categories.FindIndex(x => x.Name == "Nature");
-        poem.Categories[saisonsCategorieIndex].SubCategories.Count.Should().Be(4);
-        poem.Categories[saisonsCategorieIndex].SubCategories.First().Should().Be("Automne");
-        poem.Categories[natureCategorieIndex].SubCategories.First().Should().Be("Climat");
-        poem.VerseLength.Should().Be("8");
-        poem.PoemType.Should().BeNull();
-        position.Should().Be(11);
+        poem.Categories[saisonsCategorieIndex].SubCategories.Count.ShouldBe(4);
+        poem.Categories[saisonsCategorieIndex].SubCategories.First().ShouldBe("Automne");
+        poem.Categories[natureCategorieIndex].SubCategories.First().ShouldBe("Climat");
+        poem.VerseLength.ShouldBe("8");
+        poem.PoemType.ShouldBeNull();
+        position.ShouldBe(11);
     }
 
     [Fact(Skip = "Metadata updated to TOML, no more test case available")]
@@ -38,10 +39,10 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "16_seizieme_saison/les_chenes.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        poem.DoubleAcrostiche!.First.Should().Be("Chênes");
-        poem.DoubleAcrostiche.Second.Should().Be("destin");
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.DoubleAcrostiche!.First.ShouldBe("Chênes");
+        poem.DoubleAcrostiche.Second.ShouldBe("destin");
     }
 
     [Fact]
@@ -52,9 +53,9 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_bacchus.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        poem.PoemType.Should().Be("sonnet");
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.PoemType.ShouldBe("sonnet");
     }
 
     [Fact]
@@ -65,9 +66,9 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_bacchus.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        poem.Info.Should().Be("Reprise d'un poème-chanson de 1994");
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Info.ShouldBe("Reprise d'un poème-chanson de 1994");
     }
 
     [Fact]
@@ -78,8 +79,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "22_vingt_deuxieme_saison/l_automne_est_venu.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         /*
         {{% notice style="primary" %}}
         Acrostiche : l'automne venu.
@@ -88,9 +89,9 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         {{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
         {{% /notice %}}
         */
-        poem.Info.Should().StartWith("{{% notice style=\"primary\" %}}");
-        poem.Info.Should().EndWith("{{% /notice %}}");
-        poem.Info.Should().Be(
+        poem.Info.ShouldStartWith("{{% notice style=\"primary\" %}}");
+        poem.Info.ShouldEndWith("{{% /notice %}}");
+        poem.Info.ShouldBe(
             $"{{{{% notice style=\"primary\" %}}}}{Environment.NewLine}Acrostiche : l'automne venu.{Environment.NewLine}{Environment.NewLine}Les poèmes qui commencent par ce vers...{Environment.NewLine}{{{{% include \"../../includes/l_automne_est_venu\" hidefirstheading %}}}}{Environment.NewLine}{{{{% /notice %}}}}");
     }
 
@@ -102,9 +103,9 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/novembre.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        poem.Info.Should().BeNull();
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Info.ShouldBeNull();
     }
 
     [Fact]
@@ -115,13 +116,13 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/present_simple.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        //poem.Info.Should().Be("Vers variable : 6, 3");
-        poem.VerseLength.Should().Be("11");
-        poem.Pictures.Count.Should().Be(2);
-        poem.Pictures[0].Should().Be("17 décembre 2023");
-        poem.Pictures[1].Should().Be("Avec mon chien le 5 juillet 2022");
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        //poem.Info.ShouldBe("Vers variable : 6, 3");
+        poem.VerseLength.ShouldBe("11");
+        poem.Pictures.Count.ShouldBe(2);
+        poem.Pictures[0].ShouldBe("17 décembre 2023");
+        poem.Pictures[1].ShouldBe("Avec mon chien le 5 juillet 2022");
     }
 
     [Fact]
@@ -132,15 +133,13 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/soir_parfait.md");
         var poemContentImporter = new PoemContentImporter();
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        poem.Categories.Count.Should().Be(2);
-        poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.Count.Should().Be(1);
-        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count.Should().Be(1);
-        poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault().Should()
-            .Be("Ciel");
-        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault().Should()
-            .Be("Crépuscule");
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Categories.Count.ShouldBe(2);
+        poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.Count.ShouldBe(1);
+        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count.ShouldBe(1);
+        poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault().ShouldBe("Ciel");
+        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault().ShouldBe("Crépuscule");
     }
 
     [Fact]
@@ -152,11 +151,11 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         var poemContentImporter = new PoemContentImporter();
         var (tags, year, poemId, _) =
             poemContentImporter.GetTagsYearVariableVerseLength(poemContentFilePath, basicFixture.Configuration);
-        poemContentImporter.HasYamlMetadata.Should().BeTrue();
-        poemContentImporter.HasTomlMetadata.Should().BeFalse();
-        tags.Count.Should().Be(3);
-        tags[0].Should().Be("2023");
-        tags[1].Should().Be("saisons");
-        tags[2].Should().Be("nature");
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        tags.Count.ShouldBe(3);
+        tags[0].ShouldBe("2023");
+        tags[1].ShouldBe("saisons");
+        tags[2].ShouldBe("nature");
     }
 }

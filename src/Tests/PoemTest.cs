@@ -1,5 +1,6 @@
-using FluentAssertions;
+using Shouldly;
 using Toolbox.Domain;
+using Xunit;
 
 namespace Tests;
 
@@ -14,7 +15,7 @@ public class PoemTest
             VerseLength = "8"
         };
 
-        poem.DetailedVerseLength.Should().Be("8");
+        poem.DetailedVerseLength.ShouldBe("8");
     }
     
     [Theory]
@@ -30,7 +31,7 @@ public class PoemTest
             Info = info
         };
 
-        poem.DetailedVerseLength.Should().Be("6, 3");
+        poem.DetailedVerseLength.ShouldBe("6, 3");
     }
 
     [Fact]
@@ -44,7 +45,7 @@ public class PoemTest
         };
 
         var func = () => poem.DetailedVerseLength;
-        func.Should().Throw<InvalidOperationException>();
+        func.ShouldThrow<InvalidOperationException>();
     }
     
     [Fact]
@@ -58,6 +59,6 @@ public class PoemTest
         };
 
         var func = () => poem.DetailedVerseLength;
-        func.Should().Throw<InvalidOperationException>();
+        func.ShouldThrow<InvalidOperationException>();
     }
 }

@@ -1,6 +1,7 @@
 using System.Globalization;
-using FluentAssertions;
+using Shouldly;
 using Toolbox.Domain;
+using Xunit;
 
 namespace Tests;
 
@@ -24,7 +25,7 @@ public class SeasonTest
             ]
         };
 
-        season.Years.Should().Be(expectedYears);
+        season.Years.ShouldBe(expectedYears);
     }
 
     [Theory]
@@ -46,6 +47,6 @@ public class SeasonTest
             ]
         };
 
-        season.Period.Should().Be(expectedPeriod);
+        season.Period.ShouldBe(expectedPeriod);
     }
 }

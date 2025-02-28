@@ -510,8 +510,7 @@ public class Engine
             chartId = "poemDayRadar";
         }
 
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir,
-            storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -534,10 +533,9 @@ public class Engine
 
         var backgroundColor = borderColor?.Replace("1)", "0.5)");
 
-        // TODO determine top 4 months and use it for title
+        var title = $"Mois les plus représentés : {string.Join(", ", GetTopMostMonths(dataDict))}";
 
-        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l\\\'année"], borderColor,
-            backgroundColor);
+        chartDataFileHelper.WriteAfterData(chartId, [title], borderColor, backgroundColor);
         streamWriter.Close();
 
         if (storageSubCategory != null || storageCategory != null) return;
@@ -1586,6 +1584,25 @@ public class Engine
         return dataDict;
     }
 
+    public List<string> GetTopMostMonths(Dictionary<string, int> monthDayDict)
+    {
+        var monthDict = new Dictionary<string, int>();
+        foreach (var monthDay in monthDayDict.Keys)
+        {
+            var month = monthDay.Substring(0, 2);
+            if (monthDict.TryGetValue(month, out _))
+            {
+                monthDict[month] += monthDayDict[monthDay];
+            }
+            else
+            {
+                monthDict.Add(month, monthDayDict[monthDay]);
+            }
+        }
+
+        return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key).Select(GetMonthLabel).ToList();
+    }
+
     public void OutputSeasonsDuration()
     {
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
@@ -1683,6 +1700,39 @@ public class Engine
                 return day == "01" ? "Décembre" : day == "21" ? "Hiver" : string.Empty;
             default:
                 return string.Empty;
+        }
+    }
+
+    private string GetMonthLabel(string month)
+    {
+        switch (month)
+        {
+            case "01":
+                return "janvier";
+            case "02":
+                return "février";
+            case "03":
+                return "mars";
+            case "04":
+                return "avril";
+            case "05":
+                return "mai";
+            case "06":
+                return "juin";
+            case "07":
+                return "juillet";
+            case "08":
+                return "août";
+            case "09":
+                return "septembre";
+            case "10":
+                return "octobre";
+            case "11":
+                return "novembre";
+            case "12":
+                return "décembre";
+            default:
+                return "?";
         }
     }
 

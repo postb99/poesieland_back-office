@@ -1,9 +1,10 @@
 ﻿using System.Text;
 using System.Xml;
 using System.Xml.Schema;
-using FluentAssertions;
 using Microsoft.Extensions.Configuration;
+using Shouldly;
 using Toolbox.Settings;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Tests;
@@ -28,7 +29,7 @@ public class XmlSchemaValidationTest : IClassFixture<BasicFixture>
         _errorsCount = 0;
         new Validator(_configuration).Validate(xmlFileKey, encoding);
 
-        _errorsCount.Should().Be(0);
+        _errorsCount.ShouldBe(0);
     }
 
     private class Validator(IConfiguration configuration)

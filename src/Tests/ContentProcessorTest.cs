@@ -1,6 +1,7 @@
-﻿using FluentAssertions;
+﻿using Shouldly;
 using Toolbox;
 using Toolbox.Settings;
+using Xunit;
 
 namespace Tests;
 
@@ -15,8 +16,8 @@ public class ContentProcessorTest(BasicFixture basicFixture) : IClassFixture<Bas
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, poemContentPath);
         var poemContentImporter = new PoemContentImporter();
-        var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
-        poem.Paragraphs.Count.Should().Be(paragraphs);
-        poem.Paragraphs.ForEach(p => p.Verses.Count.Should().Be(verses));
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
+        poem.Paragraphs.Count.ShouldBe(paragraphs);
+        poem.Paragraphs.ForEach(p => p.Verses.Count.ShouldBe(verses));
     }
 }

@@ -1,12 +1,14 @@
 ﻿using AutoFixture;
-using FluentAssertions;
+using Shouldly;
 using Toolbox;
 using Toolbox.Domain;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace Tests;
 
-public class EngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper) : IClassFixture<LoadDataFixture>
+public class DataDependantEngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<LoadDataFixture>
 {
     private readonly Engine _engine = fixture.Engine;
 
@@ -21,251 +23,185 @@ public class EngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHel
             $"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
         var sum = dataDict.Values.Sum(x => x.Last());
         testOutputHelper.WriteLine($"Computed values sum: {sum}");
-        sum.Should().BeInRange(99.6m, 100.4m);
+        sum.ShouldBeInRange(99.6m, 100.4m);
     }
 
-    public class StorageLoadTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-        : EngineTest(fixture, testOutputHelper)
+    [Fact]
+    [Trait("UnitTest", "XmlRead")]
+    public void ShouldLoad()
     {
-        [Fact]
-        [Trait("UnitTest", "XmlRead")]
-        public void ShouldLoad()
-        {
-            _engine.Data.Should().NotBeNull();
-        }
-
-        [Fact]
-        [Trait("UnitTest", "XmlRead")]
-        public void ShouldLoadAcrostiche()
-        {
-            var poemWithAcrostiche = _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "resurrection_14");
-            poemWithAcrostiche.Should().NotBeNull();
-            poemWithAcrostiche!.Acrostiche.Should().Be("Résurrection");
-        }
-
-        [Fact]
-        [Trait("UnitTest", "XmlRead")]
-        public void ShouldLoadDoubleAcrostiche()
-        {
-            var poemWithFirstAndSecondAcrostiche =
-                _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
-            poemWithFirstAndSecondAcrostiche.Should().NotBeNull();
-            poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche.Should().NotBeNull();
-            poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.Should().Be("L'air");
-            poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.Second.Should().Be("créé");
-        }
-
-        [Theory]
-        [Trait("UnitTest", "XmlRead")]
-        [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, 14)]
-        [InlineData("grand_sud_1", 1, 12)]
-        [InlineData("illusion_1", 1, 8)]
-        public void ShouldHaveVersesCount(string poemId, int seasonId, int expectedCount)
-        {
-            var poem = _engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
-            poem.VersesCount.Should().Be(expectedCount);
-        }
-
-        [Theory]
-        [Trait("UnitTest", "XmlRead")]
-        [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, false)]
-        [InlineData("grand_sud_1", 1, true)]
-        [InlineData("illusion_1", 1, false)]
-        [InlineData("matin_privilege_15", 15, false)]
-        [InlineData("ombres_et_lumieres_15", 15, true)]
-        [InlineData("les_chenes_16", 16, true)]
-        public void ShouldHaveQuatrains(string poemId, int seasonId, bool expectedHasQuatrain)
-        {
-            var poem = _engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
-            poem.HasQuatrains.Should().Be(expectedHasQuatrain);
-            if (expectedHasQuatrain)
-            {
-                poem.Paragraphs.Count.Should().Be(poem.VersesCount / 4);
-            }
-
-            testOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
-        }
-
-        [Fact]
-        [Trait("UnitTest", "XmlRead")]
-        public void ShouldBePoemSeasonId()
-        {
-            _engine.Data.Seasons[0].Poems[0].SeasonId.Should().Be(1);
-        }
+        _engine.Data.ShouldNotBeNull();
     }
 
-    public class ContentGenerationTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-        : EngineTest(fixture, testOutputHelper)
+    [Fact]
+    [Trait("UnitTest", "XmlRead")]
+    public void ShouldLoadAcrostiche()
     {
-        [Fact]
-        [Trait("UnitTest", "ContentGeneration")]
-        public void ShouldBeSeasonContentDirectoryName()
-        {
-            _engine.Data.Seasons[0].ContentDirectoryName.Should().Be("1_premiere_saison");
-        }
-
-        [Fact]
-        [Trait("UnitTest", "ContentGeneration")]
-        public void ShouldCreateFirstSeasonIndexFile()
-        {
-            _engine.GenerateSeasonIndexFile(1);
-        }
-
-        [Fact]
-        [Trait("UnitTest", "ContentGeneration")]
-        public void ShouldBePoemContentFileName()
-        {
-            _engine.Data.Seasons[0].Poems[0].ContentFileName.Should().Be("j_avais_l_heur_de_m_asseoir.md");
-        }
-
-        [Fact]
-        [Trait("UnitTest", "ContentGeneration")]
-        public void ShouldCreateFirstPoemFile()
-        {
-            _engine.GeneratePoemFile(_engine.Data.Seasons[0].Poems[0]);
-        }
-
-        [Trait("UnitTest", "ContentGeneration")]
-        [Theory]
-        [InlineData("simplest", false, null, false, false)]
-        [InlineData("only_info", false, null, false, true)]
-        [InlineData("only_type", false, PoemType.Sonnet, false, false)]
-        [InlineData("type_info", false, PoemType.Sonnet, false, true)]
-        [InlineData("only_acrostiche", true, null, false, false)]
-        [InlineData("acrostiche_type", true, PoemType.Sonnet, false, false)]
-        [InlineData("acrostiche_info", true, null, false, true)]
-        [InlineData("acrostiche_type_info", true, PoemType.Sonnet, false, true)]
-        [InlineData("only_double_acrostiche", false, null, true, false)]
-        [InlineData("type_double_acrostiche", false, PoemType.Sonnet, true, false)]
-        [InlineData("double_acrostiche_info", false, null, true, true)]
-        [InlineData("double_acrostiche_type_info", false, PoemType.Sonnet, true, true)]
-        public void ShouldCreatePoemFileWhateverContent(string fileName, bool isAcrostiche, PoemType? poemType,
-            bool isDoubleAcrostiche, bool hasInfo)
-        {
-            var poem = new Fixture().Build<Poem>()
-                .With(x => x.TextDate, "01.01.1900")
-                .With(x => x.Title, fileName)
-                .With(x => x.Id, $"{fileName}_99")
-                .With(x => x.Acrostiche, isAcrostiche ? "Acrostiche" : null)
-                .With(x => x.PoemType, poemType?.ToString())
-                .With(x => x.DoubleAcrostiche,
-                    isDoubleAcrostiche ? new DoubleAcrostiche { First = "Double", Second = "Acrostiche" } : null)
-                .With(x => x.Info, hasInfo ? "Some info text" : null)
-                .With(x => x.VerseLength, "8")
-                .Create();
-
-            var fictiveSeason = new Season
-                { Id = 99, Name = "Test", NumberedName = "Test", Summary = "Test", Poems = new List<Poem> { poem } };
-
-            _engine.Data.Seasons.Add(fictiveSeason);
-            _engine.GenerateSeasonIndexFile(fictiveSeason.Id);
-            _engine.GeneratePoemFile(poem);
-        }
+        var poemWithAcrostiche = _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "resurrection_14");
+        poemWithAcrostiche.ShouldNotBeNull();
+        poemWithAcrostiche!.Acrostiche.ShouldBe("Résurrection");
     }
 
-    public class ComputationTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
-        : IClassFixture<BasicFixture>
+    [Fact]
+    [Trait("UnitTest", "XmlRead")]
+    public void ShouldLoadDoubleAcrostiche()
     {
-        [Fact]
-        [Trait("UnitTest", "Computation")]
-        public void ShouldCorrectlyFillCategoriesBubbleChartDataDict()
-        {
-            Dictionary<KeyValuePair<string, string>, int> dict = new();
-            var xAxisLabels = new SortedSet<string>();
-            var yAxisLabels = new SortedSet<string>();
-
-            var engine = new Engine(basicFixture.Configuration);
-
-            // Poem with single subcategory
-            var poem = new Poem { Categories = [new Category { SubCategories = ["A"] }] };
-            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
-            xAxisLabels.Should().BeEmpty();
-            yAxisLabels.Should().BeEmpty();
-
-            dict.Should().BeEmpty();
-
-            // Poem with two categories
-            poem = new Poem { Categories = [new Category { SubCategories = ["A", "B"] }] };
-            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
-
-            var expectedKey = new KeyValuePair<string, string>("A", "B");
-            dict.TryGetValue(expectedKey, out var counter).Should().BeTrue();
-            counter.Should().Be(1);
-
-            var unExpectedKey = new KeyValuePair<string, string>("B", "A");
-            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-
-            xAxisLabels.ToList().Should().BeEquivalentTo(["A"]);
-            yAxisLabels.ToList().Should().BeEquivalentTo(["B"]);
-
-            // Poem with three categories
-            poem = new Poem { Categories = [new Category { SubCategories = ["A", "B", "C"] }] };
-            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
-
-            expectedKey = new KeyValuePair<string, string>("A", "B");
-            dict.TryGetValue(expectedKey, out var counter2).Should().BeTrue();
-            counter2.Should().Be(2);
-
-            unExpectedKey = new KeyValuePair<string, string>("B", "A");
-            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-
-            expectedKey = new KeyValuePair<string, string>("A", "C");
-            dict.TryGetValue(expectedKey, out var counter3).Should().BeTrue();
-            counter3.Should().Be(1);
-
-            expectedKey = new KeyValuePair<string, string>("B", "C");
-            dict.TryGetValue(expectedKey, out var counter4).Should().BeTrue();
-            counter4.Should().Be(1);
-
-            unExpectedKey = new KeyValuePair<string, string>("C", "B");
-            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-
-            unExpectedKey = new KeyValuePair<string, string>("C", "A");
-            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-
-            xAxisLabels.ToList().Should().BeEquivalentTo(["A", "B"]);
-            yAxisLabels.ToList().Should().BeEquivalentTo(["B", "C"]);
-
-            // Poem with two categories, one per category
-            poem = new Poem
-                { Categories = [new Category { SubCategories = ["A"] }, new Category() { SubCategories = ["B"] }] };
-            engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
-
-            expectedKey = new KeyValuePair<string, string>("A", "B");
-            dict.TryGetValue(expectedKey, out var counter5).Should().BeTrue();
-            counter5.Should().Be(3);
-
-            unExpectedKey = new KeyValuePair<string, string>("B", "A");
-            dict.TryGetValue(unExpectedKey, out var _).Should().BeFalse();
-
-            xAxisLabels.ToList().Should().BeEquivalentTo(["A", "B"]);
-            yAxisLabels.ToList().Should().BeEquivalentTo(["B", "C"]);
-        }
+        var poemWithFirstAndSecondAcrostiche =
+            _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
+        poemWithFirstAndSecondAcrostiche.ShouldNotBeNull();
+        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche.ShouldNotBeNull();
+        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.ShouldBe("L'air");
+        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.Second.ShouldBe("créé");
     }
 
-    public class ContentImportTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
+    [Theory]
+    [Trait("UnitTest", "XmlRead")]
+    [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, 14)]
+    [InlineData("grand_sud_1", 1, 12)]
+    [InlineData("illusion_1", 1, 8)]
+    public void ShouldHaveVersesCount(string poemId, int seasonId, int expectedCount)
     {
-        [Fact]
-        [Trait("UnitTest", "ContentImport")]
-        public void ShouldImportSeason()
-        {
-            if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "github")
-                return;
-            var engine = new Engine(basicFixture.Configuration);
-            engine.ImportSeason(16);
-        }
+        var poem = _engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
+        poem.VersesCount.ShouldBe(expectedCount);
     }
 
-    public class ContentCheckTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-        : EngineTest(fixture, testOutputHelper)
+    [Theory]
+    [Trait("UnitTest", "XmlRead")]
+    [InlineData("j_avais_l_heur_de_m_asseoir_1", 1, false)]
+    [InlineData("grand_sud_1", 1, true)]
+    [InlineData("illusion_1", 1, false)]
+    [InlineData("matin_privilege_15", 15, false)]
+    [InlineData("ombres_et_lumieres_15", 15, true)]
+    [InlineData("les_chenes_16", 16, true)]
+    public void ShouldHaveQuatrains(string poemId, int seasonId, bool expectedHasQuatrain)
     {
-        [Fact]
-        [Trait("UnitTest", "MetadataCheck")]
-        public void CheckMissingYearTagInYamlMetadata()
+        var poem = _engine.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
+        poem.HasQuatrains.ShouldBe(expectedHasQuatrain);
+        if (expectedHasQuatrain)
         {
-            var anomalies = _engine.CheckMissingTagsInYamlMetadata();
-            testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
-            anomalies.Count().Should().Be(0);
+            poem.Paragraphs.Count.ShouldBe(poem.VersesCount / 4);
         }
+
+        testOutputHelper.WriteLine($"{poem.Paragraphs.Count} paragraphs, {poem.VersesCount} verses");
+    }
+
+    [Fact]
+    [Trait("UnitTest", "XmlRead")]
+    public void ShouldBePoemSeasonId()
+    {
+        _engine.Data.Seasons[0].Poems[0].SeasonId.ShouldBe(1);
+    }
+
+    [Fact]
+    [Trait("UnitTest", "MetadataCheck")]
+    public void CheckMissingYearTagInYamlMetadata()
+    {
+        var anomalies = _engine.CheckMissingTagsInYamlMetadata();
+        testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
+        anomalies.Count().ShouldBe(0);
+    }
+}
+
+public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<BasicFixture>
+{
+    [Fact]
+    [Trait("UnitTest", "Computation")]
+    public void ShouldCorrectlyFillCategoriesBubbleChartDataDict()
+    {
+        Dictionary<KeyValuePair<string, string>, int> dict = new();
+        var xAxisLabels = new SortedSet<string>();
+        var yAxisLabels = new SortedSet<string>();
+
+        var engine = new Engine(basicFixture.Configuration);
+
+        // Poem with single subcategory
+        var poem = new Poem { Categories = [new Category { SubCategories = ["A"] }] };
+        engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+        xAxisLabels.ShouldBeEmpty();
+        yAxisLabels.ShouldBeEmpty();
+
+        dict.ShouldBeEmpty();
+
+        // Poem with two categories
+        poem = new Poem { Categories = [new Category { SubCategories = ["A", "B"] }] };
+        engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+
+        var expectedKey = new KeyValuePair<string, string>("A", "B");
+        dict.TryGetValue(expectedKey, out var counter).ShouldBeTrue();
+        counter.ShouldBe(1);
+
+        var unExpectedKey = new KeyValuePair<string, string>("B", "A");
+        dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
+
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A" });
+        yAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "B" });
+
+        // Poem with three categories
+        poem = new Poem { Categories = [new Category { SubCategories = ["A", "B", "C"] }] };
+        engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+
+        expectedKey = new KeyValuePair<string, string>("A", "B");
+        dict.TryGetValue(expectedKey, out var counter2).ShouldBeTrue();
+        counter2.ShouldBe(2);
+
+        unExpectedKey = new KeyValuePair<string, string>("B", "A");
+        dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
+
+        expectedKey = new KeyValuePair<string, string>("A", "C");
+        dict.TryGetValue(expectedKey, out var counter3).ShouldBeTrue();
+        counter3.ShouldBe(1);
+
+        expectedKey = new KeyValuePair<string, string>("B", "C");
+        dict.TryGetValue(expectedKey, out var counter4).ShouldBeTrue();
+        counter4.ShouldBe(1);
+
+        unExpectedKey = new KeyValuePair<string, string>("C", "B");
+        dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
+
+        unExpectedKey = new KeyValuePair<string, string>("C", "A");
+        dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
+
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
+        yAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "B", "C" });
+
+        // Poem with two categories, one per category
+        poem = new Poem
+            { Categories = [new Category { SubCategories = ["A"] }, new Category() { SubCategories = ["B"] }] };
+        engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+
+        expectedKey = new KeyValuePair<string, string>("A", "B");
+        dict.TryGetValue(expectedKey, out var counter5).ShouldBeTrue();
+        counter5.ShouldBe(3);
+
+        unExpectedKey = new KeyValuePair<string, string>("B", "A");
+        dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
+
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
+        yAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "B", "C" });
+    }
+
+    [Fact]
+    [Trait("UnitTest", "Computation")]
+    public void ShouldCorrectlyGetTopMostMonths()
+    {
+        Dictionary<string, int> dict = new();
+        dict.Add("0502", 1);
+        dict.Add("0503", 1);
+        dict.Add("0302", 3);
+        dict.Add("0102", 1);
+
+        var engine = new Engine(basicFixture.Configuration);
+        engine.GetTopMostMonths(dict).ShouldBeEquivalentTo(new List<string> { "mars", "mai", "janvier" });
+    }
+
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportSeason()
+    {
+        if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "github")
+            return;
+        var engine = new Engine(basicFixture.Configuration);
+        engine.ImportSeason(16);
     }
 }
