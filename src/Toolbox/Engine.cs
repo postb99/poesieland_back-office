@@ -105,6 +105,7 @@ public class Engine
         var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
         if (!File.Exists(poemContentPath))
         {
+            Console.WriteLine($"Not found: {poemContentPath}");
             return null;
         }
 
