@@ -20,9 +20,9 @@ public class PoemTest
     
     [Theory]
     [Trait("UnitTest", "Computation")]
-    [InlineData("Vers variable : 6, 3")]
-    [InlineData("Vers variable : 6, 3.")]
-    [InlineData("Vers variable : 6, 3. Autre info.")]
+    [InlineData("Métrique variable : 6, 3")]
+    [InlineData("Métrique variable : 6, 3.")]
+    [InlineData("Métrique variable : 6, 3. Autre info.")]
     public void ShouldHaveMultipleIntegersDetailedVerseLength(string info)
     {
         var poem = new Poem
@@ -50,7 +50,7 @@ public class PoemTest
     
     [Fact]
     [Trait("UnitTest", "Computation")]
-    public void ShouldThrowInfoWithoutVersVariable()
+    public void ShouldThrowInfoWithoutVariableMetric()
     {
         var poem = new Poem
         {

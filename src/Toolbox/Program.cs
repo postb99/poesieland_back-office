@@ -124,7 +124,7 @@ public class Program
                 return true;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
                 _engine.CheckPoemsWithoutVerseLength();
-                _engine.CheckPoemsWithVariableVerseLength();
+                _engine.CheckPoemsWithVariableMetric();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
                 Console.WriteLine($"Verse length last season computed values sum: {_engine.FillVerseLengthDataDict(out var _).Values.Sum(x => x.Last())}");
@@ -234,7 +234,7 @@ public class Program
             if (missingTags.Any())
             {
                 Console.WriteLine(
-                    $"[ERROR] Missing tags for poems: {string.Join(',', missingTags)}, check these tags: year, versVariable");
+                    $"[ERROR] Missing tags for poems: {string.Join(',', missingTags)}, check these tags: year, métrique variable");
             }
         }
         else
@@ -380,7 +380,7 @@ public class Program
 
         // And check data quality
         _engine.CheckPoemsWithoutVerseLength();
-        _engine.CheckPoemsWithVariableVerseLength();
+        _engine.CheckPoemsWithVariableMetric();
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
         Console.WriteLine($"Content metadata quality OK. Info: verse length last season computed values sum: {_engine.FillVerseLengthDataDict(out var _).Values.Sum(x => x.Last())}");
@@ -473,8 +473,8 @@ public class Program
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
         Console.WriteLine($"Poems over seasons for 'pantoun' chart data file OK");
 
-        _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableVerse: true);
-        Console.WriteLine($"Poems over seasons for 'versVariable' chart data file OK");
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableMetric: true);
+        Console.WriteLine($"Poems over seasons for 'métrique variable' chart data file OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()

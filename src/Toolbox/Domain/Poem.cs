@@ -22,7 +22,7 @@ public class Poem
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }
 
-    [XmlIgnore] public bool HasVariableVerseLength => VerseLength != null && (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
+    [XmlIgnore] public bool HasVariableMetric => VerseLength != null && (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
 
     /// <summary>
     /// Real verse length, either an integer or integers separated by comma + space.
@@ -32,16 +32,16 @@ public class Poem
     {
         get
         {
-            if (!HasVariableVerseLength)
+            if (!HasVariableMetric)
                 return VerseLength!;
             
-            if (Info == null || !Info.StartsWith("Vers variable : "))
+            if (Info == null || !Info.StartsWith("Métrique variable : "))
             {
                 throw new InvalidOperationException(
-                    $"When verse length is -1, info should begin with variable length indication: 'Vers variable : ...'. Poem id: {Id}");
+                    $"When verse length is -1, info should begin with variable length indication: 'Métrique variable : ...'. Poem id: {Id}");
             }
 
-            return Info.IndexOf(".") > -1 ? Info.Substring(16, Info.IndexOf(".") - 16) : Info.Substring(16);
+            return Info.IndexOf(".") > -1 ? Info.Substring(20, Info.IndexOf(".") - 20) : Info.Substring(20);
         }
     }
 
@@ -108,7 +108,7 @@ public class Poem
         s.Append("]");
         s.Append(Environment.NewLine);
 
-        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, verse variable length
+        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, variable metric
         s.Append("tags = [");
         foreach (var categoryName in Categories.Select(x => x.Name).Distinct())
         {
@@ -132,9 +132,9 @@ public class Poem
             s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
         }
 
-        if (HasVariableVerseLength)
+        if (HasVariableMetric)
         {
-            s.Append($"\"versVariable\", ");
+            s.Append($"\"métrique variable\", ");
         }
 
         s.Remove(s.Length - 2, 2);
@@ -180,7 +180,7 @@ public class Poem
 
         if (VerseLength != null)
         {
-            var verseLength = HasVariableVerseLength ? "-1" : VerseLength;
+            var verseLength = HasVariableMetric ? "-1" : VerseLength;
             s.Append($"verseLength = {verseLength}");
             s.Append(Environment.NewLine);
         }

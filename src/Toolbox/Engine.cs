@@ -231,8 +231,8 @@ public class Engine
             var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
             foreach (var poemContentPath in poemContentPaths)
             {
-                var (tags, year, poemId, variableVerseLength) =
-                    poemContentImporter.GetTagsYearVariableVerseLength(poemContentPath, _configuration);
+                var (tags, year, poemId, variableMetric) =
+                    poemContentImporter.GetTagsYearVariableMetric(poemContentPath, _configuration);
                 if (poemContentImporter.HasYamlMetadata)
                 {
                     if (!tags.Contains(year.ToString()))
@@ -240,7 +240,7 @@ public class Engine
                         yield return poemId;
                     }
 
-                    if (variableVerseLength && !tags.Contains("versVariable"))
+                    if (variableMetric && !tags.Contains("métrique variable"))
                     {
                         yield return poemId;
                     }
@@ -262,14 +262,14 @@ public class Engine
                 $"[ERROR] First poem with verse length unspecified or equal to '0': {incorrectPoem.Id}");
     }
 
-    public void CheckPoemsWithVariableVerseLength()
+    public void CheckPoemsWithVariableMetric()
     {
-        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableVerseLength));
+        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric));
 
-        var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Vers variable : "));
+        var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Métrique variable : "));
         if (incorrectPoem != null)
             throw new Exception(
-                $"[ERROR] First poem with variable verse length unspecified in Info: {incorrectPoem.Id}");
+                $"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
     }
 
     public void GeneratePoemsLengthBarChartDataFile(int? seasonId)
@@ -725,8 +725,8 @@ public class Engine
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 1);
         chartDataFileHelper.WriteBeforeData();
-        var regularVerseLengthData = new Dictionary<int, int>();
-        var variableVerseLengthData = new Dictionary<string, int>();
+        var regularMetricData = new Dictionary<int, int>();
+        var variableMetricData = new Dictionary<string, int>();
         var nbUndefinedVerseLength = 0;
         var poems = seasonId != null
             ? Data.Seasons.First(x => x.Id == seasonId).Poems
@@ -737,47 +737,47 @@ public class Engine
             {
                 nbUndefinedVerseLength++;
             }
-            else if (poem.HasVariableVerseLength)
+            else if (poem.HasVariableMetric)
             {
-                if (variableVerseLengthData.TryGetValue(poem.DetailedVerseLength, out var _))
+                if (variableMetricData.TryGetValue(poem.DetailedVerseLength, out var _))
                 {
-                    variableVerseLengthData[poem.DetailedVerseLength]++;
+                    variableMetricData[poem.DetailedVerseLength]++;
                 }
                 else
                 {
-                    variableVerseLengthData[poem.DetailedVerseLength] = 1;
+                    variableMetricData[poem.DetailedVerseLength] = 1;
                 }
             }
             else
             {
                 var verseLength = int.Parse(poem.VerseLength);
-                if (regularVerseLengthData.TryGetValue(verseLength, out var _))
+                if (regularMetricData.TryGetValue(verseLength, out var _))
                 {
-                    regularVerseLengthData[verseLength]++;
+                    regularMetricData[verseLength]++;
                 }
                 else
                 {
-                    regularVerseLengthData[verseLength] = 1;
+                    regularMetricData[verseLength] = 1;
                 }
             }
         }
 
-        var regularVerseLengthRange = regularVerseLengthData.Keys.Order().ToList();
-        var variableVerseLengthRange = variableVerseLengthData.Keys.Order().ToList();
+        var regularMetricRange = regularMetricData.Keys.Order().ToList();
+        var variableMetricRange = variableMetricData.Keys.Order().ToList();
 
-        var regularVerseLengthChartData = new List<ChartDataFileHelper.DataLine>();
-        var variableVerseLengthChartData = new List<ChartDataFileHelper.ColoredDataLine>();
+        var regularMetricChartData = new List<ChartDataFileHelper.DataLine>();
+        var variableMetricChartData = new List<ChartDataFileHelper.ColoredDataLine>();
 
-        foreach (var verseLength in regularVerseLengthRange)
+        foreach (var verseLength in regularMetricRange)
         {
-            regularVerseLengthChartData.Add(new ChartDataFileHelper.DataLine(
-                verseLength.ToString(), regularVerseLengthData[verseLength]));
+            regularMetricChartData.Add(new ChartDataFileHelper.DataLine(
+                verseLength.ToString(), regularMetricData[verseLength]));
         }
 
-        foreach (var verseLength in variableVerseLengthRange)
+        foreach (var verseLength in variableMetricRange)
         {
-            variableVerseLengthChartData.Add(new ChartDataFileHelper.ColoredDataLine
-                (verseLength, variableVerseLengthData[verseLength], "rgba(72, 149, 239, 1)"));
+            variableMetricChartData.Add(new ChartDataFileHelper.ColoredDataLine
+                (verseLength, variableMetricData[verseLength], "rgba(72, 149, 239, 1)"));
         }
 
         var undefinedVerseLengthChartData = new ChartDataFileHelper.ColoredDataLine
@@ -785,8 +785,8 @@ public class Engine
         );
 
         var dataLines = new List<ChartDataFileHelper.DataLine>();
-        dataLines.AddRange(regularVerseLengthChartData);
-        dataLines.AddRange(variableVerseLengthChartData);
+        dataLines.AddRange(regularMetricChartData);
+        dataLines.AddRange(variableMetricChartData);
         if (nbUndefinedVerseLength > 0)
             dataLines.Add(undefinedVerseLengthChartData);
 
@@ -801,14 +801,14 @@ public class Engine
         // Second chart for variable length, when no season ID is given
         if (seasonId == null)
         {
-            fileName = "variable-verse-length-bar.js";
-            chartId = "variableVerseLengthBar";
+            fileName = "metrique_variable-bar.js";
+            chartId = "metrique_variableBar";
             using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
             var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bar, 1);
             chartDataFileHelper2.WriteBeforeData();
 
             dataLines = [];
-            dataLines.AddRange(variableVerseLengthChartData);
+            dataLines.AddRange(variableMetricChartData);
 
             chartDataFileHelper2.WriteData(dataLines, true);
 
@@ -965,7 +965,7 @@ public class Engine
     }
 
     public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory,
-        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableVerse = false)
+        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
@@ -1017,14 +1017,14 @@ public class Engine
             fileName = $"poems-pantoun-bar.js";
             chartId = $"poems-pantounBar";
         }
-        else if (forVariableVerse)
+        else if (forVariableMetric)
         {
-            fileName = $"poems-versVariable-bar.js";
-            chartId = $"poems-versVariableBar";
+            fileName = $"poems-metrique_variable-bar.js";
+            chartId = $"poems-metrique_variableBar";
         }
 
         var backgroundColor = borderColor.Replace("1)", "0.5)");
-        if (forVariableVerse)
+        if (forVariableMetric)
         {
             // For this one, same color to look nice below other bar chart
             backgroundColor = borderColor;
@@ -1060,9 +1060,9 @@ public class Engine
             {
                 poemCount = season.Poems.Count(x => x.IsPantoun);
             }
-            else if (forVariableVerse)
+            else if (forVariableMetric)
             {
-                poemCount = season.Poems.Count(x => x.HasVariableVerseLength);
+                poemCount = season.Poems.Count(x => x.HasVariableMetric);
             }
 
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
@@ -1314,10 +1314,10 @@ public class Engine
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
 
         // And for variable verse
-        var variableVersePoemCount = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableVerseLength)).Count();
-        var variableVersePoemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "variableVerse_poem_count.md");
-        File.WriteAllText(variableVersePoemCountFilePath, variableVersePoemCount.ToString());
+        var variableMetricPoemCount = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric)).Count();
+        var variableMetricPoemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "variable_metric_poem_count.md");
+        File.WriteAllText(variableMetricPoemCountFilePath, variableMetricPoemCount.ToString());
     }
 
     public void GeneratePoemEnCountFile()
@@ -1332,15 +1332,15 @@ public class Engine
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var poemLengthByVerseLength = new Dictionary<KeyValuePair<int, int>, int>();
-        var variableVerseLength = new Dictionary<int, int>();
+        var variableMetric = new Dictionary<int, int>();
         foreach (var poem in poems)
         {
             var poemLength = poem.VersesCount;
-            if (poem.HasVariableVerseLength)
+            if (poem.HasVariableMetric)
             {
-                if (!variableVerseLength.TryAdd(poemLength, 1))
+                if (!variableMetric.TryAdd(poemLength, 1))
                 {
-                    variableVerseLength[poemLength]++;
+                    variableMetric[poemLength]++;
                 }
 
                 continue;
@@ -1375,9 +1375,9 @@ public class Engine
                 maxValue, 30);
         }
 
-        foreach (var dataKey in variableVerseLength.Keys)
+        foreach (var dataKey in variableMetric.Keys)
         {
-            AddDataLine(0, dataKey, variableVerseLength[dataKey],
+            AddDataLine(0, dataKey, variableMetric[dataKey],
                 [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
                 maxValue, 30);
         }
@@ -1409,8 +1409,8 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 13);
         chartDataFileHelper.WriteBeforeData();
 
-        var variableVerseDataLines =
-            new ChartDataFileHelper.LineChartDataLine("Vers variable", dataDict[0], "rgb(247, 249, 249)");
+        var variableMetricDataLines =
+            new ChartDataFileHelper.LineChartDataLine("Métrique variable", dataDict[0], "rgb(247, 249, 249)");
         var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 pieds", dataDict[2], "rgb(230, 176, 170)");
         var threeFeetDataLines =
             new ChartDataFileHelper.LineChartDataLine("3 pieds", dataDict[3], "rgb(245, 183, 177)");
@@ -1432,7 +1432,7 @@ public class Engine
         var fourteenFeetDataLines =
             new ChartDataFileHelper.LineChartDataLine("14 pieds", dataDict[14], "rgb(204, 209, 209)");
 
-        chartDataFileHelper.WriteData(variableVerseDataLines);
+        chartDataFileHelper.WriteData(variableMetricDataLines);
         chartDataFileHelper.WriteData(twoFeetDataLines);
         chartDataFileHelper.WriteData(threeFeetDataLines);
         chartDataFileHelper.WriteData(fourFeetDataLines);
@@ -1449,7 +1449,7 @@ public class Engine
 
         chartDataFileHelper.WriteAfterData("poemsVerseLengthLine",
             [
-                "Vers variable",
+                "Métrique variable",
                 "2 pieds",
                 "3 pieds",
                 "4 pieds",
@@ -1573,7 +1573,7 @@ public class Engine
             // Multiplicator to get 100%
             var multiple = 100m / season.Poems.Count;
             xLabels.Add($"{season.EscapedTitleForChartsWithYears}");
-            dataDict[0].Add(Decimal.Round(season.Poems.Count(x => x.HasVariableVerseLength) * multiple, 1));
+            dataDict[0].Add(Decimal.Round(season.Poems.Count(x => x.HasVariableMetric) * multiple, 1));
 
             foreach (var verseLength in verseLengthRange)
             {

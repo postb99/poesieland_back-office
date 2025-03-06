@@ -118,7 +118,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         var (poem, position) = poemContentImporter.Import(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        //poem.Info.ShouldBe("Vers variable : 6, 3");
+        //poem.Info.ShouldBe("Métrique variable : 6, 3");
         poem.VerseLength.ShouldBe("11");
         poem.Pictures.Count.ShouldBe(2);
         poem.Pictures[0].ShouldBe("17 décembre 2023");
@@ -150,7 +150,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
             basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/saisons.md");
         var poemContentImporter = new PoemContentImporter();
         var (tags, year, poemId, _) =
-            poemContentImporter.GetTagsYearVariableVerseLength(poemContentFilePath, basicFixture.Configuration);
+            poemContentImporter.GetTagsYearVariableMetric(poemContentFilePath, basicFixture.Configuration);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         tags.Count.ShouldBe(3);
