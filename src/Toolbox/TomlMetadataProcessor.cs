@@ -119,7 +119,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public List<string> GetTags()
     {
-        return [];
+        return _tags;
     }
 
     public List<string> GetPictures()

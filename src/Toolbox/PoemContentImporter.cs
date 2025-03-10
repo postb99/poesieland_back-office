@@ -61,7 +61,7 @@ public class PoemContentImporter(IConfiguration configuration)
         tagsToIgnore.AddRange(Enumerable.Range(1994, DateTime.Now.Year - 1993).Select(x => x.ToString()));
 
         // Nor a specific tag
-        tagsToIgnore.AddRange(["métrique variable", "pantoun", "sonnet"]);
+        tagsToIgnore.AddRange(["métrique variable", "pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
         
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
     }
