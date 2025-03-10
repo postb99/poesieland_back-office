@@ -110,7 +110,7 @@ public class Engine
         }
 
         var (poem, position) =
-            (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+            (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         if (targetSeason == null)
@@ -145,7 +145,7 @@ public class Engine
         foreach (var poemContentPath in poemFilePaths)
         {
             var (poem, position) =
-                (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+                (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
 
             poemsByPosition.Add(position, poem);
         }
@@ -188,7 +188,7 @@ public class Engine
             foreach (var poemContentPath in poemFilePaths)
             {
                 var (poem, position) =
-                    (_poemContentImporter ??= new PoemContentImporter()).Import(poemContentPath, _configuration);
+                    (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
 
                 poemsByPosition.Add(position, poem);
             }
@@ -223,7 +223,7 @@ public class Engine
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonMaxId = Data.Seasons.Count;
-        var poemContentImporter = new PoemContentImporter();
+        var poemContentImporter = new PoemContentImporter(_configuration);
         for (var i = 17; i < seasonMaxId + 1; i++)
         {
             var season = Data.Seasons.First(x => x.Id == i);
@@ -232,7 +232,7 @@ public class Engine
             foreach (var poemContentPath in poemContentPaths)
             {
                 var (tags, year, poemId, variableMetric) =
-                    poemContentImporter.GetTagsYearVariableMetric(poemContentPath, _configuration);
+                    poemContentImporter.GetTagsYearVariableMetric(poemContentPath);
                 if (poemContentImporter.HasYamlMetadata)
                 {
                     if (!tags.Contains(year.ToString()))
@@ -675,7 +675,7 @@ public class Engine
         foreach (var poemFile in poemFiles)
         {
             var (poem, position) =
-                (_poemContentImporter ??= new PoemContentImporter()).Import(poemFile, _configuration);
+                (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemFile);
             var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
             var poemIndex = season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != position)

@@ -14,7 +14,7 @@ public interface IMetadataProcessor
     int GetWeight(string line);
     DoubleAcrostiche GetDoubleAcrostiche(string line);
     void BuildCategories(string line);
-    void BuildTags();
+    void BuildTags(string line);
     void BuildPictures(string line);
     void BuildInfoLines(string line);
     /// <summary>

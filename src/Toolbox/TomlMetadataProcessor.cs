@@ -7,9 +7,10 @@ public class TomlMetadataProcessor : IMetadataProcessor
 {
     public ProcessingListType ProcessingListType { get; private set; }
 
-    private List<string> _categories = new();
-    private List<string> _pictures = new();
-    private List<string> _infoLines = new();
+    private List<string> _categories = [];
+    private List<string> _tags = [];
+    private List<string> _pictures = [];
+    private List<string> _infoLines = [];
 
     public string GetTitle(string line)
     {
@@ -64,9 +65,10 @@ public class TomlMetadataProcessor : IMetadataProcessor
             .ToList();
     }
 
-    public void BuildTags()
+    public void BuildTags(string line)
     {
-        // Nothing to implement
+        _tags = line.Substring(7).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != string.Empty && x != ", ")
+            .ToList();
     }
 
     public void BuildPictures(string line)
@@ -117,7 +119,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public List<string> GetTags()
     {
-        return new List<string>();
+        return [];
     }
 
     public List<string> GetPictures()

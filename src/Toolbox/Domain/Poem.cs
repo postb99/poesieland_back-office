@@ -48,6 +48,8 @@ public class Poem
     [XmlElement("info")] public string? Info { get; set; }
 
     [XmlElement("picture")] public List<string>? Pictures { get; set; }
+    
+    [XmlElement("extraTags")] public List<string>? ExtraTags { get; set; }
 
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
