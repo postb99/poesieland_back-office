@@ -51,7 +51,7 @@ public class Poem
 
     [XmlElement("picture")] public List<string>? Pictures { get; set; }
 
-    [XmlElement("extraTags")] public List<string>? ExtraTags { get; set; }
+    [XmlElement("extraTag")] public List<string>? ExtraTags { get; set; }
 
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
@@ -198,7 +198,7 @@ public class Poem
             s.Append(Environment.NewLine);
         }
 
-        s.Append("LastModifierDisplayName = \"Barbara Post\"");
+        s.Append("LastModifierDisplayName = \"Barbara Post - Licence CC BY-NC-ND 4.0\"");
         s.Append(Environment.NewLine);
 
         s.Append("+++");

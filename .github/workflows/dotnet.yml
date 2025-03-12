@@ -29,12 +29,15 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
       working-directory: src
-    - name: Test
+    - name: Test computation
       run: dotnet test --no-build --filter "UnitTest=Computation"
       working-directory: src
-    - name: Test
+    - name: Test content import
       run: dotnet test --no-build --filter "UnitTest=ContentImport"
       working-directory: src
-    - name: Test
+    - name: Test content generation
+      run: dotnet test --no-build --filter "UnitTest=ContentGeneration"
+      working-directory: src
+    - name: Test XML serialization
       run: dotnet test --no-build --filter "UnitTest=XmlSerialization"
       working-directory: src
