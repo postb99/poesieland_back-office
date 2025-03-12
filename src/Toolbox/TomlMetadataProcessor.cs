@@ -11,6 +11,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
     private List<string> _tags = [];
     private List<string> _pictures = [];
     private List<string> _infoLines = [];
+    private List<string> _locations = [];
 
     public string GetTitle(string line)
     {
@@ -89,6 +90,12 @@ public class TomlMetadataProcessor : IMetadataProcessor
             ProcessingListType = ProcessingListType.None;
         }
     }
+    
+    public void BuildLocations(string line)
+    {
+        _locations = line.Substring(12).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != string.Empty && x != ", ")
+            .ToList();
+    }
 
     public void AddValue(string line, int nbSpaces)
     {
@@ -130,5 +137,10 @@ public class TomlMetadataProcessor : IMetadataProcessor
     public List<string> GetInfoLines()
     {
         return _infoLines;
+    }
+    
+    public List<string> GetLocations()
+    {
+        return _locations;
     }
 }

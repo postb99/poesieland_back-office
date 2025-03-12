@@ -114,6 +114,19 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         poem.ExtraTags.ShouldBe(["lovecat"]);
     }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    private void ShouldImportLocations()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison/pelerinage.md");
+        var poemContentImporter = new PoemContentImporter(basicFixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
+        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        poem.Locations.ShouldBe(["Reims"]);
+    }
 
     [Theory]
     [Trait("UnitTest", "Computation")]

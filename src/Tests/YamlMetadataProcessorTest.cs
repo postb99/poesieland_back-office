@@ -171,4 +171,17 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.ExtraTags.ShouldBe(["lovecat"]);
     }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    private void ShouldImportLocations()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/serenite_sylvaine.md");
+        var poemContentImporter = new PoemContentImporter(basicFixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Locations.ShouldBe(["Lorraine"]);
+    }
 }

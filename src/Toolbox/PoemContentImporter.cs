@@ -43,6 +43,7 @@ public class PoemContentImporter(IConfiguration configuration)
         _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
         _poem.ExtraTags = FindExtraTags(_metadataProcessor.GetTags());
+        _poem.Locations = _metadataProcessor.GetLocations();
 
         // Copy for XML save
         _poem.VerseLength = _poem.DetailedVerseLength;
@@ -162,6 +163,10 @@ public class PoemContentImporter(IConfiguration configuration)
         else if (line.StartsWith("weight"))
         {
             _position = _metadataProcessor!.GetWeight(line) - 1;
+        }
+        else if (line.StartsWith("locations"))
+        {
+            _metadataProcessor!.BuildLocations(line);
         }
         else if (line.StartsWith("    - "))
         {
