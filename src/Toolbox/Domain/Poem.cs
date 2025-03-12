@@ -22,7 +22,9 @@ public class Poem
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }
 
-    [XmlIgnore] public bool HasVariableMetric => VerseLength != null && (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
+    [XmlIgnore]
+    public bool HasVariableMetric => VerseLength != null &&
+                                     (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
 
     /// <summary>
     /// Real verse length, either an integer or integers separated by comma + space.
@@ -34,7 +36,7 @@ public class Poem
         {
             if (!HasVariableMetric)
                 return VerseLength!;
-            
+
             if (Info == null || !Info.StartsWith("Métrique variable : "))
             {
                 throw new InvalidOperationException(
@@ -48,6 +50,8 @@ public class Poem
     [XmlElement("info")] public string? Info { get; set; }
 
     [XmlElement("picture")] public List<string>? Pictures { get; set; }
+
+    [XmlElement("extraTag")] public List<string>? ExtraTags { get; set; }
 
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
@@ -67,7 +71,8 @@ public class Poem
 
     [XmlIgnore] public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 
-    [XmlIgnore] public int SeasonId
+    [XmlIgnore]
+    public int SeasonId
     {
         get
         {
@@ -113,6 +118,14 @@ public class Poem
         foreach (var categoryName in Categories.Select(x => x.Name).Distinct())
         {
             s.Append($"\"{categoryName.ToLowerInvariant()}\", ");
+        }
+
+        if (ExtraTags != null)
+        {
+            foreach (var extraTag in ExtraTags)
+            {
+                s.Append($"\"{extraTag.ToLowerInvariant()}\", ");
+            }
         }
 
         s.Append($"\"{Date.ToString("yyyy")}\", ");
@@ -185,7 +198,7 @@ public class Poem
             s.Append(Environment.NewLine);
         }
 
-        s.Append("LastModifierDisplayName = \"Barbara Post\"");
+        s.Append("LastModifierDisplayName = \"Barbara Post - Licence CC BY-NC-ND 4.0\"");
         s.Append(Environment.NewLine);
 
         s.Append("+++");

@@ -1,3 +1,4 @@
+using System.Text;
 using Shouldly;
 using Toolbox.Domain;
 using Xunit;
@@ -60,5 +61,20 @@ public class PoemTest
 
         var func = () => poem.DetailedVerseLength;
         func.ShouldThrow<InvalidOperationException>();
+    }
+
+    [Fact]
+    [Trait("UnitTest", "ContentGeneration")]
+    public void ShouldGenerateExpectedTags()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var poem = new Poem
+        {
+            Id = "poem_25",
+            TextDate = "01.01.2025",
+            Acrostiche = "Something",
+            ExtraTags = ["wonderful"]
+        };
+        poem.FileContent(-1).ShouldContain("tags = [\"wonderful\", \"2025\", \"acrostiche\"]");
     }
 }

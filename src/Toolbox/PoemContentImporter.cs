@@ -5,9 +5,8 @@ using Category = Toolbox.Domain.Category;
 
 namespace Toolbox;
 
-public class PoemContentImporter
+public class PoemContentImporter(IConfiguration configuration)
 {
-    private IConfiguration _configuration;
     private Poem _poem;
     private int _position;
     private bool _isInMetadata;
@@ -21,9 +20,8 @@ public class PoemContentImporter
 
     public bool HasYamlMetadata { get; private set; }
 
-    public (Poem, int) Import(string contentFilePath, IConfiguration configuration)
+    public (Poem, int) Import(string contentFilePath)
     {
-        _configuration = configuration;
         _poem = new Poem();
         _isInMetadata = false;
         _metadataProcessor = null;
@@ -44,6 +42,7 @@ public class PoemContentImporter
         var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
+        _poem.ExtraTags = FindExtraTags(_metadataProcessor.GetTags());
 
         // Copy for XML save
         _poem.VerseLength = _poem.DetailedVerseLength;
@@ -51,9 +50,24 @@ public class PoemContentImporter
         return (_poem, _position);
     }
 
-    public (List<string>, int, string, bool) GetTagsYearVariableMetric(string contentFilePath, IConfiguration configuration)
+    public List<string> FindExtraTags(List<string> tags)
     {
-        _configuration = configuration;
+        var tagsToIgnore = new List<string>();
+        
+        // Should not be a storage category
+        tagsToIgnore.AddRange(configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories.Select(x => x.Name.ToLowerInvariant()));
+
+        // Nor a year
+        tagsToIgnore.AddRange(Enumerable.Range(1994, DateTime.Now.Year - 1993).Select(x => x.ToString()));
+
+        // Nor a specific tag
+        tagsToIgnore.AddRange(["métrique variable", "pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
+        
+        return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
+    }
+
+    public (List<string>, int, string, bool) GetTagsYearVariableMetric(string contentFilePath)
+    {
         _poem = new Poem();
         _isInMetadata = false;
         _metadataProcessor = null;
@@ -119,7 +133,7 @@ public class PoemContentImporter
         }
         else if (line.StartsWith("tags"))
         {
-            _metadataProcessor!.BuildTags();
+            _metadataProcessor!.BuildTags(line);
         }
         else if (line.StartsWith("pictures"))
         {
@@ -167,7 +181,7 @@ public class PoemContentImporter
     private List<Category> GetCategories(List<string> metadataCategories)
     {
         var storageCategories = new Dictionary<string, Category>();
-        var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
         foreach (var metadataCategory in metadataCategories)
         {

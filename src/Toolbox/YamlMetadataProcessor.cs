@@ -6,10 +6,10 @@ namespace Toolbox;
 public class YamlMetadataProcessor : IMetadataProcessor
 {
     public ProcessingListType ProcessingListType { get; private set; }
-    private readonly List<string> _categories = new();
-    private readonly List<string> _tags = new();
-    private readonly List<string> _pictures = new();
-    private readonly List<string> _infoLines = new();
+    private readonly List<string> _categories = [];
+    private readonly List<string> _tags = [];
+    private readonly List<string> _pictures = [];
+    private readonly List<string> _infoLines = [];
 
     public string GetTitle(string line)
     {
@@ -75,7 +75,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
         ProcessingListType = ProcessingListType.Categories;
     }
 
-    public void BuildTags()
+    public void BuildTags(string line)
     {
         ProcessingListType = ProcessingListType.Tags;
     }
