@@ -53,6 +53,8 @@ public class Poem
 
     [XmlElement("extraTag")] public List<string>? ExtraTags { get; set; }
 
+    [XmlElement("location")] public List<string>? Locations { get; set; }
+
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
     [XmlElement("acrosticheDouble")] public DoubleAcrostiche? DoubleAcrostiche { get; set; }
@@ -195,6 +197,20 @@ public class Poem
         {
             var verseLength = HasVariableMetric ? "-1" : VerseLength;
             s.Append($"verseLength = {verseLength}");
+            s.Append(Environment.NewLine);
+        }
+
+        if (Locations != null)
+        {
+            s.Append(Environment.NewLine);
+            s.Append("locations = [");
+            foreach (var location in Locations)
+            {
+                s.Append($"\"{location}\", ");
+            }
+
+            s.Remove(s.Length - 2, 2);
+            s.Append("]");
             s.Append(Environment.NewLine);
         }
 
