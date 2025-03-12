@@ -77,4 +77,18 @@ public class PoemTest
         };
         poem.FileContent(-1).ShouldContain("tags = [\"wonderful\", \"2025\", \"acrostiche\"]");
     }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentGeneration")]
+    public void ShouldGenerateExpectedLocations()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var poem = new Poem
+        {
+            Id = "poem_25",
+            TextDate = "01.01.2025",
+            Locations = ["Ici", "Là", "ailleurs"]
+        };
+        poem.FileContent(-1).ShouldContain("locations = [\"Ici\", \"Là\", \"ailleurs\"]");
+    }
 }

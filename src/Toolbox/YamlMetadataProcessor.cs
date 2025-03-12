@@ -10,6 +10,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
     private readonly List<string> _tags = [];
     private readonly List<string> _pictures = [];
     private readonly List<string> _infoLines = [];
+    private readonly List<string> _locations = [];
 
     public string GetTitle(string line)
     {
@@ -95,6 +96,11 @@ public class YamlMetadataProcessor : IMetadataProcessor
     {
         ProcessingListType = ProcessingListType.Pictures;
     }
+    
+    public void BuildLocations(string line)
+    {
+        ProcessingListType = ProcessingListType.Locations;
+    }
 
     public void AddValue(string line, int nbSpaces)
     {
@@ -118,6 +124,9 @@ public class YamlMetadataProcessor : IMetadataProcessor
             case ProcessingListType.InfoLines:
                 _infoLines.Add(lineValue.TrimStart(' '));
                 break;
+            case ProcessingListType.Locations:
+                _locations.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
+                break;
         }
     }
 
@@ -139,5 +148,10 @@ public class YamlMetadataProcessor : IMetadataProcessor
     public List<string> GetInfoLines()
     {
         return _infoLines;
+    }
+    
+    public List<string> GetLocations()
+    {
+        return _locations;
     }
 }

@@ -17,6 +17,7 @@ public interface IMetadataProcessor
     void BuildTags(string line);
     void BuildPictures(string line);
     void BuildInfoLines(string line);
+    void BuildLocations(string line);
     /// <summary>
     /// When YAML, add a value to a list of value determined by current context.
     /// </summary>
@@ -26,5 +27,6 @@ public interface IMetadataProcessor
     List<string> GetTags();
     List<string> GetPictures();
     List<string> GetInfoLines();
+    List<string> GetLocations();
     ProcessingListType ProcessingListType { get; }
 }

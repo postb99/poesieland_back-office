@@ -6,5 +6,6 @@ public enum ProcessingListType
     Categories,
     Tags,
     Pictures,
-    InfoLines
+    InfoLines,
+    Locations
 }
