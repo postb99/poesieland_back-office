@@ -202,7 +202,6 @@ public class Poem
 
         if (Locations != null)
         {
-            s.Append(Environment.NewLine);
             s.Append("locations = [");
             foreach (var location in Locations)
             {
