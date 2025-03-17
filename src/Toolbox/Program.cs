@@ -50,7 +50,7 @@ public class Program
 
         if (PerformAction(menuChoice))
         {
-            Console.WriteLine(Environment.NewLine);
+            Console.WriteLine();
             Console.WriteLine("Back to main menu");
             var menuEntry = MainMenu();
             ValidateAndPerformMenuChoice(null, menuEntry);

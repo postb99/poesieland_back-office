@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace Toolbox.Domain;
 
@@ -29,4 +30,10 @@ public static class StringExtensions
         var unescaped = s.Substring(1, s.Length - 2).Unescaped();
         return string.IsNullOrEmpty(unescaped) ? null : unescaped.Replace("\\", "");
     }
+    /// <summary>
+    /// Parses to a date using "dd.MM.yyyy" format.
+    /// </summary>
+    /// <param name="textDate"></param>
+    /// <returns></returns>
+    public static DateTime ToDateTime(this string textDate) => DateTime.ParseExact(textDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
 }

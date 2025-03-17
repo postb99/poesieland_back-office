@@ -870,6 +870,32 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemIntensityPie", ["Les jours de création sont-ils intenses ?"]);
         streamWriter.Close();
+        
+        // Most intense days content file
+        var intensityKeys = intensityDict.Keys.OrderDescending().Where(x => x > 2);
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
+            "../includes/most_intense_days.md");
+        var streamWriter2 = new StreamWriter(filePath);
+
+        streamWriter2.WriteLine("+++");
+        streamWriter2.WriteLine("title = \"Les jours les plus intenses\"");
+        streamWriter2.WriteLine("+++");
+
+        foreach (var key in intensityKeys)
+        {
+            streamWriter2.WriteLine($"- {key} poèmes en un jour :");
+            var matchingIntensities = dataDict.Where(x => x.Value == key).Select(x => x.Key);
+            var years = matchingIntensities.Select(x => x.Substring(6)).Distinct();
+            
+            foreach (var year in years)
+            {
+                var dates = matchingIntensities.Where(x => x.Substring(6) == year).Select(x => x.ToDateTime()).Order();
+                streamWriter2.Write($"  - {year} : ");
+                streamWriter2.WriteLine(string.Join(", ", dates.Select(x => x.ToString("D"))));
+            }
+        }
+
+        streamWriter2.Close();
     }
 
     public void GeneratePoemByDayOfWeekPieChartDataFile()

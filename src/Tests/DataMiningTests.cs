@@ -100,7 +100,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
                 streamWriter.WriteLine("  - {0} ", subCategory);
             }
 
-            streamWriter.WriteLine(Environment.NewLine);
+            streamWriter.WriteLine();
         }
     }
 
@@ -116,7 +116,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
         foreach (var type in types.Distinct())
         {
             streamWriter.WriteLine(type);
-            streamWriter.WriteLine(Environment.NewLine);
+            streamWriter.WriteLine();
         }
     }
 

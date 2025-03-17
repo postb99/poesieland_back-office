@@ -61,9 +61,7 @@ public class Poem
 
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; } = [];
 
-    [XmlIgnore]
-    public DateTime Date =>
-        DateTime.ParseExact(TextDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
+    [XmlIgnore] public DateTime Date => TextDate.ToDateTime();
 
     [XmlIgnore]
     public bool IsSonnet => PoemType?.ToLowerInvariant() == Domain.PoemType.Sonnet.ToString().ToLowerInvariant();
