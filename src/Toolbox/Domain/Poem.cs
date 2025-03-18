@@ -17,7 +17,8 @@ public class Poem
     [XmlElement("categorie")] public List<Category> Categories { get; set; } = [];
 
     /// <summary>
-    /// Mathematical verse length, either an integer or -1 when value is variable, in this case check DetailedVerseLength property.
+    /// When coming from storage, equal to DetailedVerseLength.
+    /// When importing poem, integer value or -1 when variable.
     /// </summary>
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }

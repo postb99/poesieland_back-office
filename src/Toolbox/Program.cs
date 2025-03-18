@@ -118,6 +118,7 @@ public class Program
                 return true;
             case MainMenuSettings.MenuChoices.GenerateCategoriesBubbleChartDataFile:
                 _engine.GenerateCategoriesBubbleChartDataFile();
+                _engine.GenerateCategoryMetricBubbleChartDataFile();
                 return true;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
@@ -377,6 +378,8 @@ public class Program
         
         // Categories bubble chart
         _engine.GenerateCategoriesBubbleChartDataFile();
+        // Category metric bubble chart
+        _engine.GenerateCategoryMetricBubbleChartDataFile();
 
         // And check data quality
         _engine.CheckPoemsWithoutVerseLength();

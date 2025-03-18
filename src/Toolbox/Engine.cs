@@ -290,7 +290,7 @@ public class Engine
         {
             var nbVerses = poem.VersesCount;
             var hasQuatrains = poem.HasQuatrains;
-            if (nbVersesData.TryGetValue(nbVerses, out var _))
+            if (nbVersesData.TryGetValue(nbVerses, out _))
             {
                 nbVersesData[nbVerses]++;
             }
@@ -301,7 +301,7 @@ public class Engine
 
             if (hasQuatrains)
             {
-                if (quatrainsData.TryGetValue(nbVerses, out var _))
+                if (quatrainsData.TryGetValue(nbVerses, out _))
                 {
                     quatrainsData[nbVerses]++;
                 }
@@ -399,7 +399,7 @@ public class Engine
         {
             foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
             {
-                if (byStorageSubcategoryCount.TryGetValue(subCategory, out var _))
+                if (byStorageSubcategoryCount.TryGetValue(subCategory, out _))
                 {
                     byStorageSubcategoryCount[subCategory]++;
                 }
@@ -511,7 +511,8 @@ public class Engine
             chartId = "poemDayRadar";
         }
 
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir,
+            storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -739,7 +740,7 @@ public class Engine
             }
             else if (poem.HasVariableMetric)
             {
-                if (variableMetricData.TryGetValue(poem.DetailedVerseLength, out var _))
+                if (variableMetricData.TryGetValue(poem.DetailedVerseLength, out _))
                 {
                     variableMetricData[poem.DetailedVerseLength]++;
                 }
@@ -751,7 +752,7 @@ public class Engine
             else
             {
                 var verseLength = int.Parse(poem.VerseLength);
-                if (regularMetricData.TryGetValue(verseLength, out var _))
+                if (regularMetricData.TryGetValue(verseLength, out _))
                 {
                     regularMetricData[verseLength]++;
                 }
@@ -870,7 +871,7 @@ public class Engine
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemIntensityPie", ["Les jours de création sont-ils intenses ?"]);
         streamWriter.Close();
-        
+
         // Most intense days content file
         var intensityKeys = intensityDict.Keys.OrderDescending().Where(x => x > 2);
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
@@ -886,7 +887,7 @@ public class Engine
             streamWriter2.WriteLine($"- {key} poèmes en un jour :");
             var matchingIntensities = dataDict.Where(x => x.Value == key).Select(x => x.Key);
             var years = matchingIntensities.Select(x => x.Substring(6)).Distinct();
-            
+
             foreach (var year in years)
             {
                 var dates = matchingIntensities.Where(x => x.Substring(6) == year).Select(x => x.ToDateTime()).Order();
@@ -1418,7 +1419,7 @@ public class Engine
             "Deuxième quartile",
             "Troisième quartile",
             "Quatrième quartile"
-        ], chartXAxisTitle: "Longueur du vers (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
+        ], chartXAxisTitle: "Métrique (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
         streamWriter.Close();
     }
 
@@ -1489,7 +1490,7 @@ public class Engine
                 "12 pieds",
                 //"13 pieds",
                 "14 pieds"
-            ], chartYAxisTitle: "Longueur du vers (0 = variable)", chartXAxisTitle: "Au fil des Saisons",
+            ], chartYAxisTitle: "Métrique (0 = variable)", chartXAxisTitle: "Au fil des Saisons",
             xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
     }
@@ -1553,6 +1554,66 @@ public class Engine
         streamWriter.Close();
     }
 
+    public void GenerateCategoryMetricBubbleChartDataFile()
+    {
+        var poems = Data.Seasons.SelectMany(x => x.Poems);
+        var categoryMetricDataDictionary = new Dictionary<KeyValuePair<string, int>, int>();
+        var xAxisLabels = new SortedSet<string>();
+        var yAxisLabels = new SortedSet<string>();
+
+        foreach (var poem in poems)
+        {
+            FillCategoryMetricBubbleChartDataDict(categoryMetricDataDictionary, xAxisLabels, yAxisLabels, poem);
+        }
+
+        // Find max value
+        var maxValue = categoryMetricDataDictionary.Values.Max();
+
+        var fileName = "category-metric.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
+        chartDataFileHelper.WriteBeforeData();
+
+        var firstQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var secondQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var thirdQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+
+        // Get the values for x-axis
+        var xAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
+        xAxisKeys.Sort();
+
+        var yAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Value).Distinct().ToList();
+        yAxisKeys.Sort();
+
+        foreach (var dataKey in categoryMetricDataDictionary.Keys)
+        {
+            var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
+            // FIXME Seem to be wrong according to what I see.
+            var yAxisValue = yAxisKeys.IndexOf(dataKey.Value);
+            AddDataLine(xAxisValue, yAxisValue, categoryMetricDataDictionary[dataKey],
+                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+                maxValue, 10);
+        }
+
+        chartDataFileHelper.WriteData(firstQuartileDataLines, false);
+        chartDataFileHelper.WriteData(secondQuartileDataLines, false);
+        chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
+        chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
+        chartDataFileHelper.WriteAfterData("categoryMetric",
+            [
+                "Premier quartile",
+                "Deuxième quartile",
+                "Troisième quartile",
+                "Quatrième quartile"
+            ],
+            chartXAxisTitle: "Catégorie", chartYAxisTitle: "Métrique",
+            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(), yAxisLabels.ToList()));
+        streamWriter.Close();
+    }
+
     public void FillCategoriesBubbleChartDataDict(Dictionary<KeyValuePair<string, string>, int> dictionary,
         SortedSet<string> xLabels, SortedSet<string> yLabels, Poem poem)
     {
@@ -1569,7 +1630,7 @@ public class Engine
             {
                 if (string.Compare(subCategories[i], subCategories[j]) >= 0) continue;
                 var key = new KeyValuePair<string, string>(subCategories[i], subCategories[j]);
-                if (dictionary.TryGetValue(key, out var _))
+                if (dictionary.TryGetValue(key, out _))
                 {
                     dictionary[key]++;
                 }
@@ -1579,6 +1640,27 @@ public class Engine
                     xLabels.Add(key.Key);
                     yLabels.Add(key.Value);
                 }
+            }
+        }
+    }
+
+    public void FillCategoryMetricBubbleChartDataDict(Dictionary<KeyValuePair<string, int>, int> dictionary,
+        SortedSet<string> xLabels, SortedSet<string> yLabels, Poem poem)
+    {
+        var subCategories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
+        var metric = poem.HasVariableMetric ? 0 : int.Parse(poem.VerseLength!);
+
+        foreach (var key in subCategories.Select(subCategory => new KeyValuePair<string, int>(subCategory, metric)))
+        {
+            if (dictionary.TryGetValue(key, out _))
+            {
+                dictionary[key]++;
+            }
+            else
+            {
+                dictionary.Add(key, 1);
+                xLabels.Add(key.Key);
+                yLabels.Add(key.Value == 0 ? "Variable" : key.Value.ToString());
             }
         }
     }

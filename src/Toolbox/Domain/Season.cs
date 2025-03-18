@@ -95,7 +95,7 @@ public class Season
         s.Append(
             $"{{{{< chartjs id=\"season{Id}Pie\" width=\"75%\" jsFile=\"../../charts/season-{Id}/categories-pie.js\" />}}}}");
         s.Append(Environment.NewLine);
-        s.Append("## Longueur des vers");
+        s.Append("## Métrique");
         s.Append(Environment.NewLine);
         s.Append(
             $"{{{{< chartjs id=\"season{Id}VerseLengthBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}/poems-verse-length-bar.js\" />}}}}");
