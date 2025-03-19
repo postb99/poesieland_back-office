@@ -35,7 +35,7 @@ public class PoemContentImporter(IConfiguration configuration)
         {
             line = streamReader.ReadLine();
             ProcessLine(line);
-        } while (line != null);
+        } while (line is not null);
 
         _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
         _poem.Pictures = _metadataProcessor.GetPictures();
@@ -82,7 +82,7 @@ public class PoemContentImporter(IConfiguration configuration)
         {
             line = streamReader.ReadLine();
             ProcessLine(line);
-        } while (line != null);
+        } while (line is not null);
         
         var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;

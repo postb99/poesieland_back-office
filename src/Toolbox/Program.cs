@@ -62,7 +62,7 @@ public class Program
         var ok = Enum.TryParse<MainMenuSettings.MenuChoices>(entry, true, out var menuChoice);
         if (ok)
         {
-            var menuItem = parentMenuItem != null
+            var menuItem = parentMenuItem is not null
                 ? parentMenuItem.SubMenuItems.FirstOrDefault(x => x.Key == (int)menuChoice)
                 : _mainMenuSettings.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
             return menuItem;
@@ -208,7 +208,7 @@ public class Program
         var poemId = Console.ReadLine();
 
         var poem = _engine.Data.Seasons.SelectMany(x => x.Poems).FirstOrDefault(x => x.Id == poemId);
-        if (poem != null)
+        if (poem is not null)
         {
             _engine.GeneratePoemFile(poem);
             Console.WriteLine("Poem content file OK");
@@ -225,7 +225,7 @@ public class Program
         var poemId = Console.ReadLine();
 
         var importedPoem = _engine.ImportPoem(poemId);
-        if (importedPoem != null)
+        if (importedPoem is not null)
         {
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
@@ -357,7 +357,7 @@ public class Program
         // Categories' and tags' radar
         GeneratePoemsCategoriesAndTagsRadarChartDataFile();
         // Year tag's radar
-        if (poemYear != null)
+        if (poemYear is not null)
         {
             _engine.GeneratePoemsOfYearByDayRadarChartDataFile(poemYear.Value);
             Console.WriteLine("Poem's year by day chart data file OK");

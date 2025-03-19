@@ -110,7 +110,7 @@ public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutp
     [Trait("UnitTest", "Quality")]
     public void SpecialAcrosticheShouldBeConsistent()
     {
-        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.DoubleAcrostiche != null).All(x =>
+        _data.Seasons.SelectMany(x => x.Poems).Where(x => x.DoubleAcrostiche is not null).All(x =>
                 !string.IsNullOrEmpty(x.DoubleAcrostiche!.First) &&
                 !string.IsNullOrEmpty(x.DoubleAcrostiche.Second)).ShouldBeTrue();
     }

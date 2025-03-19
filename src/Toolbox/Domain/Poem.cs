@@ -24,7 +24,7 @@ public class Poem
     public string? VerseLength { get; set; }
 
     [XmlIgnore]
-    public bool HasVariableMetric => VerseLength != null &&
+    public bool HasVariableMetric => VerseLength is not null &&
                                      (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
 
     /// <summary>
@@ -121,7 +121,7 @@ public class Poem
             s.Append($"\"{categoryName.ToLowerInvariant()}\", ");
         }
 
-        if (ExtraTags != null)
+        if (ExtraTags is not null)
         {
             foreach (var extraTag in ExtraTags)
             {
@@ -131,17 +131,17 @@ public class Poem
 
         s.Append($"\"{Date.ToString("yyyy")}\", ");
 
-        if (Acrostiche != null)
+        if (Acrostiche is not null)
         {
             s.Append($"\"acrostiche\", ");
         }
 
-        if (DoubleAcrostiche != null)
+        if (DoubleAcrostiche is not null)
         {
             s.Append($"\"doubleAcrostiche\", ");
         }
 
-        if (PoemType != null && PoemType.ToLowerInvariant() != "default")
+        if (PoemType is not null && PoemType.ToLowerInvariant() is not "default")
         {
             s.Append($"\"{PoemType.ToLowerInvariant()}\", ");
         }
@@ -155,13 +155,13 @@ public class Poem
         s.Append("]");
         s.Append(Environment.NewLine);
 
-        if (Info != null)
+        if (Info is not null)
         {
             s.Append($"info = \"{Info.Escaped()}\"");
             s.Append(Environment.NewLine);
         }
 
-        if (Pictures != null && Pictures.Count > 0)
+        if (Pictures is not null && Pictures.Count > 0)
         {
             s.Append("pictures = [");
             foreach (var picture in Pictures)
@@ -174,32 +174,32 @@ public class Poem
             s.Append(Environment.NewLine);
         }
 
-        if (PoemType != null && PoemType.ToLowerInvariant() != "default")
+        if (PoemType is not null && PoemType.ToLowerInvariant() is not "default")
         {
             s.Append($"poemType = \"{PoemType.ToLowerInvariant()}\"");
             s.Append(Environment.NewLine);
         }
 
-        if (Acrostiche != null)
+        if (Acrostiche is not null)
         {
             s.Append($"acrostiche = \"{Acrostiche}\"");
             s.Append(Environment.NewLine);
         }
 
-        if (DoubleAcrostiche != null)
+        if (DoubleAcrostiche is not null)
         {
             s.Append($"doubleAcrostiche = \"{DoubleAcrostiche.First} | {DoubleAcrostiche.Second}\"");
             s.Append(Environment.NewLine);
         }
 
-        if (VerseLength != null)
+        if (VerseLength is not null)
         {
             var verseLength = HasVariableMetric ? "-1" : VerseLength;
             s.Append($"verseLength = {verseLength}");
             s.Append(Environment.NewLine);
         }
 
-        if (Locations != null)
+        if (Locations is not null)
         {
             s.Append("locations = [");
             foreach (var location in Locations)
@@ -226,7 +226,7 @@ public class Poem
 
         s.Remove(s.Length - 6, 6);
 
-        if (Pictures != null)
+        if (Pictures is not null)
         {
             for (var i = 0; i < Pictures.Count; i++)
             {
@@ -236,30 +236,30 @@ public class Poem
             }
         }
 
-        if (Info != null || Acrostiche != null || DoubleAcrostiche != null)
+        if (Info is not null || Acrostiche is not null || DoubleAcrostiche is not null)
         {
             s.Append(Environment.NewLine);
             s.Append("{{% notice style=\"primary\" %}}");
             s.Append(Environment.NewLine);
 
-            if (Info != null)
+            if (Info is not null)
             {
                 s.Append(Info.Escaped());
             }
 
-            if (Acrostiche != null || DoubleAcrostiche != null)
+            if (Acrostiche is not null || DoubleAcrostiche is not null)
             {
-                if (Info != null)
+                if (Info is not null)
                 {
                     s.Append(Environment.NewLine);
                     s.Append(Environment.NewLine);
                 }
 
-                if (Acrostiche != null)
+                if (Acrostiche is not null)
                 {
                     s.Append($"Acrostiche : {Acrostiche}");
                 }
-                else if (DoubleAcrostiche != null)
+                else if (DoubleAcrostiche is not null)
                 {
                     s.Append(
                         $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");

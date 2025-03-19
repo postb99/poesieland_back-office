@@ -44,7 +44,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
         using var streamWriter = new StreamWriter(outputFileStream);
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x =>
             !string.IsNullOrEmpty(x.Acrostiche)
-            || x.DoubleAcrostiche != null
+            || x.DoubleAcrostiche is not null
             || !string.IsNullOrEmpty(x.PoemType)
             || !string.IsNullOrEmpty(x.Info)).ToList();
 
@@ -61,7 +61,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
                 sb.AppendFormat(" [acrostiche] {0}", poem.Acrostiche);
             }
 
-            if (poem.DoubleAcrostiche != null)
+            if (poem.DoubleAcrostiche is not null)
             {
                 sb.AppendFormat(" [crossing acrostiche] {0}/{1}", poem.DoubleAcrostiche.First,
                     poem.DoubleAcrostiche.Second);
@@ -235,7 +235,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
         {
-            if (poem.Acrostiche != null || poem.DoubleAcrostiche != null)
+            if (poem.Acrostiche is not null || poem.DoubleAcrostiche is not null)
                 continue;
             StringBuilder sb = new StringBuilder();
             foreach (var verse in poem.Paragraphs.SelectMany(x => x.Verses))

@@ -1559,11 +1559,10 @@ public class Engine
         var poems = Data.Seasons.SelectMany(x => x.Poems);
         var categoryMetricDataDictionary = new Dictionary<KeyValuePair<string, int>, int>();
         var xAxisLabels = new SortedSet<string>();
-        var yAxisLabels = new SortedSet<string>();
 
         foreach (var poem in poems)
         {
-            FillCategoryMetricBubbleChartDataDict(categoryMetricDataDictionary, xAxisLabels, yAxisLabels, poem);
+            FillCategoryMetricBubbleChartDataDict(categoryMetricDataDictionary, xAxisLabels, poem);
         }
 
         // Find max value
@@ -1585,14 +1584,10 @@ public class Engine
         var xAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
         xAxisKeys.Sort();
 
-        var yAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Value).Distinct().ToList();
-        yAxisKeys.Sort();
-
         foreach (var dataKey in categoryMetricDataDictionary.Keys)
         {
             var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
-            // FIXME Seem to be wrong according to what I see.
-            var yAxisValue = yAxisKeys.IndexOf(dataKey.Value);
+            var yAxisValue = dataKey.Value;
             AddDataLine(xAxisValue, yAxisValue, categoryMetricDataDictionary[dataKey],
                 [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
                 maxValue, 10);
@@ -1609,8 +1604,7 @@ public class Engine
                 "Troisième quartile",
                 "Quatrième quartile"
             ],
-            chartXAxisTitle: "Catégorie", chartYAxisTitle: "Métrique",
-            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(), yAxisLabels.ToList()));
+            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(), xAxisTitle: "Catégorie", yAxisTitle: "Métrique (0 = variable)"));
         streamWriter.Close();
     }
 
@@ -1645,7 +1639,7 @@ public class Engine
     }
 
     public void FillCategoryMetricBubbleChartDataDict(Dictionary<KeyValuePair<string, int>, int> dictionary,
-        SortedSet<string> xLabels, SortedSet<string> yLabels, Poem poem)
+        SortedSet<string> xLabels, Poem poem)
     {
         var subCategories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
         var metric = poem.HasVariableMetric ? 0 : int.Parse(poem.VerseLength!);
@@ -1660,7 +1654,6 @@ public class Engine
             {
                 dictionary.Add(key, 1);
                 xLabels.Add(key.Key);
-                yLabels.Add(key.Value == 0 ? "Variable" : key.Value.ToString());
             }
         }
     }

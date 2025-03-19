@@ -135,7 +135,8 @@ public class ChartDataFileHelper
     /// <param name="yAxisStep">Option for bubble chart</param>
     /// <param name="xLabels">Option for line chart</param>
     /// <param name="stack">Option for line chart</param>
-    /// <param name="customScalesOptions">Option for bar, line, bubble chart: "scales: { ... }"</param>
+    /// <param name="customScalesOptions">Option for bar, line, bubble chart: "scales: { ... }.
+    /// NB: chartXAxisTitle, chartYAxisTitle, xAxisStep, yAxisStep options will be ignored"</param>
     public void WriteAfterData(string chartId, string[] chartTitles, string? radarChartBorderColor = null,
         string? radarChartBackgroundColor = null, string chartXAxisTitle = "",
         string chartYAxisTitle = "", int xAxisStep = 1, int yAxisStep = 1, string[]? xLabels = null,
@@ -265,17 +266,41 @@ public class ChartDataFileHelper
         _streamWriter.Flush();
     }
 
-    public string FormatCategoriesBubbleChartLabelOptions(List<string> xAxisLabels, List<string> yAxisLabels)
+    public string FormatCategoriesBubbleChartLabelOptions(List<string>? xAxisLabelsForCallback,
+        List<string>? yAxisLabelsForCallback = null, string? xAxisTitle = null, string? yAxisTitle = null)
     {
+        var xAxisTitleOption = xAxisTitle is null ? " " : $", title: {{display:true, text:'{xAxisTitle}'}} ";
+        var yAxisTitleOption = yAxisTitle is null ? " " : $", title: {{display:true, text:'{yAxisTitle}'}} ";
+
         // https://www.chartjs.org/docs/latest/axes/labelling.html
         var sb = new StringBuilder("scales: { x: { ")
-            .Append("ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return [")
-            .Append(string.Join(',', xAxisLabels.Select(x => $"'{x}'")))
-            .Append("][index]; } } }, ")
-            .Append("y: { ")
-            .Append("ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return [")
-            .Append(string.Join(',', yAxisLabels.Select(x => $"'{x}'")))
-            .Append("][index]; } } } }");
+            .Append("ticks: { stepSize: 1, ")
+            .Append("autoSkip: false");
+        if (xAxisLabelsForCallback is not null)
+        {
+            sb.Append(", callback: function(value, index, ticks) { return [")
+                .Append(string.Join(',', xAxisLabelsForCallback.Select(x => $"'{x}'")))
+                .Append("][index]; }");
+        }
+        sb.Append(" }")
+          .Append(xAxisTitleOption)
+          .Append("}");
+
+        sb.Append(", y: { ")
+            .Append("ticks: { stepSize: 1, ")
+            .Append("autoSkip: false");
+        if (yAxisLabelsForCallback is not null)
+        {
+            sb.Append(", callback: function(value, index, ticks) { return [")
+                .Append(string.Join(',', yAxisLabelsForCallback.Select(x => $"'{x}'")))
+                .Append("][index]; }");
+        }
+        sb.Append(" }")
+            .Append(yAxisTitleOption)
+            .Append("}");
+
+        sb.Append(" }");
+
         return sb.ToString();
     }
 }
