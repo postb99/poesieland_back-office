@@ -261,6 +261,19 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
     }
 
     [Fact]
+    [Trait("DataMining", "Quality")]
+    public void PoemsThatShouldBeSonnetButAreNot()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x =>
+                     x.VersesCount == 14 &&
+                     x.PoemType != Toolbox.Domain.PoemType.Sonnet.ToString().ToLowerInvariant() &&
+                     x.Paragraphs.Select(x => x.Verses.Count).ToList() == new List<int> { 4, 4, 3, 3 }))
+        {
+            testOutputHelper.WriteLine(poem.Id);
+        }
+    }
+
+    [Fact]
     [Trait("DataMining", "Lookup")]
     public void PossibleProperNouns()
     {
