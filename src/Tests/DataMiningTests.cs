@@ -197,6 +197,17 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
             }
         }
     }
+    
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void FirstDateOfEveryMetric()
+    {
+        var metrics = Enumerable.Range(2, 13);
+        foreach (var metric in metrics)
+        {
+            testOutputHelper.WriteLine($"{metric}: {_data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == metric.ToString())).Select(x => x.Date).Order().FirstOrDefault()}");
+        }
+    }
 
     [Fact]
     [Trait("DataMining", "Quality")]
