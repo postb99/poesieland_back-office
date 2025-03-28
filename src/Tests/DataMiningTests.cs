@@ -197,16 +197,24 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
             }
         }
     }
-    
+
     [Fact]
     [Trait("DataMining", "Lookup")]
     public void FirstDateOfEveryMetric()
     {
-        var metrics = Enumerable.Range(2, 13);
+        var metrics = Enumerable.Range(2, 12);
         foreach (var metric in metrics)
         {
-            testOutputHelper.WriteLine($"{metric}: {_data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == metric.ToString())).Select(x => x.Date).Order().FirstOrDefault()}");
+            testOutputHelper.WriteLine(
+                $"{metric}: {_data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == metric.ToString())).Select(x => x.Date).Order().FirstOrDefault()}");
         }
+
+        var fourteen = _data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == "14")).Select(x => x.Date)
+            .Order().ToList();
+        testOutputHelper.WriteLine($"14: {fourteen[0]} -> {fourteen[fourteen.Count - 1]}");
+
+        testOutputHelper.WriteLine(
+            $"Variable: {_data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric)).Select(x => x.Date).Order().Skip(1).FirstOrDefault()}");
     }
 
     [Fact]
