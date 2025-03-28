@@ -55,14 +55,17 @@ public class PoemContentImporter(IConfiguration configuration)
     {
         var tagsToIgnore = new List<string>();
         
-        // Should not be a storage category
+        // Should neither be a storage category
         tagsToIgnore.AddRange(configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories.Select(x => x.Name.ToLowerInvariant()));
+        
+        // Nor a metric name
+        tagsToIgnore.AddRange(configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics.Select(x => x.Name.ToLowerInvariant()));
 
         // Nor a year
         tagsToIgnore.AddRange(Enumerable.Range(1994, DateTime.Now.Year - 1993).Select(x => x.ToString()));
 
         // Nor a specific tag
-        tagsToIgnore.AddRange(["métrique variable", "pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
+        tagsToIgnore.AddRange(["pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
         
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
     }

@@ -26,6 +26,6 @@ public class PoemContentImporterTest(BasicFixture basicFixture): IClassFixture<B
     public void ShouldFindExtraTags()
     {
         var poemContentImporter = new PoemContentImporter(basicFixture.Configuration);
-        poemContentImporter.FindExtraTags(["lovecat", "2025", "nature", "sonnet", "métrique variable", "other"]).ShouldBe(["lovecat", "other"]);
+        poemContentImporter.FindExtraTags(["lovecat", "2025", "nature", "sonnet", "métrique variable", "other", "octosyllabe"]).ShouldBe(["lovecat", "other"]);
     }
 }
