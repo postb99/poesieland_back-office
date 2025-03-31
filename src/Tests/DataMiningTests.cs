@@ -216,6 +216,19 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
         testOutputHelper.WriteLine(
             $"Variable: {_data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric)).Select(x => x.Date).Order().Skip(1).FirstOrDefault()}");
     }
+    
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void SonnetsMetric()
+    {
+        var metrics = new List<string>();
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems.Where(x => x.PoemType == Toolbox.Domain.PoemType.Sonnet.ToString().ToLowerInvariant())))
+        {
+                metrics.Add(poem.VerseLength);
+        }
+        
+        testOutputHelper.WriteLine(string.Join(',', metrics.Order()));
+    }
 
     [Fact]
     [Trait("DataMining", "Quality")]
