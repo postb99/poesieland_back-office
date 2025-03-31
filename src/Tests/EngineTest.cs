@@ -16,7 +16,7 @@ public class DataDependantEngineTest(LoadDataFixture fixture, ITestOutputHelper 
     [Trait("UnitTest", "Quality")]
     public void ShouldCorrectlyComputeVerseLengthDataDict()
     {
-        var dataDict = _engine.FillVerseLengthDataDict(out var _);
+        var dataDict = _engine.FillMetricDataDict(out var _);
         testOutputHelper.WriteLine(
             $"Last non-empty season poem count: {_engine.Data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
         testOutputHelper.WriteLine(

@@ -20,7 +20,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
     {
         var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.VerseLength == verseLength.ToString());
 
-        testOutputHelper.WriteLine("Verse length {0}: {1}",
+        testOutputHelper.WriteLine("Metric {0}: {1}",
             verseLength, string.Join(' ', poems.Select(x => x.Id).ToList()));
     }
 

@@ -16,7 +16,7 @@ public class PoemTest
             VerseLength = "8"
         };
 
-        poem.DetailedVerseLength.ShouldBe("8");
+        poem.DetailedMetric.ShouldBe("8");
     }
     
     [Theory]
@@ -32,7 +32,7 @@ public class PoemTest
             Info = info
         };
 
-        poem.DetailedVerseLength.ShouldBe("6, 3");
+        poem.DetailedMetric.ShouldBe("6, 3");
     }
 
     [Fact]
@@ -45,7 +45,7 @@ public class PoemTest
             Info = null
         };
 
-        var func = () => poem.DetailedVerseLength;
+        var func = () => poem.DetailedMetric;
         func.ShouldThrow<InvalidOperationException>();
     }
     
@@ -59,7 +59,7 @@ public class PoemTest
             Info = "Some info"
         };
 
-        var func = () => poem.DetailedVerseLength;
+        var func = () => poem.DetailedMetric;
         func.ShouldThrow<InvalidOperationException>();
     }
 

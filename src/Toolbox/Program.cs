@@ -128,7 +128,7 @@ public class Program
                 _engine.CheckPoemsWithVariableMetric();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
-                Console.WriteLine($"Verse length last season computed values sum: {_engine.FillVerseLengthDataDict(out var _).Values.Sum(x => x.Last())}");
+                Console.WriteLine($"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
                 Console.WriteLine("Content metadata quality OK");
                 return true;
             case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:
@@ -330,7 +330,7 @@ public class Program
         GeneratePoemsLengthBarChartDataFile();
         _engine.GeneratePoemsLengthBarChartDataFile(seasonId);
 
-        // Poem's and season's verse length
+        // Poem's and season's metric
         GeneratePoemVersesLengthBarChartDataFile();
         _engine.GeneratePoemVersesLengthBarChartDataFile(seasonId);
 
@@ -367,7 +367,7 @@ public class Program
         _engine.GeneratePoemCountFile();
         Console.WriteLine("Poem count file OK");
 
-        // Poem length by verse length and vice versa
+        // Poem length by metric and vice versa
         Console.WriteLine("Poems bubble chart data files: starting...");
         _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
         Console.WriteLine("Poems bubble chart data files OK");
@@ -386,7 +386,7 @@ public class Program
         _engine.CheckPoemsWithVariableMetric();
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
-        Console.WriteLine($"Content metadata quality OK. Info: verse length last season computed values sum: {_engine.FillVerseLengthDataDict(out var _).Values.Sum(x => x.Last())}");
+        Console.WriteLine($"Content metadata quality OK. Info: metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)

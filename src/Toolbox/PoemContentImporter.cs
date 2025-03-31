@@ -46,7 +46,7 @@ public class PoemContentImporter(IConfiguration configuration)
         _poem.Locations = _metadataProcessor.GetLocations();
 
         // Copy for XML save
-        _poem.VerseLength = _poem.DetailedVerseLength;
+        _poem.VerseLength = _poem.DetailedMetric;
 
         return (_poem, _position);
     }

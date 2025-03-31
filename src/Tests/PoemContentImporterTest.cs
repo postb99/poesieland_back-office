@@ -16,7 +16,7 @@ public class PoemContentImporterTest(BasicFixture basicFixture): IClassFixture<B
         var poemContentImporter = new PoemContentImporter(basicFixture.Configuration);
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poem.Info.ShouldBe("Métrique variable : 8, 6, 4, 2");
-        poem.DetailedVerseLength.ShouldBe("8, 6, 4, 2");
+        poem.DetailedMetric.ShouldBe("8, 6, 4, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.ShouldBe("8, 6, 4, 2");
     }

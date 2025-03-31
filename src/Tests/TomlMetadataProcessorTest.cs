@@ -175,7 +175,7 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         poem.Info.ShouldBe("Métrique variable : 5, 2");
-        poem.DetailedVerseLength.ShouldBe("5, 2");
+        poem.DetailedMetric.ShouldBe("5, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.ShouldBe("5, 2");
     }

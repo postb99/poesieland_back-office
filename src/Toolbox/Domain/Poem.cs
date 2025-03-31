@@ -28,10 +28,10 @@ public class Poem
                                      (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
 
     /// <summary>
-    /// Real verse length, either an integer or integers separated by comma + space.
+    /// Real metric, either an integer or integers separated by comma + space.
     /// </summary>
     [XmlIgnore]
-    public string DetailedVerseLength
+    public string DetailedMetric
     {
         get
         {
@@ -41,7 +41,7 @@ public class Poem
             if (Info == null || !Info.StartsWith("Métrique variable : "))
             {
                 throw new InvalidOperationException(
-                    $"When verse length is -1, info should begin with variable length indication: 'Métrique variable : ...'. Poem id: {Id}");
+                    $"When metric is -1, info should begin with variable length indication: 'Métrique variable : ...'. Poem id: {Id}");
             }
 
             return Info.IndexOf(".") > -1 ? Info.Substring(20, Info.IndexOf(".") - 20) : Info.Substring(20);
