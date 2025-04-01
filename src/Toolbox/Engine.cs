@@ -716,15 +716,17 @@ public class Engine
         return dataDict;
     }
 
-    public void GeneratePoemVersesLengthBarChartDataFile(int? seasonId)
+    public void GeneratePoemMetricBarAndPieChartDataFile(int? seasonId)
     {
+        var isGeneral = seasonId is null;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var fileName = "poems-verse-length-bar.js";
-        var subDir = seasonId != null ? $"season-{seasonId}" : "general";
-        var chartId = seasonId != null ? $"season{seasonId}VerseLengthBar" : "poemVerseLengthBar";
+        var fileName = isGeneral ? "poems-verse-length-pie.js" : "poems-verse-length-bar.js";
+        var subDir = isGeneral ? "general" : $"season-{seasonId}";
+        var chartId = isGeneral ? "poemVerseLengthPie" : $"season{seasonId}VerseLengthBar";
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 1);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
+            isGeneral ? ChartDataFileHelper.ChartType.Pie : ChartDataFileHelper.ChartType.Bar, 1);
         chartDataFileHelper.WriteBeforeData();
         var regularMetricData = new Dictionary<int, int>();
         var variableMetricData = new Dictionary<string, int>();
@@ -769,10 +771,10 @@ public class Engine
         var regularMetricChartData = new List<ChartDataFileHelper.DataLine>();
         var variableMetricChartData = new List<ChartDataFileHelper.ColoredDataLine>();
 
-        foreach (var verseLength in regularMetricRange)
+        foreach (var metricValue in regularMetricRange)
         {
             regularMetricChartData.Add(new ChartDataFileHelper.DataLine(
-                verseLength.ToString(), regularMetricData[verseLength]));
+                metricValue.ToString(), regularMetricData[metricValue]));
         }
 
         foreach (var verseLength in variableMetricRange)
@@ -785,22 +787,46 @@ public class Engine
         ("Pas de données pour l\\'instant", nbUndefinedVerseLength, "rgb(211, 211, 211)"
         );
 
+        // General pie chart or Season's bar chart
         var dataLines = new List<ChartDataFileHelper.DataLine>();
-        dataLines.AddRange(regularMetricChartData);
-        dataLines.AddRange(variableMetricChartData);
-        if (nbUndefinedVerseLength > 0)
-            dataLines.Add(undefinedVerseLengthChartData);
 
-        chartDataFileHelper.WriteData(dataLines, true);
+        if (isGeneral)
+        {
+            var metrics = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
+            var coloredDataLines = new List<ChartDataFileHelper.ColoredDataLine>();
 
-        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
-            customScalesOptions: seasonId == null
-                ? "scales: { y: { max: " + ChartDataFileHelper.VERSE_LENGTH_MAX_Y + " } }"
-                : "scales: { y: { ticks: { stepSize: 1 } } }");
-        streamWriter.Close();
+            foreach (var metricValue in regularMetricRange)
+            {
+                var term = metricValue == 1 ? "syllabe" : "syllabes";
+                coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{metricValue} {term}",
+                    regularMetricData[metricValue], metrics.First(m => m.Length == metricValue).Color));
+            }
 
-        // Second chart for variable length, when no season ID is given
-        if (seasonId == null)
+            var variableMetricSum = variableMetricData.Sum(x => x.Value);
+
+            coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Variable (en blanc)", variableMetricSum,
+                metrics.First(m => m.Length == 0).Color));
+            chartDataFileHelper.WriteData(coloredDataLines, true);
+
+            chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"]);
+            streamWriter.Close();
+        }
+        else
+        {
+            dataLines.AddRange(regularMetricChartData);
+            dataLines.AddRange(variableMetricChartData);
+            if (nbUndefinedVerseLength > 0)
+                dataLines.Add(undefinedVerseLengthChartData);
+
+            chartDataFileHelper.WriteData(dataLines, true);
+
+            chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
+                customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
+            streamWriter.Close();
+        }
+
+        // Variable metric general bar chart
+        if (isGeneral)
         {
             fileName = "metrique_variable-bar.js";
             chartId = "metrique_variableBar";
@@ -1439,27 +1465,47 @@ public class Engine
         chartDataFileHelper.WriteBeforeData();
 
         var variableMetricDataLines =
-            new ChartDataFileHelper.LineChartDataLine("Métrique variable", dataDict[0], metrics.First(x => x.Length == 0).Color);
-        var oneFootDataLines = new ChartDataFileHelper.LineChartDataLine("1 syllabe", dataDict[1], metrics.First(x => x.Length == 1).Color);
-        var twoFeetDataLines = new ChartDataFileHelper.LineChartDataLine("2 syllabes", dataDict[2], metrics.First(x => x.Length == 2).Color);
+            new ChartDataFileHelper.LineChartDataLine("Métrique variable", dataDict[0],
+                metrics.First(x => x.Length == 0).Color);
+        var oneFootDataLines =
+            new ChartDataFileHelper.LineChartDataLine("1 syllabe", dataDict[1],
+                metrics.First(x => x.Length == 1).Color);
+        var twoFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("2 syllabes", dataDict[2],
+                metrics.First(x => x.Length == 2).Color);
         var threeFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("3 syllabes", dataDict[3], metrics.First(x => x.Length == 3).Color);
-        var fourFeetDataLines = new ChartDataFileHelper.LineChartDataLine("4 syllabes", dataDict[4], metrics.First(x => x.Length == 4).Color);
-        var fiveFeetDataLines = new ChartDataFileHelper.LineChartDataLine("5 syllabes", dataDict[5], metrics.First(x => x.Length == 5).Color);
-        var sixFeetDataLines = new ChartDataFileHelper.LineChartDataLine("6 syllabes", dataDict[6], metrics.First(x => x.Length == 6).Color);
+            new ChartDataFileHelper.LineChartDataLine("3 syllabes", dataDict[3],
+                metrics.First(x => x.Length == 3).Color);
+        var fourFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("4 syllabes", dataDict[4],
+                metrics.First(x => x.Length == 4).Color);
+        var fiveFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("5 syllabes", dataDict[5],
+                metrics.First(x => x.Length == 5).Color);
+        var sixFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("6 syllabes", dataDict[6],
+                metrics.First(x => x.Length == 6).Color);
         var sevenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("7 syllabes", dataDict[7], metrics.First(x => x.Length == 7).Color);
+            new ChartDataFileHelper.LineChartDataLine("7 syllabes", dataDict[7],
+                metrics.First(x => x.Length == 7).Color);
         var eightFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("8 syllabes", dataDict[8], metrics.First(x => x.Length == 8).Color);
-        var nineFeetDataLines = new ChartDataFileHelper.LineChartDataLine("9 syllabes", dataDict[9], metrics.First(x => x.Length == 9).Color);
+            new ChartDataFileHelper.LineChartDataLine("8 syllabes", dataDict[8],
+                metrics.First(x => x.Length == 8).Color);
+        var nineFeetDataLines =
+            new ChartDataFileHelper.LineChartDataLine("9 syllabes", dataDict[9],
+                metrics.First(x => x.Length == 9).Color);
         var tenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("10 syllabes", dataDict[10], metrics.First(x => x.Length == 10).Color);
+            new ChartDataFileHelper.LineChartDataLine("10 syllabes", dataDict[10],
+                metrics.First(x => x.Length == 10).Color);
         var elevenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("11 syllabes", dataDict[11], metrics.First(x => x.Length == 11).Color);
+            new ChartDataFileHelper.LineChartDataLine("11 syllabes", dataDict[11],
+                metrics.First(x => x.Length == 11).Color);
         var twelveFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("12 syllabes", dataDict[12], metrics.First(x => x.Length == 12).Color);
+            new ChartDataFileHelper.LineChartDataLine("12 syllabes", dataDict[12],
+                metrics.First(x => x.Length == 12).Color);
         var fourteenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("14 syllabes", dataDict[14], metrics.First(x => x.Length == 14).Color);
+            new ChartDataFileHelper.LineChartDataLine("14 syllabes", dataDict[14],
+                metrics.First(x => x.Length == 14).Color);
 
         chartDataFileHelper.WriteData(variableMetricDataLines);
         chartDataFileHelper.WriteData(oneFootDataLines);
@@ -1606,7 +1652,8 @@ public class Engine
                 "Troisième quartile",
                 "Quatrième quartile"
             ],
-            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(), xAxisTitle: "Catégorie", yAxisTitle: "Métrique (0 = variable)"));
+            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
+                xAxisTitle: "Catégorie", yAxisTitle: "Métrique (0 = variable)"));
         streamWriter.Close();
     }
 
