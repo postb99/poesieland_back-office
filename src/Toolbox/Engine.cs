@@ -231,19 +231,17 @@ public class Engine
             var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
             foreach (var poemContentPath in poemContentPaths)
             {
-                var (tags, year, poemId, variableMetric) =
-                    poemContentImporter.GetTagsYearVariableMetric(poemContentPath);
-                if (poemContentImporter.HasYamlMetadata)
+                var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
+                if (!poemContentImporter.HasYamlMetadata) continue;
+                
+                if (!partialImport.Tags.Contains(partialImport.Year.ToString()))
                 {
-                    if (!tags.Contains(year.ToString()))
-                    {
-                        yield return poemId;
-                    }
+                    yield return partialImport.PoemId;
+                }
 
-                    if (variableMetric && !tags.Contains("métrique variable"))
-                    {
-                        yield return poemId;
-                    }
+                if (partialImport.HasVariableMetric && !partialImport.Tags.Contains("métrique variable"))
+                {
+                    yield return partialImport.PoemId;
                 }
             }
         }

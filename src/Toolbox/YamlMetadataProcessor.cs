@@ -96,7 +96,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
     {
         ProcessingListType = ProcessingListType.Pictures;
     }
-    
+
     public void BuildLocations(string line)
     {
         ProcessingListType = ProcessingListType.Locations;
@@ -105,10 +105,11 @@ public class YamlMetadataProcessor : IMetadataProcessor
     public void AddValue(string line, int nbSpaces)
     {
         if (nbSpaces == -2 && line.Length > 0 && line[0] != ' ')
-        { 
+        {
             // A value in YAML cannot start at beginning of line so ignore lines not starting with at least a space
             return;
         }
+
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
         switch (ProcessingListType)
         {
@@ -122,7 +123,11 @@ public class YamlMetadataProcessor : IMetadataProcessor
                 _pictures.Add(lineValue);
                 break;
             case ProcessingListType.InfoLines:
-                _infoLines.Add(lineValue.TrimStart(' '));
+                lineValue = lineValue.TrimStart(' ');
+                if (lineValue == "{{% notice style=\"primary\" %}}") return;
+                if (lineValue == "{{% /notice %}}") return;
+                if (lineValue.StartsWith("Acrostiche :")) return;
+                _infoLines.Add(lineValue);
                 break;
             case ProcessingListType.Locations:
                 _locations.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
@@ -149,7 +154,7 @@ public class YamlMetadataProcessor : IMetadataProcessor
     {
         return _infoLines;
     }
-    
+
     public List<string> GetLocations()
     {
         return _locations;

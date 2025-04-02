@@ -70,7 +70,7 @@ public class PoemContentImporter(IConfiguration configuration)
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
     }
 
-    public (List<string>, int, string, bool) GetTagsYearVariableMetric(string contentFilePath)
+    public PartialImport GetPartialImport(string contentFilePath)
     {
         _poem = new Poem();
         _isInMetadata = false;
@@ -90,7 +90,21 @@ public class PoemContentImporter(IConfiguration configuration)
         var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
 
-        return (_metadataProcessor.GetTags(), _poem.Date.Year, _poem.Id, _poem.HasVariableMetric);
+        return new PartialImport
+        {
+            Tags = _metadataProcessor.GetTags(),
+            PoemId = _poem.Id,
+            Year = _poem.Date.Year,
+            HasVariableMetric = _poem.HasVariableMetric,
+        };
+    }
+
+    public record PartialImport()
+    {
+        public List<string> Tags { get; set; } = new();
+        public int Year { get; set; }
+        public string PoemId { get; set; }
+        public bool HasVariableMetric { get; set; }
     }
 
     private void ProcessLine(string? line)
