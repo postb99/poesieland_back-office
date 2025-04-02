@@ -231,11 +231,11 @@ public class Program
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
             GenerateDependantChartDataFiles(seasonId, importedPoem.Date.Year);
 
-            var missingTags = _engine.CheckMissingTagsInYamlMetadata();
-            if (missingTags.Any())
+            var output = _engine.CheckMissingTagsInYamlMetadata(poemId);
+            if (output.Any())
             {
                 Console.WriteLine(
-                    $"[ERROR] Missing tags for poems: {string.Join(',', missingTags)}, check these tags: year, métrique variable");
+                    $"[ERROR] Missing tags: {string.Join(',', output)}");
             }
         }
         else

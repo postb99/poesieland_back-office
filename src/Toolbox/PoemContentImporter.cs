@@ -96,6 +96,7 @@ public class PoemContentImporter(IConfiguration configuration)
             PoemId = _poem.Id,
             Year = _poem.Date.Year,
             HasVariableMetric = _poem.HasVariableMetric,
+            DetailedMetric = _poem.DetailedMetric
         };
     }
 
@@ -105,6 +106,8 @@ public class PoemContentImporter(IConfiguration configuration)
         public int Year { get; set; }
         public string PoemId { get; set; }
         public bool HasVariableMetric { get; set; }
+        
+        public string DetailedMetric { get; set; }
     }
 
     private void ProcessLine(string? line)

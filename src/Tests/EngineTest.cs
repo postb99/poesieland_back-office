@@ -96,7 +96,7 @@ public class DataDependantEngineTest(LoadDataFixture fixture, ITestOutputHelper 
     [Trait("UnitTest", "MetadataCheck")]
     public void CheckMissingYearTagInYamlMetadata()
     {
-        var anomalies = _engine.CheckMissingTagsInYamlMetadata();
+        var anomalies = _engine.CheckMissingTagsInYamlMetadata(null);
         testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
         anomalies.Count().ShouldBe(0);
     }
