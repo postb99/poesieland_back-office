@@ -167,10 +167,11 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         var partialImport = poemContentImporter.GetPartialImport(poemContentFilePath);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        partialImport.Tags.Count.ShouldBe(3);
+        partialImport.Tags.Count.ShouldBe(4);
         partialImport.Tags[0].ShouldBe("2023");
         partialImport.Tags[1].ShouldBe("saisons");
         partialImport.Tags[2].ShouldBe("nature");
+        partialImport.Tags[2].ShouldBe("octosyllabe");
     }
     
     [Fact]
