@@ -12,6 +12,7 @@ public class PoemContentImporter(IConfiguration configuration)
     private bool _isInMetadata;
     private IMetadataProcessor? _metadataProcessor;
     private ContentProcessor? _contentProcessor;
+    private List<Metric> _metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
 
     public const string YamlMarker = "---";
     public const string TomlMarker = "+++";
@@ -59,7 +60,7 @@ public class PoemContentImporter(IConfiguration configuration)
         tagsToIgnore.AddRange(configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories.Select(x => x.Name.ToLowerInvariant()));
         
         // Nor a metric name
-        tagsToIgnore.AddRange(configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics.Select(x => x.Name.ToLowerInvariant()));
+        tagsToIgnore.AddRange(_metrics.Select(x => x.Name.ToLowerInvariant()));
 
         // Nor a year
         tagsToIgnore.AddRange(Enumerable.Range(1994, DateTime.Now.Year - 1993).Select(x => x.ToString()));
@@ -68,6 +69,55 @@ public class PoemContentImporter(IConfiguration configuration)
         tagsToIgnore.AddRange(["pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
         
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
+    }
+
+    public IEnumerable<string> CheckAnomaliesAfterImport()
+    {
+        foreach (var p in CheckAnomalies(new ()
+                 {
+                     DetailedMetric = _poem.DetailedMetric,
+                     HasVariableMetric = _poem.HasVariableMetric,
+                     Tags = _metadataProcessor!.GetTags(),
+                     PoemId = _poem.Id,
+                     Year = _poem.Date.Year,
+                     Info = _poem.Info
+                 })) yield return p;
+        
+        if (_poem.VerseLength is null || _poem.VerseLength == "0")
+            yield return "Metric cannot be empty or 0";
+    }
+
+    public IEnumerable<string> CheckAnomalies(PartialImport partialImport)
+    {
+        // Poem year should be found in tags
+        if (!partialImport.Tags.Contains(partialImport.Year.ToString()))
+        {
+            yield return "Missing year tag";
+        }
+
+        // When metric is variable, "métrique variable" tag should be found and info should mention it
+        if (partialImport.HasVariableMetric)
+        {
+            if (!partialImport.Tags.Contains("métrique variable"))
+            {
+                yield return "Missing 'métrique variable' tag";
+            }
+            
+            if (!partialImport.Info.Contains("Métrique variable : "))
+            {
+                yield return "Missing 'Métrique variable : ' in Info";
+            }
+        }
+
+        // Name of metric should be found in tags
+        foreach (var metric in partialImport.DetailedMetric.Split(','))
+        {
+            var expectedTag = _metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name.ToLowerInvariant();
+            if (!partialImport.Tags.Contains(expectedTag))
+            {
+                yield return $"Missing '{expectedTag}' tag";
+            }
+        }
     }
 
     public PartialImport GetPartialImport(string contentFilePath)
@@ -96,7 +146,8 @@ public class PoemContentImporter(IConfiguration configuration)
             PoemId = _poem.Id,
             Year = _poem.Date.Year,
             HasVariableMetric = _poem.HasVariableMetric,
-            DetailedMetric = _poem.DetailedMetric
+            DetailedMetric = _poem.DetailedMetric,
+            Info = _poem.Info
         };
     }
 
@@ -108,6 +159,8 @@ public class PoemContentImporter(IConfiguration configuration)
         public bool HasVariableMetric { get; set; }
         
         public string DetailedMetric { get; set; }
+        
+        public string Info { get; set; }
     }
 
     private void ProcessLine(string? line)

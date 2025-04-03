@@ -18,6 +18,7 @@ tags:
     - "2023"
     - saisons
     - nature
+    - octosyllabe
 info: |-
     {{% notice style="primary" %}}
     Encore une variation sur cette question que j'adore...

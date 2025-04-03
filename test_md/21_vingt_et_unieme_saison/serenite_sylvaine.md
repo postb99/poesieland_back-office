@@ -12,6 +12,7 @@ tags:
     - "2024"
     - philosophie
     - nature
+    - octosyllabe
 locations:
     - Lorraine
 info: ""

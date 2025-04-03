@@ -19,5 +19,7 @@ public class ContentProcessorTest(BasicFixture basicFixture) : IClassFixture<Bas
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poem.Paragraphs.Count.ShouldBe(paragraphs);
         poem.Paragraphs.ForEach(p => p.Verses.Count.ShouldBe(verses));
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 }

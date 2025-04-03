@@ -29,6 +29,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poem.VerseLength.ShouldBe("12");
         poem.Info.ShouldBeNull();
         position.ShouldBe(0);
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -45,6 +47,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poem.Categories.First().SubCategories.Count.ShouldBe(1);
         poem.Categories.First().SubCategories.First().ShouldBe("Musique et chant");
         poem.Info.ShouldBe("Inspiré par l'air homonyme d'Offenbach.");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -67,6 +71,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poem.Info.ShouldEndWith("{{% /notice %}}");
         poem.Info.ShouldBe(
             $"{{{{% notice style=\"primary\" %}}}}{Environment.NewLine}Encore une variation sur cette question que j'adore...{Environment.NewLine}{{{{% include \"../../includes/est_ce_un_automne\" hidefirstheading %}}}}{Environment.NewLine}{{{{% /notice %}}}}");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -81,6 +87,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         poem.DoubleAcrostiche!.First.ShouldBe("Cathédrale");
         poem.DoubleAcrostiche.Second.ShouldBe("de lumières");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -100,6 +108,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.FirstOrDefault().ShouldBe("Automne");
         poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.ShouldContain("Ville");
         poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.ShouldContain("Crépuscule");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
     
     [Fact]
@@ -113,6 +123,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         poem.ExtraTags.ShouldBe(["lovecat"]);
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
     
     [Fact]
@@ -126,6 +138,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         poem.Locations.ShouldBe(["Reims"]);
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Theory]
@@ -162,6 +176,8 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poem.Pictures.ShouldNotBeNull();
         poem.Pictures.Count.ShouldBe(4);
         poem.Pictures[0].ShouldBe("Le puits du château de Ham-sous-Varsberg");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -178,5 +194,7 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poem.DetailedMetric.ShouldBe("5, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.ShouldBe("5, 2");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 }

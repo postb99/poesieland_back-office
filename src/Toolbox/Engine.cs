@@ -109,8 +109,10 @@ public class Engine
             return null;
         }
 
-        var (poem, position) =
-            (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
+        var (poem, _) = (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
+        var anomalies = _poemContentImporter!.CheckAnomaliesAfterImport();
+        foreach (var anomaly in anomalies)
+            Console.WriteLine($"[ERROR]: {anomaly}");
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         if (targetSeason == null)
@@ -146,6 +148,9 @@ public class Engine
         {
             var (poem, position) =
                 (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
+            var anomalies = _poemContentImporter!.CheckAnomaliesAfterImport();
+            foreach (var anomaly in anomalies)
+                Console.WriteLine($"[ERROR]: {anomaly}");
 
             poemsByPosition.Add(position, poem);
         }
@@ -219,67 +224,23 @@ public class Engine
         poems.ForEach(GeneratePoemFile);
     }
 
-    /// <summary>
-    /// When no imported poem provided, check a whole set of content files
-    /// </summary>
-    /// <param name="poem"></param>
-    /// <returns></returns>
-    public IEnumerable<string> CheckMissingTagsInYamlMetadata(string? poemId)
+    public IEnumerable<string> CheckMissingTagsInYamlMetadata()
     {
-        var metricSettings = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var poemContentImporter = new PoemContentImporter(_configuration);
 
-        if (poemId is not null)
+        var seasonMaxId = Data.Seasons.Count;
+        for (var i = 17; i < seasonMaxId + 1; i++)
         {
-            var season = Data.Seasons.First(x => x.Id.ToString() == poemId.Substring(poemId.LastIndexOf('_') + 1));
+            var season = Data.Seasons.First(x => x.Id == i);
             var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-            var poemContentPath = Directory.EnumerateFiles(contentDir).FirstOrDefault(x => x.EndsWith($"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md"));
-            var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
-            if (!poemContentImporter.HasYamlMetadata) yield break;
-            foreach (var p in CheckMissingTags(partialImport, metricSettings)) yield return p;
-        }
-        else
-        {
-            var seasonMaxId = Data.Seasons.Count;
-            for (var i = 17; i < seasonMaxId + 1; i++)
+            var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
+            foreach (var poemContentPath in poemContentPaths)
             {
-                var season = Data.Seasons.First(x => x.Id == i);
-                var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-                var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
-                foreach (var poemContentPath in poemContentPaths)
-                {
-                    var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
-                    if (!poemContentImporter.HasYamlMetadata) continue;
+                var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
+                if (!poemContentImporter.HasYamlMetadata) continue;
 
-                    foreach (var p in CheckMissingTags(partialImport, metricSettings)) yield return p;
-                }
-            }
-        }
-    }
-
-    private static IEnumerable<string> CheckMissingTags(PoemContentImporter.PartialImport partialImport,
-        List<Metric> metricSettings)
-    {
-        // Poem year should be found in tags
-        if (!partialImport.Tags.Contains(partialImport.Year.ToString()))
-        {
-            yield return $"{partialImport.PoemId} (missing year tag)";
-        }
-
-        // When metric is variable, "métrique variable" tag should be found
-        if (partialImport.HasVariableMetric && !partialImport.Tags.Contains("métrique variable"))
-        {
-            yield return $"{partialImport.PoemId} (missing 'métrique variable' tag)";
-        }
-
-        // Name of metric should be found in tags
-        foreach (var metric in partialImport.DetailedMetric.Split(','))
-        {
-            var expectedTag = metricSettings.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name.ToLowerInvariant();
-            if (!partialImport.Tags.Contains(expectedTag))
-            {
-                yield return $"{partialImport.PoemId} (missing '{expectedTag}' tag)";
+                foreach (var p in poemContentImporter.CheckAnomalies(partialImport)) yield return p;
             }
         }
     }
@@ -710,8 +671,7 @@ public class Engine
 
         foreach (var poemFile in poemFiles)
         {
-            var (poem, position) =
-                (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemFile);
+            var (poem, position) = (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemFile);
             var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
             var poemIndex = season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != position)

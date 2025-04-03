@@ -12,6 +12,7 @@ tags:
     - "2024"
     - ombres et lumières
     - nature
+    - hexasyllabe
 locations:
     - Mont des Cats
 info: ""

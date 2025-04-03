@@ -29,6 +29,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poem.VerseLength.ShouldBe("8");
         poem.PoemType.ShouldBeNull();
         position.ShouldBe(11);
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact(Skip = "Metadata updated to TOML, no more test case available")]
@@ -43,6 +45,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.DoubleAcrostiche!.First.ShouldBe("Chênes");
         poem.DoubleAcrostiche.Second.ShouldBe("destin");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -56,6 +60,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.PoemType.ShouldBe("sonnet");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -69,6 +75,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Info.ShouldBe("Reprise d'un poème-chanson de 1994");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -93,6 +101,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poem.Info.ShouldEndWith("hidefirstheading %}}");
         poem.Info.ShouldBe(
             $"{Environment.NewLine}Les poèmes qui commencent par ce vers...{Environment.NewLine}{{{{% include \"../../includes/l_automne_est_venu\" hidefirstheading %}}}}");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -106,6 +116,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Info.ShouldBeNull();
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -122,6 +134,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poem.Pictures.Count.ShouldBe(2);
         poem.Pictures[0].ShouldBe("17 décembre 2023");
         poem.Pictures[1].ShouldBe("Avec mon chien le 5 juillet 2022");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -139,6 +153,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count.ShouldBe(1);
         poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault().ShouldBe("Ciel");
         poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault().ShouldBe("Crépuscule");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -168,6 +184,8 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.ExtraTags.ShouldBe(["lovecat"]);
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
     
     [Fact]
@@ -181,5 +199,7 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Locations.ShouldBe(["Lorraine"]);
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 }

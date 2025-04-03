@@ -10,6 +10,7 @@ categories:
 tags:
     - "2023"
     - philosophie
+    - hendécasyllabe
 info: ""
 pictures:
     - 17 décembre 2023

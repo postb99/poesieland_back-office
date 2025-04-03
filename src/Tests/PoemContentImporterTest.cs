@@ -19,6 +19,8 @@ public class PoemContentImporterTest(BasicFixture basicFixture): IClassFixture<B
         poem.DetailedMetric.ShouldBe("8, 6, 4, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.ShouldBe("8, 6, 4, 2");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]

@@ -128,7 +128,8 @@ public class Program
                 _engine.CheckPoemsWithVariableMetric();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
-                Console.WriteLine($"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
+                Console.WriteLine(
+                    $"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
                 Console.WriteLine("Content metadata quality OK");
                 return true;
             case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:
@@ -230,13 +231,6 @@ public class Program
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
             GenerateDependantChartDataFiles(seasonId, importedPoem.Date.Year);
-
-            var output = _engine.CheckMissingTagsInYamlMetadata(poemId);
-            if (output.Any())
-            {
-                Console.WriteLine(
-                    $"[ERROR] Missing tags: {string.Join(',', output)}");
-            }
         }
         else
         {
@@ -375,18 +369,17 @@ public class Program
         // Over seasons categories', tags' bar, vers length's line
         GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
         GenerateOverSeasonsVerseLengthLineChartDataFile();
-        
+
         // Categories bubble chart
         _engine.GenerateCategoriesBubbleChartDataFile();
         // Category metric bubble chart
         _engine.GenerateCategoryMetricBubbleChartDataFile();
 
         // And check data quality
-        _engine.CheckPoemsWithoutVerseLength();
-        _engine.CheckPoemsWithVariableMetric();
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
-        Console.WriteLine($"Content metadata quality OK. Info: metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
+        Console.WriteLine(
+            $"Content metadata quality OK. Info: metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
@@ -426,7 +419,7 @@ public class Program
         _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
         Console.WriteLine("Bubble chart data file OK");
     }
-    
+
     private static void GenerateOverSeasonsVerseLengthLineChartDataFile()
     {
         _engine.GenerateOverSeasonsVerseLengthLineChartDataFile();
