@@ -1,6 +1,6 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Serialization;
+using Toolbox.Settings;
 
 namespace Toolbox.Domain;
 
@@ -90,7 +90,7 @@ public class Poem
 
     [XmlIgnore] public bool HasQuatrains => VersesCount == Paragraphs.Count * 4 && VersesCount % 4 == 0;
 
-    public string FileContent(int poemIndex)
+    public string FileContent(int poemIndex, MetricSettings metricSettings)
     {
         var s = new StringBuilder("+++");
         s.Append(Environment.NewLine);
@@ -114,7 +114,7 @@ public class Poem
         s.Append("]");
         s.Append(Environment.NewLine);
 
-        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, variable metric
+        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, variable metric, metric valu(e).
         s.Append("tags = [");
         foreach (var categoryName in Categories.Select(x => x.Name).Distinct())
         {
@@ -149,6 +149,13 @@ public class Poem
         if (HasVariableMetric)
         {
             s.Append($"\"métrique variable\", ");
+        }
+
+        foreach (var metric in VerseLength.Split(','))
+        {
+            var metricName = metricSettings.Metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name;
+            if (metricName is not null)
+                s.Append($"\"{metricName.ToLowerInvariant()}\", ");
         }
 
         s.Remove(s.Length - 2, 2);
