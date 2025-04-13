@@ -164,7 +164,8 @@ public class Poem
 
         if (Info is not null)
         {
-            s.Append($"info = \"{Info.Escaped()}\"");
+            var sep = Info.Contains("\n") ? "\"\"\"" : "\"";
+            s.Append($"info = {sep}{Info}{sep}");
             s.Append(Environment.NewLine);
         }
 
@@ -251,7 +252,7 @@ public class Poem
 
             if (Info is not null)
             {
-                s.Append(Info.Escaped());
+                s.Append(Info);
             }
 
             if (Acrostiche is not null || DoubleAcrostiche is not null)
