@@ -206,7 +206,7 @@ public class Poem
             s.Append(Environment.NewLine);
         }
 
-        if (Locations is not null)
+        if (Locations is not null && Locations.Count > 0)
         {
             s.Append("locations = [");
             foreach (var location in Locations)
