@@ -165,10 +165,11 @@ public class Poem
         if (Info is not null)
         {
             // When info is multiline, should be surrounded by """
-            // When it contains a ", it should be surrounded by '
-            // Else it is surrounded by "
-            var sep = Info.Contains("\n") ? "\"\"\"" : Info.Contains('"') ? "'" : "\"";
-            s.Append($"info = {sep}{Info}{sep}");
+            // When it contains 'include "', it should be surrounded by '
+            // Else it is surrounded by " but its " should be escaped
+            var sep = Info.Contains("\n") ? "\"\"\"" : Info.Contains("include \"") ? "'" : "\"";
+            var info = sep == "\"" ? Info.Escaped() : Info;
+            s.Append($"info = {sep}{info}{sep}");
             s.Append(Environment.NewLine);
         }
 
