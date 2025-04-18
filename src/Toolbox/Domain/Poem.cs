@@ -194,7 +194,7 @@ public class Poem
 
         if (Acrostiche is not null)
         {
-            s.Append($"acrostiche = \"{Acrostiche}\"");
+            s.Append($"acrostiche = \"{Acrostiche.Escaped()}\"");
             s.Append(Environment.NewLine);
         }
 
