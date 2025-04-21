@@ -256,7 +256,7 @@ public class Poem
 
             if (Info is not null)
             {
-                s.Append(Info);
+                s.Append(Info).Append(".");
             }
 
             if (Acrostiche is not null || DoubleAcrostiche is not null)
@@ -269,12 +269,12 @@ public class Poem
 
                 if (Acrostiche is not null)
                 {
-                    s.Append($"Acrostiche : {Acrostiche}");
+                    s.Append($"Acrostiche : {Acrostiche}.");
                 }
                 else if (DoubleAcrostiche is not null)
                 {
                     s.Append(
-                        $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");
+                        $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}.");
                 }
             }
 
