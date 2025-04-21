@@ -256,7 +256,9 @@ public class Poem
 
             if (Info is not null)
             {
-                s.Append(Info).Append(".");
+                s.Append(Info);
+                if (!Info.EndsWith("."))
+                    s.Append(".");
             }
 
             if (Acrostiche is not null || DoubleAcrostiche is not null)
