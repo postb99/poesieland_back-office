@@ -271,7 +271,9 @@ public class Poem
 
                 if (Acrostiche is not null)
                 {
-                    s.Append($"Acrostiche : {Acrostiche}.");
+                    s.Append($"Acrostiche : {Acrostiche}");
+                    if (!new List<char>{'.', '?', '!'}.Contains(Acrostiche[Acrostiche.Length-1]))
+                        s.Append(".");
                 }
                 else if (DoubleAcrostiche is not null)
                 {
