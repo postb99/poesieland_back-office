@@ -1,6 +1,6 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using System.Xml.Serialization;
+using Toolbox.Settings;
 
 namespace Toolbox.Domain;
 
@@ -90,7 +90,7 @@ public class Poem
 
     [XmlIgnore] public bool HasQuatrains => VersesCount == Paragraphs.Count * 4 && VersesCount % 4 == 0;
 
-    public string FileContent(int poemIndex)
+    public string FileContent(int poemIndex, MetricSettings metricSettings)
     {
         var s = new StringBuilder("+++");
         s.Append(Environment.NewLine);
@@ -114,7 +114,7 @@ public class Poem
         s.Append("]");
         s.Append(Environment.NewLine);
 
-        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, variable metric
+        // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, variable metric, metric valu(e).
         s.Append("tags = [");
         foreach (var categoryName in Categories.Select(x => x.Name).Distinct())
         {
@@ -151,13 +151,25 @@ public class Poem
             s.Append($"\"métrique variable\", ");
         }
 
+        foreach (var metric in VerseLength.Split(','))
+        {
+            var metricName = metricSettings.Metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name;
+            if (metricName is not null)
+                s.Append($"\"{metricName.ToLowerInvariant()}\", ");
+        }
+
         s.Remove(s.Length - 2, 2);
         s.Append("]");
         s.Append(Environment.NewLine);
 
         if (Info is not null)
         {
-            s.Append($"info = \"{Info.Escaped()}\"");
+            // When info is multiline, should be surrounded by """ followed by a line break
+            // When it contains 'include "', it should be surrounded by '
+            // Else it is surrounded by " but its " should be escaped
+            var sep = Info.Contains("\n") ? "\"\"\""+Environment.NewLine : Info.Contains("include \"") ? "'" : "\"";
+            var info = sep == "\"" ? Info.Escaped() : Info;
+            s.Append($"info = {sep}{info}{sep}");
             s.Append(Environment.NewLine);
         }
 
@@ -182,7 +194,7 @@ public class Poem
 
         if (Acrostiche is not null)
         {
-            s.Append($"acrostiche = \"{Acrostiche}\"");
+            s.Append($"acrostiche = \"{Acrostiche.Escaped()}\"");
             s.Append(Environment.NewLine);
         }
 
@@ -199,7 +211,7 @@ public class Poem
             s.Append(Environment.NewLine);
         }
 
-        if (Locations is not null)
+        if (Locations is not null && Locations.Count > 0)
         {
             s.Append("locations = [");
             foreach (var location in Locations)
@@ -244,7 +256,9 @@ public class Poem
 
             if (Info is not null)
             {
-                s.Append(Info.Escaped());
+                s.Append(Info);
+                if (!Info.EndsWith("."))
+                    s.Append(".");
             }
 
             if (Acrostiche is not null || DoubleAcrostiche is not null)
@@ -257,12 +271,12 @@ public class Poem
 
                 if (Acrostiche is not null)
                 {
-                    s.Append($"Acrostiche : {Acrostiche}");
+                    s.Append($"Acrostiche : {Acrostiche}.");
                 }
                 else if (DoubleAcrostiche is not null)
                 {
                     s.Append(
-                        $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}");
+                        $"Acrostiche double (lignes paires et impaires) : {DoubleAcrostiche.First} / {DoubleAcrostiche.Second}.");
                 }
             }
 

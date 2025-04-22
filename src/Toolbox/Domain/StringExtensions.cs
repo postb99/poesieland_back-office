@@ -5,10 +5,25 @@ namespace Toolbox.Domain;
 
 public static class StringExtensions
 {
+    /// <summary>
+    /// Escape double quote by \ sign.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
     public static string Escaped(this string s) => s.Replace("\"", "\\\"");
     
+    /// <summary>
+    /// Remove any \ placed before a double quote.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
     public static string? Unescaped(this string s) => string.IsNullOrEmpty(s) ? null : s.Replace("\\\"", "\"");
 
+    /// <summary>
+    /// Convert to lowercase and replace ' and - by _.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
     public static string UnaccentedCleaned(this string s)
     {
         var unaccented =

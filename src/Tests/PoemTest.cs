@@ -1,11 +1,13 @@
 using System.Text;
+using Microsoft.Extensions.Configuration;
 using Shouldly;
 using Toolbox.Domain;
+using Toolbox.Settings;
 using Xunit;
 
 namespace Tests;
 
-public class PoemTest
+public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
 {
     [Fact]
     [Trait("UnitTest", "Computation")]
@@ -18,7 +20,7 @@ public class PoemTest
 
         poem.DetailedMetric.ShouldBe("8");
     }
-    
+
     [Theory]
     [Trait("UnitTest", "Computation")]
     [InlineData("Métrique variable : 6, 3")]
@@ -48,7 +50,7 @@ public class PoemTest
         var func = () => poem.DetailedMetric;
         func.ShouldThrow<InvalidOperationException>();
     }
-    
+
     [Fact]
     [Trait("UnitTest", "Computation")]
     public void ShouldThrowInfoWithoutVariableMetric()
@@ -65,7 +67,7 @@ public class PoemTest
 
     [Fact]
     [Trait("UnitTest", "ContentGeneration")]
-    public void ShouldGenerateExpectedTags()
+    public void ShouldGenerateExpectedExtraAndMetricTags()
     {
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var poem = new Poem
@@ -73,11 +75,28 @@ public class PoemTest
             Id = "poem_25",
             TextDate = "01.01.2025",
             Acrostiche = "Something",
-            ExtraTags = ["wonderful"]
+            ExtraTags = ["wonderful"],
+            VerseLength = "12"
         };
-        poem.FileContent(-1).ShouldContain("tags = [\"wonderful\", \"2025\", \"acrostiche\"]");
+        poem.FileContent(-1, basicFixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+            .ShouldContain("tags = [\"wonderful\", \"2025\", \"acrostiche\", \"alexandrin\"]");
     }
-    
+
+    [Fact]
+    [Trait("UnitTest", "ContentGeneration")]
+    public void ShouldGenerateExpectedMultipleMetricTags()
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var poem = new Poem
+        {
+            Id = "poem_25",
+            TextDate = "01.01.2025",
+            VerseLength = "6, 3"
+        };
+        poem.FileContent(-1, basicFixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+            .ShouldContain("tags = [\"2025\", \"métrique variable\", \"hexasyllabe\", \"trisyllabe\"]");
+    }
+
     [Fact]
     [Trait("UnitTest", "ContentGeneration")]
     public void ShouldGenerateExpectedLocations()
@@ -87,8 +106,10 @@ public class PoemTest
         {
             Id = "poem_25",
             TextDate = "01.01.2025",
+            VerseLength = "8",
             Locations = ["Ici", "Là", "ailleurs"]
         };
-        poem.FileContent(-1).ShouldContain("locations = [\"Ici\", \"Là\", \"ailleurs\"]");
+        poem.FileContent(-1, basicFixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+            .ShouldContain("locations = [\"Ici\", \"Là\", \"ailleurs\"]");
     }
 }

@@ -76,12 +76,13 @@ public class Engine
 
     public void GeneratePoemFile(Poem poem)
     {
+        var metricSettings = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>();
         var season = Data.Seasons.First(x => x.Id == poem.SeasonId);
         var poemIndex = season.Poems.IndexOf(poem);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
         var indexFile = Path.Combine(contentDir, poem.ContentFileName);
-        File.WriteAllText(indexFile, poem.FileContent(poemIndex));
+        File.WriteAllText(indexFile, poem.FileContent(poemIndex, metricSettings!));
     }
 
     public void GenerateSeasonAllPoemFiles(int seasonId)
