@@ -241,7 +241,8 @@ public class Engine
                 var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
                 if (!poemContentImporter.HasYamlMetadata) continue;
 
-                foreach (var p in poemContentImporter.CheckAnomalies(partialImport)) yield return p;
+                foreach (var p in poemContentImporter.CheckAnomalies(partialImport)) yield return
+                    $"{p}in {poemContentPath}";
             }
         }
     }

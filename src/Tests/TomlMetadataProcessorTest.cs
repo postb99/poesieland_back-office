@@ -62,15 +62,14 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         /*
-        {{% notice style="primary" %}}
+         
         Encore une variation sur cette question que j'adore...
-        {{% include "../../includes/est_ce_un_automne" hidefirstheading %}}
-        {{% /notice %}}
+        {{% include "../../includes/est_ce_un_automne" hidefirstheading %}}.
         */
-        poem.Info.ShouldStartWith("{{% notice style=\"primary\" %}}");
-        poem.Info.ShouldEndWith("{{% /notice %}}");
+        poem.Info.ShouldStartWith($"{Environment.NewLine}Encore une variation");
+        poem.Info.ShouldEndWith("hidefirstheading %}}");
         poem.Info.ShouldBe(
-            $"{{{{% notice style=\"primary\" %}}}}{Environment.NewLine}Encore une variation sur cette question que j'adore...{Environment.NewLine}{{{{% include \"../../includes/est_ce_un_automne\" hidefirstheading %}}}}{Environment.NewLine}{{{{% /notice %}}}}");
+            $"{Environment.NewLine}Encore une variation sur cette question que j'adore...{Environment.NewLine}{{{{% include \"../../includes/est_ce_un_automne\" hidefirstheading %}}}}");
         var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
         anomalies.ShouldBeEmpty();
     }

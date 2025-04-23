@@ -90,12 +90,9 @@ public class YamlMetadataProcessorTest(BasicFixture basicFixture): IClassFixture
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         /*
-        {{% notice style="primary" %}}
-        Acrostiche : l'automne venu.
 
         Les poèmes qui commencent par ce vers...
         {{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
-        {{% /notice %}}
         */
         poem.Info.ShouldStartWith($"{Environment.NewLine}Les poèmes");
         poem.Info.ShouldEndWith("hidefirstheading %}}");
