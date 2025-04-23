@@ -42,19 +42,19 @@ public class Program
 
     private static void ValidateAndPerformMenuChoice(MenuItem? parentMenuItem, string input)
     {
-        MenuItem? menuChoice = null;
-        do
+        MenuItem? menuChoice = ValidateMenuEntry(parentMenuItem, input);
+        while (menuChoice is null)
         {
+            Console.WriteLine("ERROR: No such choice");
+            input = Console.ReadLine();
             menuChoice = ValidateMenuEntry(parentMenuItem, input);
-        } while (menuChoice == null);
-
-        if (PerformAction(menuChoice))
-        {
-            Console.WriteLine();
-            Console.WriteLine("Back to main menu");
-            var menuEntry = MainMenu();
-            ValidateAndPerformMenuChoice(null, menuEntry);
         }
+
+        if (!PerformAction(menuChoice)) return;
+        Console.WriteLine();
+        Console.WriteLine("Back to main menu");
+        var menuEntry = MainMenu();
+        ValidateAndPerformMenuChoice(null, menuEntry);
     }
 
     private static MenuItem? ValidateMenuEntry(MenuItem? parentMenuItem, string entry)
@@ -67,7 +67,7 @@ public class Program
                 : _mainMenuSettings.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
             return menuItem;
         }
-
+        
         return null;
     }
 
@@ -160,14 +160,14 @@ public class Program
             return;
         }
 
-        if (int.TryParse(choice, out var intChoice))
+        if (int.TryParse(choice, out var intChoice)  && _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
             _engine.GenerateSeasonAllPoemFiles(intChoice);
             Console.WriteLine("Poem content files OK");
         }
         else
         {
-            Console.WriteLine("No matching season for input");
+            Console.WriteLine($"ERROR: No matching season for input: {choice}");
         }
     }
 
@@ -176,7 +176,7 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
 
-        if (int.TryParse(choice, out var seasonId))
+        if (int.TryParse(choice, out var seasonId)  && _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
             _engine.ImportSeason(seasonId);
             Console.WriteLine("Season import OK");
@@ -184,7 +184,7 @@ public class Program
         }
         else
         {
-            Console.WriteLine("No matching season for input");
+            Console.WriteLine($"ERROR: No matching season for input: {choice}");
         }
     }
 
@@ -216,7 +216,7 @@ public class Program
         }
         else
         {
-            Console.WriteLine("No matching poem for input");
+            Console.WriteLine($"ERROR: No matching poem for input: {poemId}");
         }
     }
 
@@ -234,7 +234,7 @@ public class Program
         }
         else
         {
-            Console.WriteLine("No matching file for import");
+            Console.WriteLine($"ERROR: No matching file to import for: {poemId}");
         }
     }
 
@@ -262,7 +262,7 @@ public class Program
         }
         else
         {
-            Console.WriteLine($"No matching season for input: {choice}");
+            Console.WriteLine($"ERROR: No matching season for input: {choice}");
         }
     }
 
@@ -283,7 +283,7 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
 
-        if (int.TryParse(choice, out var seasonId))
+        if (int.TryParse(choice, out var seasonId)  && _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
             if (seasonId == 0)
             {
@@ -314,7 +314,7 @@ public class Program
         }
         else
         {
-            Console.WriteLine("No matching season for input");
+            Console.WriteLine($"ERROR: No matching season for input: {seasonId}");
         }
     }
 
@@ -404,7 +404,7 @@ public class Program
 
         if (color == null)
         {
-            Console.WriteLine("No matching category for input (case sensitive)");
+            Console.WriteLine($"ERROR: No matching category for input (case sensitive) : {choice}");
         }
         else
         {
