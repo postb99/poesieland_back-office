@@ -362,11 +362,10 @@ public class Program
         Console.WriteLine("Poem count file OK");
 
         // Poem length by metric and vice versa
-        Console.WriteLine("Poems bubble chart data files: starting...");
         _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
         Console.WriteLine("Poems bubble chart data files OK");
 
-        // Over seasons categories', tags' bar, vers length's line
+        // Over seasons categories', tags' bar, verse length's line
         GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
         GenerateOverSeasonsVerseLengthLineChartDataFile();
 
@@ -434,14 +433,15 @@ public class Program
                      .Distinct())
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(category, null);
-            Console.WriteLine($"Poems by day for '{category}' chart data file OK");
         }
+        Console.WriteLine($"Poems by day for all categories chart data files OK");
+
 
         foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(null, category);
-            Console.WriteLine($"Poems by day for '{category}' chart data file OK");
         }
+        Console.WriteLine($"Poems by day for all tags chart data files OK");
     }
 
     private static void GenerateOverSeasonsCategoriesAndTagsBarChartDataFile()
@@ -451,26 +451,21 @@ public class Program
         foreach (var category in storageSettings!.SubcategorieNames)
         {
             _engine.GenerateOverSeasonsChartDataFile(category, null);
-            Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");
         }
+        Console.WriteLine($"Poems over seasons for all categories chart data files OK");
 
         foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
         {
             _engine.GenerateOverSeasonsChartDataFile(null, category);
-            Console.WriteLine($"Poems over seasons for '{category}' chart data file OK");
         }
+        Console.WriteLine($"Poems over seasons for all tags chart data files OK");
+
 
         _engine.GenerateOverSeasonsChartDataFile(null, null, forAcrostiche: true);
-        Console.WriteLine($"Poems over seasons for 'acrostiche' chart data file OK");
-
         _engine.GenerateOverSeasonsChartDataFile(null, null, forSonnet: true);
-        Console.WriteLine($"Poems over seasons for 'sonnet' chart data file OK");
-
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
-        Console.WriteLine($"Poems over seasons for 'pantoun' chart data file OK");
-
         _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableMetric: true);
-        Console.WriteLine($"Poems over seasons for 'métrique variable' chart data file OK");
+        Console.WriteLine($"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable' chart data files OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
