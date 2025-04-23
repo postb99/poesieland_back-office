@@ -255,14 +255,14 @@ public class Program
             return;
         }
 
-        if (int.TryParse(choice, out var intChoice))
+        if (int.TryParse(choice, out var intChoice) && _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
             _engine.GenerateSeasonIndexFile(intChoice);
             Console.WriteLine("Season index files OK");
         }
         else
         {
-            Console.WriteLine("No matching season for input");
+            Console.WriteLine($"No matching season for input: {choice}");
         }
     }
 
