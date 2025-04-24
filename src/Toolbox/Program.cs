@@ -234,6 +234,10 @@ public class Program
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
             GenerateDependantChartDataFiles(seasonId, importedPoem.Date.Year);
         }
+        catch (InvalidOperationException ex)
+        {
+            Console.WriteLine($"ERROR: {ex.Message}");
+        }
         catch (ArgumentException ex)
         {
             Console.WriteLine($"ERROR: No matching file to import for: {poemId}, {ex.Message}");
