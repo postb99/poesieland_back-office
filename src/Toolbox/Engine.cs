@@ -91,23 +91,28 @@ public class Engine
         season.Poems.ForEach(GeneratePoemFile);
     }
 
-    public Poem? ImportPoem(string poemId)
+    public Poem ImportPoem(string poemId, bool save = true)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
+        if (!int.TryParse(seasonId, out _))
+        {
+            throw new ArgumentException($"'{poemId}' does not end with season id");
+        }
+
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         if (seasonDirName == null)
         {
-            throw new Exception("Create season directory before importing poem");
+            throw new ArgumentException(
+                $"No such season content directory for id '{seasonId}'. Create season directory before importing poem");
         }
 
         var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
         var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
         if (!File.Exists(poemContentPath))
         {
-            Console.WriteLine($"Not found: {poemContentPath}");
-            return null;
+            throw new ArgumentException($"Poem content file not found: {poemContentPath}");
         }
 
         var (poem, _) = (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
@@ -133,11 +138,12 @@ public class Engine
         else
             targetSeason.Poems.Add(poem);
 
-        Save();
+        if (save)
+            Save();
         return poem;
     }
 
-    public void ImportSeason(int seasonId)
+    public void ImportSeason(int seasonId, bool save = true)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
@@ -172,7 +178,8 @@ public class Engine
                 targetSeason.Poems.Add(poem);
         }
 
-        Save();
+        if (save)
+            Save();
     }
 
     public void ImportPoemsEn()
@@ -241,8 +248,9 @@ public class Engine
                 var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
                 if (!poemContentImporter.HasYamlMetadata) continue;
 
-                foreach (var p in poemContentImporter.CheckAnomalies(partialImport)) yield return
-                    $"{p}in {poemContentPath}";
+                foreach (var p in poemContentImporter.CheckAnomalies(partialImport))
+                    yield return
+                        $"{p}in {poemContentPath}";
             }
         }
     }

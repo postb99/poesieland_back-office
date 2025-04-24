@@ -67,7 +67,7 @@ public class Program
                 : _mainMenuSettings.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
             return menuItem;
         }
-        
+
         return null;
     }
 
@@ -160,7 +160,8 @@ public class Program
             return;
         }
 
-        if (int.TryParse(choice, out var intChoice)  && _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
+        if (int.TryParse(choice, out var intChoice) &&
+            _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
             _engine.GenerateSeasonAllPoemFiles(intChoice);
             Console.WriteLine("Poem content files OK");
@@ -176,7 +177,8 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
 
-        if (int.TryParse(choice, out var seasonId)  && _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
+        if (int.TryParse(choice, out var seasonId) &&
+            _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
             _engine.ImportSeason(seasonId);
             Console.WriteLine("Season import OK");
@@ -225,16 +227,16 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label);
         var poemId = Console.ReadLine();
 
-        var importedPoem = _engine.ImportPoem(poemId);
-        if (importedPoem is not null)
+        try
         {
+            var importedPoem = _engine.ImportPoem(poemId);
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
             GenerateDependantChartDataFiles(seasonId, importedPoem.Date.Year);
         }
-        else
+        catch (ArgumentException ex)
         {
-            Console.WriteLine($"ERROR: No matching file to import for: {poemId}");
+            Console.WriteLine($"ERROR: No matching file to import for: {poemId}, {ex.Message}");
         }
     }
 
@@ -255,7 +257,8 @@ public class Program
             return;
         }
 
-        if (int.TryParse(choice, out var intChoice) && _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
+        if (int.TryParse(choice, out var intChoice) &&
+            _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
             _engine.GenerateSeasonIndexFile(intChoice);
             Console.WriteLine("Season index files OK");
@@ -283,7 +286,8 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
 
-        if (int.TryParse(choice, out var seasonId)  && _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
+        if (int.TryParse(choice, out var seasonId) &&
+            _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
             if (seasonId == 0)
             {
@@ -434,6 +438,7 @@ public class Program
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(category, null);
         }
+
         Console.WriteLine($"Poems by day for all categories chart data files OK");
 
 
@@ -441,6 +446,7 @@ public class Program
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(null, category);
         }
+
         Console.WriteLine($"Poems by day for all tags chart data files OK");
     }
 
@@ -452,12 +458,14 @@ public class Program
         {
             _engine.GenerateOverSeasonsChartDataFile(category, null);
         }
+
         Console.WriteLine($"Poems over seasons for all categories chart data files OK");
 
         foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
         {
             _engine.GenerateOverSeasonsChartDataFile(null, category);
         }
+
         Console.WriteLine($"Poems over seasons for all tags chart data files OK");
 
 
@@ -465,7 +473,8 @@ public class Program
         _engine.GenerateOverSeasonsChartDataFile(null, null, forSonnet: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableMetric: true);
-        Console.WriteLine($"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable' chart data files OK");
+        Console.WriteLine(
+            $"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable' chart data files OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
