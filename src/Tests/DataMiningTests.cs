@@ -348,4 +348,37 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
             }
         }
     }
+
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void VariableMetricVerseLengthDiff()
+    {
+        var variableMetricPoems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.HasVariableMetric);
+        foreach (var poem in variableMetricPoems)
+        {
+            var metrics = poem.DetailedMetric.Split(',');
+            if (metrics.Length <= 1)
+                continue;
+            if (Math.Abs(int.Parse(metrics[0]) - int.Parse(metrics[1])) != 2)
+                continue;
+
+            var verseLengthDiff = Math.Abs(poem.Paragraphs[0].Verses[0].Length - poem.Paragraphs[0].Verses[1].Length);
+
+            testOutputHelper.WriteLine($"[{poem.Id}] {verseLengthDiff} ({poem.DetailedMetric})");
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Quality")]
+    public void PossibleMissedVariableMetric()
+    {
+        var notVariableMetricPoems = _data.Seasons.SelectMany(x => x.Poems).Where(x => !x.HasVariableMetric);
+        foreach (var poem in notVariableMetricPoems)
+        {
+            var verseLengthDiff = Math.Abs(poem.Paragraphs[0].Verses[0].Length - poem.Paragraphs[0].Verses[1].Length);
+            if (verseLengthDiff > 2 && poem.VerseLength != "12")
+                testOutputHelper.WriteLine(
+                    $"[{poem.Id} - {poem.DetailedMetric}] {verseLengthDiff} ({poem.Paragraphs[0].Verses[0]} / {poem.Paragraphs[0].Verses[1]})");
+        }
+    }
 }
