@@ -255,6 +255,16 @@ public class Engine
         }
     }
 
+    public IEnumerable<string> GetReusedTitles()
+    {
+        foreach (var group in Data.Seasons.SelectMany(x => x.Poems).GroupBy(x => x.Title))
+        {
+            var count = group.Count();
+            if (count > 1)
+                yield return $"Reused title {group.Key} {count} times ({string.Join(", ", group.Select(g => g.Id))})";
+        }
+    }
+
     public void CheckPoemsWithoutVerseLength()
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);

@@ -141,6 +141,12 @@ public class Program
             case MainMenuSettings.MenuChoices.OutputSeasonsDuration:
                 _engine.OutputSeasonsDuration();
                 return true;
+            case MainMenuSettings.MenuChoices.OutputReusedTitles:
+                foreach (var reusedTitle in _engine.GetReusedTitles())
+                {
+                    Console.WriteLine(reusedTitle);
+                }
+                return true;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
                 Environment.Exit(0);

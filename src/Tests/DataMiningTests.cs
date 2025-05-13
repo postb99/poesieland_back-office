@@ -284,12 +284,9 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
     [Trait("DataMining", "Lookup")]
     public void PoemReusedTitle()
     {
-        foreach (var group in _data.Seasons.SelectMany(x => x.Poems).GroupBy(x => x.Title))
+        foreach (var reusedTitle in fixture.Engine.GetReusedTitles())
         {
-            var count = group.Count();
-            if (count > 1)
-                testOutputHelper.WriteLine(
-                    $"Reused title {group.Key} {count} times ({string.Join(", ", group.Select(g => g.Id))})");
+            testOutputHelper.WriteLine(reusedTitle);
         }
     }
 

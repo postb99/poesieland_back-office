@@ -32,6 +32,7 @@ public class MainMenuSettings
         CheckContentMetadataQuality = 500,
         ImportEnPoems = 600,
         OutputSeasonsDuration = 700,
+        OutputReusedTitles = 800,
         ExitProgram = 99
     }
 
