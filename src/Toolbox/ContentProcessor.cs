@@ -20,7 +20,7 @@ public class ContentProcessor
             return;
         }
 
-        if (line.StartsWith("{{% notice") || line.StartsWith("<!-- FM:Snippet:") || line.StartsWith("![") || line.StartsWith("{{<"))
+        if (line.StartsWith("{{% notice") || line.StartsWith("<!-- FM:Snippet:") || line.StartsWith("![") || line.StartsWith("{{<") || line.StartsWith("["))
         {
             _done = true;
             return;

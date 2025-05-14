@@ -231,22 +231,6 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
         testOutputHelper.WriteLine(string.Join(',', metrics.Order()));
     }
 
-    [Fact]
-    [Trait("DataMining", "Quality")]
-    public void PoemsWithoutCapitalLetterAtVerseBeginning()
-    {
-        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
-        {
-            foreach (var verse in poem.Paragraphs.SelectMany(x => x.Verses))
-            {
-                var letter = verse[0].ToString();
-                if (letter != letter.ToUpperInvariant())
-                {
-                    testOutputHelper.WriteLine(poem.Id);
-                }
-            }
-        }
-    }
 
     [Fact]
     [Trait("DataMining", "Lookup")]
@@ -287,32 +271,6 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
         foreach (var reusedTitle in fixture.Engine.GetReusedTitles())
         {
             testOutputHelper.WriteLine(reusedTitle);
-        }
-    }
-
-    [Fact]
-    [Trait("DataMining", "Quality")]
-    public void PoemsThatCouldHaveQuatrainsButHaveNot()
-    {
-        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
-        {
-            if (poem.VersesCount % 4 == 0 && !poem.HasQuatrains)
-            {
-                testOutputHelper.WriteLine(poem.Id);
-            }
-        }
-    }
-
-    [Fact]
-    [Trait("DataMining", "Quality")]
-    public void PoemsThatShouldBeSonnetButAreNot()
-    {
-        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x =>
-                     x.VersesCount == 14 &&
-                     x.PoemType != Toolbox.Domain.PoemType.Sonnet.ToString().ToLowerInvariant() &&
-                     x.Paragraphs.Select(x => x.Verses.Count).ToList() == new List<int> { 4, 4, 3, 3 }))
-        {
-            testOutputHelper.WriteLine(poem.Id);
         }
     }
 
@@ -362,6 +320,73 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
             var verseLengthDiff = Math.Abs(poem.Paragraphs[0].Verses[0].Length - poem.Paragraphs[0].Verses[1].Length);
 
             testOutputHelper.WriteLine($"[{poem.Id}] {verseLengthDiff} ({poem.DetailedMetric})");
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void PoemsThatCouldHaveRefrain()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            if (poem.Paragraphs.Count == 1) continue;
+            try
+            {
+                foreach (var group in poem.Paragraphs.SelectMany(x => x.Verses).Take(8).Select(x => x.Substring(0, 10))
+                             .ToList().GroupBy(x => x))
+                {
+                    var count = group.Count();
+                    if (count > 1)
+                        testOutputHelper.WriteLine($"{group.Key} ({poem.Id})");
+                }
+            }
+            catch (ArgumentOutOfRangeException)
+            {
+                testOutputHelper.WriteLine($"ArgumentOutOfRangeException ({poem.Id})");
+            }
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Quality")]
+    public void PoemsWithoutCapitalLetterAtVerseBeginning()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            foreach (var verse in poem.Paragraphs.SelectMany(x => x.Verses))
+            {
+                var letter = verse[0].ToString();
+                if (letter != letter.ToUpperInvariant())
+                {
+                    testOutputHelper.WriteLine(poem.Id);
+                }
+            }
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Quality")]
+    public void PoemsThatCouldHaveQuatrainsButHaveNot()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
+        {
+            if (poem.VersesCount % 4 == 0 && !poem.HasQuatrains)
+            {
+                testOutputHelper.WriteLine(poem.Id);
+            }
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Quality")]
+    public void PoemsThatShouldBeSonnetButAreNot()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x =>
+                     x.VersesCount == 14 &&
+                     x.PoemType != Toolbox.Domain.PoemType.Sonnet.ToString().ToLowerInvariant() &&
+                     x.Paragraphs.Select(x => x.Verses.Count).ToList() == new List<int> { 4, 4, 3, 3 }))
+        {
+            testOutputHelper.WriteLine(poem.Id);
         }
     }
 
