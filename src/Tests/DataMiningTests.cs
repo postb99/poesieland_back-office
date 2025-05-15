@@ -329,6 +329,8 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
         {
+            if (poem.ExtraTags.Contains("refrain")) continue;
+            if (poem.IsPantoun) continue;
             if (poem.Paragraphs.Count == 1) continue;
             try
             {
@@ -342,9 +344,47 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
             }
             catch (ArgumentOutOfRangeException)
             {
-                testOutputHelper.WriteLine($"ArgumentOutOfRangeException ({poem.Id})");
+                if (int.TryParse(poem.VerseLength, out var verseLength) && verseLength > 3)
+                    testOutputHelper.WriteLine($"[Too short verse] ({poem.Id})");
             }
         }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void PoemsWithRefrainCategories()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList();
+        var dict = new Dictionary<string, int>();
+        foreach (var poem in poems)
+        {
+            foreach (var cat in poem.Categories.SelectMany(x => x.SubCategories))
+            {
+                if (dict.TryGetValue(cat, out var count))
+                {
+                    dict[cat] = ++count;
+                }
+                else
+                {
+                    dict[cat] = 1;
+                }
+            }
+        }
+
+        foreach (var cat in dict.Keys)
+        {
+            testOutputHelper.WriteLine($"{cat} ({dict[cat]})");
+        }
+        
+        // Espoir (8)
+        // Temps (7)    
+        // Foi (6)    
+        // Apprentissage (5)
+        // Automne (5)    
+        // Amitié (5)    
+        // Etre (5) 
+        // Ciel (5)    
+        // Romantisme (4)
     }
 
     [Fact]
