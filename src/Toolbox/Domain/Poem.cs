@@ -248,7 +248,14 @@ public class Poem
             }
         }
 
-        if (Info is not null || Acrostiche is not null || DoubleAcrostiche is not null)
+        if (Info is not null && Info.StartsWith("[^"))
+        {
+            s.Append(Info);
+            if (!Info.EndsWith("."))
+                s.Append(".");
+        }
+
+        if ((Info is not null && !Info.StartsWith("[^")) || Acrostiche is not null || DoubleAcrostiche is not null)
         {
             s.Append(Environment.NewLine);
             s.Append("{{% notice style=\"primary\" %}}");
