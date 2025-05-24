@@ -99,10 +99,10 @@ public class Program
                 ImportSeasonPoemContentFiles(menuChoice);
                 return true;
             case MainMenuSettings.MenuChoices.GeneratePoemsLengthBarChartDataFile:
-                GeneratePoemsLengthBarChartDataFile();
+                GeneratePoemsLengthPieChartDataFile();
                 return true;
             case MainMenuSettings.MenuChoices.GeneratePoemVersesLengthBarChartDataFile:
-                GeneratePoemVersesLengthBarChartDataFile();
+                GeneratePoemMetricPieChartDataFile();
                 return true;
             case MainMenuSettings.MenuChoices.GenerateSeasonCategoriesPieChartDataFile:
                 GenerateSeasonCategoriesPieChart(menuChoice);
@@ -279,16 +279,16 @@ public class Program
         }
     }
 
-    private static void GeneratePoemsLengthBarChartDataFile()
+    private static void GeneratePoemsLengthPieChartDataFile()
     {
-        _engine.GeneratePoemsLengthBarChartDataFile(null);
-        Console.WriteLine("Poems length bar chart data file OK");
+        _engine.GeneratePoemsLengthBarAndPieChartDataFile(null);
+        Console.WriteLine("Poems length pie chart data file OK");
     }
 
-    private static void GeneratePoemVersesLengthBarChartDataFile()
+    private static void GeneratePoemMetricPieChartDataFile()
     {
         _engine.GeneratePoemMetricBarAndPieChartDataFile(null);
-        Console.WriteLine("Poem verses length bar chart data file OK");
+        Console.WriteLine("Poem verses length pie chart data file OK");
     }
 
     private static void GenerateSeasonCategoriesPieChart(MenuItem menuChoice)
@@ -334,12 +334,12 @@ public class Program
 
     private static void GenerateDependantChartDataFiles(int seasonId, int? poemYear)
     {
-        // Poem's and season's poems length
-        GeneratePoemsLengthBarChartDataFile();
-        _engine.GeneratePoemsLengthBarChartDataFile(seasonId);
+        // General and season's poems length
+        GeneratePoemsLengthPieChartDataFile();
+        _engine.GeneratePoemsLengthBarAndPieChartDataFile(seasonId);
 
-        // Poem's and season's metric
-        GeneratePoemVersesLengthBarChartDataFile();
+        // General and season's metric
+        GeneratePoemMetricPieChartDataFile();
         _engine.GeneratePoemMetricBarAndPieChartDataFile(seasonId);
 
         // Season's pie
@@ -435,7 +435,7 @@ public class Program
 
     private static void GenerateOverSeasonsVerseLengthLineChartDataFile()
     {
-        _engine.GenerateOverSeasonsVerseLengthLineChartDataFile();
+        _engine.GenerateOverSeasonsMetricLineChartDataFile();
         Console.WriteLine("Line chart data file OK");
     }
 

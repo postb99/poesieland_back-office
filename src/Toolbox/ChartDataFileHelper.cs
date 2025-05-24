@@ -15,9 +15,6 @@ public class ChartDataFileHelper
         Line
     }
 
-    public const int VERSE_LENGTH_MAX_Y = 300;
-    public const int NBVERSES_MAX_Y = 300;
-
     public record DataLine
     {
         public string Label { get; }

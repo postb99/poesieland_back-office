@@ -288,24 +288,22 @@ public class Engine
                 $"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
     }
 
-    public void GeneratePoemsLengthBarChartDataFile(int? seasonId)
+    public void GeneratePoemsLengthBarAndPieChartDataFile(int? seasonId)
     {
-        var barChartFileName = "poems-length-bar.js";
-        var barChartId = seasonId != null ? $"season{seasonId}PoemLengthBar" : "poemLengthBar";
+        var isGeneral = seasonId is null;
+        var fileName = isGeneral ? "poems-length-pie.js" : "poems-length-bar.js";
+        var subDir = isGeneral ? "general" : $"season-{seasonId}";
+        var chartId = isGeneral ? "poemLengthPie" : $"season{seasonId}PoemLengthBar";
 
         var poems = seasonId != null
             ? Data.Seasons.First(x => x.Id == seasonId).Poems
             : Data.Seasons.SelectMany(x => x.Poems);
 
         var nbVersesData = new Dictionary<int, int>();
-        var quatrainsData = new Dictionary<int, int>();
         var nbSonnets = 0;
-        var nbNotQuatrainImpossible = 0;
-        var nbNotQuatrainVoluntarily = 0;
         foreach (var poem in poems)
         {
             var nbVerses = poem.VersesCount;
-            var hasQuatrains = poem.HasQuatrains;
             if (nbVersesData.TryGetValue(nbVerses, out _))
             {
                 nbVersesData[nbVerses]++;
@@ -313,29 +311,6 @@ public class Engine
             else
             {
                 nbVersesData[nbVerses] = 1;
-            }
-
-            if (hasQuatrains)
-            {
-                if (quatrainsData.TryGetValue(nbVerses, out _))
-                {
-                    quatrainsData[nbVerses]++;
-                }
-                else
-                {
-                    quatrainsData[nbVerses] = 1;
-                }
-            }
-            else
-            {
-                if (nbVerses % 4 != 0)
-                {
-                    nbNotQuatrainImpossible++;
-                }
-                else
-                {
-                    nbNotQuatrainVoluntarily++;
-                }
             }
 
             if (poem.IsSonnet)
@@ -346,56 +321,77 @@ public class Engine
 
         var nbVersesRange = nbVersesData.Keys.Order().ToList();
 
-
-        // Bar chart
+        // General pie chart or Season's bar chart
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var subDir = seasonId != null ? $"season-{seasonId}" : "general";
         var subDirPath = Path.Combine(rootDir, subDir);
         Directory.CreateDirectory(subDirPath);
-        using var streamWriter = new StreamWriter(Path.Combine(subDirPath, barChartFileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar, 2);
+        using var streamWriter = new StreamWriter(Path.Combine(subDirPath, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
+            isGeneral ? ChartDataFileHelper.ChartType.Pie : ChartDataFileHelper.ChartType.Bar, isGeneral ? 1 : 2);
         chartDataFileHelper.WriteBeforeData();
 
-        var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
-        var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
-
-        var baseColor = "rgba(72, 149, 239, {0})";
-        var baseAlpha = 0.4;
-
-        foreach (var nbVerses in nbVersesRange)
+        if (isGeneral)
         {
-            isSonnetChartData.Add(new ChartDataFileHelper.DataLine(string.Empty, 0));
+            var metrics = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
+            var coloredDataLines = new List<ChartDataFileHelper.ColoredDataLine>();
 
-            nbVersesChartData.Add(new ChartDataFileHelper.DataLine(nbVerses.ToString(),
-                nbVersesData[nbVerses]));
-        }
+            foreach (var nbVerses in nbVersesRange)
+            {
+                var lookup = nbVerses switch
+                {
+                    3 => 0,
+                    26 => 1,
+                    _ => nbVerses / 2
+                };
 
-        var index = nbVersesRange.FindIndex(x => x == 14);
-        if (index != -1)
-        {
-            isSonnetChartData[index] = new ChartDataFileHelper.DataLine("Sonnets", nbSonnets);
-            nbVersesChartData[index] = new ChartDataFileHelper.DataLine
-                (nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
-        }
+                var color = metrics.First(m => m.Length == lookup).Color;
+                coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine(nbVerses.ToString(),
+                    nbVersesData[nbVerses], color));
+            }
 
-        string[] chartTitles;
-        if (nbSonnets > 0)
-        {
-            chartDataFileHelper.WriteData(nbVersesChartData, false);
-            chartDataFileHelper.WriteData(isSonnetChartData, true);
-            chartTitles = ["Poèmes", "Sonnets"];
+            chartDataFileHelper.WriteData(coloredDataLines, true);
+
+            chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"]);
         }
         else
         {
-            chartDataFileHelper.WriteData(nbVersesChartData, true);
-            chartTitles = ["Poèmes"];
+            var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
+            var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
+
+            foreach (var nbVerses in nbVersesRange)
+            {
+                isSonnetChartData.Add(new ChartDataFileHelper.DataLine(string.Empty, 0));
+
+                nbVersesChartData.Add(new ChartDataFileHelper.DataLine(nbVerses.ToString(),
+                    nbVersesData[nbVerses]));
+            }
+
+            var index = nbVersesRange.FindIndex(x => x == 14);
+            if (index != -1)
+            {
+                isSonnetChartData[index] = new ChartDataFileHelper.DataLine("Sonnets", nbSonnets);
+                nbVersesChartData[index] = new ChartDataFileHelper.DataLine
+                    (nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
+            }
+
+            string[] chartTitles;
+            if (nbSonnets > 0)
+            {
+                chartDataFileHelper.WriteData(nbVersesChartData, false);
+                chartDataFileHelper.WriteData(isSonnetChartData, true);
+                chartTitles = ["Poèmes", "Sonnets"];
+            }
+            else
+            {
+                chartDataFileHelper.WriteData(nbVersesChartData, true);
+                chartTitles = ["Poèmes"];
+            }
+
+            chartDataFileHelper.WriteAfterData(chartId, chartTitles,
+                customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
         }
 
-        chartDataFileHelper.WriteAfterData(barChartId, chartTitles,
-            customScalesOptions: seasonId == null
-                ? "scales: { y: { max: " + ChartDataFileHelper.NBVERSES_MAX_Y + " } }"
-                : "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter.Close();
     }
 
@@ -1464,7 +1460,7 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GenerateOverSeasonsVerseLengthLineChartDataFile()
+    public void GenerateOverSeasonsMetricLineChartDataFile()
     {
         var dataDict = FillMetricDataDict(out var xLabels);
 
