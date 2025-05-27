@@ -388,6 +388,19 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
     }
 
     [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void PoemsWithMoreThanOneSeasonCategory()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems.Where(x => x.Categories.Any(x => x is { Name: "Saisons", SubCategories.Count: > 1 }))).ToList();
+
+        foreach (var poem in poems)
+        {
+            var categories = poem.Categories.Where(x => x.Name == "Saisons").SelectMany(x => x.SubCategories).ToList();
+            testOutputHelper.WriteLine($"[{poem.Id}] {string.Join(' ', categories)}");
+        }
+    }
+
+    [Fact]
     [Trait("DataMining", "Quality")]
     public void PoemsWithoutCapitalLetterAtVerseBeginning()
     {
