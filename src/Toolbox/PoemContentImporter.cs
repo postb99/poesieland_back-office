@@ -38,7 +38,7 @@ public class PoemContentImporter(IConfiguration configuration)
             ProcessLine(line);
         } while (line is not null);
 
-        _poem.Categories = GetCategories(_metadataProcessor!.GetCategories());
+        _poem.Categories = GetCategories(_metadataProcessor!.GetCategories(), _poem.Id);
         _poem.Pictures = _metadataProcessor.GetPictures();
         var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
@@ -256,7 +256,7 @@ public class PoemContentImporter(IConfiguration configuration)
         }
     }
 
-    private List<Category> GetCategories(List<string> metadataCategories)
+    private List<Category> GetCategories(List<string> metadataCategories, string poemId)
     {
         var storageCategories = new Dictionary<string, Category>();
         var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
@@ -269,7 +269,7 @@ public class PoemContentImporter(IConfiguration configuration)
             if (settingsCategory == null)
             {
                 throw new InvalidOperationException(
-                    $"No storage category found for metadata category {metadataCategory}");
+                    $"[{poemId}] No storage category found for metadata category {metadataCategory}");
             }
 
             storageCategories.TryGetValue(settingsCategory.Name, out var storageCategory);
