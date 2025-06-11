@@ -745,6 +745,7 @@ public class Engine
         var poems = seasonId != null
             ? Data.Seasons.First(x => x.Id == seasonId).Poems
             : Data.Seasons.SelectMany(x => x.Poems);
+        
         foreach (var poem in poems)
         {
             if (string.IsNullOrEmpty(poem.VerseLength))
@@ -753,14 +754,29 @@ public class Engine
             }
             else if (poem.HasVariableMetric)
             {
-                if (variableMetricData.TryGetValue(poem.DetailedMetric, out _))
-                {
-                    variableMetricData[poem.DetailedMetric]++;
-                }
-                else
-                {
-                    variableMetricData[poem.DetailedMetric] = 1;
-                }
+                    foreach (var metric in poem.VerseLength.Split(','))
+                    {
+                        // Standard metrics defined in variable metrics go to general metric pie chart
+                        if (!int.TryParse(metric.Trim(), out var verseLength)) continue;
+                        if (regularMetricData.TryGetValue(verseLength, out _))
+                        {
+                            regularMetricData[verseLength]++;
+                        }
+                        else
+                        {
+                            regularMetricData[verseLength] = 1;
+                        }
+                    }
+                    
+                    // Detailed variable metric go to general metric bar chart
+                    if (variableMetricData.TryGetValue(poem.DetailedMetric, out _))
+                    {
+                        variableMetricData[poem.DetailedMetric]++;
+                    }
+                    else
+                    {
+                        variableMetricData[poem.DetailedMetric] = 1;
+                    }
             }
             else
             {
@@ -812,11 +828,7 @@ public class Engine
                 coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{metricValue} {term}",
                     regularMetricData[metricValue], metrics.First(m => m.Length == metricValue).Color));
             }
-
-            var variableMetricSum = variableMetricData.Sum(x => x.Value);
-
-            coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine("Variable (en blanc)", variableMetricSum,
-                metrics.First(m => m.Length == 0).Color));
+            
             chartDataFileHelper.WriteData(coloredDataLines, true);
 
             chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"]);
