@@ -287,7 +287,7 @@ public class Program
 
     private static void GeneratePoemMetricPieChartDataFile()
     {
-        _engine.GeneratePoemMetricBarAndPieChartDataFile(null);
+        _engine.GeneratePoemMetricBarAndPieChartDataFile(null, true);
         Console.WriteLine("Poem verses length pie chart data file OK");
     }
 
@@ -340,7 +340,7 @@ public class Program
 
         // General and season's metric
         GeneratePoemMetricPieChartDataFile();
-        _engine.GeneratePoemMetricBarAndPieChartDataFile(seasonId);
+        _engine.GeneratePoemMetricBarAndPieChartDataFile(seasonId, false);
 
         // Season's pie
         _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);

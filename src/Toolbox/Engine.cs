@@ -727,7 +727,7 @@ public class Engine
         return dataDict;
     }
 
-    public void GeneratePoemMetricBarAndPieChartDataFile(int? seasonId)
+    public void GeneratePoemMetricBarAndPieChartDataFile(int? seasonId, bool useDetailedMetric)
     {
         var isGeneral = seasonId is null;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
@@ -754,6 +754,8 @@ public class Engine
             }
             else if (poem.HasVariableMetric)
             {
+                if (useDetailedMetric)
+                {
                     foreach (var metric in poem.VerseLength.Split(','))
                     {
                         // Standard metrics defined in variable metrics go to general metric pie chart
@@ -767,8 +769,9 @@ public class Engine
                             regularMetricData[verseLength] = 1;
                         }
                     }
-                    
-                    // Detailed variable metric go to general metric bar chart
+                }
+
+                // Detailed variable metric go to general metric bar chart
                     if (variableMetricData.TryGetValue(poem.DetailedMetric, out _))
                     {
                         variableMetricData[poem.DetailedMetric]++;
