@@ -371,27 +371,23 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
             }
         }
 
+        var outputLines = new List<string>();
         foreach (var cat in dict.Keys)
-        {
-            testOutputHelper.WriteLine($"{cat} ({dict[cat]})");
-        }
-        
-        // Espoir (8)
-        // Temps (7)    
-        // Foi (6)    
-        // Apprentissage (5)
-        // Automne (5)    
-        // Amitié (5)    
-        // Etre (5) 
-        // Ciel (5)    
-        // Romantisme (4)
+            outputLines.Add($"[{dict[cat]}] {cat}");
+
+        outputLines.Sort();
+        outputLines.Reverse();
+
+        foreach (var line in outputLines)
+            testOutputHelper.WriteLine(line);
     }
 
     [Fact]
     [Trait("DataMining", "Lookup")]
     public void PoemsWithMoreThanOneSeasonCategory()
     {
-        var poems = _data.Seasons.SelectMany(x => x.Poems.Where(x => x.Categories.Any(x => x is { Name: "Saisons", SubCategories.Count: > 1 }))).ToList();
+        var poems = _data.Seasons.SelectMany(x =>
+            x.Poems.Where(x => x.Categories.Any(x => x is { Name: "Saisons", SubCategories.Count: > 1 }))).ToList();
 
         foreach (var poem in poems)
         {

@@ -483,8 +483,9 @@ public class Program
         _engine.GenerateOverSeasonsChartDataFile(null, null, forSonnet: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableMetric: true);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forRefrain: true);
         Console.WriteLine(
-            $"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable' chart data files OK");
+            $"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain' chart data files OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
