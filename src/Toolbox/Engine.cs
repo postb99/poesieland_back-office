@@ -1499,9 +1499,6 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 14);
         chartDataFileHelper.WriteBeforeData();
 
-        var variableMetricDataLines =
-            new ChartDataFileHelper.LineChartDataLine("Métrique variable", dataDict[0],
-                metrics.First(x => x.Length == 0).Color);
         var oneFootDataLines =
             new ChartDataFileHelper.LineChartDataLine("1 syllabe", dataDict[1],
                 metrics.First(x => x.Length == 1).Color);
@@ -1542,7 +1539,6 @@ public class Engine
             new ChartDataFileHelper.LineChartDataLine("14 syllabes", dataDict[14],
                 metrics.First(x => x.Length == 14).Color);
 
-        chartDataFileHelper.WriteData(variableMetricDataLines);
         chartDataFileHelper.WriteData(oneFootDataLines);
         chartDataFileHelper.WriteData(twoFeetDataLines);
         chartDataFileHelper.WriteData(threeFeetDataLines);
@@ -1559,7 +1555,6 @@ public class Engine
 
         chartDataFileHelper.WriteAfterData("poemsVerseLengthLine",
             [
-                "Métrique variable en blanc",
                 "1 syllabe",
                 "2 syllabes",
                 "3 syllabes",
@@ -1573,7 +1568,7 @@ public class Engine
                 "11 syllabes",
                 "12 syllabes",
                 "14 syllabes"
-            ], chartYAxisTitle: "Métrique (0 = variable)", chartXAxisTitle: "Au fil des Saisons",
+            ], chartYAxisTitle: "Métrique", chartXAxisTitle: "Au fil des Saisons",
             xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
     }
@@ -1744,13 +1739,13 @@ public class Engine
 
     public Dictionary<int, List<decimal>> FillMetricDataDict(out List<string> xLabels)
     {
-        var verseLengthRange = Enumerable.Range(1, 14);
-        var dataDict = new Dictionary<int, List<decimal>> { { 0, [] } }; // For variable metric
+        var metricRange = Enumerable.Range(1, 14);
+        var dataDict = new Dictionary<int, List<decimal>> { };
 
         xLabels = new List<string>();
-        foreach (var verseLength in verseLengthRange)
+        foreach (var metric in metricRange)
         {
-            dataDict.Add(verseLength, new List<decimal>());
+            dataDict.Add(metric, new List<decimal>());
         }
 
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
@@ -1758,12 +1753,11 @@ public class Engine
             // Multiplication to get 100%
             var multiple = 100m / season.Poems.Count;
             xLabels.Add($"{season.EscapedTitleForChartsWithYears}");
-            dataDict[0].Add(Decimal.Round(season.Poems.Count(x => x.HasVariableMetric) * multiple, 1));
 
-            foreach (var verseLength in verseLengthRange)
+            foreach (var metric in metricRange)
             {
-                dataDict[verseLength]
-                    .Add(Decimal.Round(season.Poems.Count(x => x.VerseLength == verseLength.ToString()) * multiple, 1));
+                dataDict[metric]
+                    .Add(Decimal.Round(season.Poems.Count(x => !x.HasVariableMetric && x.VerseLength == metric.ToString() || x.VerseLength.Split(',').Contains(metric.ToString())) * multiple, 1));
             }
         }
 
