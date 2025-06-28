@@ -1569,7 +1569,7 @@ public class Engine
                 "12 syllabes",
                 "14 syllabes"
             ], chartYAxisTitle: "Métrique", chartXAxisTitle: "Au fil des Saisons",
-            xLabels: xLabels.ToArray(), stack: "stack0");
+            xLabels: xLabels.ToArray(), stack: "stack0", customScalesOptions:"scales: {y:{max:50}}");
         streamWriter.Close();
     }
 
@@ -1750,8 +1750,8 @@ public class Engine
 
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
         {
-            // Multiplication to get 100%
-            var multiple = 100m / season.Poems.Count;
+            // Multiplication to get 50
+            var multiple = 50m / season.Poems.Count;
             xLabels.Add($"{season.EscapedTitleForChartsWithYears}");
 
             foreach (var metric in metricRange)
