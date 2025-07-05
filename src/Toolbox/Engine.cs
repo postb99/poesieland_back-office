@@ -1630,6 +1630,30 @@ public class Engine
             customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
                 yAxisLabels.ToList()));
         streamWriter.Close();
+        
+        // Automatic listing of topmost associations
+        GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary, maxValue);
+    }
+
+    private void GenerateTopMostAssociatedCategoriesListing(Dictionary<KeyValuePair<string, string>, int> dataDict,
+        int maxValue)
+    {
+        var sortedDict = dataDict.OrderByDescending(x => x.Value).Take(10).ToList();
+        
+        var outFile = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", "associated_categories.md");
+        using var streamWriter = new StreamWriter(outFile);
+        
+        streamWriter.WriteLine("+++");
+        streamWriter.WriteLine("title = \"Associations privilégiées\"");
+        streamWriter.WriteLine("+++");
+        foreach (var (key, _) in sortedDict)
+        {
+            var key1 = key.Key.ToLowerInvariant();
+            var key2 = key.Value.ToLowerInvariant();
+            streamWriter.WriteLine($"- [{key1}](/categories/{key1.Replace(' ', '-')}) et [{key2}](/categories/{key2.Replace(' ', '-')})");
+        }
+        streamWriter.Close();
     }
 
     public void GenerateCategoryMetricBubbleChartDataFile()
