@@ -257,11 +257,17 @@ public class Engine
 
     public IEnumerable<string> GetReusedTitles()
     {
+        var allowedReuses = File.ReadAllLines("./allowed_reuses.txt");
         foreach (var group in Data.Seasons.SelectMany(x => x.Poems).GroupBy(x => x.Title))
         {
             var count = group.Count();
             if (count > 1)
-                yield return $"Reused title {group.Key} {count} times ({string.Join(", ", group.Select(g => g.Id))})";
+            {
+                var outputLine =
+                    $"Reused title {group.Key} {count} times ({string.Join(", ", group.Select(g => g.Id))})";
+                if (!allowedReuses.Contains(outputLine))
+                    yield return outputLine;
+            }
         }
     }
 
@@ -745,7 +751,7 @@ public class Engine
         var poems = seasonId != null
             ? Data.Seasons.First(x => x.Id == seasonId).Poems
             : Data.Seasons.SelectMany(x => x.Poems);
-        
+
         foreach (var poem in poems)
         {
             if (string.IsNullOrEmpty(poem.VerseLength))
@@ -772,14 +778,14 @@ public class Engine
                 }
 
                 // Detailed variable metric go to general metric bar chart
-                    if (variableMetricData.TryGetValue(poem.DetailedMetric, out _))
-                    {
-                        variableMetricData[poem.DetailedMetric]++;
-                    }
-                    else
-                    {
-                        variableMetricData[poem.DetailedMetric] = 1;
-                    }
+                if (variableMetricData.TryGetValue(poem.DetailedMetric, out _))
+                {
+                    variableMetricData[poem.DetailedMetric]++;
+                }
+                else
+                {
+                    variableMetricData[poem.DetailedMetric] = 1;
+                }
             }
             else
             {
@@ -831,7 +837,7 @@ public class Engine
                 coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{metricValue} {term}",
                     regularMetricData[metricValue], metrics.First(m => m.Length == metricValue).Color));
             }
-            
+
             chartDataFileHelper.WriteData(coloredDataLines, true);
 
             chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"]);
@@ -1044,7 +1050,8 @@ public class Engine
     }
 
     public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory,
-        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false, bool forRefrain = false)
+        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
+        bool forRefrain = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
@@ -1569,7 +1576,7 @@ public class Engine
                 "12 syllabes",
                 "14 syllabes"
             ], chartYAxisTitle: "Métrique", chartXAxisTitle: "Au fil des Saisons",
-            xLabels: xLabels.ToArray(), stack: "stack0", customScalesOptions:"scales: {y:{max:50}}");
+            xLabels: xLabels.ToArray(), stack: "stack0", customScalesOptions: "scales: {y:{max:50}}");
         streamWriter.Close();
     }
 
@@ -1630,7 +1637,7 @@ public class Engine
             customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
                 yAxisLabels.ToList()));
         streamWriter.Close();
-        
+
         // Automatic listing of topmost associations
         GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary, maxValue);
     }
@@ -1639,11 +1646,11 @@ public class Engine
         int maxValue)
     {
         var sortedDict = dataDict.OrderByDescending(x => x.Value).Take(10).ToList();
-        
+
         var outFile = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", "associated_categories.md");
         using var streamWriter = new StreamWriter(outFile);
-        
+
         streamWriter.WriteLine("+++");
         streamWriter.WriteLine("title = \"Associations privilégiées\"");
         streamWriter.WriteLine("+++");
@@ -1651,8 +1658,10 @@ public class Engine
         {
             var key1 = key.Key.ToLowerInvariant();
             var key2 = key.Value.ToLowerInvariant();
-            streamWriter.WriteLine($"- [{key1}](/categories/{key1.Replace(' ', '-')}) et [{key2}](/categories/{key2.Replace(' ', '-')})");
+            streamWriter.WriteLine(
+                $"- [{key1}](/categories/{key1.Replace(' ', '-')}) et [{key2}](/categories/{key2.Replace(' ', '-')})");
         }
+
         streamWriter.Close();
     }
 
@@ -1781,7 +1790,10 @@ public class Engine
             foreach (var metric in metricRange)
             {
                 dataDict[metric]
-                    .Add(Decimal.Round(season.Poems.Count(x => !x.HasVariableMetric && x.VerseLength == metric.ToString() || x.VerseLength.Split(',').Contains(metric.ToString())) * multiple, 1));
+                    .Add(Decimal.Round(
+                        season.Poems.Count(x =>
+                            !x.HasVariableMetric && x.VerseLength == metric.ToString() ||
+                            x.VerseLength.Split(',').Contains(metric.ToString())) * multiple, 1));
             }
         }
 
