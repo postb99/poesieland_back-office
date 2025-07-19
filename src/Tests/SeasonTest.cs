@@ -35,6 +35,7 @@ public class SeasonTest
     [InlineData("01.09.1997", "01.03.1998", "septembre 1997 à mars 1998")]
     [InlineData("01.11.1999", "01.03.2001", "novembre 1999 à mars 2001")]
     [InlineData("01.03.2002", "01.11.2004", "mars 2002 à novembre 2004")]
+    [InlineData("01.06.2025", "15.06.2025", "juin 2025")]
     public void ShouldComputePeriod(string firstDate, string secondDate, string expectedPeriod)
     {
         Thread.CurrentThread.CurrentCulture = new CultureInfo("fr");
