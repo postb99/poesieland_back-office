@@ -146,6 +146,7 @@ public class Program
                 {
                     Console.WriteLine(reusedTitle);
                 }
+
                 return true;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
@@ -296,35 +297,32 @@ public class Program
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
 
-        if (int.TryParse(choice, out var seasonId) &&
-            _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
+        if (choice == "0")
         {
-            if (seasonId == 0)
+            for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
             {
-                for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
-                {
-                    _engine.GenerateSeasonCategoriesPieChartDataFile(i);
-                }
-
-                // General chart
-                _engine.GenerateSeasonCategoriesPieChartDataFile(null);
-
-                // Categories' and tags' radar
-                GeneratePoemsCategoriesAndTagsRadarChartDataFile();
-
-                // Over seasons categories' and tags' bar
-                GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
-            }
-            else
-            {
-                _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
-                // General chart
-                _engine.GenerateSeasonCategoriesPieChartDataFile(null);
+                _engine.GenerateSeasonCategoriesPieChartDataFile(i);
             }
 
-            Console.WriteLine(seasonId == 0
-                ? "All seasons categories pie chart data file OK"
-                : $"Season {seasonId} categories pie chart data file OK");
+            // General chart
+            _engine.GenerateSeasonCategoriesPieChartDataFile(null);
+
+            // Categories' and tags' radar
+            GeneratePoemsCategoriesAndTagsRadarChartDataFile();
+
+            // Over seasons categories' and tags' bar
+            GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
+
+            Console.WriteLine("All seasons categories pie chart data file OK");
+        }
+        else if (int.TryParse(choice, out var seasonId) &&
+                 _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
+        {
+            _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+            // General chart
+            _engine.GenerateSeasonCategoriesPieChartDataFile(null);
+
+            Console.WriteLine($"Season {seasonId} categories pie chart data file OK");
         }
         else
         {
@@ -484,8 +482,21 @@ public class Program
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableMetric: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forRefrain: true);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 1);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 2);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 3);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 4);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 5);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 6);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 7);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 8);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 9);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 10);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 11);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 12);
+
         Console.WriteLine(
-            $"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain' chart data files OK");
+            $"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain', 1-12 metrics chart data files OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()

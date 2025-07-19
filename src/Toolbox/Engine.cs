@@ -1051,7 +1051,7 @@ public class Engine
 
     public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory,
         bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
-        bool forRefrain = false)
+        bool forRefrain = false, int? forMetric = null)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
@@ -1113,6 +1113,11 @@ public class Engine
             fileName = $"poems-refrain-bar.js";
             chartId = $"poems-refrainBar";
         }
+        else if (forMetric is not null)
+        {
+            fileName = $"poems-metric-{forMetric}-bar.js";
+            chartId = $"poems-metric{forMetric}Bar";
+        }
 
         var backgroundColor = borderColor.Replace("1)", "0.5)");
         if (forVariableMetric)
@@ -1158,6 +1163,10 @@ public class Engine
             else if (forRefrain)
             {
                 poemCount = season.Poems.Count(x => x.ExtraTags.Contains("refrain"));
+            }
+            else if (forMetric is not null)
+            {
+                poemCount = season.Poems.Count(x => x.HasMetric(forMetric.Value));
             }
 
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
