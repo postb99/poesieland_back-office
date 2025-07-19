@@ -274,11 +274,11 @@ public class Engine
     public void CheckPoemsWithoutVerseLength()
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);
-        var poemsWithVerseLength = poems.Count(x => x.VerseLength != null && x.VerseLength != "0");
+        var poemsWithVerseLength = poems.Count(x => x.HasVerseLength);
         if (poemsWithVerseLength == poems.Count())
             return;
 
-        var incorrectPoem = poems.FirstOrDefault(x => x.VerseLength == null || x.VerseLength == "0");
+        var incorrectPoem = poems.FirstOrDefault(x => !x.HasVerseLength);
         if (incorrectPoem != null)
             throw new Exception(
                 $"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
@@ -1576,7 +1576,7 @@ public class Engine
                 "12 syllabes",
                 "14 syllabes"
             ], chartYAxisTitle: "Métrique", chartXAxisTitle: "Au fil des Saisons",
-            xLabels: xLabels.ToArray(), stack: "stack0", customScalesOptions: "scales: {y:{max:50}}");
+            xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
     }
 
@@ -1790,8 +1790,7 @@ public class Engine
                 dataDict[metric]
                     .Add(Decimal.Round(
                         season.Poems.Count(x =>
-                            !x.HasVariableMetric && x.VerseLength == metric.ToString() ||
-                            x.VerseLength.Split(',').Contains(metric.ToString())) * multiple, 1));
+                            x.HasMetric(metric)) * multiple, 1));
             }
         }
 

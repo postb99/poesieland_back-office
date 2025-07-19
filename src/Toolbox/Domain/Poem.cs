@@ -22,10 +22,27 @@ public class Poem
     /// </summary>
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }
+    
+    [XmlIgnore]
+    public bool HasVerseLength => VerseLength is not null && VerseLength != "0";
 
     [XmlIgnore]
     public bool HasVariableMetric => VerseLength is not null &&
-                                     (VerseLength == "-1" || VerseLength.Contains(",") || VerseLength.Contains(" "));
+                                     (VerseLength == "-1" || VerseLength.Contains(',') || VerseLength.Contains(' '));
+
+    public bool HasMetric(int metric)
+    {
+        if (VerseLength.Contains(','))
+        {
+            return VerseLength.Replace(" ", string.Empty).Split(',').Select(int.Parse).ToArray().Contains(metric);
+        }
+
+        if (VerseLength.Contains(' '))
+        {
+            return false;
+        }
+        return int.Parse(VerseLength) == metric;
+    }
 
     /// <summary>
     /// Real metric, either an integer or integers separated by comma + space.
@@ -44,7 +61,7 @@ public class Poem
                     $"When metric is -1, info should begin with variable length indication: 'Métrique variable : ...'. Poem id: {Id}");
             }
 
-            return Info.IndexOf(".") > -1 ? Info.Substring(20, Info.IndexOf(".") - 20) : Info.Substring(20);
+            return Info.IndexOf('.') > -1 ? Info.Substring(20, Info.IndexOf('.') - 20) : Info.Substring(20);
         }
     }
 
@@ -111,7 +128,7 @@ public class Poem
         }
 
         s.Remove(s.Length - 2, 2);
-        s.Append("]");
+        s.Append(']');
         s.Append(Environment.NewLine);
 
         // Tags taxonomy is fed by: categories, (double) acrostiche, poem type, date year, variable metric, metric valu(e).
@@ -159,7 +176,7 @@ public class Poem
         }
 
         s.Remove(s.Length - 2, 2);
-        s.Append("]");
+        s.Append(']');
         s.Append(Environment.NewLine);
 
         if (Info is not null)
@@ -167,7 +184,7 @@ public class Poem
             // When info is multiline, should be surrounded by """ followed by a line break
             // When it contains 'include "', it should be surrounded by '
             // Else it is surrounded by " but its " should be escaped
-            var sep = Info.Contains("\n") ? "\"\"\""+Environment.NewLine : Info.Contains("include \"") ? "'" : "\"";
+            var sep = Info.Contains('\n') ? "\"\"\"" + Environment.NewLine : Info.Contains("include \"") ? "'" : "\"";
             var info = sep == "\"" ? Info.Escaped() : Info;
             s.Append($"info = {sep}{info}{sep}");
             s.Append(Environment.NewLine);
@@ -182,7 +199,7 @@ public class Poem
             }
 
             s.Remove(s.Length - 2, 2);
-            s.Append("]");
+            s.Append(']');
             s.Append(Environment.NewLine);
         }
 
@@ -220,7 +237,7 @@ public class Poem
             }
 
             s.Remove(s.Length - 2, 2);
-            s.Append("]");
+            s.Append(']');
             s.Append(Environment.NewLine);
         }
 
@@ -252,7 +269,7 @@ public class Poem
         {
             s.Append(Info);
             if (!Info.EndsWith("."))
-                s.Append(".");
+                s.Append('.');
         }
 
         if ((Info is not null && !Info.StartsWith("[^")) || Acrostiche is not null || DoubleAcrostiche is not null)
@@ -265,7 +282,7 @@ public class Poem
             {
                 s.Append(Info);
                 if (!Info.EndsWith("."))
-                    s.Append(".");
+                    s.Append('.');
             }
 
             if (Acrostiche is not null || DoubleAcrostiche is not null)
@@ -279,8 +296,8 @@ public class Poem
                 if (Acrostiche is not null)
                 {
                     s.Append($"Acrostiche : {Acrostiche}");
-                    if (!new List<char>{'.', '?', '!'}.Contains(Acrostiche[Acrostiche.Length-1]))
-                        s.Append(".");
+                    if (!new List<char> { '.', '?', '!' }.Contains(Acrostiche[Acrostiche.Length - 1]))
+                        s.Append('.');
                 }
                 else if (DoubleAcrostiche is not null)
                 {

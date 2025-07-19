@@ -83,7 +83,7 @@ public class PoemContentImporter(IConfiguration configuration)
                      Info = _poem.Info
                  })) yield return p;
         
-        if (_poem.VerseLength is null || _poem.VerseLength == "0")
+        if (!_poem.HasVerseLength)
             yield return "Metric cannot be empty or 0";
     }
 

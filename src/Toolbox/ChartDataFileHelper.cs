@@ -148,7 +148,7 @@ public class ChartDataFileHelper
         var chartTitlesBuilder = new StringBuilder();
         foreach (var chartTitle in chartTitles)
         {
-            chartTitlesBuilder.Append("'").Append(chartTitle).Append("',");
+            chartTitlesBuilder.Append('\'').Append(chartTitle).Append("',");
         }
 
         chartTitlesBuilder.Remove(chartTitlesBuilder.Length - 1, 1);
@@ -185,7 +185,7 @@ public class ChartDataFileHelper
                 var xLabelsBuilder = new StringBuilder();
                 foreach (var xLabel in xLabels)
                 {
-                    xLabelsBuilder.Append("'").Append(xLabel).Append("',");
+                    xLabelsBuilder.Append('\'').Append(xLabel).Append("',");
                 }
 
                 xLabelsBuilder.Remove(xLabelsBuilder.Length - 1, 1);
@@ -281,7 +281,7 @@ public class ChartDataFileHelper
         }
         sb.Append(" }")
           .Append(xAxisTitleOption)
-          .Append("}");
+          .Append('}');
 
         sb.Append(", y: { ")
             .Append("ticks: { stepSize: 1, ")
@@ -294,7 +294,7 @@ public class ChartDataFileHelper
         }
         sb.Append(" }")
             .Append(yAxisTitleOption)
-            .Append("}");
+            .Append('}');
 
         sb.Append(" }");
 

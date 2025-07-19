@@ -206,7 +206,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
         foreach (var metric in metrics)
         {
             testOutputHelper.WriteLine(
-                $"{metric}: {_data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == metric.ToString())).Select(x => x.Date).Order().FirstOrDefault()}");
+                $"{metric}: {_data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasMetric(metric))).Select(x => x.Date).Order().FirstOrDefault()}");
         }
 
         var fourteen = _data.Seasons.SelectMany(x => x.Poems.Where(x => x.VerseLength == "14")).Select(x => x.Date)

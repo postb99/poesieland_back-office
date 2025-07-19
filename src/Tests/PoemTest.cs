@@ -37,6 +37,22 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
         poem.DetailedMetric.ShouldBe("6, 3");
     }
 
+    [Theory]
+    [Trait("UnitTest", "Computation")]
+    [InlineData("6, 3", 6, true)]
+    [InlineData("6, 3", 3, true)]
+    [InlineData("6", 6, true)]
+    [InlineData("Poème en prose", 6, false)]
+    public void ShouldHaveMetric(string verseLength, int metric, bool expected)
+    {
+        var poem = new Poem
+        {
+            VerseLength = verseLength
+        };
+
+        poem.HasMetric(metric).ShouldBe(expected);
+    }
+
     [Fact]
     [Trait("UnitTest", "Computation")]
     public void ShouldThrowNullInfo()
