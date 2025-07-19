@@ -51,4 +51,12 @@ public static class StringExtensions
     /// <param name="textDate"></param>
     /// <returns></returns>
     public static DateTime ToDateTime(this string textDate) => DateTime.ParseExact(textDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None);
+
+    /// <summary>
+    /// Renders a markdown link.
+    /// </summary>
+    /// <param name="item">For example a category name, as given by storage values</param>
+    /// <param name="itemTypes">For example "categories"</param>
+    /// <returns></returns>
+    public static string MarkdownLink(this string item, string itemTypes) => $"[{item}](/{itemTypes}/{item.ToLowerInvariant().Replace(' ', '-')})";
 }

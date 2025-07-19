@@ -1656,10 +1656,8 @@ public class Engine
         streamWriter.WriteLine("+++");
         foreach (var (key, _) in sortedDict)
         {
-            var key1 = key.Key.ToLowerInvariant();
-            var key2 = key.Value.ToLowerInvariant();
             streamWriter.WriteLine(
-                $"- [{key1}](/categories/{key1.Replace(' ', '-')}) et [{key2}](/categories/{key2.Replace(' ', '-')})");
+                $"- {key.Key.MarkdownLink("categories")} et {key.Value.MarkdownLink("categories")}");
         }
 
         streamWriter.Close();

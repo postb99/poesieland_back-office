@@ -67,4 +67,11 @@ public class StringExtensionsTest
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
         input.CleanedContent().ShouldBe(expected);
     }
+
+    [Theory]
+    [Trait("UnitTest", "Computation")]
+    [InlineData("Automne", "[Automne](/categories/automne)")]
+    [InlineData("Enfance et adolescence", "[Enfance et adolescence](/categories/enfance-et-adolescence)")]
+    public void ShouldBeMarkdownLink(string input, string expected) =>
+        input.MarkdownLink("categories").ShouldBe(expected);
 }
