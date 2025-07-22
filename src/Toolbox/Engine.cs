@@ -1648,11 +1648,13 @@ public class Engine
         streamWriter.Close();
 
         // Automatic listing of topmost associations
-        GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary, maxValue);
+        GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary);
+        
+        // Listing of topmost associations with refreain extra tag
+        GenerateRefrainTopMostCategoriesListing();
     }
 
-    private void GenerateTopMostAssociatedCategoriesListing(Dictionary<KeyValuePair<string, string>, int> dataDict,
-        int maxValue)
+    private void GenerateTopMostAssociatedCategoriesListing(Dictionary<KeyValuePair<string, string>, int> dataDict)
     {
         var sortedDict = dataDict.OrderByDescending(x => x.Value).Take(10).ToList();
 
@@ -1667,6 +1669,43 @@ public class Engine
         {
             streamWriter.WriteLine(
                 $"- {key.Key.MarkdownLink("categories")} et {key.Value.MarkdownLink("categories")}");
+        }
+
+        streamWriter.Close();
+    }
+
+    private void GenerateRefrainTopMostCategoriesListing()
+    {
+        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList();
+        var dict = new Dictionary<string, int>();
+        foreach (var poem in poems)
+        {
+            foreach (var cat in poem.Categories.SelectMany(x => x.SubCategories))
+            {
+                if (dict.TryGetValue(cat, out var count))
+                {
+                    dict[cat] = ++count;
+                }
+                else
+                {
+                    dict[cat] = 1;
+                }
+            }
+        }
+
+        var topMost = dict.OrderByDescending(x => x.Value).Take(10).ToList();
+        
+        var outFile = Path.Combine(Directory.GetCurrentDirectory(),
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", "refrain_categories.md");
+        using var streamWriter = new StreamWriter(outFile);
+
+        streamWriter.WriteLine("+++");
+        streamWriter.WriteLine("title = \"Associations privilégiées\"");
+        streamWriter.WriteLine("+++");
+        foreach (var topmost in topMost)
+        {
+            streamWriter.WriteLine(
+                $"- {topmost.Key.MarkdownLink("categories")}");
         }
 
         streamWriter.Close();

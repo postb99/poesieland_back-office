@@ -352,38 +352,6 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
 
     [Fact]
     [Trait("DataMining", "Lookup")]
-    public void PoemsWithRefrainCategories()
-    {
-        var poems = _data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList();
-        var dict = new Dictionary<string, int>();
-        foreach (var poem in poems)
-        {
-            foreach (var cat in poem.Categories.SelectMany(x => x.SubCategories))
-            {
-                if (dict.TryGetValue(cat, out var count))
-                {
-                    dict[cat] = ++count;
-                }
-                else
-                {
-                    dict[cat] = 1;
-                }
-            }
-        }
-
-        var outputLines = new List<string>();
-        foreach (var cat in dict.Keys)
-            outputLines.Add($"[{dict[cat]}] {cat}");
-
-        outputLines.Sort();
-        outputLines.Reverse();
-
-        foreach (var line in outputLines)
-            testOutputHelper.WriteLine(line);
-    }
-
-    [Fact]
-    [Trait("DataMining", "Lookup")]
     public void PoemsWithMoreThanOneSeasonCategory()
     {
         var poems = _data.Seasons.SelectMany(x =>
