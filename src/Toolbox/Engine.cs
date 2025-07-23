@@ -1649,9 +1649,16 @@ public class Engine
 
         // Automatic listing of topmost associations
         GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary);
-        
-        // Listing of topmost associations with refreain extra tag
+
+        // Listing of topmost associations with refrain extra tag
         GenerateRefrainTopMostCategoriesListing();
+
+        // Listing of topmost associations with metrics
+        foreach (var metric in Enumerable.Range(1, 12))
+        {
+            poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasMetric(metric))).ToList();
+            GenerateTopMostCategoriesListing(poems, $"metric-{metric}_categories.md");
+        }
     }
 
     private void GenerateTopMostAssociatedCategoriesListing(Dictionary<KeyValuePair<string, string>, int> dataDict)
@@ -1677,6 +1684,11 @@ public class Engine
     private void GenerateRefrainTopMostCategoriesListing()
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList();
+        GenerateTopMostCategoriesListing(poems, "refrain_categories.md");
+    }
+
+    private void GenerateTopMostCategoriesListing(IEnumerable<Poem> poems, string fileName)
+    {
         var dict = new Dictionary<string, int>();
         foreach (var poem in poems)
         {
@@ -1694,9 +1706,9 @@ public class Engine
         }
 
         var topMost = dict.OrderByDescending(x => x.Value).Take(10).ToList();
-        
+
         var outFile = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", "refrain_categories.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", fileName);
         using var streamWriter = new StreamWriter(outFile);
 
         streamWriter.WriteLine("+++");
