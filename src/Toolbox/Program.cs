@@ -476,12 +476,12 @@ public class Program
 
         Console.WriteLine($"Poems over seasons for all tags chart data files OK");
 
-
         _engine.GenerateOverSeasonsChartDataFile(null, null, forAcrostiche: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forSonnet: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forPantoun: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forVariableMetric: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forRefrain: true);
+        _engine.GenerateOverSeasonsChartDataFile(null, null, forLovecat: true);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 1);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 2);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 3);
@@ -496,7 +496,7 @@ public class Program
         _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 12);
 
         Console.WriteLine(
-            $"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain', 1-12 metrics chart data files OK");
+            $"Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain', 'lovecat', 1-12 metrics chart data files OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
