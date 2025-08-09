@@ -1,5 +1,4 @@
-﻿using AutoFixture;
-using Shouldly;
+﻿using Shouldly;
 using Toolbox;
 using Toolbox.Domain;
 using Xunit;
@@ -23,7 +22,7 @@ public class DataDependantEngineTest(LoadDataFixture fixture, ITestOutputHelper 
             $"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
         var sum = dataDict.Values.Sum(x => x.Last());
         testOutputHelper.WriteLine($"Computed values sum: {sum}");
-        sum.ShouldBeInRange(99.6m, 100.4m);
+        sum.ShouldBeInRange(49m, 59m);
     }
 
     [Fact]

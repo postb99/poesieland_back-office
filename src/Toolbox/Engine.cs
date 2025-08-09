@@ -250,7 +250,7 @@ public class Engine
 
                 foreach (var p in poemContentImporter.CheckAnomalies(partialImport))
                     yield return
-                        $"{p}in {poemContentPath}";
+                        $"{p} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}";
             }
         }
     }
@@ -950,7 +950,7 @@ public class Engine
             {
                 var dates = matchingIntensities.Where(x => x.Substring(6) == year).Select(x => x.ToDateTime()).Order();
                 streamWriter2.Write($"  - {year} : ");
-                streamWriter2.WriteLine(string.Join(", ", dates.Select(x => x.ToString("D"))));
+                streamWriter2.WriteLine(string.Join(", ", dates.Select(x => x.ToString("ddd dd MMM"))));
             }
         }
 
@@ -1660,7 +1660,10 @@ public class Engine
         GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary);
 
         // Listing of topmost associations with refrain extra tag
-        GenerateRefrainTopMostCategoriesListing();
+        GenerateTopMostCategoriesListing(Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList(), "refrain_categories.md");
+
+        // Listing of topmost associations with sonnet
+        GenerateTopMostCategoriesListing(Data.Seasons.SelectMany(x => x.Poems.Where(x => x.IsSonnet)).ToList(), "sonnet_categories.md");
 
         // Listing of topmost associations with metrics
         foreach (var metric in Enumerable.Range(1, 12))
@@ -1688,12 +1691,6 @@ public class Engine
         }
 
         streamWriter.Close();
-    }
-
-    private void GenerateRefrainTopMostCategoriesListing()
-    {
-        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList();
-        GenerateTopMostCategoriesListing(poems, "refrain_categories.md");
     }
 
     private void GenerateTopMostCategoriesListing(IEnumerable<Poem> poems, string fileName)
