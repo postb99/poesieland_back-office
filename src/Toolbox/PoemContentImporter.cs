@@ -151,7 +151,7 @@ public class PoemContentImporter(IConfiguration configuration)
         };
     }
 
-    public record PartialImport()
+    public record PartialImport
     {
         public List<string> Tags { get; set; } = new();
         public int Year { get; set; }

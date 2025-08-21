@@ -68,8 +68,17 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildTags(string line)
     {
-        _tags = line.Substring(7).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != string.Empty && x != ", ")
-            .ToList();
+        switch (line)
+        {
+            case "tags = [":
+                ProcessingListType = ProcessingListType.Tags;
+                break;
+            default:
+                _tags = line.Substring(7).Trim('[').Trim(']').Trim(' ').Split('"')
+                    .Where(x => x != string.Empty && x != ", ")
+                    .ToList();
+                break;
+        }
     }
 
     public void BuildPictures(string line)
@@ -113,6 +122,18 @@ public class TomlMetadataProcessor : IMetadataProcessor
                 else
                 {
                     _infoLines.Add(lineValue);
+                }
+
+                break;
+            case ProcessingListType.Tags:
+                if (lineValue == "]")
+                {
+                    // Encountered ] end marker
+                    ProcessingListType = ProcessingListType.None;
+                }
+                else
+                {
+                    _tags.Add(lineValue.TrimStart(' ').TrimEnd(',').Trim('"'));
                 }
 
                 break;

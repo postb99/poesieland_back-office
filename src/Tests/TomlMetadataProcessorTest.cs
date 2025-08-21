@@ -196,4 +196,19 @@ public class TomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixtur
         var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
         anomalies.ShouldBeEmpty();
     }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    private void ShouldImportMultilineTags()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/le_jour_decroit.md");
+        var poemContentImporter = new PoemContentImporter(basicFixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
+        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        poem.ExtraTags.ShouldBeEquivalentTo(new List<string>{"refrain", "les mois"});
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
+    }
 }
