@@ -3,9 +3,9 @@ using Toolbox.Domain;
 
 namespace Toolbox;
 
-public class TomlMetadataProcessor : IMetadataProcessor
+public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
 {
-    public ProcessingListType ProcessingListType { get; private set; }
+    public MultilineMetadataProcessingType MultilineMetadataProcessingType { get; private set; }
 
     private List<string> _categories = [];
     private List<string> _tags = [];
@@ -57,7 +57,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
     public DoubleAcrostiche GetDoubleAcrostiche(string line)
     {
         var splitted = line.Substring(19).CleanedContent().Split('|');
-        return new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() };
+        return new() { First = splitted[0].Trim(), Second = splitted[1].Trim() };
     }
 
     public void BuildCategories(string line)
@@ -71,7 +71,7 @@ public class TomlMetadataProcessor : IMetadataProcessor
         switch (line)
         {
             case "tags = [":
-                ProcessingListType = ProcessingListType.Tags;
+                MultilineMetadataProcessingType = MultilineMetadataProcessingType.Tags;
                 break;
             default:
                 _tags = line.Substring(7).Trim('[').Trim(']').Trim(' ').Split('"')
@@ -91,12 +91,12 @@ public class TomlMetadataProcessor : IMetadataProcessor
 
     public void BuildInfoLines(string line)
     {
-        ProcessingListType = ProcessingListType.InfoLines;
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
         var inlineInfo = GetInfo(line);
         if (inlineInfo != null && inlineInfo != "\"")
         {
             AddValue(inlineInfo, -2);
-            ProcessingListType = ProcessingListType.None;
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
         }
     }
     
@@ -109,15 +109,15 @@ public class TomlMetadataProcessor : IMetadataProcessor
     public void AddValue(string line, int nbSpaces)
     {
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
-        switch (ProcessingListType)
+        switch (MultilineMetadataProcessingType)
         {
-            case ProcessingListType.InfoLines:
+            case MultilineMetadataProcessingType.InfoLines:
 
                 if (lineValue.EndsWith("\"\"\""))
                 {
                     // Encountered """ end marker
                     _infoLines.Add(lineValue.Substring(0, lineValue.Length - 3));
-                    ProcessingListType = ProcessingListType.None;
+                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
                 }
                 else
                 {
@@ -125,11 +125,11 @@ public class TomlMetadataProcessor : IMetadataProcessor
                 }
 
                 break;
-            case ProcessingListType.Tags:
+            case MultilineMetadataProcessingType.Tags:
                 if (lineValue == "]")
                 {
                     // Encountered ] end marker
-                    ProcessingListType = ProcessingListType.None;
+                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
                 }
                 else
                 {

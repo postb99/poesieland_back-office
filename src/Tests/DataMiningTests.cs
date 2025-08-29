@@ -84,7 +84,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
 
         foreach (var categoryName in categories.Select(x => x.Name).Distinct())
         {
-            dic.Add(categoryName, new HashSet<string>());
+            dic.Add(categoryName, new());
         }
 
         foreach (var category in categories)
@@ -254,7 +254,7 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
         {
             if (poem.Acrostiche is not null || poem.DoubleAcrostiche is not null)
                 continue;
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             foreach (var verse in poem.Paragraphs.SelectMany(x => x.Verses))
             {
                 sb.Append(verse[0]);

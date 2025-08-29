@@ -2,11 +2,11 @@
 
 namespace Toolbox;
 
-public class ContentProcessor
+public class PoemContentProcessor
 {
     private List<Paragraph> _paragraphs = new();
     private bool _isNewParagraph = true;
-    private bool _done = false;
+    private bool _done;
 
     public void AddLine(string line)
     {
@@ -15,7 +15,7 @@ public class ContentProcessor
             return;
         }
 
-        if (line == PoemContentImporter.YamlMarker || line == PoemContentImporter.TomlMarker)
+        if (line == PoemImporter.YamlMarker || line == PoemImporter.TomlMarker)
         {
             return;
         }
@@ -34,7 +34,7 @@ public class ContentProcessor
 
         if (_isNewParagraph)
         {
-            var paragraph = new Paragraph { Verses = new List<string>() };
+            var paragraph = new Paragraph { Verses = new() };
             _paragraphs.Add(paragraph);
             _isNewParagraph = false;
         }

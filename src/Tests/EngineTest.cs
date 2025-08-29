@@ -115,7 +115,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         var engine = new Engine(basicFixture.Configuration);
 
         // Poem with single subcategory
-        var poem = new Poem { Categories = [new Category { SubCategories = ["A"] }] };
+        var poem = new Poem { Categories = [new() { SubCategories = ["A"] }] };
         engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
         xAxisLabels.ShouldBeEmpty();
         yAxisLabels.ShouldBeEmpty();
@@ -123,7 +123,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         dict.ShouldBeEmpty();
 
         // Poem with two categories
-        poem = new Poem { Categories = [new Category { SubCategories = ["A", "B"] }] };
+        poem = new() { Categories = [new() { SubCategories = ["A", "B"] }] };
         engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
         var expectedKey = new KeyValuePair<string, string>("A", "B");
@@ -137,43 +137,42 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         yAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "B" });
 
         // Poem with three categories
-        poem = new Poem { Categories = [new Category { SubCategories = ["A", "B", "C"] }] };
+        poem = new() { Categories = [new() { SubCategories = ["A", "B", "C"] }] };
         engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
-        expectedKey = new KeyValuePair<string, string>("A", "B");
+        expectedKey = new("A", "B");
         dict.TryGetValue(expectedKey, out var counter2).ShouldBeTrue();
         counter2.ShouldBe(2);
 
-        unExpectedKey = new KeyValuePair<string, string>("B", "A");
+        unExpectedKey = new("B", "A");
         dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
 
-        expectedKey = new KeyValuePair<string, string>("A", "C");
+        expectedKey = new("A", "C");
         dict.TryGetValue(expectedKey, out var counter3).ShouldBeTrue();
         counter3.ShouldBe(1);
 
-        expectedKey = new KeyValuePair<string, string>("B", "C");
+        expectedKey = new("B", "C");
         dict.TryGetValue(expectedKey, out var counter4).ShouldBeTrue();
         counter4.ShouldBe(1);
 
-        unExpectedKey = new KeyValuePair<string, string>("C", "B");
+        unExpectedKey = new("C", "B");
         dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
 
-        unExpectedKey = new KeyValuePair<string, string>("C", "A");
+        unExpectedKey = new("C", "A");
         dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
 
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
         yAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "B", "C" });
 
         // Poem with two categories, one per category
-        poem = new Poem
-            { Categories = [new Category { SubCategories = ["A"] }, new Category() { SubCategories = ["B"] }] };
+        poem = new() { Categories = [new() { SubCategories = ["A"] }, new() { SubCategories = ["B"] }] };
         engine.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
-        expectedKey = new KeyValuePair<string, string>("A", "B");
+        expectedKey = new("A", "B");
         dict.TryGetValue(expectedKey, out var counter5).ShouldBeTrue();
         counter5.ShouldBe(3);
 
-        unExpectedKey = new KeyValuePair<string, string>("B", "A");
+        unExpectedKey = new("B", "A");
         dict.TryGetValue(unExpectedKey, out var _).ShouldBeFalse();
 
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
@@ -190,7 +189,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         var engine = new Engine(basicFixture.Configuration);
 
         // Poem with single subcategory
-        var poem = new Poem { VerseLength = "6", Categories = [new Category { SubCategories = ["A"] }] };
+        var poem = new Poem { VerseLength = "6", Categories = [new() { SubCategories = ["A"] }] };
         engine.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
         var expectedKey = new KeyValuePair<string, int>("A", 6);
         dict.TryGetValue(expectedKey, out var counter).ShouldBeTrue();
@@ -198,30 +197,30 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A" });
         
         // Poem with two categories
-        poem = new Poem { VerseLength = "8", Categories = [new Category { SubCategories = ["A", "B"] }] };
+        poem = new() { VerseLength = "8", Categories = [new() { SubCategories = ["A", "B"] }] };
         engine.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
-        expectedKey = new KeyValuePair<string, int>("A", 8);
+        expectedKey = new("A", 8);
         dict.TryGetValue(expectedKey, out var counter2).ShouldBeTrue();
         counter2.ShouldBe(1);
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
         
-        expectedKey = new KeyValuePair<string, int>("B", 8);
+        expectedKey = new("B", 8);
         dict.TryGetValue(expectedKey, out var counter3).ShouldBeTrue();
         counter3.ShouldBe(1);
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
         
         // Poem with reused metric
-        poem = new Poem { VerseLength = "8", Categories = [new Category { SubCategories = ["A"] }] };
+        poem = new() { VerseLength = "8", Categories = [new() { SubCategories = ["A"] }] };
         engine.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
-        expectedKey = new KeyValuePair<string, int>("A", 8);
+        expectedKey = new("A", 8);
         dict.TryGetValue(expectedKey, out var counter4).ShouldBeTrue();
         counter4.ShouldBe(2);
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
         
         // Variable metric
-        poem = new Poem { VerseLength = "-1", Categories = [new Category { SubCategories = ["A"] }] };
+        poem = new() { VerseLength = "-1", Categories = [new() { SubCategories = ["A"] }] };
         engine.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
-        expectedKey = new KeyValuePair<string, int>("A", 0);
+        expectedKey = new("A", 0);
         dict.TryGetValue(expectedKey, out var counter5).ShouldBeTrue();
         counter5.ShouldBe(1);
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });

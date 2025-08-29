@@ -11,7 +11,7 @@ namespace Tests;
 
 public class XmlSchemaValidationTest : IClassFixture<BasicFixture>
 {
-    private static int _errorsCount = 0;
+    private static int _errorsCount;
     private static ITestOutputHelper _testOutputHelper;
     private IConfiguration _configuration;
 
@@ -36,7 +36,7 @@ public class XmlSchemaValidationTest : IClassFixture<BasicFixture>
     {
         public void Validate(string xmlFileKey, string encoding)
         {
-            XmlReaderSettings xmlReaderSettings = new XmlReaderSettings();
+            XmlReaderSettings xmlReaderSettings = new();
             xmlReaderSettings.Schemas.Add("https://github.com/postb99/poesieland/ns",
                 configuration[Constants.XML_SCHEMA_FILE]);
             xmlReaderSettings.ValidationType = ValidationType.Schema;

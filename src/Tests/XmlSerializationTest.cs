@@ -14,8 +14,8 @@ public class XmlSerializationTest(ITestOutputHelper testOutputHelper) : IClassFi
         var poem = new Poem
         {
             Id = "test_id_0",
-            Categories = [new Category { Name = "TestCat", SubCategories = ["TestSubCat"] }],
-            Paragraphs = [new Paragraph { Verses = ["Verse1", "Verse2"] }],
+            Categories = [new() { Name = "TestCat", SubCategories = ["TestSubCat"] }],
+            Paragraphs = [new() { Verses = ["Verse1", "Verse2"] }],
             Title = "Title",
             TextDate = "19.10.2023",
             VerseLength = "8"
@@ -23,7 +23,7 @@ public class XmlSerializationTest(ITestOutputHelper testOutputHelper) : IClassFi
 
         var data = new Root
         {
-            Seasons = [new Season { Poems = [poem] }]
+            Seasons = [new() { Poems = [poem] }]
         };
 
         var xmlSerializer = new XmlSerializer(typeof(Root));

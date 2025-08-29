@@ -3,9 +3,9 @@ using Toolbox.Domain;
 
 namespace Toolbox;
 
-public class YamlMetadataProcessor : IMetadataProcessor
+public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
 {
-    public ProcessingListType ProcessingListType { get; private set; }
+    public MultilineMetadataProcessingType MultilineMetadataProcessingType { get; private set; }
     private readonly List<string> _categories = [];
     private readonly List<string> _tags = [];
     private readonly List<string> _pictures = [];
@@ -73,33 +73,33 @@ public class YamlMetadataProcessor : IMetadataProcessor
 
     public void BuildCategories(string line)
     {
-        ProcessingListType = ProcessingListType.Categories;
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Categories;
     }
 
     public void BuildTags(string line)
     {
-        ProcessingListType = ProcessingListType.Tags;
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Tags;
     }
 
     public void BuildInfoLines(string line)
     {
-        ProcessingListType = ProcessingListType.InfoLines;
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
         var inlineInfo = GetInfo(line);
         if (inlineInfo != null && inlineInfo != "|-")
         {
             _infoLines.Add(inlineInfo);
-            ProcessingListType = ProcessingListType.None;
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
         }
     }
 
     public void BuildPictures(string line)
     {
-        ProcessingListType = ProcessingListType.Pictures;
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Pictures;
     }
 
     public void BuildLocations(string line)
     {
-        ProcessingListType = ProcessingListType.Locations;
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Locations;
     }
 
     public void AddValue(string line, int nbSpaces)
@@ -111,25 +111,25 @@ public class YamlMetadataProcessor : IMetadataProcessor
         }
 
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
-        switch (ProcessingListType)
+        switch (MultilineMetadataProcessingType)
         {
-            case ProcessingListType.Categories:
+            case MultilineMetadataProcessingType.Categories:
                 _categories.Add(lineValue);
                 break;
-            case ProcessingListType.Tags:
+            case MultilineMetadataProcessingType.Tags:
                 _tags.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
                 break;
-            case ProcessingListType.Pictures:
+            case MultilineMetadataProcessingType.Pictures:
                 _pictures.Add(lineValue);
                 break;
-            case ProcessingListType.InfoLines:
+            case MultilineMetadataProcessingType.InfoLines:
                 lineValue = lineValue.TrimStart(' ');
                 if (lineValue == "{{% notice style=\"primary\" %}}") return;
                 if (lineValue == "{{% /notice %}}") return;
                 if (lineValue.StartsWith("Acrostiche :")) return;
                 _infoLines.Add(lineValue);
                 break;
-            case ProcessingListType.Locations:
+            case MultilineMetadataProcessingType.Locations:
                 _locations.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
                 break;
         }

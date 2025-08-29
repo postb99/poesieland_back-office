@@ -14,13 +14,13 @@ public class Engine
     public Root DataEn { get; private set; } = default!;
     public XmlSerializer XmlSerializer { get; }
 
-    private PoemContentImporter? _poemContentImporter;
+    private PoemImporter? _poemContentImporter;
 
     public Engine(IConfiguration configuration)
     {
         _configuration = configuration;
-        Data = new Root { Seasons = [] };
-        XmlSerializer = new XmlSerializer(typeof(Root));
+        Data = new() { Seasons = [] };
+        XmlSerializer = new(typeof(Root));
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
@@ -115,7 +115,7 @@ public class Engine
             throw new ArgumentException($"Poem content file not found: {poemContentPath}");
         }
 
-        var (poem, _) = (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
+        var (poem, _) = (_poemContentImporter ??= new(_configuration)).Import(poemContentPath);
         var anomalies = _poemContentImporter!.CheckAnomaliesAfterImport();
         foreach (var anomaly in anomalies)
             Console.WriteLine($"[ERROR]: {anomaly}");
@@ -123,7 +123,7 @@ public class Engine
 
         if (targetSeason == null)
         {
-            targetSeason = new Season
+            targetSeason = new()
             {
                 Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Introduction = "TODO", Summary = "TODO",
                 Poems = []
@@ -154,7 +154,7 @@ public class Engine
         foreach (var poemContentPath in poemFilePaths)
         {
             var (poem, position) =
-                (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
+                (_poemContentImporter ??= new(_configuration)).Import(poemContentPath);
             var anomalies = _poemContentImporter!.CheckAnomaliesAfterImport();
             foreach (var anomaly in anomalies)
                 Console.WriteLine($"[ERROR]: {anomaly}");
@@ -168,7 +168,7 @@ public class Engine
         }
         else
         {
-            targetSeason = new Season { Id = seasonId, Poems = [] };
+            targetSeason = new() { Id = seasonId, Poems = [] };
             Data.Seasons.Add(targetSeason);
         }
 
@@ -201,7 +201,7 @@ public class Engine
             foreach (var poemContentPath in poemFilePaths)
             {
                 var (poem, position) =
-                    (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemContentPath);
+                    (_poemContentImporter ??= new(_configuration)).Import(poemContentPath);
 
                 poemsByPosition.Add(position, poem);
             }
@@ -214,7 +214,7 @@ public class Engine
                     var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
                     if (targetSeason == null)
                     {
-                        targetSeason = new Season { Id = seasonId, Poems = [] };
+                        targetSeason = new() { Id = seasonId, Poems = [] };
                         DataEn.Seasons.Add(targetSeason);
                     }
 
@@ -235,7 +235,7 @@ public class Engine
     public IEnumerable<string> CheckMissingTagsInYamlMetadata()
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var poemContentImporter = new PoemContentImporter(_configuration);
+        var poemContentImporter = new PoemImporter(_configuration);
 
         var seasonMaxId = Data.Seasons.Count;
         for (var i = 17; i < seasonMaxId + 1; i++)
@@ -280,7 +280,7 @@ public class Engine
 
         var incorrectPoem = poems.FirstOrDefault(x => !x.HasVerseLength);
         if (incorrectPoem != null)
-            throw new Exception(
+            throw new(
                 $"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
     }
 
@@ -290,7 +290,7 @@ public class Engine
 
         var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Métrique variable : "));
         if (incorrectPoem != null)
-            throw new Exception(
+            throw new(
                 $"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
     }
 
@@ -352,7 +352,7 @@ public class Engine
                 };
 
                 var color = metrics.First(m => m.Length == lookup).Color;
-                coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine(nbVerses.ToString(),
+                coloredDataLines.Add(new(nbVerses.ToString(),
                     nbVersesData[nbVerses], color));
             }
 
@@ -367,18 +367,17 @@ public class Engine
 
             foreach (var nbVerses in nbVersesRange)
             {
-                isSonnetChartData.Add(new ChartDataFileHelper.DataLine(string.Empty, 0));
+                isSonnetChartData.Add(new(string.Empty, 0));
 
-                nbVersesChartData.Add(new ChartDataFileHelper.DataLine(nbVerses.ToString(),
+                nbVersesChartData.Add(new(nbVerses.ToString(),
                     nbVersesData[nbVerses]));
             }
 
             var index = nbVersesRange.FindIndex(x => x == 14);
             if (index != -1)
             {
-                isSonnetChartData[index] = new ChartDataFileHelper.DataLine("Sonnets", nbSonnets);
-                nbVersesChartData[index] = new ChartDataFileHelper.DataLine
-                    (nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
+                isSonnetChartData[index] = new("Sonnets", nbSonnets);
+                nbVersesChartData[index] = new(nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
             }
 
             string[] chartTitles;
@@ -435,8 +434,7 @@ public class Engine
         foreach (var subcategory in orderedSubcategories)
         {
             if (byStorageSubcategoryCount.TryGetValue(subcategory, out var value))
-                pieChartData.Add(new ChartDataFileHelper.ColoredDataLine
-                (subcategory, value,
+                pieChartData.Add(new(subcategory, value,
                     storageSettings.Categories.SelectMany(x => x.Subcategories)
                         .First(x => x.Name == subcategory).Color
                 ));
@@ -541,7 +539,7 @@ public class Engine
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
-            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarChartLabel(monthDay), value
+            dataLines.Add(new(GetRadarChartLabel(monthDay), value
             ));
             if (value == 0)
             {
@@ -608,7 +606,7 @@ public class Engine
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
-            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarEnChartLabel(monthDay), value
+            dataLines.Add(new(GetRadarEnChartLabel(monthDay), value
             ));
         }
 
@@ -646,7 +644,7 @@ public class Engine
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
-            dataLines.Add(new ChartDataFileHelper.DataLine(GetRadarChartLabel(monthDay), value));
+            dataLines.Add(new(GetRadarChartLabel(monthDay), value));
         }
 
         chartDataFileHelper.WriteData(dataLines, true);
@@ -666,12 +664,12 @@ public class Engine
             var desc = $"[{season.Id} - {season.Name}]: {season.Poems.Count}";
             if (i < seasonCount - 1 && season.Poems.Count != 50)
             {
-                throw new Exception($"Not last season. Not 50 poems for {desc}!");
+                throw new($"Not last season. Not 50 poems for {desc}!");
             }
 
             if (i == seasonCount - 1 && season.Poems.Count > 50)
             {
-                throw new Exception($"Last season. More than 50 poems for {desc}!");
+                throw new($"Last season. More than 50 poems for {desc}!");
             }
         }
     }
@@ -693,12 +691,12 @@ public class Engine
 
         foreach (var poemFile in poemFiles)
         {
-            var (poem, position) = (_poemContentImporter ??= new PoemContentImporter(_configuration)).Import(poemFile);
+            var (poem, position) = (_poemContentImporter ??= new(_configuration)).Import(poemFile);
             var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
             var poemIndex = season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != position)
             {
-                throw new Exception($"Poem {poem.Id} should have weight {poemIndex + 1}!");
+                throw new($"Poem {poem.Id} should have weight {poemIndex + 1}!");
             }
         }
     }
@@ -809,14 +807,13 @@ public class Engine
 
         foreach (var metricValue in regularMetricRange)
         {
-            regularMetricChartData.Add(new ChartDataFileHelper.DataLine(
+            regularMetricChartData.Add(new(
                 metricValue.ToString(), regularMetricData[metricValue]));
         }
 
         foreach (var verseLength in variableMetricRange)
         {
-            variableMetricChartData.Add(new ChartDataFileHelper.ColoredDataLine
-                (verseLength, variableMetricData[verseLength], "rgba(72, 149, 239, 1)"));
+            variableMetricChartData.Add(new(verseLength, variableMetricData[verseLength], "rgba(72, 149, 239, 1)"));
         }
 
         var undefinedVerseLengthChartData = new ChartDataFileHelper.ColoredDataLine
@@ -834,7 +831,7 @@ public class Engine
             foreach (var metricValue in regularMetricRange)
             {
                 var term = metricValue == 1 ? "syllabe" : "syllabes";
-                coloredDataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{metricValue} {term}",
+                coloredDataLines.Add(new($"{metricValue} {term}",
                     regularMetricData[metricValue], metrics.First(m => m.Length == metricValue).Color));
             }
 
@@ -1255,21 +1252,21 @@ public class Engine
             if (key == 0)
             {
                 dataLines.Add(
-                    new ChartDataFileHelper.ColoredDataLine("Moins d\\'un jour", intervalLengthDict[key],
+                    new("Moins d\\'un jour", intervalLengthDict[key],
                         zeroDayColor));
             }
             else if (key == 1)
             {
-                dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Un jour", intervalLengthDict[key], oneDayColor));
+                dataLines.Add(new("Un jour", intervalLengthDict[key], oneDayColor));
             }
             else if (key < 8)
             {
                 dataLines.Add(
-                    new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalLengthDict[key], upToSevenDayColor));
+                    new($"{key}j", intervalLengthDict[key], upToSevenDayColor));
             }
             else if (key < 31)
             {
-                dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", intervalLengthDict[key],
+                dataLines.Add(new($"{key}j", intervalLengthDict[key],
                     upToOneMonthColor));
             }
             else if (key < 91)
@@ -1287,15 +1284,15 @@ public class Engine
         }
 
         if (moreThanOneMonthCount > 0)
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre un et trois mois", moreThanOneMonthCount,
+            dataLines.Add(new("Entre un et trois mois", moreThanOneMonthCount,
                 upToThreeMonthsColor));
 
         if (moreThanThreeMonthsCount > 0)
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Entre trois mois et un an", moreThanThreeMonthsCount,
+            dataLines.Add(new("Entre trois mois et un an", moreThanThreeMonthsCount,
                 upToOneYearColor));
 
         if (moreThanOneYearCount > 0)
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine("Plus d\\'un an", moreThanOneYearCount,
+            dataLines.Add(new("Plus d\\'un an", moreThanOneYearCount,
                 moreThanOneYearColor));
 
         var fileName = "poem-interval-bar.js";
@@ -1336,11 +1333,11 @@ public class Engine
                 if (key < 366)
                 {
                     moreThanThreeMonthsDates.Add(
-                        new KeyValuePair<DateTime, DateTime>(pair.Key.AddDays(-key), pair.Key));
+                        new(pair.Key.AddDays(-key), pair.Key));
                 }
                 else
                 {
-                    moreThanOneYearDates.Add(new KeyValuePair<DateTime, DateTime>(pair.Key.AddDays(-key), pair.Key));
+                    moreThanOneYearDates.Add(new(pair.Key.AddDays(-key), pair.Key));
                 }
             }
         }
@@ -1379,7 +1376,7 @@ public class Engine
 
         foreach (var key in sortedKeys.Skip(1))
         {
-            seriesDataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key}j", seriesLengthDict[key],
+            seriesDataLines.Add(new($"{key}j", seriesLengthDict[key],
                 "rgba(72, 149, 239, 1)"));
         }
 
@@ -1839,10 +1836,10 @@ public class Engine
         var metricRange = Enumerable.Range(1, 14);
         var dataDict = new Dictionary<int, List<decimal>> { };
 
-        xLabels = new List<string>();
+        xLabels = new();
         foreach (var metric in metricRange)
         {
-            dataDict.Add(metric, new List<decimal>());
+            dataDict.Add(metric, new());
         }
 
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
@@ -1919,7 +1916,7 @@ public class Engine
             // First quartile
             bubbleSize *= 4;
             bubbleColor = "rgba(121, 248, 248, 1)";
-            quartileBubbleChartDatalines[0].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+            quartileBubbleChartDatalines[0].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
@@ -1927,7 +1924,7 @@ public class Engine
             // Second quartile
             bubbleSize *= 2;
             bubbleColor = "rgba(119, 181, 254, 1)";
-            quartileBubbleChartDatalines[1].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+            quartileBubbleChartDatalines[1].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
@@ -1935,14 +1932,14 @@ public class Engine
             // Third quartile
             bubbleSize *= 1.5m;
             bubbleColor = "rgba(0, 127, 255, 1)";
-            quartileBubbleChartDatalines[2].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+            quartileBubbleChartDatalines[2].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else
         {
             // Fourth quartile
             bubbleColor = "rgba(50, 122, 183, 1)";
-            quartileBubbleChartDatalines[3].Add(new ChartDataFileHelper.BubbleChartDataLine(x, y,
+            quartileBubbleChartDatalines[3].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
     }

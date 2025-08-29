@@ -5,13 +5,13 @@ using Category = Toolbox.Domain.Category;
 
 namespace Toolbox;
 
-public class PoemContentImporter(IConfiguration configuration)
+public class PoemImporter(IConfiguration configuration)
 {
     private Poem _poem;
     private int _position;
     private bool _isInMetadata;
-    private IMetadataProcessor? _metadataProcessor;
-    private ContentProcessor? _contentProcessor;
+    private IPoemMetadataProcessor? _metadataProcessor;
+    private PoemContentProcessor? _contentProcessor;
     private List<Metric> _metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
 
     public const string YamlMarker = "---";
@@ -23,7 +23,7 @@ public class PoemContentImporter(IConfiguration configuration)
 
     public (Poem, int) Import(string contentFilePath)
     {
-        _poem = new Poem();
+        _poem = new();
         _isInMetadata = false;
         _metadataProcessor = null;
         _contentProcessor = null;
@@ -122,7 +122,7 @@ public class PoemContentImporter(IConfiguration configuration)
 
     public PartialImport GetPartialImport(string contentFilePath)
     {
-        _poem = new Poem();
+        _poem = new();
         _isInMetadata = false;
         _metadataProcessor = null;
         _contentProcessor = null;
@@ -140,7 +140,7 @@ public class PoemContentImporter(IConfiguration configuration)
         var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
 
-        return new PartialImport
+        return new()
         {
             Tags = _metadataProcessor.GetTags(),
             PoemId = _poem.Id,
@@ -171,13 +171,13 @@ public class PoemContentImporter(IConfiguration configuration)
         if (line.StartsWith(TomlMarker))
         {
             HasTomlMetadata = true;
-            _metadataProcessor ??= new TomlMetadataProcessor();
+            _metadataProcessor ??= new PoemTomlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
         else if (line.StartsWith(YamlMarker))
         {
             HasYamlMetadata = true;
-            _metadataProcessor ??= new YamlMetadataProcessor();
+            _metadataProcessor ??= new PoemYamlMetadataProcessor();
             _isInMetadata = !_isInMetadata;
         }
 
@@ -275,7 +275,7 @@ public class PoemContentImporter(IConfiguration configuration)
             storageCategories.TryGetValue(settingsCategory.Name, out var storageCategory);
             if (storageCategory == null)
             {
-                storageCategory = new Category { Name = settingsCategory.Name, SubCategories = new List<string>() };
+                storageCategory = new() { Name = settingsCategory.Name, SubCategories = new() };
                 storageCategories.Add(storageCategory.Name, storageCategory);
             }
 
@@ -287,7 +287,7 @@ public class PoemContentImporter(IConfiguration configuration)
 
     private void ProcessVerses(string line)
     {
-        _contentProcessor ??= new ContentProcessor();
+        _contentProcessor ??= new();
         _contentProcessor.AddLine(line);
     }
 }

@@ -9,7 +9,7 @@ public class Paragraph
 
     public string FileContent()
     {
-        StringBuilder s = new StringBuilder();
+        StringBuilder s = new();
         foreach (var verse in Verses)
         {
             s.Append(verse);

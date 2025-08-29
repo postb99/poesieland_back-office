@@ -20,8 +20,8 @@ public class SeasonTest
         {
             Poems =
             [
-                new Poem { TextDate = firstDate },
-                new Poem { TextDate = secondDate }
+                new() { TextDate = firstDate },
+                new() { TextDate = secondDate }
             ]
         };
 
@@ -38,13 +38,13 @@ public class SeasonTest
     [InlineData("01.06.2025", "15.06.2025", "juin 2025")]
     public void ShouldComputePeriod(string firstDate, string secondDate, string expectedPeriod)
     {
-        Thread.CurrentThread.CurrentCulture = new CultureInfo("fr");
+        Thread.CurrentThread.CurrentCulture = new("fr");
         var season = new Season
         {
             Poems =
             [
-                new Poem { TextDate = firstDate },
-                new Poem { TextDate = secondDate }
+                new() { TextDate = firstDate },
+                new() { TextDate = secondDate }
             ]
         };
 

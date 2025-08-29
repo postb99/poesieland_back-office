@@ -2,7 +2,7 @@
 
 namespace Toolbox;
 
-public interface IMetadataProcessor
+public interface IPoemMetadataProcessor
 {
     string GetTitle(string line);
     string GetId(string line);
@@ -28,5 +28,5 @@ public interface IMetadataProcessor
     List<string> GetPictures();
     List<string> GetInfoLines();
     List<string> GetLocations();
-    ProcessingListType ProcessingListType { get; }
+    MultilineMetadataProcessingType MultilineMetadataProcessingType { get; }
 }

@@ -15,7 +15,7 @@ public class Program
         _configuration = configurationBuilder.Build();
         _mainMenuSettings = _configuration.GetSection(Constants.MAIN_MENU).Get<MainMenuSettings>();
 
-        _engine = new Engine(_configuration);
+        _engine = new(_configuration);
         _engine.Load();
 
         var menuEntry = MainMenu();

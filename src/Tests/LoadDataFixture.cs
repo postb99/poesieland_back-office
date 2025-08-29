@@ -9,7 +9,7 @@ public class LoadDataFixture : BasicFixture
     public LoadDataFixture()
     {
         // Do "global" initialization here; Only called once.
-        Engine = new Engine(Configuration);
+        Engine = new(Configuration);
         Engine.Load();
     }
 

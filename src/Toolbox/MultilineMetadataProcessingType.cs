@@ -1,6 +1,6 @@
 namespace Toolbox;
 
-public enum ProcessingListType
+public enum MultilineMetadataProcessingType
 {
     None,
     Categories,
