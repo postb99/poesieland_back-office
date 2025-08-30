@@ -23,6 +23,7 @@ This also helps performing statistic computations, with a big thousand of poems 
 
 - For a given poem, giving its ID (that ends with Season's number). This reads metadata in YAML or TOML format from markdown file (YAML being default format used by FrontMatter CMS editor).
 - Same operation for a Season (a logical group of 50 poems) or English poems (in a second XML storage file).
+- A Season's metadata can be imported too, so that the markdown file is easily edited during its filling.
 
 ### Generation of data files for use by Chart.js
 
