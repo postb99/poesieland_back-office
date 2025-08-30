@@ -79,7 +79,7 @@ public class Program
                 GenerateSeasonIndexFiles(menuChoice);
                 return true;
             case MainMenuSettings.MenuChoices.GeneratePoemFiles:
-            case MainMenuSettings.MenuChoices.ImportPoemContent:
+            case MainMenuSettings.MenuChoices.Import:
             case MainMenuSettings.MenuChoices.GenerateChartsDataFiles:
                 ValidateAndPerformMenuChoice(menuChoice, MenuChoice(menuChoice.SubMenuItems));
                 return false;
@@ -97,6 +97,9 @@ public class Program
                 return true;
             case MainMenuSettings.MenuChoices.ImportPoemsOfASeason:
                 ImportSeasonPoemContentFiles(menuChoice);
+                return true;
+            case MainMenuSettings.MenuChoices.ImportSeasonMetadata:
+                ImportSeasonMetadata(menuChoice);
                 return true;
             case MainMenuSettings.MenuChoices.GeneratePoemsLengthBarChartDataFile:
                 GeneratePoemsLengthPieChartDataFile();
@@ -190,6 +193,23 @@ public class Program
             _engine.ImportSeason(seasonId);
             Console.WriteLine("Season import OK");
             GenerateDependantChartDataFiles(seasonId, null);
+        }
+        else
+        {
+            Console.WriteLine($"ERROR: No matching season for input: {choice}");
+        }
+    }
+
+    private static void ImportSeasonMetadata(MenuItem menuChoice)
+    {
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
+        var choice = Console.ReadLine();
+
+        if (int.TryParse(choice, out var seasonId) &&
+            _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
+        {
+            _engine.ImportSeasonMetadata(seasonId);
+            Console.WriteLine("Season metadata import OK");
         }
         else
         {
