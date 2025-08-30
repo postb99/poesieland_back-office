@@ -248,6 +248,14 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         engine.ImportSeason(16, false);
     }
     
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportSeasonMetadata()
+    {
+        var engine = new Engine(basicFixture.Configuration);
+        engine.ImportSeasonMetadata(16, false);
+    }
+    
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [InlineData("some_poem")]

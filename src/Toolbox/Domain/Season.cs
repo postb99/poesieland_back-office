@@ -60,7 +60,9 @@ public class Season
 
             if (years[0].Year == years[^1].Year)
             {
-                return years[0].Month == years[^1].Month ? $"{years[0]:MMMM yyyy}" : $"{years[0]:MMMM} à {years[^1]:MMMM yyyy}";
+                return years[0].Month == years[^1].Month
+                    ? $"{years[0]:MMMM yyyy}"
+                    : $"{years[0]:MMMM} à {years[^1]:MMMM yyyy}";
             }
 
             return $"{years[0]:MMMM yyyy} à {years[^1]:MMMM yyyy}";
@@ -114,5 +116,13 @@ public class Season
             $"{{{{< chartjs id=\"season{Id}PoemIntervalBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}/poem-interval-bar.js\" />}}}}");
         s.Append(Environment.NewLine);
         return s.ToString();
+    }
+
+    public void Update(Season importedSeason)
+    {
+        Name = importedSeason.Name;
+        NumberedName = importedSeason.NumberedName;
+        Summary = importedSeason.Summary;
+        Introduction = importedSeason.Introduction;
     }
 }

@@ -182,6 +182,36 @@ public class Engine
             Save();
     }
 
+    public void ImportSeasonMetadata(int seasonId, bool save = true)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
+        var seasonDirName = Directory.EnumerateDirectories(rootDir)
+            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+
+        var seasonIndexPath = Path.Combine(rootDir, seasonDirName, "_index.md");
+        if (!File.Exists(seasonIndexPath))
+        {
+            throw new ArgumentException($"Season index file not found: {seasonIndexPath}");
+        }
+
+        var importedSeason = new SeasonIndexImporter().Import(seasonIndexPath);
+        var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == seasonId);
+
+        if (targetSeason == null)
+        {
+            targetSeason = new()
+            {
+                Id = seasonId
+            };
+            Data.Seasons.Add(targetSeason);
+        }
+
+        targetSeason.Update(importedSeason);
+
+        if (save)
+            Save();
+    }
+
     public void ImportPoemsEn()
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR_EN]);
@@ -377,7 +407,8 @@ public class Engine
             if (index != -1)
             {
                 isSonnetChartData[index] = new("Sonnets", nbSonnets);
-                nbVersesChartData[index] = new(nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
+                nbVersesChartData[index] =
+                    new(nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
             }
 
             string[] chartTitles;
@@ -1120,7 +1151,7 @@ public class Engine
             fileName = $"poems-lovecat-bar.js";
             chartId = $"poems-lovecatBar";
         }
-        
+
         var backgroundColor = borderColor.Replace("1)", "0.5)");
         if (forVariableMetric)
         {
@@ -1657,10 +1688,13 @@ public class Engine
         GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary);
 
         // Listing of topmost associations with refrain extra tag
-        GenerateTopMostCategoriesListing(Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList(), "refrain_categories.md");
+        GenerateTopMostCategoriesListing(
+            Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList(),
+            "refrain_categories.md");
 
         // Listing of topmost associations with sonnet
-        GenerateTopMostCategoriesListing(Data.Seasons.SelectMany(x => x.Poems.Where(x => x.IsSonnet)).ToList(), "sonnet_categories.md");
+        GenerateTopMostCategoriesListing(Data.Seasons.SelectMany(x => x.Poems.Where(x => x.IsSonnet)).ToList(),
+            "sonnet_categories.md");
 
         // Listing of topmost associations with metrics
         foreach (var metric in Enumerable.Range(1, 12))
