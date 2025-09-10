@@ -895,13 +895,51 @@ public class Engine
             chartDataFileHelper2.WriteBeforeData();
 
             dataLines = [];
-            dataLines.AddRange(variableMetricChartData);
+            dataLines.AddRange(variableMetricChartData.Select(UpdateVariableMetricColor));
 
             chartDataFileHelper2.WriteData(dataLines, true);
 
-            chartDataFileHelper2.WriteAfterData(chartId, ["Poèmes"],
+            chartDataFileHelper2.WriteAfterData(chartId, ["Orange : vers impair puis pair, mauve : vers pair puis impair, bleu : vers pairs, vert : vers impairs"],
                 customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
             streamWriter2.Close();
+        }
+    }
+
+    private ChartDataFileHelper.ColoredDataLine UpdateVariableMetricColor(
+        ChartDataFileHelper.ColoredDataLine coloredDataLine)
+    {
+        try
+        {
+            var metrics = coloredDataLine.Label.ToIntArray();
+            if (metrics[0] % 2 == 0 && metrics[1] % 2 == 0)
+            {
+                // twice even => color of hexasyllabe
+                return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                    "rgb(174, 214, 241)");
+                ;
+            }
+
+            if (metrics[0] % 2 == 1 && metrics[1] % 2 == 1)
+            {
+                // twice odd => color of octosyllabe
+                return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                    "rgb(162, 217, 206)");
+            }
+
+            if (metrics[0] % 2 == 1 && metrics[1] % 2 == 0)
+            {
+                // odd then even => color of alexandrin
+                return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                    "rgb(237, 187, 153)");
+            }
+
+            // even then odd => color of tetrasyllabe
+            return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                "rgb(215, 189, 226)");
+        }
+        catch (FormatException)
+        {
+            return coloredDataLine;
         }
     }
 

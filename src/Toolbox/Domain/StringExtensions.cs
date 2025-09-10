@@ -59,4 +59,6 @@ public static class StringExtensions
     /// <param name="itemTypes">For example "categories"</param>
     /// <returns></returns>
     public static string MarkdownLink(this string item, string itemTypes) => $"[{item}](/{itemTypes}/{item.ToLowerInvariant().Replace(' ', '-')})";
+    
+    public static int[] ToIntArray(this string s) => s.Replace(" ", string.Empty).Split(',').Select(int.Parse).ToArray();
 }

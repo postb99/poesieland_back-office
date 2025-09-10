@@ -34,7 +34,7 @@ public class Poem
     {
         if (VerseLength.Contains(','))
         {
-            return VerseLength.Replace(" ", string.Empty).Split(',').Select(int.Parse).ToArray().Contains(metric);
+            return VerseLength.ToIntArray().Contains(metric);
         }
 
         if (VerseLength.Contains(' '))
