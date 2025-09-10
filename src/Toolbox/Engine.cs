@@ -1504,35 +1504,35 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
 
-        var firstQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var secondQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var thirdQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var firstQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
 
         foreach (var dataKey in poemLengthByVerseLength.Keys)
         {
             AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 30);
         }
 
         foreach (var dataKey in variableMetric.Keys)
         {
             AddDataLine(0, dataKey, variableMetric[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 30);
         }
 
-        chartDataFileHelper.WriteData(firstQuartileDataLines, false);
-        chartDataFileHelper.WriteData(secondQuartileDataLines, false);
-        chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
-        chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
+        chartDataFileHelper.WriteData(firstQuarterDataLines, false);
+        chartDataFileHelper.WriteData(secondQuarterDataLines, false);
+        chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
+        chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
         chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
         [
-            "Premier quartile",
-            "Deuxième quartile",
-            "Troisième quartile",
-            "Quatrième quartile"
+            "Premier quart (taille fois 4)",
+            "Deuxième quart (taille fois 2)",
+            "Troisième quart (taille fois 1.5)",
+            "Quatrième quart"
         ], chartXAxisTitle: "Métrique (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
         streamWriter.Close();
     }
@@ -1648,10 +1648,10 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
 
-        var firstQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var secondQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var thirdQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var firstQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
 
         // Get the values for x-axis
         var xAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
@@ -1665,20 +1665,20 @@ public class Engine
             var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
             var yAxisValue = yAxisKeys.IndexOf(dataKey.Value);
             AddDataLine(xAxisValue, yAxisValue, categoriesDataDictionary[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 10);
         }
 
-        chartDataFileHelper.WriteData(firstQuartileDataLines, false);
-        chartDataFileHelper.WriteData(secondQuartileDataLines, false);
-        chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
-        chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
+        chartDataFileHelper.WriteData(firstQuarterDataLines, false);
+        chartDataFileHelper.WriteData(secondQuarterDataLines, false);
+        chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
+        chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
         chartDataFileHelper.WriteAfterData("associatedCategories",
             [
-                "Premier quartile",
-                "Deuxième quartile",
-                "Troisième quartile",
-                "Quatrième quartile"
+                "Premier quart (taille fois 4)",
+                "Deuxième quart (taille fois 2)",
+                "Troisième quart (taille fois 1.5)",
+                "Quatrième quart"
             ],
             customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
                 yAxisLabels.ToList()));
@@ -1781,10 +1781,10 @@ public class Engine
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
 
-        var firstQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var secondQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var thirdQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var fourthQuartileDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var firstQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
 
         // Get the values for x-axis
         var xAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
@@ -1795,20 +1795,20 @@ public class Engine
             var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
             var yAxisValue = dataKey.Value;
             AddDataLine(xAxisValue, yAxisValue, categoryMetricDataDictionary[dataKey],
-                [firstQuartileDataLines, secondQuartileDataLines, thirdQuartileDataLines, fourthQuartileDataLines],
+                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 10);
         }
 
-        chartDataFileHelper.WriteData(firstQuartileDataLines, false);
-        chartDataFileHelper.WriteData(secondQuartileDataLines, false);
-        chartDataFileHelper.WriteData(thirdQuartileDataLines, false);
-        chartDataFileHelper.WriteData(fourthQuartileDataLines, true);
+        chartDataFileHelper.WriteData(firstQuarterDataLines, false);
+        chartDataFileHelper.WriteData(secondQuarterDataLines, false);
+        chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
+        chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
         chartDataFileHelper.WriteAfterData("categoryMetric",
             [
-                "Premier quartile",
-                "Deuxième quartile",
-                "Troisième quartile",
-                "Quatrième quartile"
+                "Premier quart (taille fois 4)",
+                "Deuxième quart (taille fois 2)",
+                "Troisième quart (taille fois 1.5)",
+                "Quatrième quart"
             ],
             customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
                 xAxisTitle: "Catégorie", yAxisTitle: "Métrique (0 = variable)"));
@@ -1939,7 +1939,7 @@ public class Engine
     }
 
     private void AddDataLine(int x, int y, int value,
-        List<ChartDataFileHelper.BubbleChartDataLine>[] quartileBubbleChartDatalines, int maxValue,
+        List<ChartDataFileHelper.BubbleChartDataLine>[] quarterBubbleChartDatalines, int maxValue,
         int bubbleMaxRadiusPixels)
     {
         // Bubble radius and color
@@ -1947,33 +1947,33 @@ public class Engine
         var bubbleColor = string.Empty;
         if (bubbleSize < (bubbleMaxRadiusPixels / 4))
         {
-            // First quartile
+            // First quarter
             bubbleSize *= 4;
             bubbleColor = "rgba(121, 248, 248, 1)";
-            quartileBubbleChartDatalines[0].Add(new(x, y,
+            quarterBubbleChartDatalines[0].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
         {
-            // Second quartile
+            // Second quarter
             bubbleSize *= 2;
             bubbleColor = "rgba(119, 181, 254, 1)";
-            quartileBubbleChartDatalines[1].Add(new(x, y,
+            quarterBubbleChartDatalines[1].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
         {
-            // Third quartile
+            // Third quarter
             bubbleSize *= 1.5m;
             bubbleColor = "rgba(0, 127, 255, 1)";
-            quartileBubbleChartDatalines[2].Add(new(x, y,
+            quarterBubbleChartDatalines[2].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
         else
         {
-            // Fourth quartile
+            // Fourth quarter
             bubbleColor = "rgba(50, 122, 183, 1)";
-            quartileBubbleChartDatalines[3].Add(new(x, y,
+            quarterBubbleChartDatalines[3].Add(new(x, y,
                 bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
         }
     }
