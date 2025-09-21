@@ -481,7 +481,8 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GeneratePoemsByDayRadarChartDataFile(string? storageSubCategory, string? storageCategory)
+    public void GeneratePoemsByDayRadarChartDataFile(string? storageSubCategory, string? storageCategory,
+        bool forLesMoisExtraTag = false)
     {
         var poemStringDates = new List<string>();
         if (storageSubCategory != null)
@@ -494,6 +495,12 @@ public class Engine
         {
             poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
                 .Where(x => x.Categories.Any(x => x.Name == storageCategory)).Select(x => x.TextDate)
+                .ToList();
+        }
+        else if (forLesMoisExtraTag)
+        {
+            poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
+                .Where(x => x.ExtraTags.Contains("les mois")).Select(x => x.TextDate)
                 .ToList();
         }
         else
@@ -552,6 +559,11 @@ public class Engine
             borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
                 .FirstOrDefault(x => x.Name == storageCategory).Color;
         }
+        else if (forLesMoisExtraTag)
+        {
+            fileName = "poems-day-les-mois-radar.js";
+            chartId = "poemDayLesMoisRadar";
+        }
         else
         {
             // general
@@ -560,7 +572,8 @@ public class Engine
         }
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir,
-            storageCategory != null || storageSubCategory != null ? "taxonomy" : "general", fileName));
+            storageCategory != null || storageSubCategory != null || forLesMoisExtraTag ? "taxonomy" : "general",
+            fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -588,7 +601,7 @@ public class Engine
         chartDataFileHelper.WriteAfterData(chartId, [title], borderColor, backgroundColor);
         streamWriter.Close();
 
-        if (storageSubCategory != null || storageCategory != null) return;
+        if (storageSubCategory != null || storageCategory != null || forLesMoisExtraTag) return;
 
         // Days without poems listing
 
@@ -737,12 +750,14 @@ public class Engine
     {
         if (importedPoem is not null && !importedPoem.ExtraTags.Contains("les mois"))
             return;
-        
+
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var pageFile = Path.Combine(rootDir, "..", "tags", "les-mois", "_index.md");
         var pageContent = File.ReadAllText(pageFile);
-        
-        var poems = importedPoem is not null ? [importedPoem] : Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("les mois"))).ToList();
+
+        var poems = importedPoem is not null
+            ? [importedPoem]
+            : Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("les mois"))).ToList();
 
         foreach (var poem in poems)
         {
@@ -924,7 +939,10 @@ public class Engine
 
             chartDataFileHelper2.WriteData(dataLines, true);
 
-            chartDataFileHelper2.WriteAfterData(chartId, ["Orange : vers impair puis pair, mauve : vers pair puis impair, bleu : vers pairs, vert : vers impairs"],
+            chartDataFileHelper2.WriteAfterData(chartId,
+                [
+                    "Orange : vers impair puis pair, mauve : vers pair puis impair, bleu : vers pairs, vert : vers impairs"
+                ],
                 customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
             streamWriter2.Close();
         }

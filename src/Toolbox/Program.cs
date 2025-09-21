@@ -373,6 +373,7 @@ public class Program
 
         // Poem by day
         _engine.GeneratePoemsByDayRadarChartDataFile(null, null);
+        _engine.GeneratePoemsByDayRadarChartDataFile(null, null, forLesMoisExtraTag: true);
         _engine.GeneratePoemIntensityPieChartDataFile();
         _engine.GeneratePoemByDayOfWeekPieChartDataFile();
         Console.WriteLine("Poems by day chart data file OK");
@@ -425,6 +426,7 @@ public class Program
         if (string.IsNullOrEmpty(choice))
         {
             _engine.GeneratePoemsByDayRadarChartDataFile(null, null);
+            _engine.GeneratePoemsByDayRadarChartDataFile(null, null, forLesMoisExtraTag: true);
             _engine.GeneratePoemIntensityPieChartDataFile();
             _engine.GeneratePoemByDayOfWeekPieChartDataFile();
             Console.WriteLine("Poems by day and cie chart data file OK");
