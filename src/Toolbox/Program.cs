@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Toolbox;
+using Toolbox.Domain;
 using Toolbox.Settings;
 
 public class Program
@@ -77,7 +78,7 @@ public class Program
         {
             case MainMenuSettings.MenuChoices.GenerateSeasonIndexFile:
                 GenerateSeasonIndexFiles(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GeneratePoemFiles:
             case MainMenuSettings.MenuChoices.Import:
             case MainMenuSettings.MenuChoices.GenerateChartsDataFiles:
@@ -85,76 +86,77 @@ public class Program
                 return false;
             case MainMenuSettings.MenuChoices.GenerateSinglePoem:
                 GeneratePoemContentFile(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.ImportSinglePoem:
                 ImportPoemContentFile(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GenerateAllPoems:
                 GenerateAllPoemsContentFiles();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GeneratePoemsOfASeason:
                 GenerateSeasonPoemContentFiles(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.ImportPoemsOfASeason:
                 ImportSeasonPoemContentFiles(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.ImportSeasonMetadata:
                 ImportSeasonMetadata(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GeneratePoemsLengthBarChartDataFile:
                 GeneratePoemsLengthPieChartDataFile();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GeneratePoemVersesLengthBarChartDataFile:
                 GeneratePoemMetricPieChartDataFile();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GenerateSeasonCategoriesPieChartDataFile:
                 GenerateSeasonCategoriesPieChart(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GeneratePoemsRadarChartDataFile:
                 GeneratePoemsRadarChartDataFile(menuChoice);
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GenerateBubbleChartDataFile:
                 GenerateBubbleChartDataFile();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GenerateLineChartDataFile:
                 GenerateOverSeasonsVerseLengthLineChartDataFile();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GenerateCategoriesBubbleChartDataFile:
                 _engine.GenerateCategoriesBubbleChartDataFile();
                 _engine.GenerateCategoryMetricBubbleChartDataFile();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
                 _engine.CheckPoemsWithoutVerseLength();
                 _engine.CheckPoemsWithVariableMetric();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
+                _engine.VerifyPoemWithLesMoisExtraTagIsListedOnCustomPage(null);
                 Console.WriteLine(
                     $"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
                 Console.WriteLine("Content metadata quality OK");
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:
                 GenerateAllSeasonsPoemIntervalBarChartDataFile();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.ImportEnPoems:
-                ImportEnPoemsContentFiles(menuChoice);
-                return true;
+                ImportEnPoemsContentFiles();
+                break;
             case MainMenuSettings.MenuChoices.OutputSeasonsDuration:
                 _engine.OutputSeasonsDuration();
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.OutputReusedTitles:
                 foreach (var reusedTitle in _engine.GetReusedTitles())
                 {
                     Console.WriteLine(reusedTitle);
                 }
 
-                return true;
+                break;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
                 Environment.Exit(0);
-                return true;
+                break;
         }
 
         return true;
@@ -217,7 +219,7 @@ public class Program
         }
     }
 
-    private static void ImportEnPoemsContentFiles(MenuItem menuChoice)
+    private static void ImportEnPoemsContentFiles()
     {
         _engine.ImportPoemsEn();
         Console.WriteLine("Poems import OK");
@@ -259,7 +261,7 @@ public class Program
             var importedPoem = _engine.ImportPoem(poemId);
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
-            GenerateDependantChartDataFiles(seasonId, importedPoem.Date.Year);
+            GenerateDependantChartDataFiles(seasonId, importedPoem);
         }
         catch (InvalidOperationException ex)
         {
@@ -350,7 +352,7 @@ public class Program
         }
     }
 
-    private static void GenerateDependantChartDataFiles(int seasonId, int? poemYear)
+    private static void GenerateDependantChartDataFiles(int seasonId, Poem? importedPoem)
     {
         // General and season's poems length
         GeneratePoemsLengthPieChartDataFile();
@@ -382,10 +384,11 @@ public class Program
 
         // Categories' and tags' radar
         GeneratePoemsCategoriesAndTagsRadarChartDataFile();
+        
         // Year tag's radar
-        if (poemYear is not null)
+        if (importedPoem is not null)
         {
-            _engine.GeneratePoemsOfYearByDayRadarChartDataFile(poemYear.Value);
+            _engine.GeneratePoemsOfYearByDayRadarChartDataFile(importedPoem.Date.Year);
             Console.WriteLine("Poem's year by day chart data file OK");
         }
 
@@ -409,6 +412,7 @@ public class Program
         // And check data quality
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
+        _engine.VerifyPoemWithLesMoisExtraTagIsListedOnCustomPage(importedPoem);
         Console.WriteLine(
             $"Content metadata quality OK. Info: metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
     }

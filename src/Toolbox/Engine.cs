@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
@@ -728,6 +729,30 @@ public class Engine
             if (poemIndex != -1 && poemIndex != position)
             {
                 throw new($"Poem {poem.Id} should have weight {poemIndex + 1}!");
+            }
+        }
+    }
+
+    public void VerifyPoemWithLesMoisExtraTagIsListedOnCustomPage(Poem? importedPoem)
+    {
+        if (importedPoem is not null && !importedPoem.ExtraTags.Contains("les mois"))
+            return;
+        
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
+        var pageFile = Path.Combine(rootDir, "..", "tags", "les-mois", "_index.md");
+        var pageContent = File.ReadAllText(pageFile);
+        
+        var poems = importedPoem is not null ? [importedPoem] : Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("les mois"))).ToList();
+
+        foreach (var poem in poems)
+        {
+            var seasonId = poem.SeasonId;
+            var poemFileName = poem.Id.Substring(0, poem.Id.LastIndexOf('_'));
+            var regexp = new Regex($"(../../seasons/{seasonId}\\w*/{poemFileName})");
+            var match = regexp.Match(pageContent);
+            if (!match.Success)
+            {
+                Console.WriteLine($"[ERROR]: Poem {poem.Id} should be listed on 'les mois' custom page!");
             }
         }
     }
