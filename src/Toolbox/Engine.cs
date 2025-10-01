@@ -103,7 +103,7 @@ public class Engine
 
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
-        if (seasonDirName == null)
+        if (seasonDirName is null)
         {
             throw new ArgumentException(
                 $"No such season content directory for id '{seasonId}'. Create season directory before importing poem");
@@ -122,7 +122,7 @@ public class Engine
             Console.WriteLine($"[ERROR]: {anomaly}");
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
-        if (targetSeason == null)
+        if (targetSeason is null)
         {
             targetSeason = new()
             {
@@ -163,7 +163,7 @@ public class Engine
             poemsByPosition.Add(position, poem);
         }
 
-        if (targetSeason != null)
+        if (targetSeason is not null)
         {
             targetSeason.Poems.Clear();
         }
@@ -198,7 +198,7 @@ public class Engine
         var importedSeason = new SeasonIndexImporter().Import(seasonIndexPath);
         var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == seasonId);
 
-        if (targetSeason == null)
+        if (targetSeason is null)
         {
             targetSeason = new()
             {
@@ -243,7 +243,7 @@ public class Engine
                 {
                     var seasonId = poem.SeasonId;
                     var targetSeason = DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
-                    if (targetSeason == null)
+                    if (targetSeason is null)
                     {
                         targetSeason = new() { Id = seasonId, Poems = [] };
                         DataEn.Seasons.Add(targetSeason);
@@ -310,7 +310,7 @@ public class Engine
             return;
 
         var incorrectPoem = poems.FirstOrDefault(x => !x.HasVerseLength);
-        if (incorrectPoem != null)
+        if (incorrectPoem is not null)
             throw new(
                 $"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
     }
@@ -320,7 +320,7 @@ public class Engine
         var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric));
 
         var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Métrique variable : "));
-        if (incorrectPoem != null)
+        if (incorrectPoem is not null)
             throw new(
                 $"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
     }
@@ -332,7 +332,7 @@ public class Engine
         var subDir = isGeneral ? "general" : $"season-{seasonId}";
         var chartId = isGeneral ? "poemLengthPie" : $"season{seasonId}PoemLengthBar";
 
-        var poems = seasonId != null
+        var poems = seasonId is not null
             ? Data.Seasons.First(x => x.Id == seasonId).Poems
             : Data.Seasons.SelectMany(x => x.Poems);
 
@@ -484,14 +484,17 @@ public class Engine
     public void GeneratePoemsByDayRadarChartDataFile(string? storageSubCategory, string? storageCategory,
         bool forLesMoisExtraTag = false)
     {
+        var isGeneral = storageSubCategory is null && storageCategory is null && !forLesMoisExtraTag;
+        
         var poemStringDates = new List<string>();
-        if (storageSubCategory != null)
+        
+        if (storageSubCategory is not null)
         {
             poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
                 .Where(x => x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory))).Select(x => x.TextDate)
                 .ToList();
         }
-        else if (storageCategory != null)
+        else if (storageCategory is not null)
         {
             poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
                 .Where(x => x.Categories.Any(x => x.Name == storageCategory)).Select(x => x.TextDate)
@@ -505,6 +508,7 @@ public class Engine
         }
         else
         {
+            // General
             poemStringDates = Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
 
             // Add EN poems
@@ -529,7 +533,7 @@ public class Engine
         var chartId = string.Empty;
         var borderColor = string.Empty;
 
-        if (storageSubCategory != null)
+        if (storageSubCategory is not null)
         {
             // categories
             fileName = $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js";
@@ -551,7 +555,7 @@ public class Engine
                     break;
             }
         }
-        else if (storageCategory != null)
+        else if (storageCategory is not null)
         {
             // tags
             fileName = $"poems-day-{storageCategory.UnaccentedCleaned()}-radar.js";
@@ -571,9 +575,7 @@ public class Engine
             chartId = "poemDayRadar";
         }
 
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir,
-            storageCategory != null || storageSubCategory != null || forLesMoisExtraTag ? "taxonomy" : "general",
-            fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, isGeneral ? "general" : "taxonomy", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
@@ -586,7 +588,7 @@ public class Engine
             var value = dataDict[monthDay];
             dataLines.Add(new(GetRadarChartLabel(monthDay), value
             ));
-            if (value == 0)
+            if (isGeneral && value == 0)
             {
                 dayWithoutPoems.Add(monthDay);
             }
@@ -601,7 +603,7 @@ public class Engine
         chartDataFileHelper.WriteAfterData(chartId, [title], borderColor, backgroundColor);
         streamWriter.Close();
 
-        if (storageSubCategory != null || storageCategory != null || forLesMoisExtraTag) return;
+        if (!isGeneral) return;
 
         // Days without poems listing
 
@@ -721,7 +723,7 @@ public class Engine
 
     public void VerifySeasonHaveCorrectWeightInPoemFile(int? seasonId)
     {
-        if (seasonId == null)
+        if (seasonId is null)
         {
             VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id);
             VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id - 1);
@@ -817,7 +819,7 @@ public class Engine
         var regularMetricData = new Dictionary<int, int>();
         var variableMetricData = new Dictionary<string, int>();
         var nbUndefinedVerseLength = 0;
-        var poems = seasonId != null
+        var poems = seasonId is not null
             ? Data.Seasons.First(x => x.Id == seasonId).Poems
             : Data.Seasons.SelectMany(x => x.Poems);
 
@@ -1160,7 +1162,7 @@ public class Engine
 
     public void GenerateOverSeasonsChartDataFile(string? storageSubCategory, string? storageCategory,
         bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
-        bool forRefrain = false, int? forMetric = null, bool forLovecat = false)
+        bool forRefrain = false, int? forMetric = null, bool forLovecat = false, bool forLesMois = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
@@ -1169,7 +1171,7 @@ public class Engine
         var chartId = string.Empty;
         var borderColor = "rgba(72, 149, 239, 1)";
 
-        if (storageSubCategory != null)
+        if (storageSubCategory is not null)
         {
             fileName = $"poems-{storageSubCategory.UnaccentedCleaned()}-bar.js";
             chartId = $"poems-{storageSubCategory.UnaccentedCleaned()}Bar";
@@ -1190,7 +1192,7 @@ public class Engine
                     break;
             }
         }
-        else if (storageCategory != null)
+        else if (storageCategory is not null)
         {
             fileName = $"poems-{storageCategory.UnaccentedCleaned()}-bar.js";
             chartId = $"poems-{storageCategory.UnaccentedCleaned()}Bar";
@@ -1232,6 +1234,11 @@ public class Engine
             fileName = $"poems-lovecat-bar.js";
             chartId = $"poems-lovecatBar";
         }
+        else if (forLesMois)
+        {
+            fileName = $"poems-les-mois-bar.js";
+            chartId = $"poems-les-moisBar";
+        }
 
         var backgroundColor = borderColor.Replace("1)", "0.5)");
         if (forVariableMetric)
@@ -1249,18 +1256,18 @@ public class Engine
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
         {
             var poemCount = 0;
-            if (storageSubCategory != null)
+            if (storageSubCategory is not null)
             {
                 poemCount = season.Poems.Count(x =>
                     x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory)));
             }
-            else if (storageCategory != null)
+            else if (storageCategory is not null)
             {
                 poemCount = season.Poems.Count(x => x.Categories.Any(x => x.Name == storageCategory));
             }
             else if (forAcrostiche)
             {
-                poemCount = season.Poems.Count(x => x.Acrostiche != null || x.DoubleAcrostiche != null);
+                poemCount = season.Poems.Count(x => x.Acrostiche is not null || x.DoubleAcrostiche is not null);
             }
             else if (forSonnet)
             {
@@ -1286,7 +1293,10 @@ public class Engine
             {
                 poemCount = season.Poems.Count(x => x.ExtraTags.Contains("lovecat"));
             }
-
+            else if (forLesMois)
+            {
+                poemCount = season.Poems.Count(x => x.ExtraTags.Contains("les mois"));
+            }
             dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
                 poemCount,
                 backgroundColor));
@@ -1302,19 +1312,19 @@ public class Engine
     public void GeneratePoemIntervalBarChartDataFile(int? seasonId)
     {
         var frDatesList =
-            (seasonId == null ? Data.Seasons.SelectMany(x => x.Poems) : Data.Seasons.First(x => x.Id == seasonId).Poems)
+            (seasonId is null ? Data.Seasons.SelectMany(x => x.Poems) : Data.Seasons.First(x => x.Id == seasonId).Poems)
             .Where(x => x.TextDate != "01.01.1994")
             .Select(x => x.Date);
 
         // Add EN poems
-        var enDatesList = (seasonId == null
+        var enDatesList = (seasonId is null
                 ? DataEn.Seasons.SelectMany(x => x.Poems)
                 : DataEn.Seasons.FirstOrDefault(x => x.Id == seasonId)?.Poems)?
             .Select(x => x.Date);
 
         var datesList = new List<DateTime>();
         datesList.AddRange(frDatesList);
-        if (enDatesList != null)
+        if (enDatesList is not null)
             datesList.AddRange(enDatesList);
         datesList.Sort();
 
@@ -1408,16 +1418,16 @@ public class Engine
                 moreThanOneYearColor));
 
         var fileName = "poem-interval-bar.js";
-        var subDir = seasonId != null ? $"season-{seasonId}" : "general";
+        var subDir = seasonId is not null ? $"season-{seasonId}" : "general";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
-        chartDataFileHelper.WriteAfterData(seasonId == null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
+        chartDataFileHelper.WriteAfterData(seasonId is null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
             ["Fréquence"],
-            customScalesOptions: seasonId == null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
+            customScalesOptions: seasonId is null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter.Close();
 
         if (seasonId.HasValue) return;
@@ -1500,7 +1510,7 @@ public class Engine
         chartDataFileHelper2.WriteData(seriesDataLines, true);
         chartDataFileHelper2.WriteAfterData("poemSeriesBar",
             ["Séries"],
-            customScalesOptions: seasonId == null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
+            customScalesOptions: seasonId is null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter2.Close();
 
         // longest series content file
