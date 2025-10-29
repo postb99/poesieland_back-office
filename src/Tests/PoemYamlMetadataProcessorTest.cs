@@ -84,20 +84,20 @@ public class PoemYamlMetadataProcessorTest(BasicFixture basicFixture): IClassFix
     private void ShouldImportMultilineInfoYamlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "22_vingt_deuxieme_saison/l_automne_est_venu.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "26_vingt_sixieme_saison/quatre_soupirs.md");
         var poemContentImporter = new PoemImporter(basicFixture.Configuration);
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         /*
+         Reprise enjouée du début du premier vers d'un [poème de la dix-septième saison](../17_dix_septieme_saison/dormira).
 
-        Les poèmes qui commencent par ce vers...
-        {{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
+         Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-).
         */
-        poem.Info.ShouldStartWith($"{Environment.NewLine}Les poèmes");
-        poem.Info.ShouldEndWith("hidefirstheading %}}");
+        poem.Info.ShouldStartWith($"Reprise enjouée");
+        poem.Info.ShouldEndWith("#les-quatre-saisons-).");
         poem.Info.ShouldBe(
-            $"{Environment.NewLine}Les poèmes qui commencent par ce vers...{Environment.NewLine}{{{{% include \"../../includes/l_automne_est_venu\" hidefirstheading %}}}}");
+            $"Reprise enjouée du début du premier vers d'un [poème de la dix-septième saison](../17_dix_septieme_saison/dormira).{Environment.NewLine}{Environment.NewLine}Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-).");
         var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
         anomalies.ShouldBeEmpty();
     }
