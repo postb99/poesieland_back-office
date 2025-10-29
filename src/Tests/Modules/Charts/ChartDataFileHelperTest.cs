@@ -1,8 +1,8 @@
 using Shouldly;
-using Toolbox;
+using Toolbox.Modules.Charts;
 using Xunit;
 
-namespace Tests;
+namespace Tests.Modules.Charts;
 
 public class ChartDataFileHelperTest
 {

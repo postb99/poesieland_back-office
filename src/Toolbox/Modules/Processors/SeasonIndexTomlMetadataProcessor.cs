@@ -1,6 +1,6 @@
 using Toolbox.Domain;
 
-namespace Toolbox;
+namespace Toolbox.Modules.Processors;
 
 public class SeasonIndexTomlMetadataProcessor
 {

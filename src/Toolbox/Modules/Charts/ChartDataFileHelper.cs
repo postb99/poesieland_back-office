@@ -1,8 +1,7 @@
 ﻿using System.Globalization;
 using System.Text;
-using Microsoft.Extensions.Primitives;
 
-namespace Toolbox;
+namespace Toolbox.Modules.Charts;
 
 public class ChartDataFileHelper
 {

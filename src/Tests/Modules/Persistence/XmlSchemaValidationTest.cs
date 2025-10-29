@@ -7,7 +7,7 @@ using Toolbox.Settings;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Tests;
+namespace Tests.Modules.Persistence;
 
 public class XmlSchemaValidationTest : IClassFixture<BasicFixture>
 {

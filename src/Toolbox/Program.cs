@@ -1,13 +1,16 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Toolbox;
 using Toolbox.Domain;
+using Toolbox.Modules.Persistence;
 using Toolbox.Settings;
+
+namespace Toolbox;
 
 public class Program
 {
-    private static IConfiguration _configuration;
-    private static Engine _engine;
-    private static MainMenuSettings _mainMenuSettings;
+    private static IConfiguration? _configuration;
+    private static Engine? _engine;
+    private static MainMenuSettings? _mainMenuSettings;
+    private static DataManager? _dataManager;
 
     public static void Main(string[] args)
     {
@@ -16,7 +19,8 @@ public class Program
         _configuration = configurationBuilder.Build();
         _mainMenuSettings = _configuration.GetSection(Constants.MAIN_MENU).Get<MainMenuSettings>();
 
-        _engine = new(_configuration);
+        _dataManager = new DataManager(_configuration);
+        _engine = new(_configuration, _dataManager);
         _engine.Load();
 
         var menuEntry = MainMenu();
@@ -25,7 +29,7 @@ public class Program
 
     private static string MainMenu()
     {
-        return MenuChoice(_mainMenuSettings.MenuItems);
+        return MenuChoice(_mainMenuSettings!.MenuItems);
     }
 
     private static string MenuChoice(List<MenuItem> menuItems)
@@ -65,7 +69,7 @@ public class Program
         {
             var menuItem = parentMenuItem is not null
                 ? parentMenuItem.SubMenuItems.FirstOrDefault(x => x.Key == (int)menuChoice)
-                : _mainMenuSettings.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
+                : _mainMenuSettings!.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
             return menuItem;
         }
 
@@ -465,7 +469,7 @@ public class Program
 
     private static void GeneratePoemsCategoriesAndTagsRadarChartDataFile()
     {
-        var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+        var storageSettings = _configuration!.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
         foreach (var category in storageSettings!.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
                      .Distinct())
@@ -486,7 +490,7 @@ public class Program
 
     private static void GenerateOverSeasonsCategoriesAndTagsBarChartDataFile()
     {
-        var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+        var storageSettings = _configuration!.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
         foreach (var category in storageSettings!.SubcategorieNames)
         {

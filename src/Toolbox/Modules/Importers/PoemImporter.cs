@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
+using Toolbox.Modules.Processors;
 using Toolbox.Settings;
 using Category = Toolbox.Domain.Category;
 
-namespace Toolbox;
+namespace Toolbox.Modules.Importers;
 
 public class PoemImporter(IConfiguration configuration)
 {

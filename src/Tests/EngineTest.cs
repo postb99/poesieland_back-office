@@ -112,7 +112,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         var xAxisLabels = new SortedSet<string>();
         var yAxisLabels = new SortedSet<string>();
 
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
 
         // Poem with single subcategory
         var poem = new Poem { Categories = [new() { SubCategories = ["A"] }] };
@@ -186,7 +186,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         Dictionary<KeyValuePair<string, int>, int> dict = new();
         var xAxisLabels = new SortedSet<string>();
         
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
 
         // Poem with single subcategory
         var poem = new Poem { VerseLength = "6", Categories = [new() { SubCategories = ["A"] }] };
@@ -236,7 +236,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         dict.Add("0302", 3);
         dict.Add("0102", 1);
 
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         engine.GetTopMostMonths(dict).ShouldBeEquivalentTo(new List<string> { "mars", "mai", "janvier" });
     }
 
@@ -244,7 +244,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
     [Trait("UnitTest", "ContentImport")]
     public void ShouldImportSeason()
     {
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         engine.ImportSeason(16, false);
     }
     
@@ -252,7 +252,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
     [Trait("UnitTest", "ContentImport")]
     public void ShouldImportSeasonMetadata()
     {
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         engine.ImportSeasonMetadata(16, false);
     }
     
@@ -262,7 +262,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
     [InlineData("somepoem")]
     public void ShouldNotImportPoemWithIdNotEndingWithSeasonId(string poemId)
     {
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         var act = () => engine.ImportPoem(poemId, false);
         var ex = act.ShouldThrow<ArgumentException>();
         ex.Message.ShouldBe($"'{poemId}' does not end with season id");
@@ -272,7 +272,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
     [Trait("UnitTest", "ContentImport")]
     public void ShouldNotImportPoemWhoseSeasonDirectoryDoesNotExist()
     {
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         var act = () => engine.ImportPoem("some_poem_99", false);
         var ex = act.ShouldThrow<ArgumentException>();
         ex.Message.ShouldBe($"No such season content directory for id '99'. Create season directory before importing poem");
@@ -282,7 +282,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
     [Trait("UnitTest", "ContentImport")]
     public void ShouldNotImportPoemWhoseContentFileDoesNotExist()
     {
-        var engine = new Engine(basicFixture.Configuration);
+        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         var act = () => engine.ImportPoem("some_poem_16", false);
         var ex = act.ShouldThrow<ArgumentException>();
         ex.Message.ShouldStartWith($"Poem content file not found: ");

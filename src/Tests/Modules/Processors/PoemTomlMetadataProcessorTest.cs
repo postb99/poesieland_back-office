@@ -1,9 +1,10 @@
 ﻿using Shouldly;
-using Toolbox;
+using Toolbox.Modules.Importers;
+using Toolbox.Modules.Processors;
 using Toolbox.Settings;
 using Xunit;
 
-namespace Tests;
+namespace Tests.Modules.Processors;
 
 public class PoemTomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
 {
@@ -56,20 +57,20 @@ public class PoemTomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFi
     private void ShouldImportMultiLineInfoTomlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/est_ce_un_automne.md");
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "11_onzieme_saison/rester.md");
         var poemContentImporter = new PoemImporter(basicFixture.Configuration);
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         /*
-         
-        Encore une variation sur cette question que j'adore...
-        {{% include "../../includes/est_ce_un_automne" hidefirstheading %}}.
+        "Tu es beau" en italien.
+
+        {{% include "../../includes/trop_de_choses_auront_change" hidefirstheading %}}
         */
-        poem.Info.ShouldStartWith($"{Environment.NewLine}Encore une variation");
+        poem.Info.ShouldStartWith($"\"Tu es beau\" en italien.");
         poem.Info.ShouldEndWith("hidefirstheading %}}");
         poem.Info.ShouldBe(
-            $"{Environment.NewLine}Encore une variation sur cette question que j'adore...{Environment.NewLine}{{{{% include \"../../includes/est_ce_un_automne\" hidefirstheading %}}}}");
+            $"\"Tu es beau\" en italien.{Environment.NewLine}{Environment.NewLine}{{{{% include \"../../includes/trop_de_choses_auront_change\" hidefirstheading %}}}}");
         var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
         anomalies.ShouldBeEmpty();
     }

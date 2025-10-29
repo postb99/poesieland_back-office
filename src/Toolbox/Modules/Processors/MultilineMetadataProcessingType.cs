@@ -1,4 +1,4 @@
-namespace Toolbox;
+namespace Toolbox.Modules.Processors;
 
 public enum MultilineMetadataProcessingType
 {

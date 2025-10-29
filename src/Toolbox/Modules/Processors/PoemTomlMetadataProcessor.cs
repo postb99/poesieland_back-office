@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
 using Toolbox.Domain;
 
-namespace Toolbox;
+namespace Toolbox.Modules.Processors;
 
 public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
 {

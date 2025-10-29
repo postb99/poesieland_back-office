@@ -3,7 +3,7 @@ using Toolbox.Domain;
 using Xunit;
 using Xunit.Abstractions;
 
-namespace Tests;
+namespace Tests.Modules.Persistence;
 
 public class XmlSerializationTest(ITestOutputHelper testOutputHelper) : IClassFixture<BasicFixture>
 {

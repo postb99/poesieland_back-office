@@ -1,10 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Tests.Modules.Persistence;
+using Toolbox.Modules.Persistence;
 
 namespace Tests;
 
 public class BasicFixture : IDisposable
 {
     public IConfiguration Configuration { get; }
+    
+    public IDataManager DataManager { get; }
 
     public BasicFixture()
     {
@@ -14,6 +18,7 @@ public class BasicFixture : IDisposable
         configurationBuilder.AddJsonFile("appsettings.Test.json", optional: false, reloadOnChange: true);
         configurationBuilder.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true, reloadOnChange: true);
         Configuration = configurationBuilder.Build();
+        DataManager = new DummyDataManager(Configuration);
     }
 
     public void Dispose()

@@ -5,7 +5,7 @@ using Toolbox.Domain;
 using Toolbox.Settings;
 using Xunit;
 
-namespace Tests;
+namespace Tests.Domain;
 
 public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
 {

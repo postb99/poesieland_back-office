@@ -1,4 +1,5 @@
 ﻿using Toolbox;
+using Toolbox.Modules.Persistence;
 
 namespace Tests;
 
@@ -9,7 +10,7 @@ public class LoadDataFixture : BasicFixture
     public LoadDataFixture()
     {
         // Do "global" initialization here; Only called once.
-        Engine = new(Configuration);
+        Engine = new(Configuration, new DataManager(Configuration));
         Engine.Load();
     }
 

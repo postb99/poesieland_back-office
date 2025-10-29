@@ -1,9 +1,9 @@
 ﻿using Shouldly;
-using Toolbox;
+using Toolbox.Modules.Importers;
 using Toolbox.Settings;
 using Xunit;
 
-namespace Tests;
+namespace Tests.Modules.Processors;
 
 public class PoemContentProcessorTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
 {

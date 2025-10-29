@@ -4,22 +4,28 @@ using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
+using Toolbox.Modules.Charts;
+using Toolbox.Modules.Importers;
+using Toolbox.Modules.Persistence;
 using Toolbox.Settings;
 
 namespace Toolbox;
 
+[Obsolete("Will be replaced by direct use of modules")]
 public class Engine
 {
     private readonly IConfiguration _configuration;
+    private readonly IDataManager _dataManager;
     public Root Data { get; private set; } = default!;
     public Root DataEn { get; private set; } = default!;
     public XmlSerializer XmlSerializer { get; }
 
     private PoemImporter? _poemContentImporter;
 
-    public Engine(IConfiguration configuration)
+    public Engine(IConfiguration configuration, IDataManager dataManager)
     {
         _configuration = configuration;
+        _dataManager = dataManager;
         Data = new() { Seasons = [] };
         XmlSerializer = new(typeof(Root));
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
@@ -27,30 +33,15 @@ public class Engine
 
     public void Load()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]!);
-        using var streamReader = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]!));
-
-        Data = XmlSerializer.Deserialize(streamReader) as Root;
-
-        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]!);
-        using var streamReaderEn = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]!));
-
-        DataEn = XmlSerializer.Deserialize(streamReaderEn) as Root;
+        _dataManager.Load(out var data, out var dataEn);
+        Data = data;
+        DataEn = dataEn;
     }
 
     public void Save()
     {
-        var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]!);
-        using var streamWriter = new StreamWriter(xmlDocPath);
-        XmlSerializer.Serialize(streamWriter, Data);
-        streamWriter.Close();
-
-        xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]!);
-        using var streamWriterEn = new StreamWriter(xmlDocPath);
-        XmlSerializer.Serialize(streamWriterEn, DataEn);
-        streamWriterEn.Close();
+        _dataManager.Save(Data);
+        _dataManager.SaveEn(DataEn);
     }
 
     public void GenerateSeasonIndexFile(int seasonId)
