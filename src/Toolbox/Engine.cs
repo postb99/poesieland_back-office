@@ -5,6 +5,7 @@ using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Charts;
 using Toolbox.Domain;
+using Toolbox.Generators;
 using Toolbox.Importers;
 using Toolbox.Persistence;
 using Toolbox.Settings;
@@ -21,6 +22,8 @@ public class Engine
     public XmlSerializer XmlSerializer { get; }
 
     private PoemImporter? _poemContentImporter;
+    
+    private ContentFileGenerator _contentFileGenerator;
 
     public Engine(IConfiguration configuration, IDataManager dataManager)
     {
@@ -29,8 +32,10 @@ public class Engine
         Data = new() { Seasons = [] };
         XmlSerializer = new(typeof(Root));
         Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        _contentFileGenerator = new(_configuration);
     }
 
+    [Obsolete]
     public void Load()
     {
         _dataManager.Load(out var data, out var dataEn);
@@ -38,24 +43,17 @@ public class Engine
         DataEn = dataEn;
     }
 
+    [Obsolete]
     public void Save()
     {
         _dataManager.Save(Data);
         _dataManager.SaveEn(DataEn);
     }
 
+    [Obsolete]
     public void GenerateSeasonIndexFile(int seasonId)
     {
-        var season = Data.Seasons.First(x => x.Id == seasonId);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-        var indexFile = Path.Combine(contentDir, "_index.md");
-        Directory.CreateDirectory(contentDir);
-        File.WriteAllText(indexFile, season.IndexFileContent());
-
-        rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        contentDir = Path.Combine(rootDir, $"season-{seasonId}");
-        Directory.CreateDirectory(contentDir);
+        _contentFileGenerator.GenerateSeasonIndexFile(Data, seasonId);
     }
 
     public void GenerateAllSeasonsIndexFile()

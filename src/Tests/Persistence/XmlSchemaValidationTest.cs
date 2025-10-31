@@ -5,7 +5,6 @@ using Microsoft.Extensions.Configuration;
 using Shouldly;
 using Toolbox.Settings;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Tests.Persistence;
 
