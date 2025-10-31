@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
+using Toolbox.Generators;
 using Toolbox.Persistence;
 using Toolbox.Settings;
 
@@ -11,6 +12,7 @@ public class Program
     private static Engine? _engine;
     private static MainMenuSettings? _mainMenuSettings;
     private static DataManager? _dataManager;
+    private static ContentFileGenerator _contentFileGenerator;
 
     public static void Main(string[] args)
     {
@@ -20,6 +22,7 @@ public class Program
         _mainMenuSettings = _configuration.GetSection(Constants.MAIN_MENU).Get<MainMenuSettings>();
 
         _dataManager = new DataManager(_configuration);
+        _contentFileGenerator = new ContentFileGenerator(_configuration);
         _engine = new(_configuration, _dataManager);
         _engine.Load();
 
@@ -289,7 +292,7 @@ public class Program
         var choice = Console.ReadLine();
         if (choice == "0")
         {
-            _engine.GenerateAllSeasonsIndexFile();
+            _contentFileGenerator.GenerateAllSeasonsIndexFile(_engine.Data);
             Console.WriteLine("Seasons index files OK");
             return;
         }
@@ -297,8 +300,8 @@ public class Program
         if (int.TryParse(choice, out var intChoice) &&
             _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
-            _engine.GenerateSeasonIndexFile(intChoice);
-            Console.WriteLine("Season index files OK");
+            _contentFileGenerator.GenerateSeasonIndexFile(_engine.Data, intChoice);
+            Console.WriteLine("Season index file OK");
         }
         else
         {

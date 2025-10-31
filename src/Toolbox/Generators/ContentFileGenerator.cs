@@ -21,4 +21,12 @@ public class ContentFileGenerator(IConfiguration configuration)
         
         return indexFile;
     }
+    
+    public IEnumerable<string> GenerateAllSeasonsIndexFile(Root data)
+    {
+        foreach (var season in data.Seasons)
+        {
+            yield return GenerateSeasonIndexFile(data, season.Id);
+        }
+    }
 }

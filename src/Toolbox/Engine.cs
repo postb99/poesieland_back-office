@@ -50,20 +50,6 @@ public class Engine
         _dataManager.SaveEn(DataEn);
     }
 
-    [Obsolete]
-    public void GenerateSeasonIndexFile(int seasonId)
-    {
-        _contentFileGenerator.GenerateSeasonIndexFile(Data, seasonId);
-    }
-
-    public void GenerateAllSeasonsIndexFile()
-    {
-        for (var i = 1; i < Data.Seasons.Count + 1; i++)
-        {
-            GenerateSeasonIndexFile(i);
-        }
-    }
-
     public void GeneratePoemFile(Poem poem)
     {
         var metricSettings = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>();
