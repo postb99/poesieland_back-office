@@ -6,6 +6,12 @@ namespace Toolbox.Generators;
 
 public class ContentFileGenerator(IConfiguration configuration)
 {
+    /// <summary>
+    /// Generates _index.md file for a season.
+    /// </summary>
+    /// <param name="data">The root object containing season data.</param>
+    /// <param name="seasonId">An existing season id.</param>
+    /// <returns>The generated _index.md file path.</returns>
     public string GenerateSeasonIndexFile(Root data, int seasonId)
     {
         var season = data.Seasons.First(x => x.Id == seasonId);
@@ -18,15 +24,66 @@ public class ContentFileGenerator(IConfiguration configuration)
         rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         contentDir = Path.Combine(rootDir, $"season-{seasonId}");
         Directory.CreateDirectory(contentDir);
-        
+
         return indexFile;
     }
-    
+
+    /// <summary>
+    /// Generates _index.md files for all seasons.
+    /// </summary>
+    /// <param name="data">The root object containing season data.</param>
+    /// <returns>A collection of file paths for the generated _index.md files.</returns>
     public IEnumerable<string> GenerateAllSeasonsIndexFile(Root data)
     {
         foreach (var season in data.Seasons)
         {
             yield return GenerateSeasonIndexFile(data, season.Id);
+        }
+    }
+
+    /// <summary>
+    /// Generates a content file for a specified poem.
+    /// </summary>
+    /// <param name="data">The root object containing season and poem data.</param>
+    /// <param name="poem">The poem object for which the content file is generated.</param>
+    /// <returns>The file path of the generated poem content file.</returns>
+    public string GeneratePoemFile(Root data, Poem poem)
+    {
+        var metricSettings = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>();
+        var season = data.Seasons.First(x => x.Id == poem.SeasonId);
+        var poemIndex = season.Poems.IndexOf(poem);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
+        var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+        Directory.CreateDirectory(contentDir);
+        var indexFile = Path.Combine(contentDir, poem.ContentFileName);
+        File.WriteAllText(indexFile, poem.FileContent(poemIndex, metricSettings!));
+
+        return indexFile;
+    }
+
+    /// <summary>
+    /// Generates content files for all poems within a specified season.
+    /// </summary>
+    /// <param name="data">The root object containing season and poem data.</param>
+    /// <param name="seasonId">The ID of the season whose poems' content files will be generated.</param>
+    /// /// <returns>The file path of the generated poem content files.</returns>
+    public IEnumerable<string> GenerateSeasonAllPoemFiles(Root data, int seasonId)
+    {
+        var season = data.Seasons.First(x => x.Id == seasonId);
+        foreach (var poem in season.Poems)
+            yield return GeneratePoemFile(data, poem);
+    }
+
+    /// <summary>
+    /// Generates content files for all poems within all seasons.
+    /// </summary>
+    /// <param name="data">The root object containing season and poem data.</param>
+    public void GenerateAllPoemFiles(Root data)
+    {
+        var poems = data.Seasons.SelectMany(x => x.Poems).ToList();
+        foreach (var poem in poems)
+        {
+            GeneratePoemFile(data, poem);
         }
     }
 }

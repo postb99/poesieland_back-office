@@ -50,23 +50,6 @@ public class Engine
         _dataManager.SaveEn(DataEn);
     }
 
-    public void GeneratePoemFile(Poem poem)
-    {
-        var metricSettings = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>();
-        var season = Data.Seasons.First(x => x.Id == poem.SeasonId);
-        var poemIndex = season.Poems.IndexOf(poem);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-        var indexFile = Path.Combine(contentDir, poem.ContentFileName);
-        File.WriteAllText(indexFile, poem.FileContent(poemIndex, metricSettings!));
-    }
-
-    public void GenerateSeasonAllPoemFiles(int seasonId)
-    {
-        var season = Data.Seasons.First(x => x.Id == seasonId);
-        season.Poems.ForEach(GeneratePoemFile);
-    }
-
     public Poem ImportPoem(string poemId, bool save = true)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
@@ -230,12 +213,6 @@ public class Engine
         }
 
         Save();
-    }
-
-    public void GenerateAllPoemFiles()
-    {
-        var poems = Data.Seasons.SelectMany(x => x.Poems).ToList();
-        poems.ForEach(GeneratePoemFile);
     }
 
     public IEnumerable<string> CheckMissingTagsInYamlMetadata()

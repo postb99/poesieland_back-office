@@ -182,7 +182,7 @@ public class Program
         if (int.TryParse(choice, out var intChoice) &&
             _engine.Data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
-            _engine.GenerateSeasonAllPoemFiles(intChoice);
+            _contentFileGenerator.GenerateSeasonAllPoemFiles(_engine.Data, intChoice);
             Console.WriteLine("Poem content files OK");
         }
         else
@@ -249,7 +249,7 @@ public class Program
         var poem = _engine.Data.Seasons.SelectMany(x => x.Poems).FirstOrDefault(x => x.Id == poemId);
         if (poem is not null)
         {
-            _engine.GeneratePoemFile(poem);
+            _contentFileGenerator.GeneratePoemFile(_engine.Data, poem);
             Console.WriteLine("Poem content file OK");
         }
         else
@@ -282,7 +282,7 @@ public class Program
 
     private static void GenerateAllPoemsContentFiles()
     {
-        _engine.GenerateAllPoemFiles();
+        _contentFileGenerator.GenerateAllPoemFiles(_engine.Data);
         Console.WriteLine("All poem content files OK");
     }
 
