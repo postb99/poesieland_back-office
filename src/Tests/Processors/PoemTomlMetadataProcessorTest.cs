@@ -1,10 +1,10 @@
 ﻿using Shouldly;
-using Toolbox.Modules.Importers;
-using Toolbox.Modules.Processors;
+using Toolbox.Importers;
+using Toolbox.Processors;
 using Toolbox.Settings;
 using Xunit;
 
-namespace Tests.Modules.Processors;
+namespace Tests.Processors;
 
 public class PoemTomlMetadataProcessorTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
 {

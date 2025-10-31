@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
-using Tests.Modules.Persistence;
-using Toolbox.Modules.Persistence;
+using Tests.Persistence;
+using Toolbox.Persistence;
 
 namespace Tests;
 

@@ -3,10 +3,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
+using Toolbox.Charts;
 using Toolbox.Domain;
-using Toolbox.Modules.Charts;
-using Toolbox.Modules.Importers;
-using Toolbox.Modules.Persistence;
+using Toolbox.Importers;
+using Toolbox.Persistence;
 using Toolbox.Settings;
 
 namespace Toolbox;

@@ -1,9 +1,9 @@
 ﻿using Shouldly;
-using Toolbox.Modules.Importers;
+using Toolbox.Importers;
 using Toolbox.Settings;
 using Xunit;
 
-namespace Tests.Modules.Importers;
+namespace Tests.Importers;
 
 public class PoemImporterTest(BasicFixture basicFixture): IClassFixture<BasicFixture>
 {

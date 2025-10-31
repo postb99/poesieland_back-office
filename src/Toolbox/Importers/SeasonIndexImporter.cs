@@ -1,8 +1,8 @@
 using System.Text;
 using Toolbox.Domain;
-using Toolbox.Modules.Processors;
+using Toolbox.Processors;
 
-namespace Toolbox.Modules.Importers;
+namespace Toolbox.Importers;
 
 public class SeasonIndexImporter()
 {

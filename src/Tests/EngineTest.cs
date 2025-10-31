@@ -27,13 +27,6 @@ public class DataDependantEngineTest(LoadDataFixture fixture, ITestOutputHelper 
 
     [Fact]
     [Trait("UnitTest", "XmlRead")]
-    public void ShouldLoad()
-    {
-        _engine.Data.ShouldNotBeNull();
-    }
-
-    [Fact]
-    [Trait("UnitTest", "XmlRead")]
     public void ShouldLoadAcrostiche()
     {
         var poemWithAcrostiche = _engine.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "resurrection_14");

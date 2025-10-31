@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
-using Toolbox.Modules.Persistence;
+using Toolbox.Persistence;
 using Toolbox.Settings;
 
 namespace Toolbox;

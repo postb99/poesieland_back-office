@@ -1,6 +1,6 @@
 using Toolbox.Domain;
 
-namespace Toolbox.Modules.Persistence;
+namespace Toolbox.Persistence;
 
 public interface IDataManager
 {

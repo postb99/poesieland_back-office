@@ -38,7 +38,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Modules\Generators\" />
+      <Folder Include="Generators\" />
     </ItemGroup>
 
 </Project>

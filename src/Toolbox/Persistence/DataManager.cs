@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
 using Toolbox.Settings;
 
-namespace Toolbox.Modules.Persistence;
+namespace Toolbox.Persistence;
 
 public class DataManager : IDataManager
 {

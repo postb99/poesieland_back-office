@@ -1,7 +1,7 @@
 ﻿using Toolbox.Domain;
-using Toolbox.Modules.Importers;
+using Toolbox.Importers;
 
-namespace Toolbox.Modules.Processors;
+namespace Toolbox.Processors;
 
 public class PoemContentProcessor
 {
