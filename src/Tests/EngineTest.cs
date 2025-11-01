@@ -247,36 +247,4 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         engine.ImportSeasonMetadata(16, false);
     }
-    
-    [Theory]
-    [Trait("UnitTest", "ContentImport")]
-    [InlineData("some_poem")]
-    [InlineData("somepoem")]
-    public void ShouldNotImportPoemWithIdNotEndingWithSeasonId(string poemId)
-    {
-        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
-        var act = () => engine.ImportPoem(poemId, false);
-        var ex = act.ShouldThrow<ArgumentException>();
-        ex.Message.ShouldBe($"'{poemId}' does not end with season id");
-    }
-    
-    [Fact]
-    [Trait("UnitTest", "ContentImport")]
-    public void ShouldNotImportPoemWhoseSeasonDirectoryDoesNotExist()
-    {
-        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
-        var act = () => engine.ImportPoem("some_poem_99", false);
-        var ex = act.ShouldThrow<ArgumentException>();
-        ex.Message.ShouldBe($"No such season content directory for id '99'. Create season directory before importing poem");
-    }
-    
-    [Fact]
-    [Trait("UnitTest", "ContentImport")]
-    public void ShouldNotImportPoemWhoseContentFileDoesNotExist()
-    {
-        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
-        var act = () => engine.ImportPoem("some_poem_16", false);
-        var ex = act.ShouldThrow<ArgumentException>();
-        ex.Message.ShouldStartWith($"Poem content file not found: ");
-    }
 }

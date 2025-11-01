@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
 using Toolbox.Generators;
+using Toolbox.Importers;
 using Toolbox.Persistence;
 using Toolbox.Settings;
 
@@ -13,6 +14,7 @@ public class Program
     private static MainMenuSettings? _mainMenuSettings;
     private static DataManager? _dataManager;
     private static ContentFileGenerator _contentFileGenerator;
+    private static PoemImporter _poemImporter;
 
     public static void Main(string[] args)
     {
@@ -23,6 +25,7 @@ public class Program
 
         _dataManager = new DataManager(_configuration);
         _contentFileGenerator = new ContentFileGenerator(_configuration);
+        _poemImporter = new PoemImporter(_configuration);
         _engine = new(_configuration, _dataManager);
         _engine.Load();
 
@@ -265,7 +268,8 @@ public class Program
 
         try
         {
-            var importedPoem = _engine.ImportPoem(poemId);
+            var importedPoem = _poemImporter.ImportPoem(poemId, _engine.Data);
+            _dataManager.Save(_engine.Data);
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
             GenerateDependantChartDataFiles(seasonId, importedPoem);

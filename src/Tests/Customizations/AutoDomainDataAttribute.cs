@@ -5,15 +5,15 @@ using Toolbox.Domain;
 
 namespace Tests.Customizations;
 
-public class AutoDomainDataAttribute : AutoDataAttribute
+public class MyCustomization : CompositeCustomization
 {
-    public AutoDomainDataAttribute() : base(() => new Fixture().Customize(new CompositeCustomization(
-        new AutoMoqCustomization(),
-        new PoemCustomization())
-    ))
-    {
-    }
+    public MyCustomization() : base(new AutoMoqCustomization(), new PoemCustomization()) {}
 }
+
+public class AutoDomainDataAttribute() : AutoDataAttribute(() => new Fixture().Customize(new MyCustomization()));
+
+public class InlineAutoDomainDataAttribute(params object[] values) : InlineAutoDataAttribute(() =>
+    new Fixture().Customize(new MyCustomization()), values);
 
 public class PoemCustomization : ICustomization
 {

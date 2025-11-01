@@ -22,6 +22,77 @@ public class PoemImporter(IConfiguration configuration)
 
     public bool HasYamlMetadata { get; private set; }
 
+    /// <summary>
+    /// Imports a poem based on its identifier and updates the provided data model with the poem information.
+    /// </summary>
+    /// <param name="poemId">The unique identifier of the poem to import. It should end with the season id.</param>
+    /// <param name="data">The root data model that contains seasons and poems where the imported poem will be added or updated.</param>
+    /// <returns>Returns the imported <see cref="Poem"/> object representing the poem's details.</returns>
+    /// <exception cref="ArgumentException">
+    /// Thrown when:
+    /// - The <paramref name="poemId"/> does not end with a valid season id.
+    /// - No content directory corresponding to the specified season id exists.
+    /// - The poem content file is not found.
+    /// </exception>
+    public Poem ImportPoem(string poemId, Root data)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
+        var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
+        if (!int.TryParse(seasonId, out _))
+        {
+            throw new ArgumentException($"'{poemId}' does not end with season id");
+        }
+
+        var seasonDirName = Directory.EnumerateDirectories(rootDir)
+            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+        if (seasonDirName is null)
+        {
+            throw new ArgumentException(
+                $"No such season content directory for id '{seasonId}'. Create season directory before importing poem");
+        }
+
+        var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
+        var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
+        if (!File.Exists(poemContentPath))
+        {
+            throw new ArgumentException($"Poem content file not found: {poemContentPath}");
+        }
+
+        var (poem, _) = Import(poemContentPath);
+        var anomalies = CheckAnomaliesAfterImport();
+        foreach (var anomaly in anomalies)
+            Console.WriteLine($"[ERROR]: {anomaly}");
+        var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
+
+        if (targetSeason is null)
+        {
+            targetSeason = new()
+            {
+                Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Introduction = "TODO", Summary = "TODO",
+                Poems = []
+            };
+            data.Seasons.Add(targetSeason);
+        }
+
+        var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poemId);
+
+        if (existingPosition > -1)
+            targetSeason.Poems[existingPosition] = poem;
+        else
+            targetSeason.Poems.Add(poem);
+
+        return poem;
+    }
+
+    /// <summary>
+    /// Imports a poem from the specified content file, processes its metadata and content,
+    /// and returns a tuple with the constructed poem and its positional index.
+    /// </summary>
+    /// <param name="contentFilePath">The full file path to the poem content file to be imported. This should include any metadata and content related to the poem.</param>
+    /// <returns>Returns a tuple where the first element is the <see cref="Poem"/> object containing the processed poem information, and the second element is an integer representing the position or index of the poem.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the specified content file does not exist.</exception>
+    /// <exception cref="InvalidDataException">Thrown when the content file contains invalid or malformed data.</exception>
+    /// <exception cref="IOException">Thrown when there is an issue reading the content file.</exception>
     public (Poem, int) Import(string contentFilePath)
     {
         _poem = new();
@@ -53,6 +124,11 @@ public class PoemImporter(IConfiguration configuration)
         return (_poem, _position);
     }
 
+    /// <summary>
+    /// Filters out specific tags by removing those that match predefined categories, metrics, certain year ranges, or other specific tags to ignore.
+    /// </summary>
+    /// <param name="tags">A list of tags to be evaluated and filtered.</param>
+    /// <returns>Returns a list of tags that do not fall under the predefined exclusion criteria.</returns>
     public List<string> FindExtraTags(List<string> tags)
     {
         var tagsToIgnore = new List<string>();
@@ -72,6 +148,10 @@ public class PoemImporter(IConfiguration configuration)
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
     }
 
+    /// <summary>
+    /// Checks for anomalies in the imported poem data and provides detailed anomaly descriptions, if any.
+    /// </summary>
+    /// <returns>An enumerable collection of strings, where each string represents a specific anomaly detected during the import process.</returns>
     public IEnumerable<string> CheckAnomaliesAfterImport()
     {
         foreach (var p in CheckAnomalies(new ()
@@ -88,6 +168,11 @@ public class PoemImporter(IConfiguration configuration)
             yield return "Metric cannot be empty or 0";
     }
 
+    /// <summary>
+    /// Checks for anomalies in a partial poem import based on its properties and metadata tags.
+    /// </summary>
+    /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
+    /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
     public IEnumerable<string> CheckAnomalies(PartialImport partialImport)
     {
         // Poem year should be found in tags
@@ -121,6 +206,13 @@ public class PoemImporter(IConfiguration configuration)
         }
     }
 
+    /// <summary>
+    /// Processes a poem content file to generate a partial import object, extracting metadata, tags, and poem-specific details.
+    /// </summary>
+    /// <param name="contentFilePath">The file path of the content file to process for partial import.</param>
+    /// <returns>Returns an instance of <see cref="PartialImport"/> that contains the extracted metadata, tags, and other details of the poem.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the specified <paramref name="contentFilePath"/> does not exist.</exception>
+    /// <exception cref="InvalidDataException">Thrown when the content file contains invalid or unexpected format preventing metadata processing.</exception>
     public PartialImport GetPartialImport(string contentFilePath)
     {
         _poem = new();
@@ -152,6 +244,10 @@ public class PoemImporter(IConfiguration configuration)
         };
     }
 
+    /// <summary>
+    /// Represents a partial import of a poem during content processing.
+    /// Contains extracted metadata, tags, and poem-specific information.
+    /// </summary>
     public record PartialImport
     {
         public List<string> Tags { get; set; } = new();
@@ -164,6 +260,10 @@ public class PoemImporter(IConfiguration configuration)
         public string Info { get; set; }
     }
 
+    /// <summary>
+    /// Processes a single line of poem content, identifying metadata and verses, and updates the internal state accordingly.
+    /// </summary>
+    /// <param name="line">The line of poem content to process. It may represent a metadata marker, a metadata line, or a verse.</param>
     private void ProcessLine(string? line)
     {
         if (line == null)
@@ -188,6 +288,10 @@ public class PoemImporter(IConfiguration configuration)
             ProcessVerses(line);
     }
 
+    /// <summary>
+    /// Processes a line of metadata and extracts or builds corresponding details for the poem.
+    /// </summary>
+    /// <param name="line">The metadata line to process. This line could define various attributes of the poem such as title, id, categories, tags, or other properties.</param>
     private void ProcessMetadataLine(string line)
     {
         if (line.StartsWith("title"))
@@ -257,6 +361,17 @@ public class PoemImporter(IConfiguration configuration)
         }
     }
 
+    /// <summary>
+    /// Maps the provided metadata categories to their corresponding storage categories and organizes them
+    /// based on the storage settings configuration.
+    /// </summary>
+    /// <param name="metadataCategories">A list of category names obtained from the metadata of a poem.</param>
+    /// <param name="poemId">The unique identifier of the poem used for error tracking during the mapping process.</param>
+    /// <returns>Returns a list of <see cref="Category"/> objects representing the categories and their associated subcategories.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when a metadata category does not match any storage category defined in the storage settings.
+    /// The exception includes the <paramref name="poemId"/> and the unmatched metadata category for debugging purposes.
+    /// </exception>
     private List<Category> GetCategories(List<string> metadataCategories, string poemId)
     {
         var storageCategories = new Dictionary<string, Category>();
@@ -286,6 +401,10 @@ public class PoemImporter(IConfiguration configuration)
         return storageCategories.Values.ToList();
     }
 
+    /// <summary>
+    /// Processes a single line of verse by delegating it to the content processor for handling poem content.
+    /// </summary>
+    /// <param name="line">The line of verse to process.</param>
     private void ProcessVerses(string line)
     {
         _contentProcessor ??= new();

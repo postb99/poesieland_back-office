@@ -50,59 +50,7 @@ public class Engine
         _dataManager.SaveEn(DataEn);
     }
 
-    public Poem ImportPoem(string poemId, bool save = true)
-    {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
-        if (!int.TryParse(seasonId, out _))
-        {
-            throw new ArgumentException($"'{poemId}' does not end with season id");
-        }
-
-        var seasonDirName = Directory.EnumerateDirectories(rootDir)
-            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
-        if (seasonDirName is null)
-        {
-            throw new ArgumentException(
-                $"No such season content directory for id '{seasonId}'. Create season directory before importing poem");
-        }
-
-        var poemFileName = $"{poemId.Substring(0, poemId.LastIndexOf('_'))}.md";
-        var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
-        if (!File.Exists(poemContentPath))
-        {
-            throw new ArgumentException($"Poem content file not found: {poemContentPath}");
-        }
-
-        var (poem, _) = (_poemContentImporter ??= new(_configuration)).Import(poemContentPath);
-        var anomalies = _poemContentImporter!.CheckAnomaliesAfterImport();
-        foreach (var anomaly in anomalies)
-            Console.WriteLine($"[ERROR]: {anomaly}");
-        var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
-
-        if (targetSeason is null)
-        {
-            targetSeason = new()
-            {
-                Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Introduction = "TODO", Summary = "TODO",
-                Poems = []
-            };
-            Data.Seasons.Add(targetSeason);
-        }
-
-        var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poemId);
-
-        if (existingPosition > -1)
-            targetSeason.Poems[existingPosition] = poem;
-        else
-            targetSeason.Poems.Add(poem);
-
-        if (save)
-            Save();
-        return poem;
-    }
-
-    public void ImportSeason(int seasonId, bool save = true)
+  public void ImportSeason(int seasonId, bool save = true)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
