@@ -202,7 +202,7 @@ public class Program
         if (int.TryParse(choice, out var seasonId) &&
             _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
-            _engine.ImportSeason(seasonId);
+            _poemImporter.ImportPoemsOfSeason(seasonId, _engine.Data);
             Console.WriteLine("Season import OK");
             GenerateDependantChartDataFiles(seasonId, null);
         }

@@ -85,7 +85,6 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
     [Trait("UnitTest", "ContentGeneration")]
     public void ShouldGenerateExpectedExtraAndMetricTags()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var poem = new Poem
         {
             Id = "poem_25",
@@ -102,7 +101,6 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
     [Trait("UnitTest", "ContentGeneration")]
     public void ShouldGenerateExpectedMultipleMetricTags()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var poem = new Poem
         {
             Id = "poem_25",
@@ -117,7 +115,6 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
     [Trait("UnitTest", "ContentGeneration")]
     public void ShouldGenerateExpectedLocations()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var poem = new Poem
         {
             Id = "poem_25",

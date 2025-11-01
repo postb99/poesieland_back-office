@@ -85,6 +85,52 @@ public class PoemImporter(IConfiguration configuration)
     }
 
     /// <summary>
+    /// Imports all poems associated with a specified season and updates the provided data model.
+    /// </summary>
+    /// <param name="seasonId">The unique identifier of the season whose poems are to be imported.</param>
+    /// <param name="data">The root data model containing seasons and poems, where the imported poems will be added or updated.</param>
+    /// <exception cref="ArgumentNullException">
+    /// Thrown when the content directory or season directory corresponding to the specified <paramref name="seasonId"/> is not found.
+    /// </exception>
+    /// <exception cref="IOException">
+    /// Thrown when file access errors occur during the import operation.
+    /// </exception>
+    public void ImportPoemsOfSeason(int seasonId, Root data)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
+        var seasonDirName = Directory.EnumerateDirectories(rootDir)
+            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
+        var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == seasonId);
+        var poemFilePaths = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("_index.md"));
+        var poemsByPosition = new Dictionary<int, Poem>(50);
+        foreach (var poemContentPath in poemFilePaths)
+        {
+            var (poem, position) =Import(poemContentPath);
+            var anomalies = CheckAnomaliesAfterImport();
+            foreach (var anomaly in anomalies)
+                Console.WriteLine($"[ERROR]: {anomaly}");
+
+            poemsByPosition.Add(position, poem);
+        }
+
+        if (targetSeason is not null)
+        {
+            targetSeason.Poems.Clear();
+        }
+        else
+        {
+            targetSeason = new() { Id = seasonId, Poems = [] };
+            data.Seasons.Add(targetSeason);
+        }
+
+        for (var i = 0; i < 50; i++)
+        {
+            if (poemsByPosition.TryGetValue(i, out var poem))
+                targetSeason.Poems.Add(poem);
+        }
+    }
+
+    /// <summary>
     /// Imports a poem from the specified content file, processes its metadata and content,
     /// and returns a tuple with the constructed poem and its positional index.
     /// </summary>

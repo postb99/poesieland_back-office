@@ -50,46 +50,7 @@ public class Engine
         _dataManager.SaveEn(DataEn);
     }
 
-  public void ImportSeason(int seasonId, bool save = true)
-    {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var seasonDirName = Directory.EnumerateDirectories(rootDir)
-            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
-        var targetSeason = Data.Seasons.FirstOrDefault(x => x.Id == seasonId);
-        var poemFilePaths = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("_index.md"));
-        var poemsByPosition = new Dictionary<int, Poem>(50);
-        foreach (var poemContentPath in poemFilePaths)
-        {
-            var (poem, position) =
-                (_poemContentImporter ??= new(_configuration)).Import(poemContentPath);
-            var anomalies = _poemContentImporter!.CheckAnomaliesAfterImport();
-            foreach (var anomaly in anomalies)
-                Console.WriteLine($"[ERROR]: {anomaly}");
-
-            poemsByPosition.Add(position, poem);
-        }
-
-        if (targetSeason is not null)
-        {
-            targetSeason.Poems.Clear();
-        }
-        else
-        {
-            targetSeason = new() { Id = seasonId, Poems = [] };
-            Data.Seasons.Add(targetSeason);
-        }
-
-        for (var i = 0; i < 50; i++)
-        {
-            if (poemsByPosition.TryGetValue(i, out var poem))
-                targetSeason.Poems.Add(poem);
-        }
-
-        if (save)
-            Save();
-    }
-
-    public void ImportSeasonMetadata(int seasonId, bool save = true)
+  public void ImportSeasonMetadata(int seasonId, bool save = true)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)

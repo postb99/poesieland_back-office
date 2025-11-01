@@ -15,7 +15,6 @@ public class ContentFileGeneratorTest(BasicFixture basicFixture, ITestOutputHelp
     [AutoData]
     public void ShouldGenerateSeasonIndexFile(Root data)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var generatedFilePath =
             new ContentFileGenerator(basicFixture.Configuration).GenerateSeasonIndexFile(data, data.Seasons.First().Id);
         testOutputHelper.WriteLine(File.ReadAllText(generatedFilePath));
@@ -28,7 +27,6 @@ public class ContentFileGeneratorTest(BasicFixture basicFixture, ITestOutputHelp
     [AutoData]
     public void ShouldGenerateAllSeasonsIndexFile(Root data)
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var generatedFilesPaths = new ContentFileGenerator(basicFixture.Configuration).GenerateAllSeasonsIndexFile(data);
         foreach (var generatedFilePath in generatedFilesPaths)
         {
@@ -44,7 +42,6 @@ public class ContentFileGeneratorTest(BasicFixture basicFixture, ITestOutputHelp
     public void ShouldGeneratePoemIndexFile(Root data)
     {
         data.Seasons.First().Id = data.Seasons.First().Poems.First().SeasonId;
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var generatedFilePath =
             new ContentFileGenerator(basicFixture.Configuration).GeneratePoemFile(data, data.Seasons.First().Poems.First());
         testOutputHelper.WriteLine(File.ReadAllText(generatedFilePath));
@@ -58,7 +55,6 @@ public class ContentFileGeneratorTest(BasicFixture basicFixture, ITestOutputHelp
     public void ShouldGenerateSeasonAllPoemFiles(Root data)
     {
         data.Seasons.First().Id = data.Seasons.First().Poems.First().SeasonId;
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var generatedFilesPaths =
             new ContentFileGenerator(basicFixture.Configuration).GenerateSeasonAllPoemFiles(data, data.Seasons.First().Id);
         foreach (var generatedFilePath in generatedFilesPaths)

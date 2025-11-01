@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Text;
+using Microsoft.Extensions.Configuration;
 using Tests.Persistence;
 using Toolbox.Persistence;
 
@@ -13,6 +14,7 @@ public class BasicFixture : IDisposable
     public BasicFixture()
     {
         // Do "global" initialization here; Only called once.
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
         configurationBuilder.AddJsonFile("appsettings.Test.json", optional: false, reloadOnChange: true);

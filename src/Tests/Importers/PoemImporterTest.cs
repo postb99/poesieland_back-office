@@ -42,6 +42,18 @@ public class PoemImporterTest(BasicFixture basicFixture): IClassFixture<BasicFix
         var ex = act.ShouldThrow<ArgumentException>();
         ex.Message.ShouldStartWith($"Poem content file not found: ");
     }
+    
+    [Theory]
+    [Trait("UnitTest", "ContentImport")]
+    [AutoDomainData]
+    public void ShouldImportPoemsOfSeason(Root data)
+    {
+        var poemContentImporter = new PoemImporter(basicFixture.Configuration);
+        poemContentImporter.ImportPoemsOfSeason(16, data);
+        data.Seasons.FirstOrDefault(x => x.Id == 16).ShouldNotBeNull();
+        data.Seasons.FirstOrDefault(x => x.Id == 16).Poems.ShouldNotBeEmpty();
+    }
+    
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     public void ShouldImportVariableVerseLength()
