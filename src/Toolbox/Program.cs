@@ -203,6 +203,7 @@ public class Program
             _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
             _poemImporter.ImportPoemsOfSeason(seasonId, _engine.Data);
+            _dataManager.Save(_engine.Data);
             Console.WriteLine("Season import OK");
             GenerateDependantChartDataFiles(seasonId, null);
         }
