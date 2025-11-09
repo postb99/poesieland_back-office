@@ -15,6 +15,7 @@ public class Program
     private static DataManager? _dataManager;
     private static ContentFileGenerator _contentFileGenerator;
     private static PoemImporter _poemImporter;
+    private static SeasonMetadataImporter _seasonMetadataImporter;
 
     public static void Main(string[] args)
     {
@@ -26,6 +27,7 @@ public class Program
         _dataManager = new DataManager(_configuration);
         _contentFileGenerator = new ContentFileGenerator(_configuration);
         _poemImporter = new PoemImporter(_configuration);
+        _seasonMetadataImporter = new SeasonMetadataImporter(_configuration);
         _engine = new(_configuration, _dataManager);
         _engine.Load();
 
@@ -221,7 +223,8 @@ public class Program
         if (int.TryParse(choice, out var seasonId) &&
             _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
-            _engine.ImportSeasonMetadata(seasonId);
+            _seasonMetadataImporter.ImportSeasonMetadata(seasonId, _engine.Data);
+            _dataManager.Save(_engine.Data);
             Console.WriteLine("Season metadata import OK");
         }
         else
@@ -232,7 +235,8 @@ public class Program
 
     private static void ImportEnPoemsContentFiles()
     {
-        _engine.ImportPoemsEn();
+        _poemImporter.ImportPoemsEn(_engine.DataEn);
+        _dataManager.Save(_engine.DataEn);
         Console.WriteLine("Poems import OK");
 
         _engine.GeneratePoemEnCountFile();

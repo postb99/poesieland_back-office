@@ -171,6 +171,60 @@ public class PoemImporter(IConfiguration configuration)
     }
 
     /// <summary>
+    /// Imports poems in English from the designated content directory and updates the provided data model with the imported poems, organizing them by their respective seasons and positions.
+    /// </summary>
+    /// <param name="dataEn">The root data model containing seasons and poems to be updated with imported English poems.</param>
+    /// <exception cref="DirectoryNotFoundException">
+    /// Thrown when the content root directory for English poems cannot be found.
+    /// </exception>
+    /// <exception cref="IOException">
+    /// Thrown when there is an error accessing files in the content directory.
+    /// </exception>
+    /// <exception cref="ArgumentException">
+    /// Thrown when there is an issue with parsing the content of a poem file, such as missing or malformed metadata.
+    /// </exception>
+    public void ImportPoemsEn(Root dataEn)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR_EN]!);
+
+        foreach (var season in dataEn.Seasons)
+        {
+            season.Poems.Clear();
+        }
+
+        var yearDirNames = Directory.EnumerateDirectories(rootDir);
+
+        foreach (var yearDirName in yearDirNames)
+        {
+            var poemFilePaths = Directory.EnumerateFiles(yearDirName).Where(x => !x.EndsWith("_index.md"));
+            var poemsByPosition = new Dictionary<int, Poem>(50);
+
+            foreach (var poemContentPath in poemFilePaths)
+            {
+                var (poem, position) = Import(poemContentPath);
+
+                poemsByPosition.Add(position, poem);
+            }
+
+            for (var i = 0; i < 50; i++)
+            {
+                if (poemsByPosition.TryGetValue(i, out var poem))
+                {
+                    var seasonId = poem.SeasonId;
+                    var targetSeason = dataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
+                    if (targetSeason is null)
+                    {
+                        targetSeason = new() { Id = seasonId, Poems = [] };
+                        dataEn.Seasons.Add(targetSeason);
+                    }
+
+                    targetSeason.Poems.Add(poem);
+                }
+            }
+        }
+    }
+
+    /// <summary>
     /// Filters out specific tags by removing those that match predefined categories, metrics, certain year ranges, or other specific tags to ignore.
     /// </summary>
     /// <param name="tags">A list of tags to be evaluated and filtered.</param>

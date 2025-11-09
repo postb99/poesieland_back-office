@@ -231,12 +231,4 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
         engine.GetTopMostMonths(dict).ShouldBeEquivalentTo(new List<string> { "mars", "mai", "janvier" });
     }
-    
-    [Fact]
-    [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportSeasonMetadata()
-    {
-        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
-        engine.ImportSeasonMetadata(16, false);
-    }
 }

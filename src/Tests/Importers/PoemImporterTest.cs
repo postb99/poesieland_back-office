@@ -1,4 +1,5 @@
-﻿using Shouldly;
+﻿using System.Text;
+using Shouldly;
 using Tests.Customizations;
 using Toolbox.Domain;
 using Toolbox.Importers;
@@ -66,6 +67,24 @@ public class PoemImporterTest(BasicFixture basicFixture): IClassFixture<BasicFix
         poem.DetailedMetric.ShouldBe("8, 6, 4, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.ShouldBe("8, 6, 4, 2");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
+    }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportVariableVerseLengthWhenMoreTextAfterVerseLength()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "19_dix_neuvieme_saison/urgence.md");
+        var poemContentImporter = new PoemImporter(basicFixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        var expectedInfo = new StringBuilder("Métrique variable : 5, 2.").Append(Environment.NewLine)
+            .Append(Environment.NewLine).Append("{{% include").ToString();
+        poem.Info.ShouldStartWith(expectedInfo);
+        poem.DetailedMetric.ShouldBe("5, 2");
+        // Because it has been copied from DetailedVerseLength by poemContentImporter.
+        poem.VerseLength.ShouldBe("5, 2");
         var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
         anomalies.ShouldBeEmpty();
     }
