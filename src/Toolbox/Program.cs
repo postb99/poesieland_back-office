@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Generators;
 using Toolbox.Importers;
@@ -16,6 +17,7 @@ public class Program
     private static ContentFileGenerator _contentFileGenerator;
     private static PoemImporter _poemImporter;
     private static SeasonMetadataImporter _seasonMetadataImporter;
+    private static CustomPageChecker _customPageChecker;
 
     public static void Main(string[] args)
     {
@@ -28,6 +30,7 @@ public class Program
         _contentFileGenerator = new ContentFileGenerator(_configuration);
         _poemImporter = new PoemImporter(_configuration);
         _seasonMetadataImporter = new SeasonMetadataImporter(_configuration);
+        _customPageChecker = new CustomPageChecker(_configuration);
         _engine = new(_configuration, _dataManager);
         _engine.Load();
 
@@ -144,7 +147,25 @@ public class Program
                 _engine.CheckPoemsWithVariableMetric();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
-                _engine.VerifyPoemWithLesMoisExtraTagIsListedOnCustomPage(null);
+                // Les mois
+                var outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _engine.Data);
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
+                // Ciel
+                outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _engine.Data);
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
+                // Saisons
+                outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _engine.Data);
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
+                
                 Console.WriteLine(
                     $"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
                 Console.WriteLine("Content metadata quality OK");
@@ -401,7 +422,7 @@ public class Program
 
         // Categories' and tags' radar
         GeneratePoemsCategoriesAndTagsRadarChartDataFile();
-        
+
         // Year tag's radar
         if (importedPoem is not null)
         {
@@ -429,7 +450,19 @@ public class Program
         // And check data quality
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
-        _engine.VerifyPoemWithLesMoisExtraTagIsListedOnCustomPage(importedPoem);
+        // Les mois
+        var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _engine.Data);
+        if (!string.IsNullOrEmpty(output.FirstOrDefault()))
+            Console.WriteLine(output);
+        // Ciel
+        output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem, _engine.Data);
+        if (!string.IsNullOrEmpty(output.FirstOrDefault()))
+            Console.WriteLine(output);
+        // Saisons
+        output = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(importedPoem, _engine.Data);
+        if (!string.IsNullOrEmpty(output.FirstOrDefault()))
+            Console.WriteLine(output);
+        
         Console.WriteLine(
             $"Content metadata quality OK. Info: metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
     }
@@ -538,7 +571,8 @@ public class Program
         _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 11);
         _engine.GenerateOverSeasonsChartDataFile(null, null, forMetric: 12);
 
-        Console.WriteLine("Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain', 'lovecat', 'les mois', 1-12 metrics chart data files OK");
+        Console.WriteLine(
+            "Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain', 'lovecat', 'les mois', 1-12 metrics chart data files OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
