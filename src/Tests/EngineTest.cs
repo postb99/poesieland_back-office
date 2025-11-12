@@ -5,8 +5,8 @@ using Xunit;
 
 namespace Tests;
 
-public class DataDependantEngineTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-    : IClassFixture<LoadDataFixture>
+public class DataDependantEngineTest(WithRealDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<WithRealDataFixture>
 {
     private readonly Engine _engine = fixture.Engine;
 
@@ -83,17 +83,10 @@ public class DataDependantEngineTest(LoadDataFixture fixture, ITestOutputHelper 
         _engine.Data.Seasons[0].Poems[0].SeasonId.ShouldBe(1);
     }
 
-    [Fact]
-    [Trait("UnitTest", "MetadataCheck")]
-    public void CheckMissingYearTagInYamlMetadata()
-    {
-        var anomalies = _engine.CheckMissingTagsInYamlMetadata();
-        testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
-        anomalies.ShouldBeEmpty();
-    }
+
 }
 
-public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
+public class DataIndependantEngineTest(BasicFixture fixture, ITestOutputHelper testOutputHelper)
     : IClassFixture<BasicFixture>
 {
     [Fact]
@@ -104,7 +97,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         var xAxisLabels = new SortedSet<string>();
         var yAxisLabels = new SortedSet<string>();
 
-        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
+        var engine = new Engine(fixture.Configuration, fixture.DataManager);
 
         // Poem with single subcategory
         var poem = new Poem { Categories = [new() { SubCategories = ["A"] }] };
@@ -178,7 +171,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         Dictionary<KeyValuePair<string, int>, int> dict = new();
         var xAxisLabels = new SortedSet<string>();
         
-        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
+        var engine = new Engine(fixture.Configuration, fixture.DataManager);
 
         // Poem with single subcategory
         var poem = new Poem { VerseLength = "6", Categories = [new() { SubCategories = ["A"] }] };
@@ -228,7 +221,7 @@ public class DataIndependantEngineTest(BasicFixture basicFixture, ITestOutputHel
         dict.Add("0302", 3);
         dict.Add("0102", 1);
 
-        var engine = new Engine(basicFixture.Configuration, basicFixture.DataManager);
+        var engine = new Engine(fixture.Configuration, fixture.DataManager);
         engine.GetTopMostMonths(dict).ShouldBeEquivalentTo(new List<string> { "mars", "mai", "janvier" });
     }
 }

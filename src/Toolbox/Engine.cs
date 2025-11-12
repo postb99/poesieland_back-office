@@ -50,45 +50,6 @@ public class Engine
         _dataManager.SaveEn(DataEn);
     }
  
-    public IEnumerable<string> CheckMissingTagsInYamlMetadata()
-    {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var poemContentImporter = new PoemImporter(_configuration);
-
-        var seasonMaxId = Data.Seasons.Count;
-        for (var i = 17; i < seasonMaxId + 1; i++)
-        {
-            var season = Data.Seasons.First(x => x.Id == i);
-            var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-            var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
-            foreach (var poemContentPath in poemContentPaths)
-            {
-                var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
-                if (!poemContentImporter.HasYamlMetadata) continue;
-
-                foreach (var p in poemContentImporter.CheckAnomalies(partialImport))
-                    yield return
-                        $"{p} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}";
-            }
-        }
-    }
-
-    public IEnumerable<string> GetReusedTitles()
-    {
-        var allowedReuses = File.ReadAllLines("./allowed_reuses.txt");
-        foreach (var group in Data.Seasons.SelectMany(x => x.Poems).GroupBy(x => x.Title))
-        {
-            var count = group.Count();
-            if (count > 1)
-            {
-                var outputLine =
-                    $"Reused title {group.Key} {count} times ({string.Join(", ", group.Select(g => g.Id))})";
-                if (!allowedReuses.Contains(outputLine))
-                    yield return outputLine;
-            }
-        }
-    }
-
     public void CheckPoemsWithoutVerseLength()
     {
         var poems = Data.Seasons.SelectMany(x => x.Poems);

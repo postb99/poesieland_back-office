@@ -5,14 +5,14 @@ using Xunit;
 
 namespace Tests.Importers;
 
-public class SeasonIndexImporterTest(BasicFixture basicFixture): IClassFixture<BasicFixture>
+public class SeasonIndexImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
 {
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     public void ShouldImport()
     {
         var seasonIndexContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "7_septieme_saison/_index.md");
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "7_septieme_saison/_index.md");
         var seasonIndexImporter = new SeasonIndexImporter();
         var season = seasonIndexImporter.Import(seasonIndexContentFilePath);
         season.Id.ShouldBe(7);

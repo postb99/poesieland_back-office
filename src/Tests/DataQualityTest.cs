@@ -4,8 +4,8 @@ using Xunit;
 
 namespace Tests;
 
-public class DataQualityTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-    : IClassFixture<LoadDataFixture>
+public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<WithRealDataFixture>
 {
     private readonly Root _data = fixture.Engine.Data;
 

@@ -1,12 +1,13 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using Toolbox.Consistency;
 using Toolbox.Domain;
 using Xunit;
 
 namespace Tests;
 
-public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-    : IClassFixture<LoadDataFixture>
+public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<WithRealDataFixture>
 {
     private readonly Root _data = fixture.Engine.Data;
 
@@ -265,9 +266,11 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
 
     [Fact]
     [Trait("DataMining", "Lookup")]
-    public void PoemReusedTitle()
+    public void PoemReusedTitles()
     {
-        foreach (var reusedTitle in fixture.Engine.GetReusedTitles())
+        var reusedTitlesChecker = new ReusedTitlesChecker(fixture.Engine.Data);
+        var reusedTitles = reusedTitlesChecker.GetReusedTitles();
+        foreach (var reusedTitle in reusedTitles)
         {
             testOutputHelper.WriteLine(reusedTitle);
         }

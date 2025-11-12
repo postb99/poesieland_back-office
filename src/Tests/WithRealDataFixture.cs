@@ -4,7 +4,7 @@ using Toolbox.Persistence;
 
 namespace Tests;
 
-public class LoadDataFixture : BasicFixture
+public class WithRealDataFixture : BasicFixture
 {
     [Obsolete("To be removed")]
     public Engine Engine { get; private set; }
@@ -12,7 +12,7 @@ public class LoadDataFixture : BasicFixture
     public Root Data { get; private set; }
     public Root DataEn { get; private set; }
 
-    public LoadDataFixture()
+    public WithRealDataFixture()
     {
         // Do "global" initialization here; Only called once.
         Engine = new(Configuration, new DataManager(Configuration));

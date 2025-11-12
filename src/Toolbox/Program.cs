@@ -18,6 +18,8 @@ public class Program
     private static PoemImporter _poemImporter;
     private static SeasonMetadataImporter _seasonMetadataImporter;
     private static CustomPageChecker _customPageChecker;
+    private static YamlMetadataChecker _yamlMetadataChecker;
+    private static ReusedTitlesChecker _reuseTitlesChecker;
 
     public static void Main(string[] args)
     {
@@ -31,8 +33,12 @@ public class Program
         _poemImporter = new PoemImporter(_configuration);
         _seasonMetadataImporter = new SeasonMetadataImporter(_configuration);
         _customPageChecker = new CustomPageChecker(_configuration);
+        
         _engine = new(_configuration, _dataManager);
         _engine.Load();
+        
+        _yamlMetadataChecker = new YamlMetadataChecker(_configuration, _engine.Data);
+        _reuseTitlesChecker = new ReusedTitlesChecker(_engine.Data);
 
         var menuEntry = MainMenu();
         ValidateAndPerformMenuChoice(null, menuEntry);
@@ -147,18 +153,26 @@ public class Program
                 _engine.CheckPoemsWithVariableMetric();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
-                // Les mois
-                var outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _engine.Data);
+                var outputs = _yamlMetadataChecker.CheckMissingTagsInYamlMetadata();
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
                 }
+                
+                // Les mois
+                outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _engine.Data);
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
+                
                 // Ciel
                 outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _engine.Data);
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
                 }
+                
                 // Saisons
                 outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _engine.Data);
                 foreach (var output in outputs)
@@ -168,6 +182,7 @@ public class Program
                 
                 Console.WriteLine(
                     $"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
+                
                 Console.WriteLine("Content metadata quality OK");
                 break;
             case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:
@@ -180,7 +195,8 @@ public class Program
                 _engine.OutputSeasonsDuration();
                 break;
             case MainMenuSettings.MenuChoices.OutputReusedTitles:
-                foreach (var reusedTitle in _engine.GetReusedTitles())
+                var reusedTitles = new ReusedTitlesChecker(_engine.Data).GetReusedTitles();
+                foreach (var reusedTitle in reusedTitles)
                 {
                     Console.WriteLine(reusedTitle);
                 }
@@ -228,7 +244,7 @@ public class Program
             _poemImporter.ImportPoemsOfSeason(seasonId, _engine.Data);
             _dataManager.Save(_engine.Data);
             Console.WriteLine("Season import OK");
-            GenerateDependantChartDataFiles(seasonId, null);
+            GenerateDependantChartDataFilesAndCheckQuality(seasonId, null);
         }
         else
         {
@@ -298,7 +314,7 @@ public class Program
             _dataManager.Save(_engine.Data);
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
-            GenerateDependantChartDataFiles(seasonId, importedPoem);
+            GenerateDependantChartDataFilesAndCheckQuality(seasonId, importedPoem);
         }
         catch (InvalidOperationException ex)
         {
@@ -389,7 +405,7 @@ public class Program
         }
     }
 
-    private static void GenerateDependantChartDataFiles(int seasonId, Poem? importedPoem)
+    private static void GenerateDependantChartDataFilesAndCheckQuality(int seasonId, Poem? importedPoem)
     {
         // General and season's poems length
         GeneratePoemsLengthPieChartDataFile();
@@ -450,14 +466,17 @@ public class Program
         // And check data quality
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
+        
         // Les mois
         var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _engine.Data);
         if (!string.IsNullOrEmpty(output.FirstOrDefault()))
             Console.WriteLine(output);
+        
         // Ciel
         output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem, _engine.Data);
         if (!string.IsNullOrEmpty(output.FirstOrDefault()))
             Console.WriteLine(output);
+        
         // Saisons
         output = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(importedPoem, _engine.Data);
         if (!string.IsNullOrEmpty(output.FirstOrDefault()))

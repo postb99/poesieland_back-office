@@ -14,10 +14,10 @@ public class XmlSchemaValidationTest : IClassFixture<BasicFixture>
     private static ITestOutputHelper _testOutputHelper;
     private IConfiguration _configuration;
 
-    public XmlSchemaValidationTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
+    public XmlSchemaValidationTest(BasicFixture fixture, ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
-        _configuration = basicFixture.Configuration;
+        _configuration = fixture.Configuration;
     }
 
     [Theory]

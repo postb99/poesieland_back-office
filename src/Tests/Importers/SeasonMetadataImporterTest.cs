@@ -5,14 +5,14 @@ using Xunit;
 
 namespace Tests.Importers;
 
-public class SeasonMetadataImporterTest(BasicFixture basicFixture): IClassFixture<BasicFixture>
+public class SeasonMetadataImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
 {
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [AutoDomainData]
     public void ShouldImportSeasonMetadata(Root data)
     {
-        var seasonMetadataImporter = new SeasonMetadataImporter(basicFixture.Configuration);
+        var seasonMetadataImporter = new SeasonMetadataImporter(fixture.Configuration);
         seasonMetadataImporter.ImportSeasonMetadata(16, data);
     }
 }

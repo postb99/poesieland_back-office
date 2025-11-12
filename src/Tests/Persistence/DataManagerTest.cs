@@ -3,8 +3,8 @@ using Xunit;
 
 namespace Tests.Persistence;
 
-public class DataManagerTest(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-    : IClassFixture<LoadDataFixture>
+public class DataManagerTest(WithRealDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<WithRealDataFixture>
 {
     [Fact]
     [Trait("UnitTest", "Persistence")]

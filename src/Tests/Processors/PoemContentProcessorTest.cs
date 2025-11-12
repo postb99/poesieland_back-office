@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Tests.Processors;
 
-public class PoemContentProcessorTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
+public class PoemContentProcessorTest(BasicFixture fixture) : IClassFixture<BasicFixture>
 {
     [Theory]
     [Trait("UnitTest", "ContentImport")]
@@ -14,8 +14,8 @@ public class PoemContentProcessorTest(BasicFixture basicFixture) : IClassFixture
     public void ShouldImportParagraphs(string poemContentPath, int paragraphs, int verses)
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            basicFixture.Configuration[Constants.CONTENT_ROOT_DIR]!, poemContentPath);
-        var poemContentImporter = new PoemImporter(basicFixture.Configuration);
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, poemContentPath);
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poem.Paragraphs.Count.ShouldBe(paragraphs);
         poem.Paragraphs.ForEach(p => p.Verses.Count.ShouldBe(verses));

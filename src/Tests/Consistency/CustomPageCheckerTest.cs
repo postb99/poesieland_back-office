@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Tests.Consistency;
 
-public class CustomPageCheckerTest(BasicFixture basicFixture, ITestOutputHelper testOutputHelper)
+public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testOutputHelper)
     : IClassFixture<BasicFixture>
 {
     [Theory]
@@ -15,7 +15,7 @@ public class CustomPageCheckerTest(BasicFixture basicFixture, ITestOutputHelper 
     public void ShouldNotFailWhenCheckingGloballyForPoemsNotListedOnLesMoisCustomPage(Root data)
     {
         data.Seasons.First().Poems.First().ExtraTags.Add("les mois");
-        var customPageChecker = new CustomPageChecker(basicFixture.Configuration);
+        var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var outputs = customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, data);
         foreach (var output in outputs)
         {
@@ -29,7 +29,7 @@ public class CustomPageCheckerTest(BasicFixture basicFixture, ITestOutputHelper 
     public void ShouldNotFailWhenCheckingForPoemNotListedOnLesMoisCustomPage(Root data, Poem poem)
     {
         poem.ExtraTags.Add("les mois");
-        var customPageChecker = new CustomPageChecker(basicFixture.Configuration);
+        var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var output = customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(poem, data);
         output.ShouldHaveSingleItem();
         testOutputHelper.WriteLine(output.FirstOrDefault());
@@ -46,7 +46,7 @@ public class CustomPageCheckerTest(BasicFixture basicFixture, ITestOutputHelper 
         data.Seasons.First().Poems[1].Categories.First().SubCategories.Add("Ciel");
         data.Seasons.First().Poems[1].Paragraphs.First().Verses[0] = "Le ciel est gris";
         
-        var customPageChecker = new CustomPageChecker(basicFixture.Configuration);
+        var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var outputs = customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, data);
         outputs.Where(x => !string.IsNullOrEmpty(x)).ShouldHaveSingleItem();
         foreach (var output in outputs)
@@ -63,7 +63,7 @@ public class CustomPageCheckerTest(BasicFixture basicFixture, ITestOutputHelper 
         poem.Categories.First().SubCategories.Add("Ciel");
         poem.Paragraphs.First().Verses[0] = "Le ciel est beau";
         
-        var customPageChecker = new CustomPageChecker(basicFixture.Configuration);
+        var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var output = customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(poem, data);
         testOutputHelper.WriteLine(output.FirstOrDefault());
     }
@@ -77,7 +77,7 @@ public class CustomPageCheckerTest(BasicFixture basicFixture, ITestOutputHelper 
 
         data.Seasons.First().Poems[1].Categories.Add(new Category {Name = "Saisons", SubCategories = ["Printemps"]});
         
-        var customPageChecker = new CustomPageChecker(basicFixture.Configuration);
+        var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var outputs = customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, data);
         outputs.Where(x => !string.IsNullOrEmpty(x)).ShouldHaveSingleItem();
         foreach (var output in outputs)
@@ -93,7 +93,7 @@ public class CustomPageCheckerTest(BasicFixture basicFixture, ITestOutputHelper 
     {
         poem.Categories.Add(new Category {Name = "Saisons", SubCategories = ["Printemps", "Automne"]});
         
-        var customPageChecker = new CustomPageChecker(basicFixture.Configuration);
+        var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var output = customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(poem, data);
         testOutputHelper.WriteLine(output.FirstOrDefault());
     }
