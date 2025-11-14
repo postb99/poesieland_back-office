@@ -17,7 +17,7 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
     /// An enumerable collection of strings indicating the anomalies found in the YAML metadata.
     /// Each string specifies the anomaly and the associated file path.
     /// </returns>
-    public IEnumerable<string> CheckMissingTagsInYamlMetadata()
+    public IEnumerable<string> GetMissingTagsInYamlMetadata()
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var poemContentImporter = new PoemImporter(configuration);

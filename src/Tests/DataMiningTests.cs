@@ -354,6 +354,23 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
 
     [Fact]
     [Trait("DataMining", "Lookup")]
+    public void PoemsThatCouldBeVerseRepeat()
+    {
+        var minLength = 16;
+
+        foreach (var group in _data.Seasons.SelectMany(x => x.Poems)
+                     .Where(x => x.Paragraphs[0].Verses[0].Length > minLength - 1)
+                     .Select(x => x.Paragraphs[0].Verses[0].Substring(0, minLength))
+                     .GroupBy(x => x))
+        {
+            var count = group.Count();
+            if (count > 1)
+                testOutputHelper.WriteLine($"{group.Key}");
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Lookup")]
     public void PoemsWithMoreThanOneSeasonCategory()
     {
         var poems = _data.Seasons.SelectMany(x =>

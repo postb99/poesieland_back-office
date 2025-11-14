@@ -153,7 +153,7 @@ public class Program
                 _engine.CheckPoemsWithVariableMetric();
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
-                var outputs = _yamlMetadataChecker.CheckMissingTagsInYamlMetadata();
+                var outputs = _yamlMetadataChecker.GetMissingTagsInYamlMetadata();
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
