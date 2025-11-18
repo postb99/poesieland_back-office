@@ -210,18 +210,4 @@ public class DataIndependantEngineTest(BasicFixture fixture, ITestOutputHelper t
         counter5.ShouldBe(1);
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
     }
-
-    [Fact]
-    [Trait("UnitTest", "Computation")]
-    public void ShouldCorrectlyGetTopMostMonths()
-    {
-        Dictionary<string, int> dict = new();
-        dict.Add("0502", 1);
-        dict.Add("0503", 1);
-        dict.Add("0302", 3);
-        dict.Add("0102", 1);
-
-        var engine = new Engine(fixture.Configuration, fixture.DataManager);
-        engine.GetTopMostMonths(dict).ShouldBeEquivalentTo(new List<string> { "mars", "mai", "janvier" });
-    }
 }

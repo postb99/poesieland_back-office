@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Xml.Serialization;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Charts;
@@ -113,13 +112,13 @@ public class Engine
         Directory.CreateDirectory(subDirPath);
         using var streamWriter = new StreamWriter(Path.Combine(subDirPath, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
-            isGeneral ? ChartDataFileHelper.ChartType.Pie : ChartDataFileHelper.ChartType.Bar, isGeneral ? 1 : 2);
+            isGeneral ? ChartType.Pie : ChartType.Bar, isGeneral ? 1 : 2);
         chartDataFileHelper.WriteBeforeData();
 
         if (isGeneral)
         {
             var metrics = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
-            var coloredDataLines = new List<ChartDataFileHelper.ColoredDataLine>();
+            var coloredDataLines = new List<ColoredDataLine>();
 
             foreach (var nbVerses in nbVersesRange)
             {
@@ -141,8 +140,8 @@ public class Engine
         }
         else
         {
-            var nbVersesChartData = new List<ChartDataFileHelper.DataLine>();
-            var isSonnetChartData = new List<ChartDataFileHelper.DataLine>();
+            var nbVersesChartData = new List<DataLine>();
+            var isSonnetChartData = new List<DataLine>();
 
             foreach (var nbVerses in nbVersesRange)
             {
@@ -187,7 +186,7 @@ public class Engine
         var subDir = seasonId.HasValue ? $"season-{seasonId}" : "general";
         var storageSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, "categories-pie.js"));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         var byStorageSubcategoryCount = new Dictionary<string, int>();
 
@@ -209,7 +208,7 @@ public class Engine
 
         var orderedSubcategories =
             storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).ToList();
-        var pieChartData = new List<ChartDataFileHelper.ColoredDataLine>();
+        var pieChartData = new List<ColoredDataLine>();
 
         foreach (var subcategory in orderedSubcategories)
         {
@@ -229,155 +228,11 @@ public class Engine
         streamWriter.Close();
     }
 
-    public void GeneratePoemsByDayRadarChartDataFile(string? storageSubCategory, string? storageCategory,
-        bool forLesMoisExtraTag = false)
-    {
-        var isGeneral = storageSubCategory is null && storageCategory is null && !forLesMoisExtraTag;
-        
-        var poemStringDates = new List<string>();
-        
-        if (storageSubCategory is not null)
-        {
-            poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory))).Select(x => x.TextDate)
-                .ToList();
-        }
-        else if (storageCategory is not null)
-        {
-            poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.Categories.Any(x => x.Name == storageCategory)).Select(x => x.TextDate)
-                .ToList();
-        }
-        else if (forLesMoisExtraTag)
-        {
-            poemStringDates = Data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.ExtraTags.Contains("les mois")).Select(x => x.TextDate)
-                .ToList();
-        }
-        else
-        {
-            // General
-            poemStringDates = Data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
-
-            // Add EN poems
-            poemStringDates.AddRange(DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
-        }
-
-        var dataDict = InitMonthDayDictionary();
-
-        foreach (var poemStringDate in poemStringDates)
-        {
-            var year = poemStringDate.Substring(6);
-            if (year == "1994")
-                continue;
-            var monthDay = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
-            dataDict[monthDay]++;
-        }
-
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var fileName = string.Empty;
-
-        var chartId = string.Empty;
-        var borderColor = string.Empty;
-
-        if (storageSubCategory is not null)
-        {
-            // categories
-            fileName = $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js";
-            chartId = $"poemDay-{storageSubCategory.UnaccentedCleaned()}Radar";
-            borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
-                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory).Color;
-
-            switch (borderColor)
-            {
-                // Use some not too light colors
-                case "rgba(254, 231, 240, 1)":
-                    borderColor = "rgba(255, 194, 209, 1)";
-                    break;
-                case "rgba(247, 235, 253, 1)":
-                    borderColor = "rgba(234, 191, 250, 1)";
-                    break;
-                case "rgba(244, 254, 254, 1)":
-                    borderColor = "rgba(119, 181, 254, 1)";
-                    break;
-            }
-        }
-        else if (storageCategory is not null)
-        {
-            // tags
-            fileName = $"poems-day-{storageCategory.UnaccentedCleaned()}-radar.js";
-            chartId = $"poemDay-{storageCategory.UnaccentedCleaned()}Radar";
-            borderColor = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
-                .FirstOrDefault(x => x.Name == storageCategory).Color;
-        }
-        else if (forLesMoisExtraTag)
-        {
-            fileName = "poems-day-les-mois-radar.js";
-            chartId = "poemDayLesMoisRadar";
-        }
-        else
-        {
-            // general
-            fileName = "poems-day-radar.js";
-            chartId = "poemDayRadar";
-        }
-
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, isGeneral ? "general" : "taxonomy", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
-        chartDataFileHelper.WriteBeforeData();
-
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
-
-        var dayWithoutPoems = new List<string>();
-
-        foreach (var monthDay in dataDict.Keys)
-        {
-            var value = dataDict[monthDay];
-            dataLines.Add(new(GetRadarChartLabel(monthDay), value
-            ));
-            if (isGeneral && value == 0)
-            {
-                dayWithoutPoems.Add(monthDay);
-            }
-        }
-
-        chartDataFileHelper.WriteData(dataLines, true);
-
-        var backgroundColor = borderColor?.Replace("1)", "0.5)");
-
-        var title = $"Mois les plus représentés : {string.Join(", ", GetTopMostMonths(dataDict))}";
-
-        chartDataFileHelper.WriteAfterData(chartId, [title], borderColor, backgroundColor);
-        streamWriter.Close();
-
-        if (!isGeneral) return;
-
-        // Days without poems listing
-
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
-            "../includes/days_without_creation.md");
-        var streamWriter2 = new StreamWriter(filePath);
-
-        streamWriter2.WriteLine("+++");
-        streamWriter2.WriteLine("title = \"Les jours sans\"");
-        streamWriter2.WriteLine("+++");
-
-        foreach (var monthDay in dayWithoutPoems)
-        {
-            var splitted = monthDay.Split('-');
-            streamWriter2.WriteLine(
-                $"- {splitted[1].TrimStart('0')} {GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
-        }
-
-        streamWriter2.Close();
-    }
-
     public void GeneratePoemsEnByDayRadarChartDataFile()
     {
         var poemStringDates = DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
 
-        var dataDict = InitMonthDayDictionary();
+        var dataDict = ChartDataFileGenerator.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -393,10 +248,10 @@ public class Engine
         var chartId = "poemEnDayRadar";
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var dataLines = new List<DataLine>();
 
         foreach (var monthDay in dataDict.Keys)
         {
@@ -417,7 +272,7 @@ public class Engine
             .Where(x => x.Date.Year == year).Select(x => x.TextDate)
             .ToList();
 
-        var dataDict = InitMonthDayDictionary();
+        var dataDict = ChartDataFileGenerator.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -431,10 +286,10 @@ public class Engine
         var chartId = $"poemDay-{year}Radar";
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Radar);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Radar);
         chartDataFileHelper.WriteBeforeData();
 
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var dataLines = new List<DataLine>();
 
         foreach (var monthDay in dataDict.Keys)
         {
@@ -496,36 +351,6 @@ public class Engine
         }
     }
 
-    private static Dictionary<string, int> InitMonthDayDictionary()
-    {
-        var dataDict = new Dictionary<string, int>();
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"01-0{i}" : $"01-{i}", 0);
-        for (var i = 1; i < 30; i++)
-            dataDict.Add(i < 10 ? $"02-0{i}" : $"02-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"03-0{i}" : $"03-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"04-0{i}" : $"04-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"05-0{i}" : $"05-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"06-0{i}" : $"06-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"07-0{i}" : $"07-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"08-0{i}" : $"08-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"09-0{i}" : $"09-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"10-0{i}" : $"10-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"11-0{i}" : $"11-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"12-0{i}" : $"12-{i}", 0);
-        return dataDict;
-    }
-
     public void GeneratePoemMetricBarAndPieChartDataFile(int? seasonId, bool useDetailedMetric)
     {
         var isGeneral = seasonId is null;
@@ -536,7 +361,7 @@ public class Engine
         var chartId = isGeneral ? "poemVerseLengthPie" : $"season{seasonId}VerseLengthBar";
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
-            isGeneral ? ChartDataFileHelper.ChartType.Pie : ChartDataFileHelper.ChartType.Bar, 1);
+            isGeneral ? ChartType.Pie : ChartType.Bar, 1);
         chartDataFileHelper.WriteBeforeData();
         var regularMetricData = new Dictionary<int, int>();
         var variableMetricData = new Dictionary<string, int>();
@@ -597,8 +422,8 @@ public class Engine
         var regularMetricRange = regularMetricData.Keys.Order().ToList();
         var variableMetricRange = variableMetricData.Keys.Order().ToList();
 
-        var regularMetricChartData = new List<ChartDataFileHelper.DataLine>();
-        var variableMetricChartData = new List<ChartDataFileHelper.ColoredDataLine>();
+        var regularMetricChartData = new List<DataLine>();
+        var variableMetricChartData = new List<ColoredDataLine>();
 
         foreach (var metricValue in regularMetricRange)
         {
@@ -611,17 +436,17 @@ public class Engine
             variableMetricChartData.Add(new(verseLength, variableMetricData[verseLength], "rgba(72, 149, 239, 1)"));
         }
 
-        var undefinedVerseLengthChartData = new ChartDataFileHelper.ColoredDataLine
+        var undefinedVerseLengthChartData = new ColoredDataLine
         ("Pas de données pour l\\'instant", nbUndefinedVerseLength, "rgb(211, 211, 211)"
         );
 
         // General pie chart or Season's bar chart
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var dataLines = new List<DataLine>();
 
         if (isGeneral)
         {
             var metrics = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
-            var coloredDataLines = new List<ChartDataFileHelper.ColoredDataLine>();
+            var coloredDataLines = new List<ColoredDataLine>();
 
             foreach (var metricValue in regularMetricRange)
             {
@@ -655,7 +480,7 @@ public class Engine
             fileName = "metrique_variable-bar.js";
             chartId = "metrique_variableBar";
             using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-            var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bar, 1);
+            var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartType.Bar, 1);
             chartDataFileHelper2.WriteBeforeData();
 
             dataLines = [];
@@ -672,8 +497,8 @@ public class Engine
         }
     }
 
-    private ChartDataFileHelper.ColoredDataLine UpdateVariableMetricColor(
-        ChartDataFileHelper.ColoredDataLine coloredDataLine)
+    private ColoredDataLine UpdateVariableMetricColor(
+        ColoredDataLine coloredDataLine)
     {
         try
         {
@@ -681,7 +506,7 @@ public class Engine
             if (metrics[0] % 2 == 0 && metrics[1] % 2 == 0)
             {
                 // twice even => color of hexasyllabe
-                return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
                     "rgb(174, 214, 241)");
                 ;
             }
@@ -689,19 +514,19 @@ public class Engine
             if (metrics[0] % 2 == 1 && metrics[1] % 2 == 1)
             {
                 // twice odd => color of octosyllabe
-                return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
                     "rgb(162, 217, 206)");
             }
 
             if (metrics[0] % 2 == 1 && metrics[1] % 2 == 0)
             {
                 // odd then even => color of alexandrin
-                return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
                     "rgb(237, 187, 153)");
             }
 
             // even then odd => color of tetrasyllabe
-            return new ChartDataFileHelper.ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+            return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
                 "rgb(215, 189, 226)");
         }
         catch (FormatException)
@@ -739,14 +564,14 @@ public class Engine
             }
         }
 
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var dataLines = new List<DataLine>();
         var orderedIntensitiesKeys = intensityDict.Keys.Order();
         var baseColor = "rgba(72, 149, 239, {0})";
         var baseAlpha = 0.5;
         foreach (var key in orderedIntensitiesKeys)
         {
             if (key == 0) continue;
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{key} {(key == 1 ? "poème" : "poèmes")}",
+            dataLines.Add(new ColoredDataLine($"{key} {(key == 1 ? "poème" : "poèmes")}",
                 intensityDict[key],
                 string.Format(baseColor,
                     (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo
@@ -757,7 +582,7 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemIntensityPie", ["Les jours de création sont-ils intenses ?"]);
@@ -808,13 +633,13 @@ public class Engine
             }
         }
 
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var dataLines = new List<DataLine>();
         var baseColor = "rgba(72, 149, 239, {0})";
         var baseAlpha = 0.2;
         int[] daysOfWeek = [1, 2, 3, 4, 5, 6, 0];
         foreach (var key in daysOfWeek)
         {
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine(
+            dataLines.Add(new ColoredDataLine(
                 key == 1 ? "Lundi" :
                 key == 2 ? "Mardi" :
                 key == 3 ? "Mercredi" :
@@ -831,7 +656,7 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", ["Par jour de la semaine"]);
@@ -852,13 +677,13 @@ public class Engine
             }
         }
 
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var dataLines = new List<DataLine>();
         var baseColor = "rgba(72, 149, 239, {0})";
         var baseAlpha = 0.2;
         int[] daysOfWeek = [1, 2, 3, 4, 5, 6, 0];
         foreach (var key in daysOfWeek)
         {
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine(
+            dataLines.Add(new ColoredDataLine(
                 key == 1 ? "Monday" :
                 key == 2 ? "Tuesday" :
                 key == 3 ? "Wednesday" :
@@ -875,7 +700,7 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CONTENT_ROOT_DIR_EN]);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "../charts/general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Pie);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemEnDayOfWeekPie", ["By day of week"]);
@@ -970,10 +795,10 @@ public class Engine
         }
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
 
-        var dataLines = new List<ChartDataFileHelper.DataLine>();
+        var dataLines = new List<DataLine>();
 
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
         {
@@ -1019,7 +844,7 @@ public class Engine
             {
                 poemCount = season.Poems.Count(x => x.ExtraTags.Contains("les mois"));
             }
-            dataLines.Add(new ChartDataFileHelper.ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
+            dataLines.Add(new ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
                 poemCount,
                 backgroundColor));
         }
@@ -1079,7 +904,7 @@ public class Engine
 
         // Interval length charts
 
-        var dataLines = new List<ChartDataFileHelper.ColoredDataLine>();
+        var dataLines = new List<ColoredDataLine>();
         var orderedIntervalKeys = intervalLengthDict.Keys.Order().ToList();
         var zeroDayColor = "rgba(72, 149, 239, 1)";
         var oneDayColor = "rgba(72, 149, 239, 0.9)";
@@ -1144,7 +969,7 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bar);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData(seasonId is null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
@@ -1215,7 +1040,7 @@ public class Engine
             }
         }
 
-        var seriesDataLines = new List<ChartDataFileHelper.ColoredDataLine>();
+        var seriesDataLines = new List<ColoredDataLine>();
         var sortedKeys = seriesLengthDict.Keys.Order().ToList();
 
         foreach (var key in sortedKeys.Skip(1))
@@ -1227,7 +1052,7 @@ public class Engine
         fileName = "poem-series-bar.js";
         subDir = "general";
         using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
-        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartDataFileHelper.ChartType.Bar);
+        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartType.Bar);
         chartDataFileHelper2.WriteBeforeData();
         chartDataFileHelper2.WriteData(seriesDataLines, true);
         chartDataFileHelper2.WriteAfterData("poemSeriesBar",
@@ -1314,13 +1139,13 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
 
-        var firstQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var secondQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var thirdQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var fourthQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var firstQuarterDataLines = new List<BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<BubbleChartDataLine>();
 
         foreach (var dataKey in poemLengthByVerseLength.Keys)
         {
@@ -1362,47 +1187,47 @@ public class Engine
         var fileName = "poems-verseLength-line.js";
 
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Line, 14);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Line, 14);
         chartDataFileHelper.WriteBeforeData();
 
         var oneFootDataLines =
-            new ChartDataFileHelper.LineChartDataLine("1 syllabe", dataDict[1],
+            new LineChartDataLine("1 syllabe", dataDict[1],
                 metrics.First(x => x.Length == 1).Color);
         var twoFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("2 syllabes", dataDict[2],
+            new LineChartDataLine("2 syllabes", dataDict[2],
                 metrics.First(x => x.Length == 2).Color);
         var threeFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("3 syllabes", dataDict[3],
+            new LineChartDataLine("3 syllabes", dataDict[3],
                 metrics.First(x => x.Length == 3).Color);
         var fourFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("4 syllabes", dataDict[4],
+            new LineChartDataLine("4 syllabes", dataDict[4],
                 metrics.First(x => x.Length == 4).Color);
         var fiveFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("5 syllabes", dataDict[5],
+            new LineChartDataLine("5 syllabes", dataDict[5],
                 metrics.First(x => x.Length == 5).Color);
         var sixFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("6 syllabes", dataDict[6],
+            new LineChartDataLine("6 syllabes", dataDict[6],
                 metrics.First(x => x.Length == 6).Color);
         var sevenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("7 syllabes", dataDict[7],
+            new LineChartDataLine("7 syllabes", dataDict[7],
                 metrics.First(x => x.Length == 7).Color);
         var eightFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("8 syllabes", dataDict[8],
+            new LineChartDataLine("8 syllabes", dataDict[8],
                 metrics.First(x => x.Length == 8).Color);
         var nineFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("9 syllabes", dataDict[9],
+            new LineChartDataLine("9 syllabes", dataDict[9],
                 metrics.First(x => x.Length == 9).Color);
         var tenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("10 syllabes", dataDict[10],
+            new LineChartDataLine("10 syllabes", dataDict[10],
                 metrics.First(x => x.Length == 10).Color);
         var elevenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("11 syllabes", dataDict[11],
+            new LineChartDataLine("11 syllabes", dataDict[11],
                 metrics.First(x => x.Length == 11).Color);
         var twelveFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("12 syllabes", dataDict[12],
+            new LineChartDataLine("12 syllabes", dataDict[12],
                 metrics.First(x => x.Length == 12).Color);
         var fourteenFeetDataLines =
-            new ChartDataFileHelper.LineChartDataLine("14 syllabes", dataDict[14],
+            new LineChartDataLine("14 syllabes", dataDict[14],
                 metrics.First(x => x.Length == 14).Color);
 
         chartDataFileHelper.WriteData(oneFootDataLines);
@@ -1458,13 +1283,13 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
 
-        var firstQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var secondQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var thirdQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var fourthQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var firstQuarterDataLines = new List<BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<BubbleChartDataLine>();
 
         // Get the values for x-axis
         var xAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
@@ -1591,13 +1416,13 @@ public class Engine
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartDataFileHelper.ChartType.Bubble, 4);
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
 
-        var firstQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var secondQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var thirdQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
-        var fourthQuarterDataLines = new List<ChartDataFileHelper.BubbleChartDataLine>();
+        var firstQuarterDataLines = new List<BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<BubbleChartDataLine>();
 
         // Get the values for x-axis
         var xAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
@@ -1707,25 +1532,6 @@ public class Engine
         return dataDict;
     }
 
-    public List<string> GetTopMostMonths(Dictionary<string, int> monthDayDict)
-    {
-        var monthDict = new Dictionary<string, int>();
-        foreach (var monthDay in monthDayDict.Keys)
-        {
-            var month = monthDay.Substring(0, 2);
-            if (monthDict.TryGetValue(month, out _))
-            {
-                monthDict[month] += monthDayDict[monthDay];
-            }
-            else
-            {
-                monthDict.Add(month, monthDayDict[monthDay]);
-            }
-        }
-
-        return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key).Select(GetMonthLabel).ToList();
-    }
-
     public void OutputSeasonsDuration()
     {
         foreach (var season in Data.Seasons.Where(x => x.Poems.Count > 0))
@@ -1752,7 +1558,7 @@ public class Engine
     }
 
     private void AddDataLine(int x, int y, int value,
-        List<ChartDataFileHelper.BubbleChartDataLine>[] quarterBubbleChartDatalines, int maxValue,
+        List<BubbleChartDataLine>[] quarterBubbleChartDatalines, int maxValue,
         int bubbleMaxRadiusPixels)
     {
         // Bubble radius and color
@@ -1823,39 +1629,6 @@ public class Engine
                 return day == "01" ? "Décembre" : day == "21" ? "Hiver" : string.Empty;
             default:
                 return string.Empty;
-        }
-    }
-
-    private string GetMonthLabel(string month)
-    {
-        switch (month)
-        {
-            case "01":
-                return "janvier";
-            case "02":
-                return "février";
-            case "03":
-                return "mars";
-            case "04":
-                return "avril";
-            case "05":
-                return "mai";
-            case "06":
-                return "juin";
-            case "07":
-                return "juillet";
-            case "08":
-                return "août";
-            case "09":
-                return "septembre";
-            case "10":
-                return "octobre";
-            case "11":
-                return "novembre";
-            case "12":
-                return "décembre";
-            default:
-                return "?";
         }
     }
 

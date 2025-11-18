@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Toolbox.Charts;
 using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Generators;
@@ -19,7 +20,7 @@ public class Program
     private static SeasonMetadataImporter _seasonMetadataImporter;
     private static CustomPageChecker _customPageChecker;
     private static YamlMetadataChecker _yamlMetadataChecker;
-    private static ReusedTitlesChecker _reuseTitlesChecker;
+    private static ChartDataFileGenerator _chartDataFileGenerator;
 
     public static void Main(string[] args)
     {
@@ -33,12 +34,12 @@ public class Program
         _poemImporter = new PoemImporter(_configuration);
         _seasonMetadataImporter = new SeasonMetadataImporter(_configuration);
         _customPageChecker = new CustomPageChecker(_configuration);
-        
+        _chartDataFileGenerator = new ChartDataFileGenerator(_configuration);
+
         _engine = new(_configuration, _dataManager);
         _engine.Load();
-        
+
         _yamlMetadataChecker = new YamlMetadataChecker(_configuration, _engine.Data);
-        _reuseTitlesChecker = new ReusedTitlesChecker(_engine.Data);
 
         var menuEntry = MainMenu();
         ValidateAndPerformMenuChoice(null, menuEntry);
@@ -158,31 +159,32 @@ public class Program
                 {
                     Console.WriteLine(output);
                 }
-                
+
                 // Les mois
                 outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _engine.Data);
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
                 }
-                
+
                 // Ciel
-                outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _engine.Data);
+                outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null,
+                    _engine.Data);
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
                 }
-                
+
                 // Saisons
                 outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _engine.Data);
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
                 }
-                
+
                 Console.WriteLine(
                     $"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
-                
+
                 Console.WriteLine("Content metadata quality OK");
                 break;
             case MainMenuSettings.MenuChoices.GenerateAllSeasonsPoemIntervalBarChartDataFile:
@@ -425,11 +427,15 @@ public class Program
             : $"Season {seasonId} categories pie chart data file OK");
 
         // Poem by day
-        _engine.GeneratePoemsByDayRadarChartDataFile(null, null);
-        _engine.GeneratePoemsByDayRadarChartDataFile(null, null, forLesMoisExtraTag: true);
+        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null);
+        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null,
+            forLesMoisExtraTag: true);
+        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null,
+            forNoelExtraTag: true);
         _engine.GeneratePoemIntensityPieChartDataFile();
         _engine.GeneratePoemByDayOfWeekPieChartDataFile();
-        Console.WriteLine("Poems by day chart data file OK");
+        Console.WriteLine(
+            "Poems by day general and specific, poem intensity, poem by day of week, chart data files OK");
 
         // Poem interval
         _engine.GeneratePoemIntervalBarChartDataFile(null);
@@ -466,22 +472,23 @@ public class Program
         // And check data quality
         _engine.VerifySeasonHaveCorrectPoemCount();
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
-        
+
         // Les mois
         var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _engine.Data);
         if (!string.IsNullOrEmpty(output.FirstOrDefault()))
             Console.WriteLine(output);
-        
+
         // Ciel
-        output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem, _engine.Data);
+        output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem,
+            _engine.Data);
         if (!string.IsNullOrEmpty(output.FirstOrDefault()))
             Console.WriteLine(output);
-        
+
         // Saisons
         output = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(importedPoem, _engine.Data);
         if (!string.IsNullOrEmpty(output.FirstOrDefault()))
             Console.WriteLine(output);
-        
+
         Console.WriteLine(
             $"Content metadata quality OK. Info: metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
     }
@@ -493,11 +500,15 @@ public class Program
 
         if (string.IsNullOrEmpty(choice))
         {
-            _engine.GeneratePoemsByDayRadarChartDataFile(null, null);
-            _engine.GeneratePoemsByDayRadarChartDataFile(null, null, forLesMoisExtraTag: true);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null,
+                forLesMoisExtraTag: true);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null,
+                forNoelExtraTag: true);
             _engine.GeneratePoemIntensityPieChartDataFile();
             _engine.GeneratePoemByDayOfWeekPieChartDataFile();
-            Console.WriteLine("Poems by day and cie chart data file OK");
+            Console.WriteLine(
+                "Poems by day general and specific, poem intensity, poem by day of week, chart data files OK");
             GeneratePoemsCategoriesAndTagsRadarChartDataFile();
             Console.WriteLine("Categories and tags radar chart data file OK");
             GenerateOverSeasonsCategoriesAndTagsBarChartDataFile();
@@ -514,7 +525,7 @@ public class Program
         }
         else
         {
-            _engine.GeneratePoemsByDayRadarChartDataFile(choice, null);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, choice, null);
             Console.WriteLine($"Poems by day for '{choice}' chart data file OK");
         }
     }
@@ -538,15 +549,14 @@ public class Program
         foreach (var category in storageSettings!.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
                      .Distinct())
         {
-            _engine.GeneratePoemsByDayRadarChartDataFile(category, null);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, category, null);
         }
 
         Console.WriteLine("Poems by day for all categories chart data files OK");
 
-
         foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
         {
-            _engine.GeneratePoemsByDayRadarChartDataFile(null, category);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, category);
         }
 
         Console.WriteLine("Poems by day for all tags chart data files OK");
