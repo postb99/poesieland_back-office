@@ -150,8 +150,8 @@ public class Program
                 _engine.Load();
                 break;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
-                _engine.CheckPoemsWithoutVerseLength();
-                _engine.CheckPoemsWithVariableMetric();
+                PoemMetadataChecker.CheckPoemsWithoutVerseLength(_engine.Data);
+                PoemMetadataChecker.CheckPoemsWithVariableMetric(_engine.Data);
                 _engine.VerifySeasonHaveCorrectPoemCount();
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
                 var outputs = _yamlMetadataChecker.GetMissingTagsInYamlMetadata();

@@ -64,7 +64,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             poemStringDates.AddRange(dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
         }
 
-        var dataDict = InitMonthDayDictionary();
+        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -140,7 +140,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
-            dataLines.Add(new(GetRadarChartLabel(monthDay), value
+            dataLines.Add(new(ChartDataFileHelper.GetRadarChartLabel(monthDay), value
             ));
             if (isGeneral && value == 0)
             {
@@ -173,7 +173,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         {
             var splitted = monthDay.Split('-');
             streamWriter2.WriteLine(
-                $"- {splitted[1].TrimStart('0')} {GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
+                $"- {splitted[1].TrimStart('0')} {ChartDataFileHelper.GetRadarChartLabel($"{splitted[0]}-01").ToLower()}");
         }
 
         streamWriter2.Close();
@@ -195,104 +195,6 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             }
         }
 
-        return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key).Select(GetMonthLabel).ToList();
-    }
-
-    public static Dictionary<string, int> InitMonthDayDictionary()
-    {
-        var dataDict = new Dictionary<string, int>();
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"01-0{i}" : $"01-{i}", 0);
-        for (var i = 1; i < 30; i++)
-            dataDict.Add(i < 10 ? $"02-0{i}" : $"02-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"03-0{i}" : $"03-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"04-0{i}" : $"04-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"05-0{i}" : $"05-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"06-0{i}" : $"06-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"07-0{i}" : $"07-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"08-0{i}" : $"08-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"09-0{i}" : $"09-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"10-0{i}" : $"10-{i}", 0);
-        for (var i = 1; i < 31; i++)
-            dataDict.Add(i < 10 ? $"11-0{i}" : $"11-{i}", 0);
-        for (var i = 1; i < 32; i++)
-            dataDict.Add(i < 10 ? $"12-0{i}" : $"12-{i}", 0);
-        return dataDict;
-    }
-
-    private string GetRadarChartLabel(string monthDay)
-    {
-        var day = monthDay.Substring(3);
-        var month = monthDay.Substring(0, 2);
-        switch (month)
-        {
-            case "01":
-                return day == "01" ? "Janvier" : string.Empty;
-            case "02":
-                return day == "01" ? "Février" : string.Empty;
-            case "03":
-                return day == "01" ? "Mars" : day == "20" ? "Printemps" : string.Empty;
-            case "04":
-                return day == "01" ? "Avril" : string.Empty;
-            case "05":
-                return day == "01" ? "Mai" : string.Empty;
-            case "06":
-                return day == "01" ? "Juin" : day == "21" ? "Eté" : string.Empty;
-            case "07":
-                return day == "01" ? "Juillet" : string.Empty;
-            case "08":
-                return day == "01" ? "Août" : string.Empty;
-            case "09":
-                return day == "01" ? "Septembre" : day == "23" ? "Automne" : string.Empty;
-            case "10":
-                return day == "01" ? "Octobre" : string.Empty;
-            case "11":
-                return day == "01" ? "Novembre" : string.Empty;
-            case "12":
-                return day == "01" ? "Décembre" : day == "21" ? "Hiver" : string.Empty;
-            default:
-                return string.Empty;
-        }
-    }
-
-    private string GetMonthLabel(string month)
-    {
-        switch (month)
-        {
-            case "01":
-                return "janvier";
-            case "02":
-                return "février";
-            case "03":
-                return "mars";
-            case "04":
-                return "avril";
-            case "05":
-                return "mai";
-            case "06":
-                return "juin";
-            case "07":
-                return "juillet";
-            case "08":
-                return "août";
-            case "09":
-                return "septembre";
-            case "10":
-                return "octobre";
-            case "11":
-                return "novembre";
-            case "12":
-                return "décembre";
-            default:
-                return "?";
-        }
+        return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key).Select(ChartDataFileHelper.GetMonthLabel).ToList();
     }
 }

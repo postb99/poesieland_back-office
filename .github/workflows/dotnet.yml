@@ -31,7 +31,8 @@ jobs:
       working-directory: src
     - name: Test computation
       run: dotnet test --no-build --filter "UnitTest=Computation"
-      working-directory: src
+    - name: Test consistency
+      run: dotnet test --no-build --filter "UnitTest=ConsistencyCheck"
     - name: Test content import
       run: dotnet test --no-build --filter "UnitTest=ContentImport"
       working-directory: src

@@ -41,37 +41,7 @@ public class Engine
         Data = data;
         DataEn = dataEn;
     }
-
-    [Obsolete]
-    public void Save()
-    {
-        _dataManager.Save(Data);
-        _dataManager.SaveEn(DataEn);
-    }
- 
-    public void CheckPoemsWithoutVerseLength()
-    {
-        var poems = Data.Seasons.SelectMany(x => x.Poems);
-        var poemsWithVerseLength = poems.Count(x => x.HasVerseLength);
-        if (poemsWithVerseLength == poems.Count())
-            return;
-
-        var incorrectPoem = poems.FirstOrDefault(x => !x.HasVerseLength);
-        if (incorrectPoem is not null)
-            throw new(
-                $"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
-    }
-
-    public void CheckPoemsWithVariableMetric()
-    {
-        var poems = Data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric));
-
-        var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Métrique variable : "));
-        if (incorrectPoem is not null)
-            throw new(
-                $"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
-    }
-
+    
     public void GeneratePoemsLengthBarAndPieChartDataFile(int? seasonId)
     {
         var isGeneral = seasonId is null;
@@ -232,7 +202,7 @@ public class Engine
     {
         var poemStringDates = DataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
 
-        var dataDict = ChartDataFileGenerator.InitMonthDayDictionary();
+        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -272,7 +242,7 @@ public class Engine
             .Where(x => x.Date.Year == year).Select(x => x.TextDate)
             .ToList();
 
-        var dataDict = ChartDataFileGenerator.InitMonthDayDictionary();
+        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {

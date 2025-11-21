@@ -10,7 +10,7 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
     : IClassFixture<BasicFixture>
 {
     [Theory]
-    [Trait("UnitTest", "ConsistencyCheck")]
+    [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldNotFailWhenCheckingGloballyForPoemsNotListedOnLesMoisCustomPage(Root data)
     {
@@ -24,7 +24,7 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
     }
 
     [Theory]
-    [Trait("UnitTest", "ConsistencyCheck")]
+    [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldNotFailWhenCheckingForPoemNotListedOnLesMoisCustomPage(Root data, Poem poem)
     {
@@ -36,7 +36,7 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
     }
 
     [Theory]
-    [Trait("UnitTest", "ConsistencyCheck")]
+    [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldNotFailWhenCheckingGloballyForPoemsNotListedOnCielCustomPage(Root data)
     {
@@ -56,7 +56,7 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
     }
 
     [Theory]
-    [Trait("UnitTest", "ConsistencyCheck")]
+    [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldNotFailWhenCheckingForPoemNotListedOnCielCustomPage(Root data, Poem poem)
     {
@@ -69,7 +69,7 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
     }
     
     [Theory]
-    [Trait("UnitTest", "ConsistencyCheck")]
+    [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldNotFailWhenCheckingGloballyForPoemsNotListedOnSaisonsCustomPage(Root data)
     {
@@ -87,7 +87,7 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
     }
     
     [Theory]
-    [Trait("UnitTest", "ConsistencyCheck")]
+    [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldNotFailWhenCheckingForPoemNotListedOnSaisonsCustomPage(Root data, Poem poem)
     {
