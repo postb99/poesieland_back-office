@@ -96,4 +96,17 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.FindExtraTags(["lovecat", "2025", "nature", "sonnet", "métrique variable", "other", "octosyllabe"]).ShouldBe(["lovecat", "other"]);
     }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportEnPoem()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR_EN]!, "2024", "wisdom.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.ImportEn(poemContentFilePath);
+        poem.ShouldNotBeNull();
+        poem.Categories.FirstOrDefault()?.Name.ShouldBe("Philosophie");
+        poem.Categories.FirstOrDefault()?.SubCategories.FirstOrDefault().ShouldBe("Etre");
+    }
 }

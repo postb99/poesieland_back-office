@@ -21,4 +21,6 @@ public class SubCategory
     public string Name { get; set; } = string.Empty;
 
     public string Color { get; set; } = string.Empty;
+    
+    public string? Alias { get; set; }
 }

@@ -131,7 +131,7 @@ public class PoemImporter(IConfiguration configuration)
     }
 
     /// <summary>
-    /// Imports a poem from the specified content file, processes its metadata and content,
+    /// Imports a poem in French from the specified content file, processes its metadata and content,
     /// and returns a tuple with the constructed poem and its positional index.
     /// </summary>
     /// <param name="contentFilePath">The full file path to the poem content file to be imported. This should include any metadata and content related to the poem.</param>
@@ -162,6 +162,44 @@ public class PoemImporter(IConfiguration configuration)
         _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
         _poem.ExtraTags = FindExtraTags(_metadataProcessor.GetTags());
+        _poem.Locations = _metadataProcessor.GetLocations();
+
+        // Copy for XML save
+        _poem.VerseLength = _poem.DetailedMetric;
+
+        return (_poem, _position);
+    }
+    
+    /// <summary>
+    /// Imports a poem in English from the specified content file, processes its metadata and content,
+    /// and returns a tuple with the constructed poem and its positional index.
+    /// </summary>
+    /// <param name="contentFilePath">The full file path to the poem content file to be imported. This should include any metadata and content related to the poem.</param>
+    /// <returns>Returns a tuple where the first element is the <see cref="Poem"/> object containing the processed poem information, and the second element is an integer representing the position or index of the poem.</returns>
+    /// <exception cref="FileNotFoundException">Thrown when the specified content file does not exist.</exception>
+    /// <exception cref="InvalidDataException">Thrown when the content file contains invalid or malformed data.</exception>
+    /// <exception cref="IOException">Thrown when there is an issue reading the content file.</exception>
+    public (Poem, int) ImportEn(string contentFilePath)
+    {
+        _poem = new();
+        _isInMetadata = false;
+        _metadataProcessor = null;
+        _contentProcessor = null;
+        HasYamlMetadata = false;
+        HasTomlMetadata = false;
+
+        using var streamReader = new StreamReader(contentFilePath);
+        string line;
+        do
+        {
+            line = streamReader.ReadLine();
+            ProcessLine(line);
+        } while (line is not null);
+
+        _poem.Categories = GetCategoriesEn(_metadataProcessor!.GetCategories(), _poem.Id);
+        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+        _poem.Info = poemInfo;
+        _poem.Paragraphs = _contentProcessor!.Paragraphs;
         _poem.Locations = _metadataProcessor.GetLocations();
 
         // Copy for XML save
@@ -201,7 +239,7 @@ public class PoemImporter(IConfiguration configuration)
 
             foreach (var poemContentPath in poemFilePaths)
             {
-                var (poem, position) = Import(poemContentPath);
+                var (poem, position) = ImportEn(poemContentPath);
 
                 poemsByPosition.Add(position, poem);
             }
@@ -496,6 +534,46 @@ public class PoemImporter(IConfiguration configuration)
             }
 
             storageCategory.SubCategories.Add(metadataCategory);
+        }
+
+        return storageCategories.Values.ToList();
+    }
+    
+    /// <summary>
+    /// Maps the provided metadata categories to their corresponding storage categories and organizes them
+    /// based on the storage settings configuration.
+    /// </summary>
+    /// <param name="metadataCategories">A list of category names obtained from the metadata of a poem.</param>
+    /// <param name="poemId">The unique identifier of the poem used for error tracking during the mapping process.</param>
+    /// <returns>Returns a list of <see cref="Category"/> objects representing the categories and their associated subcategories.</returns>
+    /// <exception cref="InvalidOperationException">
+    /// Thrown when a metadata category does not match any storage category defined in the storage settings.
+    /// The exception includes the <paramref name="poemId"/> and the unmatched metadata category for debugging purposes.
+    /// </exception>
+    private List<Category> GetCategoriesEn(List<string> metadataCategories, string poemId)
+    {
+        var storageCategories = new Dictionary<string, Category>();
+        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+
+        foreach (var metadataCategory in metadataCategories)
+        {
+            var settingsCategory =
+                storageSettings.Categories.FirstOrDefault(x =>
+                    x.Subcategories.Select(x => x.Alias).Contains(metadataCategory));
+             
+            if (settingsCategory == null)
+            {
+                throw new InvalidOperationException(
+                    $"[{poemId}] No storage category found for metadata category {metadataCategory}");
+            }
+            storageCategories.TryGetValue(settingsCategory.Name, out var storageCategory);
+            if (storageCategory == null)
+            {
+                storageCategory = new() { Name = settingsCategory.Name, SubCategories = new() };
+                storageCategories.Add(storageCategory.Name, storageCategory);
+            }
+
+            storageCategory.SubCategories.Add(settingsCategory.Subcategories.First(x => x.Alias == metadataCategory).Name);
         }
 
         return storageCategories.Values.ToList();

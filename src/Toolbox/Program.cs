@@ -275,7 +275,7 @@ public class Program
     private static void ImportEnPoemsContentFiles()
     {
         _poemImporter.ImportPoemsEn(_engine.DataEn);
-        _dataManager.Save(_engine.DataEn);
+        _dataManager.SaveEn(_engine.DataEn);
         Console.WriteLine("Poems import OK");
 
         _engine.GeneratePoemEnCountFile();

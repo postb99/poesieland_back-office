@@ -18,20 +18,15 @@ public class Engine
     private readonly IDataManager _dataManager;
     public Root Data { get; private set; } = default!;
     public Root DataEn { get; private set; } = default!;
-    public XmlSerializer XmlSerializer { get; }
 
     private PoemImporter? _poemContentImporter;
     
-    private ContentFileGenerator _contentFileGenerator;
 
     public Engine(IConfiguration configuration, IDataManager dataManager)
     {
         _configuration = configuration;
         _dataManager = dataManager;
         Data = new() { Seasons = [] };
-        XmlSerializer = new(typeof(Root));
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        _contentFileGenerator = new(_configuration);
     }
 
     [Obsolete]
