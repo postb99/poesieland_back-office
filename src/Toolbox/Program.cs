@@ -152,7 +152,7 @@ public class Program
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
                 PoemMetadataChecker.CheckPoemsWithoutVerseLength(_engine.Data);
                 PoemMetadataChecker.CheckPoemsWithVariableMetric(_engine.Data);
-                _engine.VerifySeasonHaveCorrectPoemCount();
+                SeasonChecker.VerifySeasonHaveCorrectPoemCount(_engine.Data);
                 _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
                 var outputs = _yamlMetadataChecker.GetMissingTagsInYamlMetadata();
                 foreach (var output in outputs)
@@ -281,7 +281,7 @@ public class Program
         _engine.GeneratePoemEnCountFile();
         Console.WriteLine("Poems count OK");
 
-        _engine.GeneratePoemsEnByDayRadarChartDataFile();
+        _chartDataFileGenerator.GeneratePoemsEnByDayRadarChartDataFile(_engine.DataEn);
         Console.WriteLine("Chart for day radar OK");
 
         _engine.GenerateEnPoemByDayOfWeekPieChartDataFile();
@@ -359,7 +359,7 @@ public class Program
 
     private static void GeneratePoemsLengthPieChartDataFile()
     {
-        _engine.GeneratePoemsLengthBarAndPieChartDataFile(null);
+        _chartDataFileGenerator.GeneratePoemsLengthBarAndPieChartDataFile(_engine.Data, null);
         Console.WriteLine("Poems length pie chart data file OK");
     }
 
@@ -378,11 +378,11 @@ public class Program
         {
             for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
             {
-                _engine.GenerateSeasonCategoriesPieChartDataFile(i);
+                _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, i);
             }
 
             // General chart
-            _engine.GenerateSeasonCategoriesPieChartDataFile(null);
+            _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
 
             // Categories' and tags' radar
             GeneratePoemsCategoriesAndTagsRadarChartDataFile();
@@ -395,9 +395,9 @@ public class Program
         else if (int.TryParse(choice, out var seasonId) &&
                  _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
-            _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+            _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, seasonId);
             // General chart
-            _engine.GenerateSeasonCategoriesPieChartDataFile(null);
+            _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
 
             Console.WriteLine($"Season {seasonId} categories pie chart data file OK");
         }
@@ -411,16 +411,16 @@ public class Program
     {
         // General and season's poems length
         GeneratePoemsLengthPieChartDataFile();
-        _engine.GeneratePoemsLengthBarAndPieChartDataFile(seasonId);
+        _chartDataFileGenerator.GeneratePoemsLengthBarAndPieChartDataFile(_engine.Data, seasonId);
 
         // General and season's metric
         GeneratePoemMetricPieChartDataFile();
         _engine.GeneratePoemMetricBarAndPieChartDataFile(seasonId, false);
 
         // Season's pie
-        _engine.GenerateSeasonCategoriesPieChartDataFile(seasonId);
+        _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, seasonId);
         // General chart
-        _engine.GenerateSeasonCategoriesPieChartDataFile(null);
+        _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
 
         Console.WriteLine(seasonId == 0
             ? "All seasons categories pie chart data file OK"
@@ -448,7 +448,7 @@ public class Program
         // Year tag's radar
         if (importedPoem is not null)
         {
-            _engine.GeneratePoemsOfYearByDayRadarChartDataFile(importedPoem.Date.Year);
+            _chartDataFileGenerator.GeneratePoemsOfYearByDayRadarChartDataFile(_engine.Data, importedPoem.Date.Year);
             Console.WriteLine("Poem's year by day chart data file OK");
         }
 
@@ -470,7 +470,7 @@ public class Program
         _engine.GenerateCategoryMetricBubbleChartDataFile();
 
         // And check data quality
-        _engine.VerifySeasonHaveCorrectPoemCount();
+        SeasonChecker.VerifySeasonHaveCorrectPoemCount(_engine.Data);
         _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
 
         // Les mois

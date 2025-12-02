@@ -104,7 +104,7 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR_EN]!, "2024", "wisdom.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.ImportEn(poemContentFilePath);
+        var (poem, _) = poemContentImporter.ImportEnYaml(poemContentFilePath);
         poem.ShouldNotBeNull();
         poem.Categories.FirstOrDefault()?.Name.ShouldBe("Philosophie");
         poem.Categories.FirstOrDefault()?.SubCategories.FirstOrDefault().ShouldBe("Etre");

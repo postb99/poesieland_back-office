@@ -278,6 +278,41 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
                 return string.Empty;
         }
     }
+    
+    public static string GetRadarEnChartLabel(string monthDay)
+    {
+        var day = monthDay.Substring(3);
+        var month = monthDay.Substring(0, 2);
+        switch (month)
+        {
+            case "01":
+                return day == "01" ? "January" : string.Empty;
+            case "02":
+                return day == "01" ? "February" : string.Empty;
+            case "03":
+                return day == "01" ? "March" : day == "20" ? "Spring" : string.Empty;
+            case "04":
+                return day == "01" ? "April" : string.Empty;
+            case "05":
+                return day == "01" ? "May" : string.Empty;
+            case "06":
+                return day == "01" ? "June" : day == "21" ? "Summer" : string.Empty;
+            case "07":
+                return day == "01" ? "July" : string.Empty;
+            case "08":
+                return day == "01" ? "August" : string.Empty;
+            case "09":
+                return day == "01" ? "September" : day == "23" ? "Fall" : string.Empty;
+            case "10":
+                return day == "01" ? "October" : string.Empty;
+            case "11":
+                return day == "01" ? "November" : string.Empty;
+            case "12":
+                return day == "01" ? "December" : day == "21" ? "Winter" : string.Empty;
+            default:
+                return string.Empty;
+        }
+    }
 
     public static string GetMonthLabel(string month)
     {

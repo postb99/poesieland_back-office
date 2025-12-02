@@ -23,13 +23,15 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// <param name="storageSubCategory">The sub-category to filter poems. If null, sub-category filtering is skipped.</param>
     /// <param name="storageCategory">The category to filter poems. If null, category filtering is skipped.</param>
     /// <param name="forLesMoisExtraTag">A flag indicating whether to filter poems containing the tag "les mois".</param>
+    /// <param name="forNoelExtraTag">A flag indicating whether to filter poems containing the tag "noël".</param>
     public void GeneratePoemsByDayRadarChartDataFile(Root data, Root dataEn,
         string? storageSubCategory, string? storageCategory,
         bool forLesMoisExtraTag = false, bool forNoelExtraTag = false)
     {
-        var isGeneral = storageSubCategory is null && storageCategory is null && !forLesMoisExtraTag && !forNoelExtraTag;
+        var isGeneral = storageSubCategory is null && storageCategory is null && !forLesMoisExtraTag &&
+                        !forNoelExtraTag;
 
-        var poemStringDates = new List<string>();
+        List<string> poemStringDates;
 
         if (storageSubCategory is not null)
         {
@@ -46,13 +48,13 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         else if (forLesMoisExtraTag)
         {
             poemStringDates = data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.ExtraTags.Contains("les mois")).Select(x => x.TextDate)
+                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains("les mois")).Select(x => x.TextDate)
                 .ToList();
         }
         else if (forNoelExtraTag)
         {
             poemStringDates = data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.ExtraTags.Contains("noël")).Select(x => x.TextDate)
+                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains("noël")).Select(x => x.TextDate)
                 .ToList();
         }
         else
@@ -87,8 +89,8 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             // categories
             fileName = $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js";
             chartId = $"poemDay-{storageSubCategory.UnaccentedCleaned()}Radar";
-            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
-                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory).Color;
+            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory)!.Color;
 
             switch (borderColor)
             {
@@ -109,8 +111,8 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             // tags
             fileName = $"poems-day-{storageCategory.UnaccentedCleaned()}-radar.js";
             chartId = $"poemDay-{storageCategory.UnaccentedCleaned()}Radar";
-            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
-                .FirstOrDefault(x => x.Name == storageCategory).Color;
+            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+                .FirstOrDefault(x => x.Name == storageCategory)!.Color;
         }
         else if (forLesMoisExtraTag)
         {
@@ -179,6 +181,264 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         streamWriter2.Close();
     }
 
+    /// <summary>
+    /// Generates bar and pie chart data files for poem lengths, categorized by season or in a general context.
+    /// The method processes poem data from the given `Root` object and creates a bar chart file if a season ID
+    /// is provided, or a pie chart file if the data is for the general context. The files are organized into
+    /// appropriate sub-directories, and the data includes distribution of poem lengths and sonnet counts.
+    /// </summary>
+    /// <param name="data">The primary source of poem data containing seasons and poems information.</param>
+    /// <param name="seasonId">The ID of the season to generate chart data for. If null, generates data for all seasons.</param>
+    public void GeneratePoemsLengthBarAndPieChartDataFile(Root data, int? seasonId)
+    {
+        var isGeneral = seasonId is null;
+        var fileName = isGeneral ? "poems-length-pie.js" : "poems-length-bar.js";
+        var subDir = isGeneral ? "general" : $"season-{seasonId}";
+        var chartId = isGeneral ? "poemLengthPie" : $"season{seasonId}PoemLengthBar";
+
+        var poems = seasonId is not null
+            ? data.Seasons.First(x => x.Id == seasonId).Poems
+            : data.Seasons.SelectMany(x => x.Poems);
+
+        var nbVersesData = new Dictionary<int, int>();
+        var nbSonnets = 0;
+        foreach (var poem in poems)
+        {
+            var nbVerses = poem.VersesCount;
+            if (nbVersesData.TryGetValue(nbVerses, out _))
+            {
+                nbVersesData[nbVerses]++;
+            }
+            else
+            {
+                nbVersesData[nbVerses] = 1;
+            }
+
+            if (poem.IsSonnet)
+            {
+                nbSonnets++;
+            }
+        }
+
+        var nbVersesRange = nbVersesData.Keys.Order().ToList();
+
+        // General pie chart or Season's bar chart
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        var subDirPath = Path.Combine(rootDir, subDir);
+        Directory.CreateDirectory(subDirPath);
+        using var streamWriter = new StreamWriter(Path.Combine(subDirPath, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
+            isGeneral ? ChartType.Pie : ChartType.Bar, isGeneral ? 1 : 2);
+        chartDataFileHelper.WriteBeforeData();
+
+        if (isGeneral)
+        {
+            var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
+            var coloredDataLines = new List<ColoredDataLine>();
+
+            foreach (var nbVerses in nbVersesRange)
+            {
+                var lookup = nbVerses switch
+                {
+                    3 => 0,
+                    26 => 1,
+                    _ => nbVerses / 2
+                };
+
+                var color = metrics.First(m => m.Length == lookup).Color;
+                coloredDataLines.Add(new(nbVerses.ToString(),
+                    nbVersesData[nbVerses], color));
+            }
+
+            chartDataFileHelper.WriteData(coloredDataLines, true);
+
+            chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"]);
+        }
+        else
+        {
+            var nbVersesChartData = new List<DataLine>();
+            var isSonnetChartData = new List<DataLine>();
+
+            foreach (var nbVerses in nbVersesRange)
+            {
+                isSonnetChartData.Add(new(string.Empty, 0));
+
+                nbVersesChartData.Add(new(nbVerses.ToString(),
+                    nbVersesData[nbVerses]));
+            }
+
+            var index = nbVersesRange.FindIndex(x => x == 14);
+            if (index != -1)
+            {
+                isSonnetChartData[index] = new("Sonnets", nbSonnets);
+                nbVersesChartData[index] =
+                    new(nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
+            }
+
+            string[] chartTitles;
+            if (nbSonnets > 0)
+            {
+                chartDataFileHelper.WriteData(nbVersesChartData, false);
+                chartDataFileHelper.WriteData(isSonnetChartData, true);
+                chartTitles = ["Poèmes", "Sonnets"];
+            }
+            else
+            {
+                chartDataFileHelper.WriteData(nbVersesChartData, true);
+                chartTitles = ["Poèmes"];
+            }
+
+            chartDataFileHelper.WriteAfterData(chartId, chartTitles,
+                customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
+        }
+
+        streamWriter.Close();
+    }
+
+    /// <summary>
+    /// Generates a pie chart data file for categories within a season or across all seasons.
+    /// The method processes poem data from the provided `Root` object, optionally filtered
+    /// by a specific season identifier, and writes the resulting chart data to a "categories-pie.js" file
+    /// in the appropriate directory structure.
+    /// </summary>
+    /// <param name="data">The root object containing all seasons and poems data to be processed for chart generation.</param>
+    /// <param name="seasonId">
+    /// An optional season identifier to filter poems by season. If set to null, the chart data will include poems across all seasons.
+    /// </param>
+    public void GenerateSeasonCategoriesPieChartDataFile(Root data, int? seasonId)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        var subDir = seasonId.HasValue ? $"season-{seasonId}" : "general";
+        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!;
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, "categories-pie.js"));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        var byStorageSubcategoryCount = new Dictionary<string, int>();
+
+        var season = seasonId.HasValue ? data.Seasons.First(x => x.Id == seasonId) : null;
+        foreach (var poem in season?.Poems ?? data.Seasons.SelectMany(x => x.Poems))
+        {
+            foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
+            {
+                if (byStorageSubcategoryCount.TryGetValue(subCategory, out _))
+                {
+                    byStorageSubcategoryCount[subCategory]++;
+                }
+                else
+                {
+                    byStorageSubcategoryCount[subCategory] = 1;
+                }
+            }
+        }
+
+        var orderedSubcategories =
+            storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).ToList();
+        var pieChartData = new List<ColoredDataLine>();
+
+        foreach (var subcategory in orderedSubcategories)
+        {
+            if (byStorageSubcategoryCount.TryGetValue(subcategory, out var value))
+                pieChartData.Add(new(subcategory, value,
+                    storageSettings.Categories.SelectMany(x => x.Subcategories)
+                        .First(x => x.Name == subcategory).Color
+                ));
+        }
+
+        chartDataFileHelper.WriteData(pieChartData);
+
+        chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
+        [
+            seasonId.HasValue ? $"{season.EscapedTitleForChartsWithPeriod}" : string.Empty
+        ]);
+        streamWriter.Close();
+    }
+    
+    public void GeneratePoemsEnByDayRadarChartDataFile(Root dataEn)
+    {
+        var poemStringDates = dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
+
+        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
+
+        foreach (var poemStringDate in poemStringDates)
+        {
+            var year = poemStringDate.Substring(6);
+            var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
+            dataDict[day]++;
+        }
+
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR_EN]!, "../charts/general");
+
+        var fileName = "poems-en-day-radar.js";
+        var chartId = "poemEnDayRadar";
+
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Radar);
+        chartDataFileHelper.WriteBeforeData();
+
+        var dataLines = new List<DataLine>();
+
+        foreach (var monthDay in dataDict.Keys)
+        {
+            var value = dataDict[monthDay];
+            dataLines.Add(new(ChartDataFileHelper.GetRadarEnChartLabel(monthDay), value
+            ));
+        }
+
+        chartDataFileHelper.WriteData(dataLines, true);
+
+        chartDataFileHelper.WriteAfterData(chartId, ["Poems by day of year"], string.Empty, string.Empty);
+        streamWriter.Close();
+    }
+
+    /// <summary>
+    /// Generates a radar chart data file for poems organized by the day of the year for a specific year.
+    /// The method processes poem data from the provided `Root` object, filtering by the specified year,
+    /// and writes chart data files in the format required for radar charts.
+    /// The generated file is named in the format: poems-day-{year}-radar.js
+    /// </summary>
+    /// <param name="data">The primary source of poem data containing seasons and poems information.</param>
+    /// <param name="year">The year for which poems should be filtered and represented in the chart.</param>
+    public void GeneratePoemsOfYearByDayRadarChartDataFile(Root data, int year)
+    {
+        var poemStringDates = data.Seasons.SelectMany(x => x.Poems)
+            .Where(x => x.Date.Year == year).Select(x => x.TextDate)
+            .ToList();
+
+        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
+
+        foreach (var poemStringDate in poemStringDates)
+        {
+            var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
+            dataDict[day]++;
+        }
+
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        var fileName = $"poems-day-{year}-radar.js";
+        var chartId = $"poemDay-{year}Radar";
+
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Radar);
+        chartDataFileHelper.WriteBeforeData();
+
+        var dataLines = new List<DataLine>();
+
+        foreach (var monthDay in dataDict.Keys)
+        {
+            var value = dataDict[monthDay];
+            dataLines.Add(new(ChartDataFileHelper.GetRadarChartLabel(monthDay), value));
+        }
+
+        chartDataFileHelper.WriteData(dataLines, true);
+
+        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l\\\'année"], string.Empty,
+            string.Empty);
+        streamWriter.Close();
+    }
+
     public List<string> GetTopMostMonths(Dictionary<string, int> monthDayDict)
     {
         var monthDict = new Dictionary<string, int>();
@@ -195,6 +455,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             }
         }
 
-        return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key).Select(ChartDataFileHelper.GetMonthLabel).ToList();
+        return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key)
+            .Select(ChartDataFileHelper.GetMonthLabel).ToList();
     }
 }

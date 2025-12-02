@@ -141,12 +141,7 @@ public class PoemImporter(IConfiguration configuration)
     /// <exception cref="IOException">Thrown when there is an issue reading the content file.</exception>
     public (Poem, int) Import(string contentFilePath)
     {
-        _poem = new();
-        _isInMetadata = false;
-        _metadataProcessor = null;
-        _contentProcessor = null;
-        HasYamlMetadata = false;
-        HasTomlMetadata = false;
+        Init();
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
@@ -171,7 +166,7 @@ public class PoemImporter(IConfiguration configuration)
     }
     
     /// <summary>
-    /// Imports a poem in English from the specified content file, processes its metadata and content,
+    /// Imports a poem in English from the specified content file, processes its YAML metadata and content,
     /// and returns a tuple with the constructed poem and its positional index.
     /// </summary>
     /// <param name="contentFilePath">The full file path to the poem content file to be imported. This should include any metadata and content related to the poem.</param>
@@ -179,14 +174,9 @@ public class PoemImporter(IConfiguration configuration)
     /// <exception cref="FileNotFoundException">Thrown when the specified content file does not exist.</exception>
     /// <exception cref="InvalidDataException">Thrown when the content file contains invalid or malformed data.</exception>
     /// <exception cref="IOException">Thrown when there is an issue reading the content file.</exception>
-    public (Poem, int) ImportEn(string contentFilePath)
+    public (Poem, int) ImportEnYaml(string contentFilePath)
     {
-        _poem = new();
-        _isInMetadata = false;
-        _metadataProcessor = null;
-        _contentProcessor = null;
-        HasYamlMetadata = false;
-        HasTomlMetadata = false;
+       Init();
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
@@ -239,7 +229,7 @@ public class PoemImporter(IConfiguration configuration)
 
             foreach (var poemContentPath in poemFilePaths)
             {
-                var (poem, position) = ImportEn(poemContentPath);
+                var (poem, position) = ImportEnYaml(poemContentPath);
 
                 poemsByPosition.Add(position, poem);
             }
@@ -396,6 +386,20 @@ public class PoemImporter(IConfiguration configuration)
         public string DetailedMetric { get; set; }
         
         public string Info { get; set; }
+    }
+
+    /// <summary>
+    /// Initializes the fields and properties required for processing a poem,
+    /// setting default values and clearing any existing state for a new import operation.
+    /// </summary>
+    private void Init()
+    {
+        _poem = new();
+        _isInMetadata = false;
+        _metadataProcessor = null;
+        _contentProcessor = null;
+        HasYamlMetadata = false;
+        HasTomlMetadata = false;
     }
 
     /// <summary>
