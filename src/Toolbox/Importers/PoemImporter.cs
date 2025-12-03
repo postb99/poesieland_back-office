@@ -6,7 +6,12 @@ using Category = Toolbox.Domain.Category;
 
 namespace Toolbox.Importers;
 
-public class PoemImporter(IConfiguration configuration)
+public interface IPoemImporter
+{
+    (Poem, int) Import(string contentFilePath);
+}
+
+public class PoemImporter(IConfiguration configuration): IPoemImporter
 {
     private Poem _poem;
     private int _position;

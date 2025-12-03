@@ -37,35 +37,6 @@ public class Engine
         DataEn = dataEn;
     }
     
-
-
-    public void VerifySeasonHaveCorrectWeightInPoemFile(int? seasonId)
-    {
-        if (seasonId is null)
-        {
-            VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id);
-            VerifySeasonHaveCorrectWeightInPoemFile(Data.Seasons.Last().Id - 1);
-            return;
-        }
-
-        var season = Data.Seasons.First(s => s.Id == seasonId);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var seasonDirName = Directory.EnumerateDirectories(rootDir)
-            .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
-        var poemFiles = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("index.md"));
-
-        foreach (var poemFile in poemFiles)
-        {
-            var (poem, position) = (_poemContentImporter ??= new(_configuration)).Import(poemFile);
-            var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
-            var poemIndex = season.Poems.IndexOf(poemInSeason);
-            if (poemIndex != -1 && poemIndex != position)
-            {
-                throw new($"Poem {poem.Id} should have weight {poemIndex + 1}!");
-            }
-        }
-    }
-
     public void GeneratePoemMetricBarAndPieChartDataFile(int? seasonId, bool useDetailedMetric)
     {
         var isGeneral = seasonId is null;

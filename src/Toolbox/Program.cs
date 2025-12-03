@@ -21,6 +21,7 @@ public class Program
     private static CustomPageChecker _customPageChecker;
     private static YamlMetadataChecker _yamlMetadataChecker;
     private static ChartDataFileGenerator _chartDataFileGenerator;
+    private static PoemMetadataChecker _poemMetadataChecker;
 
     public static void Main(string[] args)
     {
@@ -35,6 +36,7 @@ public class Program
         _seasonMetadataImporter = new SeasonMetadataImporter(_configuration);
         _customPageChecker = new CustomPageChecker(_configuration);
         _chartDataFileGenerator = new ChartDataFileGenerator(_configuration);
+        _poemMetadataChecker = new PoemMetadataChecker(_configuration, _poemImporter);
 
         _engine = new(_configuration, _dataManager);
         _engine.Load();
@@ -153,7 +155,7 @@ public class Program
                 PoemMetadataChecker.CheckPoemsWithoutVerseLength(_engine.Data);
                 PoemMetadataChecker.CheckPoemsWithVariableMetric(_engine.Data);
                 SeasonChecker.VerifySeasonHaveCorrectPoemCount(_engine.Data);
-                _engine.VerifySeasonHaveCorrectWeightInPoemFile(null);
+                _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_engine.Data, null);
                 var outputs = _yamlMetadataChecker.GetMissingTagsInYamlMetadata();
                 foreach (var output in outputs)
                 {
@@ -471,7 +473,7 @@ public class Program
 
         // And check data quality
         SeasonChecker.VerifySeasonHaveCorrectPoemCount(_engine.Data);
-        _engine.VerifySeasonHaveCorrectWeightInPoemFile(seasonId);
+        _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_engine.Data, seasonId);
 
         // Les mois
         var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _engine.Data);
