@@ -1,3 +1,4 @@
+using System.Globalization;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
 using Toolbox.Settings;
@@ -354,7 +355,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         ]);
         streamWriter.Close();
     }
-    
+
     public void GeneratePoemsEnByDayRadarChartDataFile(Root dataEn)
     {
         var poemStringDates = dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
@@ -450,7 +451,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// </summary>
     /// <param name="data">The root object containing seasons and poems data.</param>
     /// <param name="seasonId">An optional season identifier to filter poems by season. If null, all seasons are included.</param>
-     public void GeneratePoemMetricBarAndPieChartDataFile(Root data, int? seasonId)
+    public void GeneratePoemMetricBarAndPieChartDataFile(Root data, int? seasonId)
     {
         var isGeneral = seasonId is null;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
@@ -596,6 +597,104 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         }
     }
 
+    /// <summary>
+    /// Generates a pie chart data file representing the intensity of poem creation by counting the number of poems created on each day.
+    /// The method aggregates poem data from two `Root` objects, processes the intensity of poem creation,
+    /// and generates output files including a pie chart data file `poem-intensity-pie.js`
+    /// and a markdown file `most_intense_days.md` listing the most intense creation days.
+    /// </summary>
+    /// <param name="data">The primary source of poem data containing seasons and poems information.</param>
+    /// <param name="dataEn">The secondary source of poem data, used for "general" context.</param>
+    public void GeneratePoemIntensityPieChartDataFile(Root data, Root dataEn)
+    {
+        var dataDict = new Dictionary<string, int>();
+
+        var fullDates = data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate)
+            .Where(x => x != "01.01.1994").ToList();
+
+        // Add EN poems
+        fullDates.AddRange(dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
+
+        foreach (var fullDate in fullDates)
+        {
+            if (!dataDict.TryAdd(fullDate, 1))
+            {
+                dataDict[fullDate]++;
+            }
+        }
+
+        var intensityDict = new Dictionary<int, int>();
+
+        foreach (var dataDictItem in dataDict)
+        {
+            var value = dataDictItem.Value;
+            if (!intensityDict.TryAdd(value, 1))
+            {
+                intensityDict[value]++;
+            }
+        }
+
+        var dataLines = new List<DataLine>();
+        var orderedIntensitiesKeys = intensityDict.Keys.Order();
+        var baseColor = "rgba(72, 149, 239, {0})";
+        var baseAlpha = 0.5;
+        foreach (var key in orderedIntensitiesKeys)
+        {
+            if (key == 0) continue;
+            dataLines.Add(new ColoredDataLine($"{key} {(key == 1 ? "poème" : "poèmes")}",
+                intensityDict[key],
+                string.Format(baseColor,
+                    (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+        }
+
+        var fileName = "poem-intensity-pie.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemIntensityPie", ["Les jours de création sont-ils intenses ?"]);
+        streamWriter.Close();
+
+        // Most intense days content file
+        var intensityKeys = intensityDict.Keys.OrderDescending().Where(x => x > 2);
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!,
+            "../includes/most_intense_days.md");
+        var streamWriter2 = new StreamWriter(filePath);
+
+        streamWriter2.WriteLine("+++");
+        streamWriter2.WriteLine("title = \"Les jours les plus intenses\"");
+        streamWriter2.WriteLine("+++");
+
+        foreach (var key in intensityKeys)
+        {
+            streamWriter2.WriteLine($"- {key} poèmes en un jour :");
+            var matchingIntensities = dataDict.Where(x => x.Value == key).Select(x => x.Key);
+            // ReSharper disable once PossibleMultipleEnumeration
+            var years = matchingIntensities.Select(x => x.Substring(6)).Distinct();
+
+            foreach (var year in years)
+            {
+                // ReSharper disable once PossibleMultipleEnumeration
+                var dates = matchingIntensities.Where(x => x.Substring(6) == year).Select(x => x.ToDateTime()).Order();
+                streamWriter2.Write($"  - {year} : ");
+                streamWriter2.WriteLine(string.Join(", ", dates.Select(x => x.ToString("ddd dd MMM"))));
+            }
+        }
+
+        streamWriter2.Close();
+    }
+
+    /// <summary>
+    /// Retrieves the top most represented months from the provided dictionary of month-day data.
+    /// The method aggregates the data by month, ranks the months by their total occurrences,
+    /// and returns a list of the top four months with the highest occurrence counts.
+    /// </summary>
+    /// <param name="monthDayDict">A dictionary where the keys are month-day strings in the format "MM-DD"
+    /// and the values are the associated occurrence counts.</param>
+    /// <returns>A list of the top four month names, ordered by their occurrence counts in descending order.</returns>
     public List<string> GetTopMostMonths(Dictionary<string, int> monthDayDict)
     {
         var monthDict = new Dictionary<string, int>();
@@ -658,5 +757,4 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             return coloredDataLine;
         }
     }
-
 }

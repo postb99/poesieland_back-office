@@ -434,7 +434,7 @@ public class Program
             forLesMoisExtraTag: true);
         _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null,
             forNoelExtraTag: true);
-        _engine.GeneratePoemIntensityPieChartDataFile();
+        _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_engine.Data, _engine.DataEn);
         _engine.GeneratePoemByDayOfWeekPieChartDataFile();
         Console.WriteLine(
             "Poems by day general and specific, poem intensity, poem by day of week, chart data files OK");
@@ -507,7 +507,7 @@ public class Program
                 forLesMoisExtraTag: true);
             _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null,
                 forNoelExtraTag: true);
-            _engine.GeneratePoemIntensityPieChartDataFile();
+            _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_engine.Data, _engine.DataEn);
             _engine.GeneratePoemByDayOfWeekPieChartDataFile();
             Console.WriteLine(
                 "Poems by day general and specific, poem intensity, poem by day of week, chart data files OK");
