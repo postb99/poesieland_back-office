@@ -439,6 +439,163 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         streamWriter.Close();
     }
 
+    /// <summary>
+    /// Generates bar and pie chart data files based on poem metrics, such as verse length,
+    /// and categorizes them by seasons or a general context.
+    /// This method processes the given poems from the Root object and distinguishes regular,
+    /// variable, and undefined metrics. It outputs:
+    /// - A pie chart file `poems-verse-length-pie.js` when a general context is used (seasonId is null).
+    /// - A bar chart file `poems-verse-length-bar.js` when a specific season is selected.
+    /// - A bar chart file `metrique_variable-bar.js` when a general context is used (seasonId is null).
+    /// </summary>
+    /// <param name="data">The root object containing seasons and poems data.</param>
+    /// <param name="seasonId">An optional season identifier to filter poems by season. If null, all seasons are included.</param>
+     public void GeneratePoemMetricBarAndPieChartDataFile(Root data, int? seasonId)
+    {
+        var isGeneral = seasonId is null;
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        var fileName = isGeneral ? "poems-verse-length-pie.js" : "poems-verse-length-bar.js";
+        var subDir = isGeneral ? "general" : $"season-{seasonId}";
+        var chartId = isGeneral ? "poemVerseLengthPie" : $"season{seasonId}VerseLengthBar";
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
+            isGeneral ? ChartType.Pie : ChartType.Bar, 1);
+        chartDataFileHelper.WriteBeforeData();
+        var regularMetricData = new Dictionary<int, int>();
+        var variableMetricData = new Dictionary<string, int>();
+        var nbUndefinedVerseLength = 0;
+        var poems = seasonId is not null
+            ? data.Seasons.First(x => x.Id == seasonId).Poems
+            : data.Seasons.SelectMany(x => x.Poems);
+
+        foreach (var poem in poems)
+        {
+            if (string.IsNullOrEmpty(poem.VerseLength))
+            {
+                nbUndefinedVerseLength++;
+            }
+            else if (poem.HasVariableMetric)
+            {
+                if (isGeneral)
+                {
+                    foreach (var metric in poem.VerseLength.Split(','))
+                    {
+                        // Standard metrics defined in variable metrics go to general metric pie chart
+                        if (!int.TryParse(metric.Trim(), out var verseLength)) continue;
+                        if (regularMetricData.TryGetValue(verseLength, out _))
+                        {
+                            regularMetricData[verseLength]++;
+                        }
+                        else
+                        {
+                            regularMetricData[verseLength] = 1;
+                        }
+                    }
+                }
+
+                // Detailed variable metric go to general metric bar chart
+                if (variableMetricData.TryGetValue(poem.DetailedMetric, out _))
+                {
+                    variableMetricData[poem.DetailedMetric]++;
+                }
+                else
+                {
+                    variableMetricData[poem.DetailedMetric] = 1;
+                }
+            }
+            else
+            {
+                var verseLength = int.Parse(poem.VerseLength);
+                if (regularMetricData.TryGetValue(verseLength, out _))
+                {
+                    regularMetricData[verseLength]++;
+                }
+                else
+                {
+                    regularMetricData[verseLength] = 1;
+                }
+            }
+        }
+
+        var regularMetricRange = regularMetricData.Keys.Order().ToList();
+        var variableMetricRange = variableMetricData.Keys.Order().ToList();
+
+        var regularMetricChartData = new List<DataLine>();
+        var variableMetricChartData = new List<ColoredDataLine>();
+
+        foreach (var metricValue in regularMetricRange)
+        {
+            regularMetricChartData.Add(new(
+                metricValue.ToString(), regularMetricData[metricValue]));
+        }
+
+        foreach (var verseLength in variableMetricRange)
+        {
+            variableMetricChartData.Add(new(verseLength, variableMetricData[verseLength], "rgba(72, 149, 239, 1)"));
+        }
+
+        var undefinedVerseLengthChartData = new ColoredDataLine
+        ("Pas de données pour l\\'instant", nbUndefinedVerseLength, "rgb(211, 211, 211)"
+        );
+
+        // General pie chart or Season's bar chart
+        var dataLines = new List<DataLine>();
+
+        if (isGeneral)
+        {
+            var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
+            var coloredDataLines = new List<ColoredDataLine>();
+
+            foreach (var metricValue in regularMetricRange)
+            {
+                var term = metricValue == 1 ? "syllabe" : "syllabes";
+                coloredDataLines.Add(new($"{metricValue} {term}",
+                    regularMetricData[metricValue], metrics.First(m => m.Length == metricValue).Color));
+            }
+
+            chartDataFileHelper.WriteData(coloredDataLines, true);
+
+            chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"]);
+            streamWriter.Close();
+        }
+        else
+        {
+            dataLines.AddRange(regularMetricChartData);
+            dataLines.AddRange(variableMetricChartData);
+            if (nbUndefinedVerseLength > 0)
+                dataLines.Add(undefinedVerseLengthChartData);
+
+            chartDataFileHelper.WriteData(dataLines, true);
+
+            chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
+                customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
+            streamWriter.Close();
+        }
+
+        // Variable metric general bar chart
+        if (isGeneral)
+        {
+            fileName = "metrique_variable-bar.js";
+            chartId = "metrique_variableBar";
+            using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+            var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartType.Bar, 1);
+            chartDataFileHelper2.WriteBeforeData();
+
+            dataLines = [];
+            dataLines.AddRange(variableMetricChartData.Select(UpdateVariableMetricColor));
+
+            chartDataFileHelper2.WriteData(dataLines, true);
+
+            chartDataFileHelper2.WriteAfterData(chartId,
+                [
+                    "Orange : vers impair puis pair, mauve : vers pair puis impair, bleu : vers pairs, vert : vers impairs"
+                ],
+                customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
+            streamWriter2.Close();
+        }
+    }
+
     public List<string> GetTopMostMonths(Dictionary<string, int> monthDayDict)
     {
         var monthDict = new Dictionary<string, int>();
@@ -458,4 +615,48 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key)
             .Select(ChartDataFileHelper.GetMonthLabel).ToList();
     }
+
+    /// <summary>
+    /// Updates the color of a given metric data line based on the parity of the metric values.
+    /// The color mapping is determined by the combination of even and odd values in the metric.
+    /// </summary>
+    /// <param name="coloredDataLine">The metric data line for which the color needs to be updated.</param>
+    /// <returns>A new <see cref="ColoredDataLine"/> object with the updated color information.
+    /// If the format of the metric data cannot be parsed, the original data line is returned.</returns>
+    private ColoredDataLine UpdateVariableMetricColor(ColoredDataLine coloredDataLine)
+    {
+        try
+        {
+            var metrics = coloredDataLine.Label.ToIntArray();
+            if (metrics[0] % 2 == 0 && metrics[1] % 2 == 0)
+            {
+                // twice even => color of hexasyllabe
+                return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                    "rgb(174, 214, 241)");
+            }
+
+            if (metrics[0] % 2 == 1 && metrics[1] % 2 == 1)
+            {
+                // twice odd => color of octosyllabe
+                return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                    "rgb(162, 217, 206)");
+            }
+
+            if (metrics[0] % 2 == 1 && metrics[1] % 2 == 0)
+            {
+                // odd then even => color of alexandrin
+                return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                    "rgb(237, 187, 153)");
+            }
+
+            // even then odd => color of tetrasyllabe
+            return new ColoredDataLine(coloredDataLine.Label, coloredDataLine.Value,
+                "rgb(215, 189, 226)");
+        }
+        catch (FormatException)
+        {
+            return coloredDataLine;
+        }
+    }
+
 }
