@@ -1,4 +1,3 @@
-using AutoFixture;
 using Shouldly;
 using Tests.Customizations;
 using Toolbox.Consistency;
@@ -17,8 +16,14 @@ public class SeasonCheckerTest : IClassFixture<BasicFixture>
     [InlineAutoDomainData(49, 0)]
     public void ShouldNotThrowWhenSeasonPoemCountsAreBelowLimit(int firstSeasonPoemCount, int secondSeasonPoemCount)
     {
-        var fixture = new Fixture { RepeatCount = 50 };
-        var data = new Root {Seasons = {fixture.Create<Season>(), fixture.Create<Season>()}};
+        var data = new Root
+        {
+            Seasons =
+            {
+                new Season { Poems = Get(50).ToList() },
+                new Season { Poems = Get(50).ToList() }
+            }
+        };
         data.Seasons[0].Poems = data.Seasons[0].Poems.Take(firstSeasonPoemCount).ToList();
         data.Seasons[1].Poems = data.Seasons[1].Poems.Take(secondSeasonPoemCount).ToList();
 
@@ -32,8 +37,14 @@ public class SeasonCheckerTest : IClassFixture<BasicFixture>
     public void ShouldThrowWhenSeasonPoemCountsAreAboveLimit(int firstSeasonPoemCount, int secondSeasonPoemCount,
         int expectedInErrorSeasonIndex, string expectedErrorMessage)
     {
-        var fixture = new Fixture { RepeatCount = 51 };
-        var data = new Root {Seasons = {fixture.Create<Season>(), fixture.Create<Season>()}};
+        var data = new Root
+        {
+            Seasons =
+            {
+                new Season { Poems = Get(51).ToList() },
+                new Season { Poems = Get(51).ToList() }
+            }
+        };
         data.Seasons[0].Poems = data.Seasons[0].Poems.Take(firstSeasonPoemCount).ToList();
         data.Seasons[1].Poems = data.Seasons[1].Poems.Take(secondSeasonPoemCount).ToList();
 
@@ -41,5 +52,13 @@ public class SeasonCheckerTest : IClassFixture<BasicFixture>
         var ex = act.ShouldThrow<Exception>();
         ex.Message.ShouldBe(expectedErrorMessage.Replace("{desc}",
             $"[{data.Seasons[expectedInErrorSeasonIndex].Id} - {data.Seasons[expectedInErrorSeasonIndex].Name}]: {data.Seasons[expectedInErrorSeasonIndex].Poems.Count}"));
+    }
+
+    private static IEnumerable<Poem> Get(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            yield return new Poem();
+        }
     }
 }
