@@ -284,10 +284,17 @@ public class Program
         Console.WriteLine("Poems count OK");
 
         _chartDataFileGenerator.GeneratePoemsEnByDayRadarChartDataFile(_engine.DataEn);
-        Console.WriteLine("Chart for day radar OK");
+        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_engine.Data, _engine.DataEn, null, null);
+        Console.WriteLine("Charts for day radar OK");
+        
+        _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_engine.Data, _engine.DataEn);
+        Console.WriteLine("Poem intensity chart OK");
 
         _engine.GenerateEnPoemByDayOfWeekPieChartDataFile();
         Console.WriteLine("Chart for day of week OK");
+        
+        _engine.GeneratePoemIntervalBarChartDataFile(null);
+        Console.WriteLine("Poem interval bar chart OK");
     }
 
     private static void GeneratePoemContentFile(MenuItem menuChoice)
