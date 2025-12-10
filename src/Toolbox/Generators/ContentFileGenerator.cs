@@ -86,4 +86,38 @@ public class ContentFileGenerator(IConfiguration configuration)
             GeneratePoemFile(data, poem);
         }
     }
+
+    /// <summary>
+    /// Generates files containing the total count of French poems and variable metric poems.
+    /// Output files:
+    /// - "poem_count.md"
+    /// - "variable_metric_poem_count.md".
+    /// </summary>
+    /// <param name="data">The root object containing French seasons and their respective poems.</param>
+    public void GeneratePoemCountFile(Root data)
+    {
+        var poemCount = data.Seasons.Select(x => x.Poems.Count).Sum();
+        var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count.md");
+        File.WriteAllText(poemCountFilePath, poemCount.ToString());
+
+        // And for variable verse
+        var variableMetricPoemCount = data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric)).Count();
+        var variableMetricPoemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "variable_metric_poem_count.md");
+        File.WriteAllText(variableMetricPoemCountFilePath, variableMetricPoemCount.ToString());
+    }
+
+    /// <summary>
+    /// Generates a file containing the English poems total count.
+    /// Output file: "poem_count_en.md".
+    /// </summary>
+    /// <param name="dataEn">The root object containing English poems arranged by season.</param>
+    public void GeneratePoemEnCountFile(Root dataEn)
+    {
+        var poemCount = dataEn.Seasons.Select(x => x.Poems.Count).Sum();
+        var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count_en.md");
+        File.WriteAllText(poemCountFilePath, poemCount.ToString());
+    }
 }

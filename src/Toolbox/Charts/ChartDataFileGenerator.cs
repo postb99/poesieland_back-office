@@ -19,8 +19,8 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// - poems-day-radar.js
     /// - days_without_creation.md
     /// </summary>
-    /// <param name="data">The primary source of poem data containing seasons and poems information.</param>
-    /// <param name="dataEn">The secondary source of poem data, used for "general" context.</param>
+    /// <param name="data">The primary source of French poems data.</param>
+    /// <param name="dataEn">The secondary source of English poems data.</param>
     /// <param name="storageSubCategory">The sub-category to filter poems. If null, sub-category filtering is skipped.</param>
     /// <param name="storageCategory">The category to filter poems. If null, category filtering is skipped.</param>
     /// <param name="forLesMoisExtraTag">A flag indicating whether to filter poems containing the tag "les mois".</param>
@@ -188,7 +188,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// is provided, or a pie chart file if the data is for the general context. The files are organized into
     /// appropriate sub-directories, and the data includes distribution of poem lengths and sonnet counts.
     /// </summary>
-    /// <param name="data">The primary source of poem data containing seasons and poems information.</param>
+    /// <param name="data">The primary source of French poems data.</param>
     /// <param name="seasonId">The ID of the season to generate chart data for. If null, generates data for all seasons.</param>
     public void GeneratePoemsLengthBarAndPieChartDataFile(Root data, int? seasonId)
     {
@@ -351,11 +351,18 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
         [
-            seasonId.HasValue ? $"{season.EscapedTitleForChartsWithPeriod}" : string.Empty
+            seasonId.HasValue ? $"{season!.EscapedTitleForChartsWithPeriod}" : string.Empty
         ]);
         streamWriter.Close();
     }
 
+    /// <summary>
+    /// Generates a radar chart data file for English poems categorized by the day of the year.
+    /// The method processes poem data from the provided `Root` object, extracts dates of poems,
+    /// and compiles a dataset representing the number of poems created on each day throughout
+    /// the year. The resulting chart data is written to a specified file.
+    /// </summary>
+    /// <param name="dataEn">The source of English poems.</param>
     public void GeneratePoemsEnByDayRadarChartDataFile(Root dataEn)
     {
         var poemStringDates = dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
@@ -398,9 +405,9 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// Generates a radar chart data file for poems organized by the day of the year for a specific year.
     /// The method processes poem data from the provided `Root` object, filtering by the specified year,
     /// and writes chart data files in the format required for radar charts.
-    /// The generated file is named in the format: poems-day-{year}-radar.js
+    /// The generated file is named in the format: "poems-day-{year}-radar.js".
     /// </summary>
-    /// <param name="data">The primary source of poem data containing seasons and poems information.</param>
+    /// <param name="data">The primary source of French poems data.</param>
     /// <param name="year">The year for which poems should be filtered and represented in the chart.</param>
     public void GeneratePoemsOfYearByDayRadarChartDataFile(Root data, int year)
     {
@@ -445,9 +452,9 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// and categorizes them by seasons or a general context.
     /// This method processes the given poems from the Root object and distinguishes regular,
     /// variable, and undefined metrics. It outputs:
-    /// - A pie chart file `poems-verse-length-pie.js` when a general context is used (seasonId is null).
-    /// - A bar chart file `poems-verse-length-bar.js` when a specific season is selected.
-    /// - A bar chart file `metrique_variable-bar.js` when a general context is used (seasonId is null).
+    /// - A pie chart file "poems-verse-length-pie.js" when a general context is used (seasonId is null).
+    /// - A bar chart file "poems-verse-length-bar.js" when a specific season is selected.
+    /// - A bar chart file "metrique_variable-bar.js" when a general context is used (seasonId is null).
     /// </summary>
     /// <param name="data">The root object containing seasons and poems data.</param>
     /// <param name="seasonId">An optional season identifier to filter poems by season. If null, all seasons are included.</param>
@@ -600,11 +607,11 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// <summary>
     /// Generates a pie chart data file representing the intensity of poem creation by counting the number of poems created on each day.
     /// The method aggregates poem data from two `Root` objects, processes the intensity of poem creation,
-    /// and generates output files including a pie chart data file `poem-intensity-pie.js`
-    /// and a markdown file `most_intense_days.md` listing the most intense creation days.
+    /// and generates output files: a pie chart data file "poem-intensity-pie.js"
+    /// and a markdown file "most_intense_days.md" listing the most intense creation days.
     /// </summary>
-    /// <param name="data">The primary source of poem data containing seasons and poems information.</param>
-    /// <param name="dataEn">The secondary source of poem data, used for "general" context.</param>
+    /// <param name="data">The primary source of French poems data.</param>
+    /// <param name="dataEn">The secondary source of English poems data.</param>
     public void GeneratePoemIntensityPieChartDataFile(Root data, Root dataEn)
     {
         var dataDict = new Dictionary<string, int>();
@@ -685,6 +692,527 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         }
 
         streamWriter2.Close();
+    }
+
+    /// <summary>
+    /// Processes and generates a pie chart data file representing the distribution of poems
+    /// categorized by the day of the week on which they were written. This method consolidates
+    /// data from two `Root` objects (primary and secondary sources) and calculates poem counts
+    /// for each day of the week, identified as Monday through Sunday.
+    /// The generated "poem-dayofweek-pie.js" file will include visual data for each day of the week with corresponding
+    /// values and colors.
+    /// </summary>
+    /// <param name="data">The primary source of French poems data.</param>
+    /// <param name="dataEn">The secondary source of English poems data.</param>
+    public void GeneratePoemByDayOfWeekPieChartDataFile(Root data, Root dataEn)
+    {
+        var dataDict = new Dictionary<int, int>();
+
+        var dayOfWeekData = data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
+            .Select(x => x.Date.DayOfWeek).ToList();
+
+        // Add EN poems
+        dayOfWeekData.AddRange(dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.Date.DayOfWeek));
+
+        foreach (var dayOfWeek in dayOfWeekData)
+        {
+            if (!dataDict.TryAdd((int)dayOfWeek, 1))
+            {
+                dataDict[(int)dayOfWeek]++;
+            }
+        }
+
+        var dataLines = new List<DataLine>();
+        var baseColor = "rgba(72, 149, 239, {0})";
+        var baseAlpha = 0.2;
+        int[] daysOfWeek = [1, 2, 3, 4, 5, 6, 0];
+        foreach (var key in daysOfWeek)
+        {
+            dataLines.Add(new ColoredDataLine(
+                key == 1 ? "Lundi" :
+                key == 2 ? "Mardi" :
+                key == 3 ? "Mercredi" :
+                key == 4 ? "Jeudi" :
+                key == 5 ? "Vendredi" :
+                key == 6 ? "Samedi" : "Dimanche",
+                dataDict[key],
+                string.Format(baseColor,
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+        }
+
+        var fileName = "poem-dayofweek-pie.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", ["Par jour de la semaine"]);
+        streamWriter.Close();
+    }
+
+    /// <summary>
+    /// Generates a pie chart data file for English poems based on the day of the week they are dated.
+    /// The method processes poems from the given `Root` object and categorizes them by the day of the week.
+    /// The generated "poem-en-dayofweek-pie.js" file will include visual data for each day of the week with corresponding
+    /// values and colors.
+    /// </summary>
+    /// <param name="dataEn">The source of English poems data.</param>
+    public void GenerateEnPoemByDayOfWeekPieChartDataFile(Root dataEn)
+    {
+        var dataDict = new Dictionary<int, int>();
+
+        var dayOfWeekData = dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.Date.DayOfWeek);
+
+        foreach (var dayOfWeek in dayOfWeekData)
+        {
+            if (!dataDict.TryAdd((int)dayOfWeek, 1))
+            {
+                dataDict[(int)dayOfWeek]++;
+            }
+        }
+
+        var dataLines = new List<DataLine>();
+        var baseColor = "rgba(72, 149, 239, {0})";
+        var baseAlpha = 0.2;
+        int[] daysOfWeek = [1, 2, 3, 4, 5, 6, 0];
+        foreach (var key in daysOfWeek)
+        {
+            dataLines.Add(new ColoredDataLine(
+                key == 1 ? "Monday" :
+                key == 2 ? "Tuesday" :
+                key == 3 ? "Wednesday" :
+                key == 4 ? "Thursday" :
+                key == 5 ? "Friday" :
+                key == 6 ? "Saturday" : "Sunday",
+                dataDict[key],
+                string.Format(baseColor,
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
+                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+        }
+
+        var fileName = "poem-en-dayofweek-pie.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR_EN]!);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "../charts/general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData("poemEnDayOfWeekPie", ["By day of week"]);
+        streamWriter.Close();
+    }
+
+    /// <summary>
+    /// Generates a bar chart data file for poems categorized by season and additional filters.
+    /// The resulting file captures seasonal trends in poem data and is stored in the
+    /// taxonomy subdirectory. The method allows filtering poems based on sub-category,
+    /// category, or specific poem forms or features such as acrostiche, sonnet, and others.
+    /// Following files may be generated, depending on the applied filters:
+    /// - poems-{storageSubCategory}-bar.js
+    /// - poems-{storageCategory}-bar.js
+    /// - Various files for other poem types like acrostiche, sonnet, and patterns.
+    /// </summary>
+    /// <param name="data">The primary source of poem data, including seasonal information.</param>
+    /// <param name="storageSubCategory">The sub-category to filter poems. If null, filtering is skipped.</param>
+    /// <param name="storageCategory">The category to filter poems. If null, filtering is skipped.</param>
+    /// <param name="forAcrostiche">A flag indicating to include poems of type "acrostiche".</param>
+    /// <param name="forSonnet">A flag indicating to include poems of type "sonnet".</param>
+    /// <param name="forPantoun">A flag indicating to include poems of type "pantoun".</param>
+    /// <param name="forVariableMetric">A flag indicating to include poems with variable metrics.</param>
+    /// <param name="forRefrain">A flag indicating to include poems with a refrain.</param>
+    /// <param name="forMetric">An optional numeric metric filter for poems.</param>
+    /// <param name="forLovecat">A flag indicating to include poems in the "lovecat" category.</param>
+    /// <param name="forLesMois">A flag indicating to include poems categorized under "les mois".</param>
+    public void GenerateOverSeasonsChartDataFile(Root data, string? storageSubCategory, string? storageCategory,
+        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
+        bool forRefrain = false, int? forMetric = null, bool forLovecat = false, bool forLesMois = false)
+    {
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        var fileName = string.Empty;
+
+        var chartId = string.Empty;
+        var borderColor = "rgba(72, 149, 239, 1)";
+
+        if (storageSubCategory is not null)
+        {
+            fileName = $"poems-{storageSubCategory.UnaccentedCleaned()}-bar.js";
+            chartId = $"poems-{storageSubCategory.UnaccentedCleaned()}Bar";
+            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+                .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory)!.Color;
+
+            switch (borderColor)
+            {
+                // Use some not too light colors
+                case "rgba(254, 231, 240, 1)":
+                    borderColor = "rgba(255, 194, 209, 1)";
+                    break;
+                case "rgba(247, 235, 253, 1)":
+                    borderColor = "rgba(234, 191, 250, 1)";
+                    break;
+                case "rgba(244, 254, 254, 1)":
+                    borderColor = "rgba(119, 181, 254, 1)";
+                    break;
+            }
+        }
+        else if (storageCategory is not null)
+        {
+            fileName = $"poems-{storageCategory.UnaccentedCleaned()}-bar.js";
+            chartId = $"poems-{storageCategory.UnaccentedCleaned()}Bar";
+            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+                .FirstOrDefault(x => x.Name == storageCategory)!.Color;
+        }
+        else if (forAcrostiche)
+        {
+            fileName = $"poems-acrostiche-bar.js";
+            chartId = $"poems-acrosticheBar";
+        }
+        else if (forSonnet)
+        {
+            fileName = $"poems-sonnet-bar.js";
+            chartId = $"poems-sonnetBar";
+        }
+        else if (forPantoun)
+        {
+            fileName = $"poems-pantoun-bar.js";
+            chartId = $"poems-pantounBar";
+        }
+        else if (forVariableMetric)
+        {
+            fileName = $"poems-metrique_variable-bar.js";
+            chartId = $"poems-metrique_variableBar";
+        }
+        else if (forRefrain)
+        {
+            fileName = $"poems-refrain-bar.js";
+            chartId = $"poems-refrainBar";
+        }
+        else if (forMetric is not null)
+        {
+            fileName = $"poems-metric-{forMetric}-bar.js";
+            chartId = $"poems-metric{forMetric}Bar";
+        }
+        else if (forLovecat)
+        {
+            fileName = $"poems-lovecat-bar.js";
+            chartId = $"poems-lovecatBar";
+        }
+        else if (forLesMois)
+        {
+            fileName = $"poems-les-mois-bar.js";
+            chartId = $"poems-les-moisBar";
+        }
+
+        var backgroundColor = borderColor.Replace("1)", "0.5)");
+        if (forVariableMetric)
+        {
+            // For this one, same color to look nice below other bar chart
+            backgroundColor = borderColor;
+        }
+
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bar);
+        chartDataFileHelper.WriteBeforeData();
+
+        var dataLines = new List<DataLine>();
+
+        foreach (var season in data.Seasons.Where(x => x.Poems.Count > 0))
+        {
+            var poemCount = 0;
+            if (storageSubCategory is not null)
+            {
+                poemCount = season.Poems.Count(x =>
+                    x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory)));
+            }
+            else if (storageCategory is not null)
+            {
+                poemCount = season.Poems.Count(x => x.Categories.Any(x => x.Name == storageCategory));
+            }
+            else if (forAcrostiche)
+            {
+                poemCount = season.Poems.Count(x => x.Acrostiche is not null || x.DoubleAcrostiche is not null);
+            }
+            else if (forSonnet)
+            {
+                poemCount = season.Poems.Count(x => x.IsSonnet);
+            }
+            else if (forPantoun)
+            {
+                poemCount = season.Poems.Count(x => x.IsPantoun);
+            }
+            else if (forVariableMetric)
+            {
+                poemCount = season.Poems.Count(x => x.HasVariableMetric);
+            }
+            else if (forRefrain)
+            {
+                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("refrain"));
+            }
+            else if (forMetric is not null)
+            {
+                poemCount = season.Poems.Count(x => x.HasMetric(forMetric.Value));
+            }
+            else if (forLovecat)
+            {
+                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("lovecat"));
+            }
+            else if (forLesMois)
+            {
+                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("les mois"));
+            }
+
+            dataLines.Add(new ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
+                poemCount,
+                backgroundColor));
+        }
+
+        chartDataFileHelper.WriteData(dataLines, true);
+
+        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes au fil des saisons"],
+            customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
+        streamWriter.Close();
+    }
+
+    /// <summary>
+    /// Generates a bar chart data file representing poem intervals, categorized by seasons or other specified criteria.
+    /// The method processes poem data from the provided `Root` objects and writes chart data files with interval-based statistics.
+    /// Output files:
+    /// - "poem-interval-bar.js"
+    /// - "longest_intervals.md"
+    /// - "poem-series-bar.js"
+    /// - "longest_series.md"
+    /// </summary>
+    /// <param name="data">The primary source of French poems data.</param>
+    /// <param name="dataEn">The secondary source of English poems data.</param>
+    /// <param name="seasonId">An optional parameter specifying the season ID to filter poems. If null, filtering by season is skipped.</param>
+    public void GeneratePoemIntervalBarChartDataFile(Root data, Root dataEn, int? seasonId)
+    {
+        var frDatesList =
+            (seasonId is null ? data.Seasons.SelectMany(x => x.Poems) : data.Seasons.First(x => x.Id == seasonId).Poems)
+            .Where(x => x.TextDate != "01.01.1994")
+            .Select(x => x.Date);
+
+        // Add EN poems
+        var enDatesList = (seasonId is null
+                ? dataEn.Seasons.SelectMany(x => x.Poems)
+                : dataEn.Seasons.FirstOrDefault(x => x.Id == seasonId)?.Poems)?
+            .Select(x => x.Date);
+
+        var datesList = new List<DateTime>();
+        datesList.AddRange(frDatesList);
+        if (enDatesList is not null)
+            datesList.AddRange(enDatesList);
+        datesList.Sort();
+
+        var intervalDict = new Dictionary<DateTime, int>(); // end date, duration
+        var intervalLengthDict = new Dictionary<int, int>(); // duration, occurrence
+        var seriesDict = new Dictionary<DateTime, int>(); // end date, duration
+
+        int dateCount = datesList.Count();
+        for (var i = 1; i < dateCount; i++)
+        {
+            var current = datesList[i];
+            var previous = datesList[i - 1];
+            var dayDiff = (int)(current - previous).TotalDays;
+
+            if (!intervalLengthDict.TryAdd(dayDiff, 1))
+            {
+                intervalLengthDict[dayDiff]++;
+            }
+
+            intervalDict.TryAdd(current, dayDiff);
+
+            seriesDict.TryAdd(previous, 1);
+
+            if (dayDiff != 1) continue;
+
+            var duration = seriesDict[previous];
+            seriesDict.Remove(previous);
+            seriesDict[current] = ++duration;
+        }
+
+        // Interval length charts
+
+        var dataLines = new List<ColoredDataLine>();
+        var orderedIntervalKeys = intervalLengthDict.Keys.Order().ToList();
+        var zeroDayColor = "rgba(72, 149, 239, 1)";
+        var oneDayColor = "rgba(72, 149, 239, 0.9)";
+        var upToSevenDayColor = "rgba(72, 149, 239, 0.7)";
+        var upToOneMonthColor = "rgba(72, 149, 239, 0.5)";
+        var upToThreeMonthsColor = "rgba(72, 149, 239, 0.3)";
+        var upToOneYearColor = "rgba(72, 149, 239, 0.2)";
+        var moreThanOneYearColor = "rgba(72, 149, 239, 0.1)";
+        var moreThanOneMonthCount = 0;
+        var moreThanThreeMonthsCount = 0;
+        var moreThanOneYearCount = 0;
+        foreach (var key in orderedIntervalKeys)
+        {
+            if (key == 0)
+            {
+                dataLines.Add(
+                    new("Moins d\\'un jour", intervalLengthDict[key],
+                        zeroDayColor));
+            }
+            else if (key == 1)
+            {
+                dataLines.Add(new("Un jour", intervalLengthDict[key], oneDayColor));
+            }
+            else if (key < 8)
+            {
+                dataLines.Add(
+                    new($"{key}j", intervalLengthDict[key], upToSevenDayColor));
+            }
+            else if (key < 31)
+            {
+                dataLines.Add(new($"{key}j", intervalLengthDict[key],
+                    upToOneMonthColor));
+            }
+            else if (key < 91)
+            {
+                moreThanOneMonthCount++;
+            }
+            else if (key < 366)
+            {
+                moreThanThreeMonthsCount++;
+            }
+            else
+            {
+                moreThanOneYearCount++;
+            }
+        }
+
+        if (moreThanOneMonthCount > 0)
+            dataLines.Add(new("Entre un et trois mois", moreThanOneMonthCount,
+                upToThreeMonthsColor));
+
+        if (moreThanThreeMonthsCount > 0)
+            dataLines.Add(new("Entre trois mois et un an", moreThanThreeMonthsCount,
+                upToOneYearColor));
+
+        if (moreThanOneYearCount > 0)
+            dataLines.Add(new("Plus d\\'un an", moreThanOneYearCount,
+                moreThanOneYearColor));
+
+        var fileName = "poem-interval-bar.js";
+        var subDir = seasonId is not null ? $"season-{seasonId}" : "general";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bar);
+        chartDataFileHelper.WriteBeforeData();
+        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteAfterData(seasonId is null ? "poemIntervalBar" : $"season{seasonId}PoemIntervalBar",
+            ["Fréquence"],
+            customScalesOptions: seasonId is null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
+        streamWriter.Close();
+
+        if (seasonId.HasValue) return;
+
+        // Longest intervals content file
+
+        var longestIntervalKeys = orderedIntervalKeys.OrderDescending().ToList();
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!,
+            "../includes/longest_intervals.md");
+        var streamWriter3b = new StreamWriter(filePath);
+
+        streamWriter3b.WriteLine("+++");
+        streamWriter3b.WriteLine("title = \"Les plus longs intervalles\"");
+        streamWriter3b.WriteLine("+++");
+
+        var moreThanOneYearDates = new List<KeyValuePair<DateTime, DateTime>>();
+        var moreThanThreeMonthsDates = new List<KeyValuePair<DateTime, DateTime>>();
+
+        foreach (var key in longestIntervalKeys)
+        {
+            if (key < 91) break;
+            var matchingSeries = intervalDict.Where(x => x.Value == key).ToList();
+            foreach (var pair in matchingSeries)
+            {
+                if (key < 366)
+                {
+                    moreThanThreeMonthsDates.Add(
+                        new(pair.Key.AddDays(-key), pair.Key));
+                }
+                else
+                {
+                    moreThanOneYearDates.Add(new(pair.Key.AddDays(-key), pair.Key));
+                }
+            }
+        }
+
+        streamWriter3b.WriteLine($"- Plus d'un an, du plus long au plus court :");
+
+        foreach (var date in moreThanOneYearDates)
+        {
+            streamWriter3b.WriteLine(
+                $"  - Du {date.Key.ToString("dd.MM.yyyy")} au {date.Value.ToString("dd.MM.yyyy")}");
+        }
+
+        streamWriter3b.WriteLine($"- Plus de trois mois, du plus long au plus court :");
+
+        foreach (var date in moreThanThreeMonthsDates)
+        {
+            streamWriter3b.WriteLine(
+                $"  - Du {date.Key.ToString("dd.MM.yyyy")} au {date.Value.ToString("dd.MM.yyyy")}");
+        }
+
+        streamWriter3b.Close();
+
+        // Series length chart (general chart)
+
+        var seriesLengthDict = new Dictionary<int, int>();
+        foreach (var seriesLength in seriesDict.Values)
+        {
+            if (!seriesLengthDict.TryAdd(seriesLength, 1))
+            {
+                seriesLengthDict[seriesLength]++;
+            }
+        }
+
+        var seriesDataLines = new List<ColoredDataLine>();
+        var sortedKeys = seriesLengthDict.Keys.Order().ToList();
+
+        foreach (var key in sortedKeys.Skip(1))
+        {
+            seriesDataLines.Add(new($"{key}j", seriesLengthDict[key],
+                "rgba(72, 149, 239, 1)"));
+        }
+
+        fileName = "poem-series-bar.js";
+        subDir = "general";
+        using var streamWriter2 = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
+        var chartDataFileHelper2 = new ChartDataFileHelper(streamWriter2, ChartType.Bar);
+        chartDataFileHelper2.WriteBeforeData();
+        chartDataFileHelper2.WriteData(seriesDataLines, true);
+        chartDataFileHelper2.WriteAfterData("poemSeriesBar",
+            ["Séries"],
+            customScalesOptions: seasonId is null ? string.Empty : "scales: { y: { ticks: { stepSize: 1 } } }");
+        streamWriter2.Close();
+
+        // longest series content file
+
+        var longestSeriesKeys = sortedKeys.OrderDescending().Take(5);
+        filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!,
+            "../includes/longest_series.md");
+        var streamWriter3 = new StreamWriter(filePath);
+
+        streamWriter3.WriteLine("+++");
+        streamWriter3.WriteLine("title = \"Les plus longues séries\"");
+        streamWriter3.WriteLine("+++");
+
+        foreach (var key in longestSeriesKeys)
+        {
+            var matchingSeries = seriesDict.Where(x => x.Value == key);
+            streamWriter3.WriteLine($"- {key} jours :");
+            foreach (var pair in matchingSeries)
+            {
+                streamWriter3.WriteLine(
+                    $"  - Du {pair.Key.AddDays(-key).ToString("dd.MM.yyyy")} au {pair.Key.ToString("dd.MM.yyyy")}");
+            }
+        }
+
+        streamWriter3.Close();
     }
 
     /// <summary>
