@@ -3,6 +3,7 @@ using AutoFixture.Xunit3;
 using Tests.Customizations;
 using Toolbox.Domain;
 using Toolbox.Generators;
+using Toolbox.Settings;
 using Xunit;
 
 namespace Tests.Generators;
@@ -12,27 +13,25 @@ public class ContentFileGeneratorTest(BasicFixture fixture, ITestOutputHelper te
 {
     [Theory]
     [Trait("UnitTest", "ContentGeneration")]
-    [AutoData]
+    [AutoDomainData]
     public void ShouldGenerateSeasonIndexFile(Root data)
     {
         var generatedFilePath =
             new ContentFileGenerator(fixture.Configuration).GenerateSeasonIndexFile(data, data.Seasons.First().Id);
         testOutputHelper.WriteLine(File.ReadAllText(generatedFilePath));
-        File.Delete(generatedFilePath);
-        Directory.Delete(Path.GetDirectoryName(generatedFilePath));
+        DeleteGeneratedFiles(generatedFilePath, data.Seasons.First().Id);
     }
 
     [Theory]
     [Trait("UnitTest", "ContentGeneration")]
-    [AutoData]
+    [AutoDomainData]
     public void ShouldGenerateAllSeasonsIndexFile(Root data)
     {
         var generatedFilesPaths = new ContentFileGenerator(fixture.Configuration).GenerateAllSeasonsIndexFile(data);
         foreach (var generatedFilePath in generatedFilesPaths)
         {
             testOutputHelper.WriteLine(File.ReadAllText(generatedFilePath));
-            File.Delete(generatedFilePath);
-            Directory.Delete(Path.GetDirectoryName(generatedFilePath));
+            DeleteGeneratedFiles(generatedFilePath, data.Seasons.First().Id);
         }
     }
     
@@ -45,8 +44,7 @@ public class ContentFileGeneratorTest(BasicFixture fixture, ITestOutputHelper te
         var generatedFilePath =
             new ContentFileGenerator(fixture.Configuration).GeneratePoemFile(data, data.Seasons.First().Poems.First());
         testOutputHelper.WriteLine(File.ReadAllText(generatedFilePath));
-        File.Delete(generatedFilePath);
-        Directory.Delete(Path.GetDirectoryName(generatedFilePath));
+        DeleteGeneratedFiles(generatedFilePath, data.Seasons.First().Id);
     }
     
     [Theory]
@@ -60,8 +58,15 @@ public class ContentFileGeneratorTest(BasicFixture fixture, ITestOutputHelper te
         foreach (var generatedFilePath in generatedFilesPaths)
         {
             testOutputHelper.WriteLine(File.ReadAllText(generatedFilePath));
-            File.Delete(generatedFilePath);
-            Directory.Delete(Path.GetDirectoryName(generatedFilePath));
+            DeleteGeneratedFiles(generatedFilePath, data.Seasons.First().Id);
         }
+    }
+
+    private void DeleteGeneratedFiles(string seasonIndexFile, int seasonId)
+    {
+        File.Delete(seasonIndexFile);
+        Directory.Delete(Path.GetDirectoryName(seasonIndexFile));
+        var chartDir = Path.Combine(Directory.GetCurrentDirectory(), fixture.Configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!, $"season-{seasonId}");
+        Directory.Delete(chartDir);
     }
 }
