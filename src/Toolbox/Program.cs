@@ -291,6 +291,7 @@ public class Program
         Console.WriteLine("Poem intensity chart OK");
 
         _chartDataFileGenerator.GenerateEnPoemByDayOfWeekPieChartDataFile(_engine.DataEn);
+        _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_engine.Data, _engine.DataEn);
         Console.WriteLine("Chart for day of week OK");
 
         _chartDataFileGenerator.GeneratePoemIntervalBarChartDataFile(_engine.Data, _engine.DataEn, null);
