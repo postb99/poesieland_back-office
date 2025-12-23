@@ -29,19 +29,6 @@ public class ContentFileGenerator(IConfiguration configuration)
     }
 
     /// <summary>
-    /// Generates _index.md files for all seasons.
-    /// </summary>
-    /// <param name="data">The root object containing season data.</param>
-    /// <returns>A collection of file paths for the generated _index.md files.</returns>
-    public IEnumerable<string> GenerateAllSeasonsIndexFile(Root data)
-    {
-        foreach (var season in data.Seasons)
-        {
-            yield return GenerateSeasonIndexFile(data, season.Id);
-        }
-    }
-
-    /// <summary>
     /// Generates a content file for a specified poem.
     /// </summary>
     /// <param name="data">The root object containing season and poem data.</param>

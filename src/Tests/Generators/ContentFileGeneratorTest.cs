@@ -25,19 +25,6 @@ public class ContentFileGeneratorTest(BasicFixture fixture, ITestOutputHelper te
     [Theory]
     [Trait("UnitTest", "ContentGeneration")]
     [AutoDomainData]
-    public void ShouldGenerateAllSeasonsIndexFile(Root data)
-    {
-        var generatedFilesPaths = new ContentFileGenerator(fixture.Configuration).GenerateAllSeasonsIndexFile(data);
-        foreach (var generatedFilePath in generatedFilesPaths)
-        {
-            testOutputHelper.WriteLine(File.ReadAllText(generatedFilePath));
-            DeleteGeneratedFiles(generatedFilePath, data.Seasons.First().Id);
-        }
-    }
-    
-    [Theory]
-    [Trait("UnitTest", "ContentGeneration")]
-    [AutoDomainData]
     public void ShouldGeneratePoemIndexFile(Root data)
     {
         data.Seasons.First().Id = data.Seasons.First().Poems.First().SeasonId;

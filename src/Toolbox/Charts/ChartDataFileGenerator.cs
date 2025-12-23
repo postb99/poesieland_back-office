@@ -183,23 +183,13 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     }
 
     /// <summary>
-    /// Generates bar and pie chart data files for poem lengths, categorized by season or in a general context.
-    /// The method processes poem data from the given `Root` object and creates a bar chart file if a season ID
-    /// is provided, or a pie chart file if the data is for the general context. The files are organized into
-    /// appropriate sub-directories, and the data includes distribution of poem lengths and sonnet counts.
+    /// Generates pie chart data file for poem lengths.
+    /// The data includes distribution of poem lengths and sonnet counts.
     /// </summary>
     /// <param name="data">The primary source of French poems data.</param>
-    /// <param name="seasonId">The ID of the season to generate chart data for. If null, generates data for all seasons.</param>
-    public void GeneratePoemsLengthBarAndPieChartDataFile(Root data, int? seasonId)
+    public void GeneratePoemsLengthBarAndPieChartDataFile(Root data)
     {
-        var isGeneral = seasonId is null;
-        var fileName = isGeneral ? "poems-length-pie.js" : "poems-length-bar.js";
-        var subDir = isGeneral ? "general" : $"season-{seasonId}";
-        var chartId = isGeneral ? "poemLengthPie" : $"season{seasonId}PoemLengthBar";
-
-        var poems = seasonId is not null
-            ? data.Seasons.First(x => x.Id == seasonId).Poems
-            : data.Seasons.SelectMany(x => x.Poems);
+        var poems = data.Seasons.SelectMany(x => x.Poems);
 
         var nbVersesData = new Dictionary<int, int>();
         var nbSonnets = 0;
@@ -223,76 +213,36 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         var nbVersesRange = nbVersesData.Keys.Order().ToList();
 
-        // General pie chart or Season's bar chart
+        // General pie chart
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var subDirPath = Path.Combine(rootDir, subDir);
+        var subDirPath = Path.Combine(rootDir, "general");
         Directory.CreateDirectory(subDirPath);
-        using var streamWriter = new StreamWriter(Path.Combine(subDirPath, fileName));
+        using var streamWriter = new StreamWriter(Path.Combine(subDirPath, "poems-length-pie.js"));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
-            isGeneral ? ChartType.Pie : ChartType.Bar, isGeneral ? 1 : 2);
+            ChartType.Pie, 1);
         chartDataFileHelper.WriteBeforeData();
 
-        if (isGeneral)
+        var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
+        var coloredDataLines = new List<ColoredDataLine>();
+
+        foreach (var nbVerses in nbVersesRange)
         {
-            var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
-            var coloredDataLines = new List<ColoredDataLine>();
-
-            foreach (var nbVerses in nbVersesRange)
+            var lookup = nbVerses switch
             {
-                var lookup = nbVerses switch
-                {
-                    3 => 0,
-                    26 => 1,
-                    _ => nbVerses / 2
-                };
+                3 => 0,
+                26 => 1,
+                _ => nbVerses / 2
+            };
 
-                var color = metrics.First(m => m.Length == lookup).Color;
-                coloredDataLines.Add(new(nbVerses.ToString(),
-                    nbVersesData[nbVerses], color));
-            }
-
-            chartDataFileHelper.WriteData(coloredDataLines, true);
-
-            chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"]);
+            var color = metrics.First(m => m.Length == lookup).Color;
+            coloredDataLines.Add(new(nbVerses.ToString(),
+                nbVersesData[nbVerses], color));
         }
-        else
-        {
-            var nbVersesChartData = new List<DataLine>();
-            var isSonnetChartData = new List<DataLine>();
 
-            foreach (var nbVerses in nbVersesRange)
-            {
-                isSonnetChartData.Add(new(string.Empty, 0));
+        chartDataFileHelper.WriteData(coloredDataLines, true);
 
-                nbVersesChartData.Add(new(nbVerses.ToString(),
-                    nbVersesData[nbVerses]));
-            }
-
-            var index = nbVersesRange.FindIndex(x => x == 14);
-            if (index != -1)
-            {
-                isSonnetChartData[index] = new("Sonnets", nbSonnets);
-                nbVersesChartData[index] =
-                    new(nbVersesChartData[index].Label, nbVersesChartData[index].Value - nbSonnets);
-            }
-
-            string[] chartTitles;
-            if (nbSonnets > 0)
-            {
-                chartDataFileHelper.WriteData(nbVersesChartData, false);
-                chartDataFileHelper.WriteData(isSonnetChartData, true);
-                chartTitles = ["Poèmes", "Sonnets"];
-            }
-            else
-            {
-                chartDataFileHelper.WriteData(nbVersesChartData, true);
-                chartTitles = ["Poèmes"];
-            }
-
-            chartDataFileHelper.WriteAfterData(chartId, chartTitles,
-                customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
-        }
+        chartDataFileHelper.WriteAfterData("poemLengthPie", ["Poèmes"]);
 
         streamWriter.Close();
     }

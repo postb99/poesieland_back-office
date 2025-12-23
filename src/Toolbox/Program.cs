@@ -347,11 +347,13 @@ public class Program
 
     private static void GenerateSeasonIndexFiles(MenuItem menuChoice)
     {
-        Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
+        var seasonCount = _engine.Data.Seasons.Count;
+        Console.WriteLine(menuChoice.SubMenuItems.First().Label, seasonCount);
         var choice = Console.ReadLine();
         if (choice == "0")
         {
-            _contentFileGenerator.GenerateAllSeasonsIndexFile(_engine.Data);
+            for (var i = 1; i <= seasonCount; i++)
+                _contentFileGenerator.GenerateSeasonIndexFile(_engine.Data, i);
             Console.WriteLine("Seasons index files OK");
             return;
         }
@@ -370,7 +372,7 @@ public class Program
 
     private static void GeneratePoemsLengthPieChartDataFile()
     {
-        _chartDataFileGenerator.GeneratePoemsLengthBarAndPieChartDataFile(_engine.Data, null);
+        _chartDataFileGenerator.GeneratePoemsLengthBarAndPieChartDataFile(_engine.Data);
         Console.WriteLine("Poems length pie chart data file OK");
     }
 
@@ -420,9 +422,8 @@ public class Program
 
     private static void GenerateDependantChartDataFilesAndCheckQuality(int seasonId, Poem? importedPoem)
     {
-        // General and season's poems length
+        // General poems length
         GeneratePoemsLengthPieChartDataFile();
-        _chartDataFileGenerator.GeneratePoemsLengthBarAndPieChartDataFile(_engine.Data, seasonId);
 
         // General and season's metric
         GeneratePoemMetricPieChartDataFile();
@@ -617,7 +618,7 @@ public class Program
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()
     {
-        _chartDataFileGenerator.GeneratePoemIntervalBarChartDataFile(_engine.Data, _engine.DataEn,null);
+        _chartDataFileGenerator.GeneratePoemIntervalBarChartDataFile(_engine.Data, _engine.DataEn, null);
         for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
             _chartDataFileGenerator.GeneratePoemIntervalBarChartDataFile(_engine.Data, _engine.DataEn, i);
         Console.WriteLine("All seasons poems interval chart data files OK");
