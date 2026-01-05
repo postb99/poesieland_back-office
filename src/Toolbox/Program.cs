@@ -389,13 +389,21 @@ public class Program
 
         if (choice == "0")
         {
+            // Seasons categories' pie
             for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
             {
                 _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, i);
-            }
-
-            // General chart
+            }           
+            
+            // General categories' pie
             _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
+            
+            // Year categories' pie
+            var currentYear = DateTime.Now.Year;
+            for (var y = 1994; y < currentYear + 1; y++)
+            {
+                _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_engine.Data, y);
+            }
 
             // Categories' and tags' radar
             GeneratePoemsCategoriesAndTagsRadarChartDataFile();
@@ -408,8 +416,10 @@ public class Program
         else if (int.TryParse(choice, out var seasonId) &&
                  _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
+            // Season categories' pie
             _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, seasonId);
-            // General chart
+            
+            // General categories' pie
             _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
 
             Console.WriteLine($"Season {seasonId} categories pie chart data file OK");
@@ -429,10 +439,14 @@ public class Program
         GeneratePoemMetricPieChartDataFile();
         _chartDataFileGenerator.GeneratePoemMetricBarAndPieChartDataFile(_engine.Data, seasonId);
 
-        // Season's pie
+        // Season categories' pie
         _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, seasonId);
-        // General chart
+        
+        // General categories' pie
         _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
+        
+        // Year categories' pie
+        _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_engine.Data, importedPoem.Date.Year);
 
         Console.WriteLine(seasonId == 0
             ? "All seasons categories pie chart data file OK"

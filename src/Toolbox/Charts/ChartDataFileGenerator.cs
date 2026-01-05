@@ -305,6 +305,63 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         ]);
         streamWriter.Close();
     }
+    
+    /// <summary>
+    /// Generates a pie chart data file for categories within a year.
+    /// The method processes poem data from the provided `Root` object, filtered
+    /// by a specific year, and writes the resulting chart data to a "categories-{year}-pie.js" file.
+    /// </summary>
+    /// <param name="data">The root object containing all seasons and poems data to be processed for chart generation.</param>
+    /// <param name="year">A year to filter poems by date.</param>
+    public void GenerateYearCategoriesPieChartDataFile(Root data, int year)
+    {
+        var poems = data.Seasons.SelectMany(x => x.Poems).Where(x => x.Date.Year == year);
+        if (!poems.Any()) return;
+        
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!;
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", $"categories-{year}-pie.js"));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
+        chartDataFileHelper.WriteBeforeData();
+        var byStorageSubcategoryCount = new Dictionary<string, int>();
+        
+        foreach (var poem in poems)
+        {
+            foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
+            {
+                if (byStorageSubcategoryCount.TryGetValue(subCategory, out _))
+                {
+                    byStorageSubcategoryCount[subCategory]++;
+                }
+                else
+                {
+                    byStorageSubcategoryCount[subCategory] = 1;
+                }
+            }
+        }
+
+        var orderedSubcategories =
+            storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).ToList();
+        var pieChartData = new List<ColoredDataLine>();
+
+        foreach (var subcategory in orderedSubcategories)
+        {
+            if (byStorageSubcategoryCount.TryGetValue(subcategory, out var value))
+                pieChartData.Add(new(subcategory, value,
+                    storageSettings.Categories.SelectMany(x => x.Subcategories)
+                        .First(x => x.Name == subcategory).Color
+                ));
+        }
+
+        chartDataFileHelper.WriteData(pieChartData);
+
+        chartDataFileHelper.WriteAfterData($"categories{year}Pie",
+        [
+            year.ToString()
+        ]);
+        streamWriter.Close();
+    }
 
     /// <summary>
     /// Generates a radar chart data file for English poems categorized by the day of the year.
