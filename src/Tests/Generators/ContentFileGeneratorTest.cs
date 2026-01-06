@@ -35,7 +35,7 @@ public class ContentFileGeneratorTest(BasicFixture fixture, ITestOutputHelper te
     }
     
     [Theory]
-    [Trait("UnitTest", "ContentGeneration")]
+    [Trait("UnitTest", "BuggyInGithubContentGeneration")]
     [AutoDomainData]
     public void ShouldGenerateSeasonAllPoemFiles(Root data)
     {
