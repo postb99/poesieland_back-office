@@ -1223,6 +1223,178 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     }
 
     /// <summary>
+    /// Generates a bubble chart data file visualizing the relationship between the length of poems
+    /// and their verse lengths. The method processes poem data from the provided `Root` object,
+    /// organizes the data by verse lengths and poem lengths, and outputs poem-length-by-verse-length.js file
+    /// containing the chart-ready data. Data is further divided into four distinct quarters
+    /// based on calculated thresholds. Additionally, poems with variable metrics are grouped
+    /// and visualized separately.
+    /// </summary>
+    /// <param name="data">The primary source of French poems data.</param>
+    public void GeneratePoemLengthByVerseLengthBubbleChartDataFile(Root data)
+    {
+        var poems = data.Seasons.SelectMany(x => x.Poems);
+        var poemLengthByVerseLength = new Dictionary<KeyValuePair<int, int>, int>();
+        var variableMetric = new Dictionary<int, int>();
+        foreach (var poem in poems)
+        {
+            var poemLength = poem.VersesCount;
+            if (poem.HasVariableMetric)
+            {
+                if (!variableMetric.TryAdd(poemLength, 1))
+                {
+                    variableMetric[poemLength]++;
+                }
+
+                continue;
+            }
+
+            var key = new KeyValuePair<int, int>(int.Parse(poem.VerseLength!), poemLength);
+            if (!poemLengthByVerseLength.TryAdd(key, 1))
+            {
+                poemLengthByVerseLength[key]++;
+            }
+        }
+
+        // Find max value
+        var maxValue = poemLengthByVerseLength.Values.Max();
+
+        var fileName = "poem-length-by-verse-length.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
+        chartDataFileHelper.WriteBeforeData();
+
+        var firstQuarterDataLines = new List<BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<BubbleChartDataLine>();
+
+        foreach (var dataKey in poemLengthByVerseLength.Keys)
+        {
+            ChartDataFileHelper.AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
+                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
+                maxValue, 30);
+        }
+
+        foreach (var dataKey in variableMetric.Keys)
+        {
+            ChartDataFileHelper.AddDataLine(0, dataKey, variableMetric[dataKey],
+                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
+                maxValue, 30);
+        }
+
+        chartDataFileHelper.WriteData(firstQuarterDataLines, false);
+        chartDataFileHelper.WriteData(secondQuarterDataLines, false);
+        chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
+        chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
+        chartDataFileHelper.WriteAfterData("poemLengthByVerseLength",
+        [
+            "Premier quart (taille fois 4)",
+            "Deuxième quart (taille fois 2)",
+            "Troisième quart (taille fois 1.5)",
+            "Quatrième quart"
+        ], chartXAxisTitle: "Métrique (0 = variable)", chartYAxisTitle: "Nombre de vers", yAxisStep: 2);
+        streamWriter.Close();
+    }
+
+    /// <summary>
+    /// Generates a line chart data file for visualizing metrics distributed over seasons.
+    /// The method processes the data provided in the `Root` object and writes poems-verseLength-line.js
+    /// line chart data file containing the chart-ready data.
+    /// </summary>
+    /// <param name="data">The primary source of French poems data.</param>
+    public void GenerateOverSeasonsMetricLineChartDataFile(Root data)
+    {
+        var dataDict = ChartDataFileHelper.FillMetricDataDict(data, out var xLabels);
+
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+
+        var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
+
+        var fileName = "poems-verseLength-line.js";
+
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Line, 14);
+        chartDataFileHelper.WriteBeforeData();
+
+        var oneFootDataLines =
+            new LineChartDataLine("1 syllabe", dataDict[1],
+                metrics.First(x => x.Length == 1).Color);
+        var twoFeetDataLines =
+            new LineChartDataLine("2 syllabes", dataDict[2],
+                metrics.First(x => x.Length == 2).Color);
+        var threeFeetDataLines =
+            new LineChartDataLine("3 syllabes", dataDict[3],
+                metrics.First(x => x.Length == 3).Color);
+        var fourFeetDataLines =
+            new LineChartDataLine("4 syllabes", dataDict[4],
+                metrics.First(x => x.Length == 4).Color);
+        var fiveFeetDataLines =
+            new LineChartDataLine("5 syllabes", dataDict[5],
+                metrics.First(x => x.Length == 5).Color);
+        var sixFeetDataLines =
+            new LineChartDataLine("6 syllabes", dataDict[6],
+                metrics.First(x => x.Length == 6).Color);
+        var sevenFeetDataLines =
+            new LineChartDataLine("7 syllabes", dataDict[7],
+                metrics.First(x => x.Length == 7).Color);
+        var eightFeetDataLines =
+            new LineChartDataLine("8 syllabes", dataDict[8],
+                metrics.First(x => x.Length == 8).Color);
+        var nineFeetDataLines =
+            new LineChartDataLine("9 syllabes", dataDict[9],
+                metrics.First(x => x.Length == 9).Color);
+        var tenFeetDataLines =
+            new LineChartDataLine("10 syllabes", dataDict[10],
+                metrics.First(x => x.Length == 10).Color);
+        var elevenFeetDataLines =
+            new LineChartDataLine("11 syllabes", dataDict[11],
+                metrics.First(x => x.Length == 11).Color);
+        var twelveFeetDataLines =
+            new LineChartDataLine("12 syllabes", dataDict[12],
+                metrics.First(x => x.Length == 12).Color);
+        var fourteenFeetDataLines =
+            new LineChartDataLine("14 syllabes", dataDict[14],
+                metrics.First(x => x.Length == 14).Color);
+
+        chartDataFileHelper.WriteData(oneFootDataLines);
+        chartDataFileHelper.WriteData(twoFeetDataLines);
+        chartDataFileHelper.WriteData(threeFeetDataLines);
+        chartDataFileHelper.WriteData(fourFeetDataLines);
+        chartDataFileHelper.WriteData(fiveFeetDataLines);
+        chartDataFileHelper.WriteData(sixFeetDataLines);
+        chartDataFileHelper.WriteData(sevenFeetDataLines);
+        chartDataFileHelper.WriteData(eightFeetDataLines);
+        chartDataFileHelper.WriteData(nineFeetDataLines);
+        chartDataFileHelper.WriteData(tenFeetDataLines);
+        chartDataFileHelper.WriteData(elevenFeetDataLines);
+        chartDataFileHelper.WriteData(twelveFeetDataLines);
+        chartDataFileHelper.WriteData(fourteenFeetDataLines);
+
+        chartDataFileHelper.WriteAfterData("poemsVerseLengthLine",
+            [
+                "1 syllabe",
+                "2 syllabes",
+                "3 syllabes",
+                "4 syllabes",
+                "5 syllabes",
+                "6 syllabes",
+                "7 syllabes",
+                "8 syllabes",
+                "9 syllabes",
+                "10 syllabes",
+                "11 syllabes",
+                "12 syllabes",
+                "14 syllabes"
+            ], chartYAxisTitle: "Métrique", chartXAxisTitle: "Au fil des Saisons",
+            xLabels: xLabels.ToArray(), stack: "stack0");
+        streamWriter.Close();
+    }
+
+    /// <summary>
     /// Retrieves the top most represented months from the provided dictionary of month-day data.
     /// The method aggregates the data by month, ranks the months by their total occurrences,
     /// and returns a list of the top four months with the highest occurrence counts.

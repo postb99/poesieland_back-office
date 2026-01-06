@@ -185,7 +185,7 @@ public class Program
                 }
 
                 Console.WriteLine(
-                    $"Metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
+                    $"Metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_engine.Data, out var _).Values.Sum(x => x.Last())}");
 
                 Console.WriteLine("Content metadata quality OK");
                 break;
@@ -483,7 +483,7 @@ public class Program
         Console.WriteLine("Poem count file OK");
 
         // Poem length by metric and vice versa
-        _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
+        _chartDataFileGenerator.GeneratePoemLengthByVerseLengthBubbleChartDataFile(_engine.Data);
         Console.WriteLine("Poems bubble chart data files OK");
 
         // Over seasons categories', tags' bar, verse length's line
@@ -516,7 +516,7 @@ public class Program
             Console.WriteLine(output);
 
         Console.WriteLine(
-            $"Content metadata quality OK. Info: metric last season computed values sum: {_engine.FillMetricDataDict(out var _).Values.Sum(x => x.Last())}");
+            $"Content metadata quality OK. Info: metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_engine.Data, out var _).Values.Sum(x => x.Last())}");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
@@ -558,13 +558,13 @@ public class Program
 
     private static void GenerateBubbleChartDataFile()
     {
-        _engine.GeneratePoemLengthByVerseLengthBubbleChartDataFile();
+        _chartDataFileGenerator.GeneratePoemLengthByVerseLengthBubbleChartDataFile(_engine.Data);
         Console.WriteLine("Bubble chart data file OK");
     }
 
     private static void GenerateOverSeasonsVerseLengthLineChartDataFile()
     {
-        _engine.GenerateOverSeasonsMetricLineChartDataFile();
+        _chartDataFileGenerator.GenerateOverSeasonsMetricLineChartDataFile(_engine.Data);
         Console.WriteLine("Line chart data file OK");
     }
 

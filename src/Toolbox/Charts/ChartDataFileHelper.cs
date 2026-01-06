@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Text;
+using Toolbox.Domain;
 
 namespace Toolbox.Charts;
 
@@ -345,5 +346,74 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
             default:
                 return "?";
         }
+    }
+    
+    public static void AddDataLine(int x, int y, int value,
+        List<BubbleChartDataLine>[] quarterBubbleChartDatalines, int maxValue,
+        int bubbleMaxRadiusPixels)
+    {
+        // Bubble radius and color
+        decimal bubbleSize = (decimal)bubbleMaxRadiusPixels * value / maxValue;
+        var bubbleColor = string.Empty;
+        if (bubbleSize < (bubbleMaxRadiusPixels / 4))
+        {
+            // First quarter
+            bubbleSize *= 4;
+            bubbleColor = "rgba(121, 248, 248, 1)";
+            quarterBubbleChartDatalines[0].Add(new(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+        }
+        else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
+        {
+            // Second quarter
+            bubbleSize *= 2;
+            bubbleColor = "rgba(119, 181, 254, 1)";
+            quarterBubbleChartDatalines[1].Add(new(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+        }
+        else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
+        {
+            // Third quarter
+            bubbleSize *= 1.5m;
+            bubbleColor = "rgba(0, 127, 255, 1)";
+            quarterBubbleChartDatalines[2].Add(new(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+        }
+        else
+        {
+            // Fourth quarter
+            bubbleColor = "rgba(50, 122, 183, 1)";
+            quarterBubbleChartDatalines[3].Add(new(x, y,
+                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+        }
+    }
+    
+    public static Dictionary<int, List<decimal>> FillMetricDataDict(Root data, out List<string> xLabels)
+    {
+        var metricRange = Enumerable.Range(1, 14);
+        var dataDict = new Dictionary<int, List<decimal>> { };
+
+        xLabels = new();
+        foreach (var metric in metricRange)
+        {
+            dataDict.Add(metric, new());
+        }
+
+        foreach (var season in data.Seasons.Where(x => x.Poems.Count > 0))
+        {
+            // Multiplication to get 50
+            var multiple = 50m / season.Poems.Count;
+            xLabels.Add($"{season.EscapedTitleForChartsWithYears}");
+
+            foreach (var metric in metricRange)
+            {
+                dataDict[metric]
+                    .Add(Decimal.Round(
+                        season.Poems.Count(x =>
+                            x.HasMetric(metric)) * multiple, 1));
+            }
+        }
+
+        return dataDict;
     }
 }
