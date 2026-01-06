@@ -12,7 +12,7 @@ public class ContentFileGeneratorTest(BasicFixture fixture, ITestOutputHelper te
     : IClassFixture<BasicFixture>
 {
     [Theory]
-    [Trait("UnitTest", "ContentGeneration")]
+    [Trait("UnitTest", "BuggyInGithubContentGeneration")]
     [AutoDomainData]
     public void ShouldGenerateSeasonIndexFile(Root data)
     {
@@ -23,7 +23,7 @@ public class ContentFileGeneratorTest(BasicFixture fixture, ITestOutputHelper te
     }
 
     [Theory]
-    [Trait("UnitTest", "ContentGeneration")]
+    [Trait("UnitTest", "BuggyInGithubContentGeneration")]
     [AutoDomainData]
     public void ShouldGeneratePoemIndexFile(Root data)
     {
