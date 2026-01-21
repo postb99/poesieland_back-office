@@ -114,9 +114,6 @@ public class Program
             case MainMenuSettings.MenuChoices.ImportSinglePoem:
                 ImportPoemContentFile(menuChoice);
                 break;
-            case MainMenuSettings.MenuChoices.GenerateAllPoems:
-                GenerateAllPoemsContentFiles();
-                break;
             case MainMenuSettings.MenuChoices.GeneratePoemsOfASeason:
                 GenerateSeasonPoemContentFiles(menuChoice);
                 break;
@@ -241,6 +238,11 @@ public class Program
     {
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _engine.Data.Seasons.Count);
         var choice = Console.ReadLine();
+        if (choice == "0")
+        {
+            ImportAllPoemsContentFiles();
+            return;
+        }
 
         if (int.TryParse(choice, out var seasonId) &&
             _engine.Data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
@@ -339,6 +341,19 @@ public class Program
         }
     }
 
+    private static void ImportAllPoemsContentFiles()
+    {
+        var seasonCount = _engine.Data.Seasons.Count;
+        for (var i = 1; i <= seasonCount; i++)
+        {
+            _poemImporter.ImportPoemsOfSeason(i, _engine.Data);
+            GenerateDependantChartDataFilesAndCheckQuality(i, null);
+        }
+
+        _dataManager.Save(_engine.Data);
+        Console.WriteLine("All poems import OK");
+    }
+
     private static void GenerateAllPoemsContentFiles()
     {
         _contentFileGenerator.GenerateAllPoemFiles(_engine.Data);
@@ -393,11 +408,11 @@ public class Program
             for (var i = 1; i < _engine.Data.Seasons.Count + 1; i++)
             {
                 _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, i);
-            }           
-            
+            }
+
             // General categories' pie
             _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
-            
+
             // Year categories' pie
             var currentYear = DateTime.Now.Year;
             for (var y = 1994; y < currentYear + 1; y++)
@@ -418,7 +433,7 @@ public class Program
         {
             // Season categories' pie
             _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, seasonId);
-            
+
             // General categories' pie
             _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
 
@@ -441,12 +456,13 @@ public class Program
 
         // Season categories' pie
         _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, seasonId);
-        
+
         // General categories' pie
         _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_engine.Data, null);
-        
+
         // Year categories' pie
-        _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_engine.Data, importedPoem.Date.Year);
+        if (importedPoem is not null)
+            _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_engine.Data, importedPoem.Date.Year);
 
         Console.WriteLine(seasonId == 0
             ? "All seasons categories pie chart data file OK"
@@ -499,24 +515,28 @@ public class Program
         SeasonChecker.VerifySeasonHaveCorrectPoemCount(_engine.Data);
         _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_engine.Data, seasonId);
 
-        // Les mois
-        var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _engine.Data);
-        if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-            Console.WriteLine(output);
+        if (importedPoem is not null)
+        {
+            // Check custom pages
+            // Les mois
+            var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _engine.Data);
+            if (!string.IsNullOrEmpty(output.FirstOrDefault()))
+                Console.WriteLine(output);
 
-        // Ciel
-        output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem,
-            _engine.Data);
-        if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-            Console.WriteLine(output);
+            // Ciel
+            output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem,
+                _engine.Data);
+            if (!string.IsNullOrEmpty(output.FirstOrDefault()))
+                Console.WriteLine(output);
 
-        // Saisons
-        output = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(importedPoem, _engine.Data);
-        if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-            Console.WriteLine(output);
+            // Saisons
+            output = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(importedPoem, _engine.Data);
+            if (!string.IsNullOrEmpty(output.FirstOrDefault()))
+                Console.WriteLine(output);
+        }
 
         Console.WriteLine(
-            $"Content metadata quality OK. Info: metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_engine.Data, out var _).Values.Sum(x => x.Last())}");
+            $"Content metadata quality OK. Info: metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_engine.Data, out _).Values.Sum(x => x.Last())}");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)

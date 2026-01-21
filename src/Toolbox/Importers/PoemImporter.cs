@@ -331,6 +331,8 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         // Name of metric should be found in tags
         foreach (var metric in partialImport.DetailedMetric.Split(','))
         {
+            if (metric == "poème en prose")
+                break;
             var expectedTag = _metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name.ToLowerInvariant();
             if (!partialImport.Tags.Contains(expectedTag))
             {
@@ -532,7 +534,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             if (settingsCategory == null)
             {
                 throw new InvalidOperationException(
-                    $"[{poemId}] No storage category found for metadata category {metadataCategory}");
+                    $"[{poemId}] No storage category found for metadata category '{metadataCategory}', maybe you intended to add this value to tags instead of categories?");
             }
 
             storageCategories.TryGetValue(settingsCategory.Name, out var storageCategory);
