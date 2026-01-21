@@ -25,9 +25,10 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// <param name="storageCategory">The category to filter poems. If null, category filtering is skipped.</param>
     /// <param name="forLesMoisExtraTag">A flag indicating whether to filter poems containing the tag "les mois".</param>
     /// <param name="forNoelExtraTag">A flag indicating whether to filter poems containing the tag "noël".</param>
+    /// <param name="forLaMortExtraTag">A flag indicating whether to filter poems containing the tag "la mort".</param>
     public void GeneratePoemsByDayRadarChartDataFile(Root data, Root dataEn,
         string? storageSubCategory, string? storageCategory,
-        bool forLesMoisExtraTag = false, bool forNoelExtraTag = false)
+        bool forLesMoisExtraTag = false, bool forNoelExtraTag = false, bool forLaMortExtraTag = false)
     {
         var isGeneral = storageSubCategory is null && storageCategory is null && !forLesMoisExtraTag &&
                         !forNoelExtraTag;
@@ -56,6 +57,12 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         {
             poemStringDates = data.Seasons.SelectMany(x => x.Poems)
                 .Where(x => x.ExtraTags != null && x.ExtraTags.Contains("noël")).Select(x => x.TextDate)
+                .ToList();
+        }
+        else if (forLaMortExtraTag)
+        {
+            poemStringDates = data.Seasons.SelectMany(x => x.Poems)
+                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains("la mort")).Select(x => x.TextDate)
                 .ToList();
         }
         else
@@ -124,6 +131,11 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         {
             fileName = "poems-day-noel-radar.js";
             chartId = "poemDayNoelRadar";
+        }
+        else if (forLaMortExtraTag)
+        {
+            fileName = "poems-day-la-mort-radar.js";
+            chartId = "poemDayLaMortRadar";
         }
         else
         {
@@ -827,13 +839,14 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// <param name="forSonnet">A flag indicating to include poems of type "sonnet".</param>
     /// <param name="forPantoun">A flag indicating to include poems of type "pantoun".</param>
     /// <param name="forVariableMetric">A flag indicating to include poems with variable metrics.</param>
-    /// <param name="forRefrain">A flag indicating to include poems with a refrain.</param>
+    /// <param name="forRefrain">A flag indicating to include poems with "refrain" extra tag.</param>
     /// <param name="forMetric">An optional numeric metric filter for poems.</param>
-    /// <param name="forLovecat">A flag indicating to include poems in the "lovecat" category.</param>
-    /// <param name="forLesMois">A flag indicating to include poems categorized under "les mois".</param>
+    /// <param name="forLovecat">A flag indicating to include poems with "lovecat" extra tag.</param>
+    /// <param name="forLesMois">A flag indicating to include poems with "les mois" extra tag.</param>
+    /// <param name="forLaMort">A flag indicating to include poems with "la mort" extra tag.</param>
     public void GenerateOverSeasonsChartDataFile(Root data, string? storageSubCategory, string? storageCategory,
         bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
-        bool forRefrain = false, int? forMetric = null, bool forLovecat = false, bool forLesMois = false)
+        bool forRefrain = false, int? forMetric = null, bool forLovecat = false, bool forLesMois = false, bool forLaMort = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
@@ -910,6 +923,11 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             fileName = $"poems-les-mois-bar.js";
             chartId = $"poems-les-moisBar";
         }
+        else if (forLaMort)
+        {
+            fileName = $"poems-la-mort-bar.js";
+            chartId = $"poems-la-mortBar";
+        }
 
         var backgroundColor = borderColor.Replace("1)", "0.5)");
         if (forVariableMetric)
@@ -967,6 +985,10 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             else if (forLesMois)
             {
                 poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("les mois"));
+            }
+            else if (forLaMort)
+            {
+                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("la mort"));
             }
 
             dataLines.Add(new ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",

@@ -99,6 +99,11 @@ public class Engine
         GenerateTopMostCategoriesListing(
             Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList(),
             "refrain_categories.md");
+        
+        // Listing of topmost associations with la mort extra tag
+        GenerateTopMostCategoriesListing(
+            Data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("la mort"))).ToList(),
+            "la_mort_categories.md");
 
         // Listing of topmost associations with sonnet
         GenerateTopMostCategoriesListing(Data.Seasons.SelectMany(x => x.Poems.Where(x => x.IsSonnet)).ToList(),
