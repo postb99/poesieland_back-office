@@ -31,7 +31,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         bool forLesMoisExtraTag = false, bool forNoelExtraTag = false, bool forLaMortExtraTag = false)
     {
         var isGeneral = storageSubCategory is null && storageCategory is null && !forLesMoisExtraTag &&
-                        !forNoelExtraTag;
+                        !forNoelExtraTag && !forLaMortExtraTag;
 
         List<string> poemStringDates;
 
