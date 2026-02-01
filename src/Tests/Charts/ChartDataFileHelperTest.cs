@@ -133,4 +133,49 @@ public class ChartDataFileHelperTest
         xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
         yAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "B", "C" });
     }
+    
+        [Fact]
+    [Trait("UnitTest", "Computation")]
+    public void ShouldCorrectlyFillCategoryMetricBubbleChartDataDict()
+    {
+        Dictionary<KeyValuePair<string, int>, int> dict = new();
+        var xAxisLabels = new SortedSet<string>();
+
+        // Poem with single subcategory
+        var poem = new Poem { VerseLength = "6", Categories = [new() { SubCategories = ["A"] }] };
+        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        var expectedKey = new KeyValuePair<string, int>("A", 6);
+        dict.TryGetValue(expectedKey, out var counter).ShouldBeTrue();
+        counter.ShouldBe(1);
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A" });
+        
+        // Poem with two categories
+        poem = new() { VerseLength = "8", Categories = [new() { SubCategories = ["A", "B"] }] };
+        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        expectedKey = new("A", 8);
+        dict.TryGetValue(expectedKey, out var counter2).ShouldBeTrue();
+        counter2.ShouldBe(1);
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
+        
+        expectedKey = new("B", 8);
+        dict.TryGetValue(expectedKey, out var counter3).ShouldBeTrue();
+        counter3.ShouldBe(1);
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
+        
+        // Poem with reused metric
+        poem = new() { VerseLength = "8", Categories = [new() { SubCategories = ["A"] }] };
+        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        expectedKey = new("A", 8);
+        dict.TryGetValue(expectedKey, out var counter4).ShouldBeTrue();
+        counter4.ShouldBe(2);
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
+        
+        // Variable metric
+        poem = new() { VerseLength = "-1", Categories = [new() { SubCategories = ["A"] }] };
+        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        expectedKey = new("A", 0);
+        dict.TryGetValue(expectedKey, out var counter5).ShouldBeTrue();
+        counter5.ShouldBe(1);
+        xAxisLabels.ToList().ShouldBeEquivalentTo(new List<string> { "A", "B" });
+    }
 }

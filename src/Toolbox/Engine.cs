@@ -34,80 +34,9 @@ public class Engine
         DataEn = dataEn;
     }
     
-    public void GenerateCategoryMetricBubbleChartDataFile()
-    {
-        var poems = Data.Seasons.SelectMany(x => x.Poems);
-        var categoryMetricDataDictionary = new Dictionary<KeyValuePair<string, int>, int>();
-        var xAxisLabels = new SortedSet<string>();
 
-        foreach (var poem in poems)
-        {
-            FillCategoryMetricBubbleChartDataDict(categoryMetricDataDictionary, xAxisLabels, poem);
-        }
 
-        // Find max value
-        var maxValue = categoryMetricDataDictionary.Values.Max();
 
-        var fileName = "category-metric.js";
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
-        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
-        chartDataFileHelper.WriteBeforeData();
-
-        var firstQuarterDataLines = new List<BubbleChartDataLine>();
-        var secondQuarterDataLines = new List<BubbleChartDataLine>();
-        var thirdQuarterDataLines = new List<BubbleChartDataLine>();
-        var fourthQuarterDataLines = new List<BubbleChartDataLine>();
-
-        // Get the values for x-axis
-        var xAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
-        xAxisKeys.Sort();
-
-        foreach (var dataKey in categoryMetricDataDictionary.Keys)
-        {
-            var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
-            var yAxisValue = dataKey.Value;
-            AddDataLine(xAxisValue, yAxisValue, categoryMetricDataDictionary[dataKey],
-                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
-                maxValue, 10);
-        }
-
-        chartDataFileHelper.WriteData(firstQuarterDataLines, false);
-        chartDataFileHelper.WriteData(secondQuarterDataLines, false);
-        chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
-        chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
-        chartDataFileHelper.WriteAfterData("categoryMetric",
-            [
-                "Premier quart (taille fois 4)",
-                "Deuxième quart (taille fois 2)",
-                "Troisième quart (taille fois 1.5)",
-                "Quatrième quart"
-            ],
-            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
-                xAxisTitle: "Catégorie", yAxisTitle: "Métrique (0 = variable)"));
-        streamWriter.Close();
-    }
-
-    public void FillCategoryMetricBubbleChartDataDict(Dictionary<KeyValuePair<string, int>, int> dictionary,
-        SortedSet<string> xLabels, Poem poem)
-    {
-        var subCategories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
-        var metric = poem.HasVariableMetric ? 0 : int.Parse(poem.VerseLength!);
-
-        foreach (var key in subCategories.Select(subCategory => new KeyValuePair<string, int>(subCategory, metric)))
-        {
-            if (dictionary.TryGetValue(key, out _))
-            {
-                dictionary[key]++;
-            }
-            else
-            {
-                dictionary.Add(key, 1);
-                xLabels.Add(key.Key);
-            }
-        }
-    }
 
     public void OutputSeasonsDuration()
     {

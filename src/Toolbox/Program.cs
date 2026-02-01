@@ -143,7 +143,7 @@ public class Program
                 break;
             case MainMenuSettings.MenuChoices.GenerateCategoriesBubbleChartDataFile:
                 _chartDataFileGenerator.GenerateCategoriesBubbleChartDataFile(_engine.Data);
-                _engine.GenerateCategoryMetricBubbleChartDataFile();
+                _chartDataFileGenerator.GenerateCategoryMetricBubbleChartDataFile(_engine.Data);
                 break;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
                 _engine.Load();
@@ -511,7 +511,7 @@ public class Program
         // Categories bubble chart
         _chartDataFileGenerator.GenerateCategoriesBubbleChartDataFile(_engine.Data);
         // Category metric bubble chart
-        _engine.GenerateCategoryMetricBubbleChartDataFile();
+        _chartDataFileGenerator.GenerateCategoryMetricBubbleChartDataFile(_engine.Data);
 
         // And check data quality
         SeasonChecker.VerifySeasonHaveCorrectPoemCount(_engine.Data);
