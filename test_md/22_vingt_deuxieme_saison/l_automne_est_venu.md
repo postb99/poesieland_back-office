@@ -17,7 +17,6 @@ info: |-
     {{% notice style="primary" %}}
     Acrostiche : l'automne venu.
 
-    Les poèmes qui commencent par ce vers...
     {{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
     {{% /notice %}}
 pictures: []
@@ -55,6 +54,5 @@ Un pâle doigt traçant destin.
 {{% notice style="primary" %}}
 Acrostiche : l'automne venu.
 
-Les poèmes qui commencent par ce vers...
 {{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
 {{% /notice %}}

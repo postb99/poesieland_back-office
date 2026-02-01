@@ -1,15 +1,15 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using Toolbox.Consistency;
 using Toolbox.Domain;
 using Xunit;
-using Xunit.Abstractions;
 
 namespace Tests;
 
-public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutputHelper)
-    : IClassFixture<LoadDataFixture>
+public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper testOutputHelper)
+    : IClassFixture<WithRealDataFixture>
 {
-    private readonly Root _data = fixture.Engine.Data;
+    private readonly Root _data = fixture.Data;
 
     [Theory]
     [Trait("DataMining", "Lookup")]
@@ -266,9 +266,11 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
 
     [Fact]
     [Trait("DataMining", "Lookup")]
-    public void PoemReusedTitle()
+    public void PoemReusedTitles()
     {
-        foreach (var reusedTitle in fixture.Engine.GetReusedTitles())
+        var reusedTitlesChecker = new ReusedTitlesChecker(fixture.Data);
+        var reusedTitles = reusedTitlesChecker.GetReusedTitles();
+        foreach (var reusedTitle in reusedTitles)
         {
             testOutputHelper.WriteLine(reusedTitle);
         }
@@ -347,6 +349,23 @@ public class DataMiningTests(LoadDataFixture fixture, ITestOutputHelper testOutp
                 if (int.TryParse(poem.VerseLength, out var verseLength) && verseLength > 3)
                     testOutputHelper.WriteLine($"[Too short verse] ({poem.Id})");
             }
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void PoemsThatCouldBeVerseRepeat()
+    {
+        var minLength = 16;
+
+        foreach (var group in _data.Seasons.SelectMany(x => x.Poems)
+                     .Where(x => x.Paragraphs[0].Verses[0].Length > minLength - 1)
+                     .Select(x => x.Paragraphs[0].Verses[0].Substring(0, minLength))
+                     .GroupBy(x => x))
+        {
+            var count = group.Count();
+            if (count > 1)
+                testOutputHelper.WriteLine($"{group.Key}");
         }
     }
 

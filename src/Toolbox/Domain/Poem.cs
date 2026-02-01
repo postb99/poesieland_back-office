@@ -24,7 +24,7 @@ public class Poem
     public string? VerseLength { get; set; }
     
     [XmlIgnore]
-    public bool HasVerseLength => VerseLength is not null && VerseLength != "0";
+    public bool HasVerseLength => !string.IsNullOrEmpty(VerseLength) && VerseLength != "0";
 
     [XmlIgnore]
     public bool HasVariableMetric => VerseLength is not null &&

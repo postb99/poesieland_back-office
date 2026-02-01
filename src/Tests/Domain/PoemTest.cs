@@ -5,9 +5,9 @@ using Toolbox.Domain;
 using Toolbox.Settings;
 using Xunit;
 
-namespace Tests;
+namespace Tests.Domain;
 
-public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
+public class PoemTest(BasicFixture fixture) : IClassFixture<BasicFixture>
 {
     [Fact]
     [Trait("UnitTest", "Computation")]
@@ -85,7 +85,6 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
     [Trait("UnitTest", "ContentGeneration")]
     public void ShouldGenerateExpectedExtraAndMetricTags()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var poem = new Poem
         {
             Id = "poem_25",
@@ -94,7 +93,7 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
             ExtraTags = ["wonderful"],
             VerseLength = "12"
         };
-        poem.FileContent(-1, basicFixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+        poem.FileContent(-1, fixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
             .ShouldContain("tags = [\"wonderful\", \"2025\", \"acrostiche\", \"alexandrin\"]");
     }
 
@@ -102,14 +101,13 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
     [Trait("UnitTest", "ContentGeneration")]
     public void ShouldGenerateExpectedMultipleMetricTags()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var poem = new Poem
         {
             Id = "poem_25",
             TextDate = "01.01.2025",
             VerseLength = "6, 3"
         };
-        poem.FileContent(-1, basicFixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+        poem.FileContent(-1, fixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
             .ShouldContain("tags = [\"2025\", \"métrique variable\", \"hexasyllabe\", \"trisyllabe\"]");
     }
 
@@ -117,7 +115,6 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
     [Trait("UnitTest", "ContentGeneration")]
     public void ShouldGenerateExpectedLocations()
     {
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
         var poem = new Poem
         {
             Id = "poem_25",
@@ -125,7 +122,7 @@ public class PoemTest(BasicFixture basicFixture) : IClassFixture<BasicFixture>
             VerseLength = "8",
             Locations = ["Ici", "Là", "ailleurs"]
         };
-        poem.FileContent(-1, basicFixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+        poem.FileContent(-1, fixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
             .ShouldContain("locations = [\"Ici\", \"Là\", \"ailleurs\"]");
     }
 }

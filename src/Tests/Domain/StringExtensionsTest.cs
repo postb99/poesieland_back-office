@@ -1,11 +1,9 @@
-﻿using System.Globalization;
-using System.Text;
+﻿using System.Text;
 using Shouldly;
 using Toolbox.Domain;
 using Xunit;
-using Xunit.Abstractions;
 
-namespace Tests;
+namespace Tests.Domain;
 
 public class StringExtensionsTest
 {

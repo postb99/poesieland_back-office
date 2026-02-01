@@ -1,9 +1,8 @@
-using System.Globalization;
 using Shouldly;
 using Toolbox.Domain;
 using Xunit;
 
-namespace Tests;
+namespace Tests.Domain;
 
 public class SeasonTest
 {

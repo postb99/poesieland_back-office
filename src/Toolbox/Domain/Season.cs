@@ -105,11 +105,6 @@ public class Season
         s.Append(
             $"{{{{< chartjs id=\"season{Id}VerseLengthBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}/poems-verse-length-bar.js\" />}}}}");
         s.Append(Environment.NewLine);
-        s.Append("## Longueur des poèmes");
-        s.Append(Environment.NewLine);
-        s.Append(
-            $"{{{{< chartjs id=\"season{Id}PoemLengthBar\" width=\"75%\" jsFile=\"../../charts/season-{Id}/poems-length-bar.js\" />}}}}");
-        s.Append(Environment.NewLine);
         s.Append("## Intervalle");
         s.Append(Environment.NewLine);
         s.Append(
