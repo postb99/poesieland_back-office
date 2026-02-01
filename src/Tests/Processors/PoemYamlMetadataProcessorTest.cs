@@ -164,11 +164,12 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         var partialImport = poemContentImporter.GetPartialImport(poemContentFilePath);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        partialImport.Tags.Count.ShouldBe(4);
+        partialImport.Tags.Count.ShouldBe(5);
         partialImport.Tags.ShouldContain("2023");
         partialImport.Tags.ShouldContain("saisons");
         partialImport.Tags.ShouldContain("nature");
         partialImport.Tags.ShouldContain("octosyllabe");
+        partialImport.Tags.ShouldContain("saison incertaine");
     }
     
     [Fact]

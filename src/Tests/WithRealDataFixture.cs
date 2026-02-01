@@ -12,7 +12,9 @@ public class WithRealDataFixture : BasicFixture
     public WithRealDataFixture()
     {
         // Do "global" initialization here; Only called once.
-        new DataManager(Configuration).Load(out Root Data, out Root DataEn);
+        new DataManager(Configuration).Load(out Root data, out Root dataEn);
+        Data = data;
+        DataEn = dataEn;
     }
 
     public void Dispose()
