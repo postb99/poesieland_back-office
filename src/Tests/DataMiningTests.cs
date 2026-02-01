@@ -9,7 +9,7 @@ namespace Tests;
 public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper testOutputHelper)
     : IClassFixture<WithRealDataFixture>
 {
-    private readonly Root _data = fixture.Engine.Data;
+    private readonly Root _data = fixture.Data;
 
     [Theory]
     [Trait("DataMining", "Lookup")]
@@ -268,7 +268,7 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
     [Trait("DataMining", "Lookup")]
     public void PoemReusedTitles()
     {
-        var reusedTitlesChecker = new ReusedTitlesChecker(fixture.Engine.Data);
+        var reusedTitlesChecker = new ReusedTitlesChecker(fixture.Data);
         var reusedTitles = reusedTitlesChecker.GetReusedTitles();
         foreach (var reusedTitle in reusedTitles)
         {

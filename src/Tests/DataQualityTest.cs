@@ -7,7 +7,7 @@ namespace Tests;
 public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper testOutputHelper)
     : IClassFixture<WithRealDataFixture>
 {
-    private readonly Root _data = fixture.Engine.Data;
+    private readonly Root _data = fixture.Data;
 
     [Fact]
     [Trait("UnitTest", "Quality")]
