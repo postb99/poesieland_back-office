@@ -4,6 +4,7 @@ using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Generators;
 using Toolbox.Importers;
+using Toolbox.Information;
 using Toolbox.Persistence;
 using Toolbox.Settings;
 
@@ -193,7 +194,7 @@ public class Program
                 ImportEnPoemsContentFiles();
                 break;
             case MainMenuSettings.MenuChoices.OutputSeasonsDuration:
-                _engine.OutputSeasonsDuration();
+                SeasonDurationOutputHelper.OutputSeasonsDuration(_engine.Data);
                 break;
             case MainMenuSettings.MenuChoices.OutputReusedTitles:
                 var reusedTitles = new ReusedTitlesChecker(_engine.Data).GetReusedTitles();
