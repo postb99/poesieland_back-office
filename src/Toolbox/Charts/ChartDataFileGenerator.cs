@@ -317,7 +317,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         ]);
         streamWriter.Close();
     }
-    
+
     /// <summary>
     /// Generates a pie chart data file for categories within a year.
     /// The method processes poem data from the provided `Root` object, filtered
@@ -329,7 +329,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     {
         var poems = data.Seasons.SelectMany(x => x.Poems).Where(x => x.Date.Year == year);
         if (!poems.Any()) return;
-        
+
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!;
@@ -337,7 +337,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         var byStorageSubcategoryCount = new Dictionary<string, int>();
-        
+
         foreach (var poem in poems)
         {
             foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
@@ -846,7 +846,8 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// <param name="forLaMort">A flag indicating to include poems with "la mort" extra tag.</param>
     public void GenerateOverSeasonsChartDataFile(Root data, string? storageSubCategory, string? storageCategory,
         bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
-        bool forRefrain = false, int? forMetric = null, bool forLovecat = false, bool forLesMois = false, bool forLaMort = false)
+        bool forRefrain = false, int? forMetric = null, bool forLovecat = false, bool forLesMois = false,
+        bool forLaMort = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
@@ -1415,6 +1416,160 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             xLabels: xLabels.ToArray(), stack: "stack0");
         streamWriter.Close();
     }
+
+    /// <summary>
+    /// Generates a bubble chart data file for associated categories.
+    /// This method processes the data provided in the `Root` object and generates a chart data
+    /// file that reflects category associations. Additionally, it creates markdown files
+    /// listing top category associations for specific tags or properties.
+    /// The following files are generated:
+    /// - associated-categories.js: The main bubble chart data file with category associations.
+    /// - refrain_categories.md: Lists topmost categories associations for poems with the "refrain" extra tag.
+    /// - la_mort_categories.md: Lists topmost categories associations for poems related to "la mort".
+    /// - sonnet_categories.md: Lists topmost categories associations for sonnets.
+    /// - metric-{metric}_categories.md : Lists topmost categories associations for 1-12 metric.
+    /// </summary>
+    /// <param name="data">The primary source of French poems data.</param>
+    public void GenerateCategoriesBubbleChartDataFile(Root data)
+    {
+        var poems = data.Seasons.SelectMany(x => x.Poems);
+        var categoriesDataDictionary = new Dictionary<KeyValuePair<string, string>, int>();
+        var xAxisLabels = new SortedSet<string>();
+        var yAxisLabels = new SortedSet<string>();
+
+        foreach (var poem in poems)
+        {
+            ChartDataFileHelper.FillCategoriesBubbleChartDataDict(categoriesDataDictionary, xAxisLabels, yAxisLabels,
+                poem);
+        }
+
+        // Find max value
+        var maxValue = categoriesDataDictionary.Values.Max();
+
+        var fileName = "associated-categories.js";
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
+        var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
+        chartDataFileHelper.WriteBeforeData();
+
+        var firstQuarterDataLines = new List<BubbleChartDataLine>();
+        var secondQuarterDataLines = new List<BubbleChartDataLine>();
+        var thirdQuarterDataLines = new List<BubbleChartDataLine>();
+        var fourthQuarterDataLines = new List<BubbleChartDataLine>();
+
+        // Get the values for x-axis
+        var xAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
+        xAxisKeys.Sort();
+
+        var yAxisKeys = categoriesDataDictionary.Keys.Select(x => x.Value).Distinct().ToList();
+        yAxisKeys.Sort();
+
+        foreach (var dataKey in categoriesDataDictionary.Keys)
+        {
+            var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
+            var yAxisValue = yAxisKeys.IndexOf(dataKey.Value);
+            ChartDataFileHelper.AddDataLine(xAxisValue, yAxisValue, categoriesDataDictionary[dataKey],
+                [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
+                maxValue, 10);
+        }
+
+        chartDataFileHelper.WriteData(firstQuarterDataLines, false);
+        chartDataFileHelper.WriteData(secondQuarterDataLines, false);
+        chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
+        chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
+        chartDataFileHelper.WriteAfterData("associatedCategories",
+            [
+                "Premier quart (taille fois 4)",
+                "Deuxième quart (taille fois 2)",
+                "Troisième quart (taille fois 1.5)",
+                "Quatrième quart"
+            ],
+            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
+                yAxisLabels.ToList()));
+        streamWriter.Close();
+
+        // Automatic listing of topmost associations
+        GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary);
+
+        // Listing of topmost associations with refrain extra tag
+        GenerateTopMostCategoriesListing(
+            data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList(),
+            "refrain_categories.md");
+
+        // Listing of topmost associations with la mort extra tag
+        GenerateTopMostCategoriesListing(
+            data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("la mort"))).ToList(),
+            "la_mort_categories.md");
+
+        // Listing of topmost associations with sonnet
+        GenerateTopMostCategoriesListing(data.Seasons.SelectMany(x => x.Poems.Where(x => x.IsSonnet)).ToList(),
+            "sonnet_categories.md");
+
+        // Listing of topmost associations with metrics
+        foreach (var metric in Enumerable.Range(1, 12))
+        {
+            poems = data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasMetric(metric))).ToList();
+            GenerateTopMostCategoriesListing(poems, $"metric-{metric}_categories.md");
+        }
+    }
+
+    private void GenerateTopMostAssociatedCategoriesListing(Dictionary<KeyValuePair<string, string>, int> dataDict)
+    {
+        var sortedDict = dataDict.OrderByDescending(x => x.Value).Take(10).ToList();
+
+        var outFile = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", "associated_categories.md");
+        using var streamWriter = new StreamWriter(outFile);
+
+        streamWriter.WriteLine("+++");
+        streamWriter.WriteLine("title = \"Associations privilégiées\"");
+        streamWriter.WriteLine("+++");
+        foreach (var (key, _) in sortedDict)
+        {
+            streamWriter.WriteLine(
+                $"- {key.Key.MarkdownLink("categories")} et {key.Value.MarkdownLink("categories")}");
+        }
+
+        streamWriter.Close();
+    }
+
+    private void GenerateTopMostCategoriesListing(IEnumerable<Poem> poems, string fileName)
+    {
+        var dict = new Dictionary<string, int>();
+        foreach (var poem in poems)
+        {
+            foreach (var cat in poem.Categories.SelectMany(x => x.SubCategories))
+            {
+                if (dict.TryGetValue(cat, out var count))
+                {
+                    dict[cat] = ++count;
+                }
+                else
+                {
+                    dict[cat] = 1;
+                }
+            }
+        }
+
+        var topMost = dict.OrderByDescending(x => x.Value).Take(10).ToList();
+
+        var outFile = Path.Combine(Directory.GetCurrentDirectory(),
+            configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", fileName);
+        using var streamWriter = new StreamWriter(outFile);
+
+        streamWriter.WriteLine("+++");
+        streamWriter.WriteLine("title = \"Associations privilégiées\"");
+        streamWriter.WriteLine("+++");
+        foreach (var topmost in topMost)
+        {
+            streamWriter.WriteLine(
+                $"- {topmost.Key.MarkdownLink("categories")}");
+        }
+
+        streamWriter.Close();
+    }
+
 
     /// <summary>
     /// Retrieves the top most represented months from the provided dictionary of month-day data.

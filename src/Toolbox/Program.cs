@@ -142,7 +142,7 @@ public class Program
                 GenerateOverSeasonsVerseLengthLineChartDataFile();
                 break;
             case MainMenuSettings.MenuChoices.GenerateCategoriesBubbleChartDataFile:
-                _engine.GenerateCategoriesBubbleChartDataFile();
+                _chartDataFileGenerator.GenerateCategoriesBubbleChartDataFile(_engine.Data);
                 _engine.GenerateCategoryMetricBubbleChartDataFile();
                 break;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
@@ -509,7 +509,7 @@ public class Program
         GenerateOverSeasonsVerseLengthLineChartDataFile();
 
         // Categories bubble chart
-        _engine.GenerateCategoriesBubbleChartDataFile();
+        _chartDataFileGenerator.GenerateCategoriesBubbleChartDataFile(_engine.Data);
         // Category metric bubble chart
         _engine.GenerateCategoryMetricBubbleChartDataFile();
 

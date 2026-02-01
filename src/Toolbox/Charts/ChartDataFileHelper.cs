@@ -416,4 +416,34 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
 
         return dataDict;
     }
+    
+    public static void FillCategoriesBubbleChartDataDict(Dictionary<KeyValuePair<string, string>, int> dictionary,
+        SortedSet<string> xLabels, SortedSet<string> yLabels, Poem poem)
+    {
+        var subCategories = poem.Categories.SelectMany(x => x.SubCategories).ToList();
+
+        if (subCategories.Count == 1)
+        {
+            return;
+        }
+
+        for (var i = 0; i < subCategories.Count; i++)
+        {
+            for (var j = subCategories.Count - 1; j > -1; j--)
+            {
+                if (string.Compare(subCategories[i], subCategories[j]) >= 0) continue;
+                var key = new KeyValuePair<string, string>(subCategories[i], subCategories[j]);
+                if (dictionary.TryGetValue(key, out _))
+                {
+                    dictionary[key]++;
+                }
+                else
+                {
+                    dictionary.Add(key, 1);
+                    xLabels.Add(key.Key);
+                    yLabels.Add(key.Value);
+                }
+            }
+        }
+    }
 }
