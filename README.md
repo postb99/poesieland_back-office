@@ -3,60 +3,59 @@
 # Poesieland's back-office toolbox
 
 ## Why
-I needed a management tool to perform some operations with my French and also some English poems that you can read at https://poesieland.github.io/.
+I needed a management tool to perform operations on my French and English poems that you can read at https://poesieland.github.io/.
 
-Since the beginning, data is privately stored in a single XML file.
+Historically, data has been stored privately in a single XML file.
 
-The site content uses markdown files. So the storage to content initial operation and subsequent import from content to storage is coded using my favorite language, C#.
+Site content is stored as Markdown files. Conversion between storage (XML) and content (Markdown) — both export and import — is implemented in C#, my favorite programming language.
 
-This also helps performing statistic computations using XML memory-loaded document, with more than a thousand of poems it's not a memory hassle, at least it works for now.
+This also helps perform statistical computations using an in-memory XML document. With more than a thousand poems, memory is not an issue for now.
 
 ## What
 
 ### Content file generation
 
-- For a single poem, from XML storage to markdown file. This produces metadata in TOML format markdown file.
+- Export a single poem from XML storage to a Markdown file with TOML front matter metadata.
 - Same operation for a Season (a logical group of 50 poems).
-- For a new Season main page, from XML storage to a markdown file, using a template for every Season main page (index).
+- Generate a new Season main page (index) from XML storage using a template.
 
 ### Import to XML storage
 
-- For a given poem, giving its ID (that ends with Season's number). This reads metadata in YAML or TOML format from markdown file (YAML being default format used by FrontMatter CMS editor).
-- Same operation for a Season (a logical group of 50 poems) or English poems (in a second XML storage file).
-- A Season's metadata can be imported too, so that the markdown file is easily edited during its filling.
-- All English poems because they're taken into account for some statistics. They have a separate XML storage file.
+- Import a specific poem by its ID (IDs end with the Season number). Metadata is read from the Markdown file in YAML or TOML format (YAML is the default used by the FrontMatter CMS editor).
+- Same operation for a Season (a logical group of 50 poems).
+- Season metadata can also be imported to allow easy editing while filling the season page.
+- Import all English poems because they are included in some statistics. They're stored in a separate XML file.
 
 ### Generation of data files for use by Chart.js
 
-- Overall statistics (charts of types bar, radar, pie) about poems' length, poems' verse length (aka metric), poems' interval, poem by day across whole time.
-- Same statistics but limited to a subset that is a Season, a CMS category (technically a subcategory), a CMS tag (technically a category or another metadata special value).
-- Repartition of a given subset of poems across a Season.
-- A line chart rather than a bar chart, for poem metric over Seasons.
-- More evolved charts (of type bubble) that allow to display relationship between two variables, typically poem length by metric, associated categories, category/metric association.
+- Overall statistics (bar, radar, pie) about poem lengths, verse lengths (metric), intervals between poems, and poems per day across the year timeline.
+- Same statistics limited to a subset: a Season, a CMS category (a stored poem object subcategory), or a CMS tag (a stored poem object category).
+- Distribution of a subset of poems across a Season.
+- Line chart, rather than bar chart, for metrics over Seasons.
+- More advanced charts (e.g., bubble charts) to show relationships between variables, such as poem length/metric, associated categories, or category/metric associations.
 
 ### Content quality check
 
-- Especially about some metadata I can easily typo or forget in CMS editor despite fields descriptions:
-  - Miss of correctly filling required tags such as year, metric name
-  - Miss of filling required information when metric is variable
-  - 
-- To ensure weight field of a new poem is encoded with right value corresponding to its index minus one in its Season.
-- To ensure Season has exactly 50 poems when I think they're complete.
-- For now, for poems with a given tag or characteristic being listed on special pages.
+Because CMS editor gives indications (fields descriptions) but a miss or typo can happen.
+
+- Missing required tags (e.g., year, metric name).
+- Missing required information when a metric is variable.
+- Ensures the weight field of a new poem is encoded correctly (index plus one within its Season).
+- Ensures a Season contains exactly 50 poems when it is considered complete.
+- Checks poems that should be listed on special pages based on tags or characteristics.
 
 ### Helper functions
 
-- Output Seasons duration because this value is put on a specific page.
-- Output reused titles because it's better to have different titles for every poem, but some reuses are allowed after careful review and stored in a control text file. When a title is updated, the poem ID remains the same.
+- Output a Season's duration (used on a specific page).
+- Report reused titles — titles should generally be unique, but reuse is allowed after review and recorded in a control file. When a title is updated, the poem ID remains unchanged.
 
 ## How
 
-Go to `src/Toolbox` and type `dotnet run`.
+Go to `src/Toolbox` and run `dotnet run`.
 
-A menu displays in command line. The most used option is to import a single poem (type 300 then 310 then type poem ID).
+A menu appears in the command line. The most-used option is importing a single poem: choose 300, then 310, then enter the poem ID.
 
-Once the poem is imported to XML storage, relevant data files are generated for Chart.js, so not all data files.
-There are also specific markdown files generated containing things like total poem count so that it's always up-to-date on site and easy to manage.
+After importing a poem into the XML storage, the relevant data files for Chart.js are generated (not all files are regenerated). Specific Markdown files are also generated (e.g., total poem count), keeping site data up to date and easy to manage.
 
 ## External resources
 
