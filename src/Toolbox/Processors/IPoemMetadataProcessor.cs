@@ -11,6 +11,7 @@ public interface IPoemMetadataProcessor
     string? GetAcrostiche(string line);
     string? GetVerseLength(string line);
     string? GetType(string line);
+    string? GetDescription(string line);
     int GetWeight(string line);
     DoubleAcrostiche GetDoubleAcrostiche(string line);
     void BuildCategories(string line);

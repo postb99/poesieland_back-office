@@ -43,6 +43,11 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     {
         return line.Substring(14);
     }
+    
+    public string GetDescription(string line)
+    {
+        return line.Substring(14).CleanedContent()!;
+    }
 
     public int GetWeight(string line)
     {

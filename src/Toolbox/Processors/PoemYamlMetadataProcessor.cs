@@ -57,6 +57,12 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
         var value = line.Substring(13);
         return value == "\"\"" ? null : value;
     }
+    
+    public string? GetDescription(string line)
+    {
+        var value = line?.Substring(14);
+        return value == "\"\"" ? null : value.Trim('"');
+    }
 
     public int GetWeight(string line)
     {

@@ -66,6 +66,8 @@ public class Poem
     }
 
     [XmlElement("info")] public string? Info { get; set; }
+    
+    [XmlElement("description")] public string? Description { get; set; }
 
     [XmlElement("picture")] public List<string>? Pictures { get; set; }
 
@@ -187,6 +189,12 @@ public class Poem
             var sep = Info.Contains('\n') ? "\"\"\"" + Environment.NewLine : Info.Contains("include \"") ? "'" : "\"";
             var info = sep == "\"" ? Info.Escaped() : Info;
             s.Append($"info = {sep}{info}{sep}");
+            s.Append(Environment.NewLine);
+        }
+
+        if (Description is not null)
+        {
+            s.Append($"description = \"{Description}\"");
             s.Append(Environment.NewLine);
         }
 
