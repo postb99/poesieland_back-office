@@ -60,7 +60,7 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
     
     public string? GetDescription(string line)
     {
-        var value = line?.Substring(14);
+        var value = line?.Substring(13);
         return value == "\"\"" ? null : value.Trim('"');
     }
 
