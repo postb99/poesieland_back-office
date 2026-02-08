@@ -201,4 +201,20 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
         anomalies.ShouldBeEmpty();
     }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    private void ShouldImportDescription()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "27_vingt_septieme_saison/gare_au_chat.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Description.ShouldBe("Gare au chat qui **dort** / Car il te surveille");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
+    }
+
 }

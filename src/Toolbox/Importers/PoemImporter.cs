@@ -471,6 +471,10 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         {
             _metadataProcessor!.BuildInfoLines(line);
         }
+        else if (line.StartsWith("description"))
+        {
+            _poem.Description = _metadataProcessor!.GetDescription(line);
+        }
         else if (line.StartsWith("acrostiche"))
         {
             _poem.Acrostiche = _metadataProcessor!.GetAcrostiche(line);

@@ -36,7 +36,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    private void ShouldImportInfoTomlMetadata()
+    private void ShouldImportSingleLineInfoTomlMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison/barcarolle.md");
@@ -212,4 +212,20 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
         anomalies.ShouldBeEmpty();
     }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    private void ShouldImportDescription()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/est_ce_un_automne.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
+        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        poem.Description.ShouldBe("Est-ce un automne, est-ce un printemps / Qui dans mon cœur se renouvelle");
+        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
+        anomalies.ShouldBeEmpty();
+    }
+
 }
