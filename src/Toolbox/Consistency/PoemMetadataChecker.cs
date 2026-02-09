@@ -128,4 +128,28 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             }
         }
     }
+
+    /// <summary>
+    /// Validates that a poem's description meets the requirements based on its extra tags and settings.
+    /// </summary>
+    /// <param name="poem">The poem to validate.</param>
+    /// <param name="settings">The settings defining required descriptions and formatting rules.</param>
+    /// <exception cref="Exception">
+    /// Thrown if the poem is missing a description or required bold formatting for a specified extra tag.
+    /// </exception>
+    public static void CheckRequiredDescription(Poem poem, RequiredDescriptionSettings settings)
+    {
+        foreach (var extraTag in poem.ExtraTags)
+        {
+            var setting = settings.RequiredDescriptions.FirstOrDefault(x => x.ExtraTag == extraTag);
+            if (setting is null)
+                continue;
+
+            if (string.IsNullOrWhiteSpace(poem.Description))
+                throw new($"Poem {poem.Id} is missing description because of extra tag '{extraTag}'");
+
+            if (setting.Bold && !poem.Description.Contains("**"))
+                throw new($"Poem {poem.Id} description is missing bold formatting because of extra tag '{extraTag}'");
+        }
+    }
 }

@@ -288,7 +288,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     /// <returns>An enumerable collection of strings, where each string represents a specific anomaly detected during the import process.</returns>
     public IEnumerable<string> CheckAnomaliesAfterImport()
     {
-        var partialImport = new PartialImport()
+        var partialImport = new PartialImport
         {
             DetailedMetric = _poem.DetailedMetric,
             HasVariableMetric = _poem.HasVariableMetric,
@@ -351,7 +351,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         
         public string DetailedMetric { get; set; }
         
-        public string Info { get; set; }
+        public string? Info { get; set; }
     }
 
     /// <summary>
