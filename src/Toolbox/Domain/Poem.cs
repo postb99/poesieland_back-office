@@ -17,8 +17,8 @@ public class Poem
     [XmlElement("categorie")] public List<Category> Categories { get; set; } = [];
 
     /// <summary>
-    /// When coming from storage, equal to DetailedVerseLength.
-    /// When importing poem, integer value or -1 when variable.
+    /// When coming from storage, equal to <see cref="DetailedMetric"/>.
+    /// When importing poem, integer value or -1 when variable, because detailed metric is then determined by imported Info property.
     /// </summary>
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }
@@ -46,6 +46,7 @@ public class Poem
 
     /// <summary>
     /// Real metric, either an integer or integers separated by comma + space.
+    /// Useful for poem import from content files, because detailed metric is determined by imported Info property.
     /// </summary>
     [XmlIgnore]
     public string DetailedMetric

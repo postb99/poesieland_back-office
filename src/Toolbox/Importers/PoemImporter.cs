@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Processors;
 using Toolbox.Settings;
@@ -282,63 +283,21 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     }
 
     /// <summary>
-    /// Checks for anomalies in the imported poem data and provides detailed anomaly descriptions, if any.
+    /// Checks for anomalies in the imported poem data by calling <see cref="PoemMetadataChecker"/> and returning a list of strings representing the detected anomalies.
     /// </summary>
     /// <returns>An enumerable collection of strings, where each string represents a specific anomaly detected during the import process.</returns>
     public IEnumerable<string> CheckAnomaliesAfterImport()
     {
-        foreach (var p in CheckAnomalies(new ()
-                 {
-                     DetailedMetric = _poem.DetailedMetric,
-                     HasVariableMetric = _poem.HasVariableMetric,
-                     Tags = _metadataProcessor!.GetTags(),
-                     PoemId = _poem.Id,
-                     Year = _poem.Date.Year,
-                     Info = _poem.Info
-                 })) yield return p;
-        
-        if (!_poem.HasVerseLength)
-            yield return "Metric cannot be empty or 0";
-    }
-
-    /// <summary>
-    /// Checks for anomalies in a partial poem import based on its properties and metadata tags.
-    /// </summary>
-    /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
-    /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
-    public IEnumerable<string> CheckAnomalies(PartialImport partialImport)
-    {
-        // Poem year should be found in tags
-        if (!partialImport.Tags.Contains(partialImport.Year.ToString()))
+        var partialImport = new PartialImport()
         {
-            yield return "Missing year tag";
-        }
-
-        // When metric is variable, "métrique variable" tag should be found and info should mention it
-        if (partialImport.HasVariableMetric)
-        {
-            if (!partialImport.Tags.Contains("métrique variable"))
-            {
-                yield return "Missing 'métrique variable' tag";
-            }
-            
-            if (!partialImport.Info.Contains("Métrique variable : "))
-            {
-                yield return "Missing 'Métrique variable : ' in Info";
-            }
-        }
-
-        // Name of metric should be found in tags
-        foreach (var metric in partialImport.DetailedMetric.Split(','))
-        {
-            if (metric == "poème en prose")
-                break;
-            var expectedTag = _metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name.ToLowerInvariant();
-            if (!partialImport.Tags.Contains(expectedTag))
-            {
-                yield return $"Missing '{expectedTag}' tag";
-            }
-        }
+            DetailedMetric = _poem.DetailedMetric,
+            HasVariableMetric = _poem.HasVariableMetric,
+            Tags = _metadataProcessor!.GetTags(),
+            PoemId = _poem.Id,
+            Year = _poem.Date.Year,
+            Info = _poem.Info
+        };
+        return PoemMetadataChecker.CheckAnomalies(partialImport, _metrics);
     }
 
     /// <summary>

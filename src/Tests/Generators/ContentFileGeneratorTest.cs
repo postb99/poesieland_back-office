@@ -1,5 +1,3 @@
-using System.Text;
-using AutoFixture.Xunit3;
 using Tests.Customizations;
 using Toolbox.Domain;
 using Toolbox.Generators;

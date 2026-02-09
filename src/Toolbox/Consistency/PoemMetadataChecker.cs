@@ -13,30 +13,26 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// /// <exception cref="Exception">
     /// Thrown when the check fails.
     /// </exception>
-    public static void CheckPoemsWithoutVerseLength(Root data)
+    public static void CheckPoemsWithoutMetricSpecified(Root data)
     {
-        var poems = data.Seasons.SelectMany(x => x.Poems);
-        var poemsWithVerseLength = poems.Count(x => x.HasVerseLength);
-        if (poemsWithVerseLength == poems.Count())
-            return;
+        var incorrectPoem = data.Seasons.SelectMany(x => x.Poems).FirstOrDefault(x => !x.HasVerseLength);
 
-        var incorrectPoem = poems.FirstOrDefault(x => !x.HasVerseLength);
         if (incorrectPoem is not null)
             throw new(
                 $"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
     }
-    
+
     /// <summary>
-    /// Checks that all poems whose metric is variable have a metric specified in Info.
+    /// Checks that all poems whose metric is variable have metric specified as expected in Info.
     /// </summary>
     /// /// <exception cref="Exception">
     /// Thrown when the check fails.
     /// </exception>
-    public static void CheckPoemsWithVariableMetric(Root data)
+    public static void CheckPoemsWithVariableMetricNotPresentInInfo(Root data)
     {
         var poems = data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric));
-
         var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Métrique variable : "));
+
         if (incorrectPoem is not null)
             throw new(
                 $"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
@@ -76,6 +72,59 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             if (poemIndex != -1 && poemIndex != position)
             {
                 throw new($"Poem {poem.Id} should have weight {poemIndex + 1}!");
+            }
+        }
+    }
+
+    /// <summary>
+    /// Checks for anomalies in a partial poem import.
+    /// Possible anomalies:
+    /// - Poem metric is unspecified
+    /// - Poem year is not found in tags
+    /// - Poem metric is not found in tags
+    /// - Poem 'métrique variable' tag is missing
+    /// - Poem variable metric value is missing in Info
+    /// </summary>
+    /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
+    /// <param name="metrics">A list of all available metrics.</param>
+    /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
+    public static IEnumerable<string> CheckAnomalies(PoemImporter.PartialImport partialImport, List<Metric> metrics)
+    {
+        if (string.IsNullOrEmpty(partialImport.DetailedMetric) || partialImport.DetailedMetric == "0")
+        {
+            yield return "Poem metric is unspecified";
+        }
+
+        // Poem year should be found in tags
+        if (!partialImport.Tags.Contains(partialImport.Year.ToString()))
+        {
+            yield return "Missing year tag";
+        }
+
+        // When metric is variable, "métrique variable" tag should be found and info should mention it
+        if (partialImport.HasVariableMetric)
+        {
+            if (!partialImport.Tags.Contains("métrique variable"))
+            {
+                yield return "Missing 'métrique variable' tag";
+            }
+
+            if (!partialImport.Info.Contains("Métrique variable : "))
+            {
+                yield return "Missing 'Métrique variable : ' in Info";
+            }
+        }
+
+        // Name of metric should be found in tags
+        foreach (var metric in partialImport.DetailedMetric.Split(','))
+        {
+            if (metric == "poème en prose")
+                break;
+            var expectedTag = metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name
+                .ToLowerInvariant();
+            if (!partialImport.Tags.Contains(expectedTag))
+            {
+                yield return $"Missing '{expectedTag}' tag";
             }
         }
     }

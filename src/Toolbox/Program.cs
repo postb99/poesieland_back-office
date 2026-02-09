@@ -151,15 +151,19 @@ public class Program
                 _dataManager.Load(out _data, out _dataEn);
                 break;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
-                PoemMetadataChecker.CheckPoemsWithoutVerseLength(_data);
-                PoemMetadataChecker.CheckPoemsWithVariableMetric(_data);
+                PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(_data);
+                Console.WriteLine("Poems without metric specified checked");
+                PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(_data);
+                Console.WriteLine("Poems with variable metric not present in info checked");
                 SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data);
+                Console.WriteLine("Seasons with incorrect poem count checked");
                 _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null);
                 var outputs = _yamlMetadataChecker.GetMissingTagsInYamlMetadata();
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
                 }
+                Console.WriteLine("YAML metadata checked for all poems since season 21");
                 // Custom pages
                 // Les mois
                 outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data);

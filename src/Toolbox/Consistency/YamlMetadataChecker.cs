@@ -19,6 +19,7 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
     /// </returns>
     public IEnumerable<string> GetMissingTagsInYamlMetadata()
     {
+        List<Metric> metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var poemContentImporter = new PoemImporter(configuration);
 
@@ -33,7 +34,7 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
                 var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
                 if (!poemContentImporter.HasYamlMetadata) continue;
 
-                foreach (var p in poemContentImporter.CheckAnomalies(partialImport))
+                foreach (var p in PoemMetadataChecker.CheckAnomalies(partialImport, metrics))
                     yield return
                         $"{p} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}";
             }
