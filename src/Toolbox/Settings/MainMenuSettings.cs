@@ -43,6 +43,6 @@ public class MainMenuSettings
 public class MenuItem
 {
     public int Key { get; set; }
-    public string Label { get; set; } = string.Empty;
+    public required string Label { get; set; }
     public List<MenuItem> SubMenuItems { get; set; } = [];
 }

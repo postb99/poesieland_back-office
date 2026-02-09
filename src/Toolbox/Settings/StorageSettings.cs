@@ -9,18 +9,18 @@ public class StorageSettings
 
 public class Category
 {
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; }
     
-    public string Color { get; set; } = string.Empty;
+    public required string Color { get; set; }
 
     public List<SubCategory> Subcategories { get; set; } = [];
 }
 
 public class SubCategory
 {
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; }
 
-    public string Color { get; set; } = string.Empty;
+    public required string Color { get; set; }
     
     public string? Alias { get; set; }
 }

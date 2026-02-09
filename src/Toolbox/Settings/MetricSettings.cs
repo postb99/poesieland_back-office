@@ -7,9 +7,9 @@ public class MetricSettings
 
 public class Metric
 {
-    public string Name { get; set; } = string.Empty;
+    public required string Name { get; set; }
     
-    public int Length { get; set; } = 0;
+    public int Length { get; set; }
     
-    public string Color { get; set; } = string.Empty;
+    public required string Color { get; set; }
 }

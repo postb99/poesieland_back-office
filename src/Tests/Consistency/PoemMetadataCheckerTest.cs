@@ -27,9 +27,9 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         return
         [
-            new() { Length = 0, Name = "zero" },
-            new() { Length = 2, Name = "TestMetric2" },
-            new() { Length = 4, Name = "TestMetric4" }
+            new() { Length = 0, Name = "zero", Color = "blue" },
+            new() { Length = 2, Name = "TestMetric2", Color = "blue" },
+            new() { Length = 4, Name = "TestMetric4", Color = "blue" }
         ];
     }
 
