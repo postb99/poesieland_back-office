@@ -1,4 +1,4 @@
-﻿using Shouldly;
+using Shouldly;
 using Toolbox.Importers;
 using Toolbox.Settings;
 using Xunit;
@@ -29,8 +29,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poem.VerseLength.ShouldBe("8");
         poem.PoemType.ShouldBeNull();
         position.ShouldBe(11);
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact(Skip = "Metadata updated to TOML, no more test case available")]
@@ -45,8 +45,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.DoubleAcrostiche!.First.ShouldBe("Chênes");
         poem.DoubleAcrostiche.Second.ShouldBe("destin");
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -60,8 +60,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.PoemType.ShouldBe("sonnet");
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -75,8 +75,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Info.ShouldBe("Reprise d'un poème-chanson de 1994");
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -98,8 +98,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poem.Info.ShouldEndWith("#les-quatre-saisons-).");
         poem.Info.ShouldBe(
             $"Reprise enjouée du début du premier vers d'un [poème de la dix-septième saison](../17_dix_septieme_saison/dormira).{Environment.NewLine}{Environment.NewLine}Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-).");
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -113,8 +113,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Info.ShouldBeNull();
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -131,8 +131,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poem.Pictures.Count.ShouldBe(2);
         poem.Pictures[0].ShouldBe("17 décembre 2023");
         poem.Pictures[1].ShouldBe("Avec mon chien le 5 juillet 2022");
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -150,8 +150,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count.ShouldBe(1);
         poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault().ShouldBe("Ciel");
         poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault().ShouldBe("Crépuscule");
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
     [Fact]
@@ -183,8 +183,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.ExtraTags.ShouldBe(["lovecat"]);
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
     
     [Fact]
@@ -198,8 +198,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Locations.ShouldBe(["Lorraine"]);
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
     
     [Fact]
@@ -213,8 +213,8 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture): IClassFixture<
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Description.ShouldBe("Gare au chat qui **dort** / Car il te surveille");
-        var anomalies = poemContentImporter.CheckAnomaliesAfterImport();
-        anomalies.ShouldBeEmpty();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+        // TODO put back anomalies.ShouldBeEmpty();
     }
 
 }

@@ -158,34 +158,36 @@ public class Program
                 SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data);
                 Console.WriteLine("Seasons with incorrect poem count checked");
                 _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null);
-                var outputs = _yamlMetadataChecker.GetMissingTagsInYamlMetadata();
-                foreach (var output in outputs)
-                {
-                    Console.WriteLine(output);
-                }
+                _yamlMetadataChecker.VerifyMissingTagsInYamlMetadata();
                 Console.WriteLine("YAML metadata checked for all poems since season 21");
                 // Custom pages
                 // Les mois
-                outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data);
-                foreach (var output in outputs)
-                {
-                    Console.WriteLine(output);
-                }
+                // TODO put back output
+                _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data);
+                // outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data);
+                // foreach (var output in outputs)
+                // {
+                //     Console.WriteLine(output);
+                // }
 
                 // Ciel
-                outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null,
-                    _data);
-                foreach (var output in outputs)
-                {
-                    Console.WriteLine(output);
-                }
+                // TODO put back output
+                _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _data);
+                // outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null,
+                //     _data);
+                // foreach (var output in outputs)
+                // {
+                //     Console.WriteLine(output);
+                // }
 
                 // Saisons
-                outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _data);
-                foreach (var output in outputs)
-                {
-                    Console.WriteLine(output);
-                }
+                // TODO put back output
+                _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _data);
+                // outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _data);
+                // foreach (var output in outputs)
+                // {
+                //     Console.WriteLine(output);
+                // }
 
                 Console.WriteLine(
                     $"Metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_data, out var _).Values.Sum(x => x.Last())}");

@@ -41,24 +41,24 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldFailWhenPoemHasEmptyVerseLength(Root data)
+    public void ShouldThrowWhenPoemHasEmptyVerseLength(Root data)
     {
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "";
         var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
-        act.ShouldThrow<Exception>().Message
+        act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe($"[ERROR] First poem with unspecified metric or equal to '0': {poem.Id}");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldFailWhenPoemHasZeroVerseLength(Root data)
+    public void ShouldThrowWhenPoemHasZeroVerseLength(Root data)
     {
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "0";
         var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
-        act.ShouldThrow<Exception>().Message
+        act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe($"[ERROR] First poem with unspecified metric or equal to '0': {poem.Id}");
     }
 
@@ -76,109 +76,113 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldFailWhenPoemWithVariableVerseLengthHasNotExpectedInfo(Root data)
+    public void ShouldThrowWhenPoemWithVariableVerseLengthHasNotExpectedInfo(Root data)
     {
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "4, 2";
         var act = () => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(data);
-        act.ShouldThrow<Exception>().Message
+        act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe($"[ERROR] First poem with variable metric unspecified in Info: {poem.Id}");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
-    [AutoDomainData]
-    public void ShouldReturnUnspecifiedMetricAnomaly(PoemImporter.PartialImport partialImport)
+    [InlineAutoDomainData("")]
+    [InlineAutoDomainData("0")]
+    [InlineAutoDomainData(null)]
+    public void ShouldThrowWhenMetricIsUnspecified(string? metric, PoemImporter.PartialImport? partialImport)
     {
-        ArrangePartialImport(partialImport, 2000, "0", "Info");
-        partialImport.Tags.Add("zero");
-        var anomalies = PoemMetadataChecker.CheckAnomalies(partialImport, CreateMetrics());
-        anomalies.ShouldContain("Poem metric is unspecified");
+        ArrangePartialImport(partialImport, 2000, metric, "Info");
+        var act = () => PoemMetadataChecker.VerifyMetricIsSpecified(partialImport);
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Poem metric is unspecified");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldReturnMissingYearTagAnomaly(PoemImporter.PartialImport partialImport)
+    public void ShouldThrowWhenYearTagIsMissing(PoemImporter.PartialImport partialImport)
     {
         ArrangePartialImport(partialImport, 2000, "4", "Info");
         partialImport.Tags.Remove("2000");
-        var anomalies = PoemMetadataChecker.CheckAnomalies(partialImport, CreateMetrics());
-        anomalies.ShouldContain("Missing year tag");
+        var act = () => PoemMetadataChecker.VerifyYearTagIsPresent(partialImport);
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"Missing year tag: {partialImport.Year}");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldReturnMissingVariableMetricTagAnomaly(PoemImporter.PartialImport partialImport)
+    public void ShouldThrowWhenVariableMetricTagIsMissing(PoemImporter.PartialImport partialImport)
     {
         ArrangePartialImport(partialImport, 2000, "4, 2", "Métrique variable : 4, 2");
         partialImport.HasVariableMetric = true;
         partialImport.Tags.Remove("métrique variable");
-        var anomalies = PoemMetadataChecker.CheckAnomalies(partialImport, CreateMetrics());
-        anomalies.ShouldContain("Missing 'métrique variable' tag");
+        var act = () => PoemMetadataChecker.VerifyVariableMetricTagIsPresent(partialImport);
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Missing 'métrique variable' tag");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldReturnMissingVariableMetricInfoAnomaly(PoemImporter.PartialImport partialImport)
+    public void ShouldThrowWhenVariableMetricInfoIsMissing(PoemImporter.PartialImport partialImport)
     {
         ArrangePartialImport(partialImport, 2000, "4, 2", "Info");
         partialImport.HasVariableMetric = true;
-        var anomalies = PoemMetadataChecker.CheckAnomalies(partialImport, CreateMetrics());
-        anomalies.ShouldContain("Missing 'Métrique variable : ' in Info");
+        var act = () => PoemMetadataChecker.VerifyVariableMetricInfoIsPresent(partialImport);
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Missing 'Métrique variable : ' in Info");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldReturnMissingMetricTagAnomaly(PoemImporter.PartialImport partialImport)
+    public void ShouldThrowWhenMetricTagIsMissing(PoemImporter.PartialImport partialImport)
     {
         ArrangePartialImport(partialImport, 2000, "4", "Info");
         partialImport.Tags.Remove("testmetric4");
-        var anomalies = PoemMetadataChecker.CheckAnomalies(partialImport, CreateMetrics());
-        anomalies.ShouldContain("Missing 'testmetric4' tag");
+        var act = () => PoemMetadataChecker.VerifyMetricTagsArePresent(partialImport, CreateMetrics());
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Missing 'testmetric4' tag");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldThrowWhenRequiredDescriptionIsMissing(Poem poem, string extraTag)
+    public void ShouldThrowWhenRequiredDescriptionIsMissing(PoemImporter.PartialImport partialImport, string extraTag)
     {
-        poem.ExtraTags = [extraTag];
-        poem.Description = "";
-        var act = () => PoemMetadataChecker.CheckRequiredDescription(poem, new RequiredDescriptionSettings
+        partialImport.Tags = [extraTag];
+        partialImport.Description = "";
+        var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
         {
             RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = false }]
         });
-        act.ShouldThrow<Exception>().Message
-            .ShouldBe($"Poem {poem.Id} is missing description because of extra tag '{extraTag}'");
+        act.ShouldThrow<MetadataConsistencyException>().Message
+            .ShouldBe($"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldThrowWhenRequiredDescriptionDoesNotContainBoldAsRequired(Poem poem, string extraTag)
+    public void ShouldThrowWhenRequiredDescriptionDoesNotContainBoldAsRequired(PoemImporter.PartialImport partialImport,
+        string extraTag)
     {
-        poem.ExtraTags = [extraTag];
-        poem.Description = "Not bold text";
-        var act = () => PoemMetadataChecker.CheckRequiredDescription(poem, new RequiredDescriptionSettings
+        partialImport.Tags = [extraTag];
+        partialImport.Description = "Not bold text";
+        var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
         {
             RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = true }]
         });
-        act.ShouldThrow<Exception>().Message
-            .ShouldBe($"Poem {poem.Id} description is missing bold formatting because of extra tag '{extraTag}'");
+        act.ShouldThrow<MetadataConsistencyException>().Message
+            .ShouldBe(
+                $"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'");
     }
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotThrowWhenRequiredDescriptionIsPresent(Poem poem, string extraTag)
+    public void ShouldNotThrowWhenRequiredDescriptionIsPresent(PoemImporter.PartialImport partialImport,
+        string extraTag)
     {
-        poem.ExtraTags = [extraTag];
-        poem.Description = "Some ordinary text";
-        PoemMetadataChecker.CheckRequiredDescription(poem, new RequiredDescriptionSettings
+        partialImport.Tags = [extraTag];
+        partialImport.Description = "Some ordinary text";
+        PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
             {
                 RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = false }]
             }
@@ -188,11 +192,12 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotThrowWhenRequiredDescriptionContainsBoldAsRequired(Poem poem, string extraTag)
+    public void ShouldNotThrowWhenRequiredDescriptionContainsBoldAsRequired(PoemImporter.PartialImport partialImport,
+        string extraTag)
     {
-        poem.ExtraTags = [extraTag];
-        poem.Description = "Some **Bold text**";
-        PoemMetadataChecker.CheckRequiredDescription(poem, new RequiredDescriptionSettings
+        partialImport.Tags = [extraTag];
+        partialImport.Description = "Some **Bold text**";
+        PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
             {
                 RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = true }]
             }

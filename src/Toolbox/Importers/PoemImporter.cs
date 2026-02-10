@@ -20,7 +20,8 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     private IPoemMetadataProcessor? _metadataProcessor;
     private PoemContentProcessor? _contentProcessor;
     private List<Metric> _metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
-
+    private RequiredDescriptionSettings _requiredDescriptionSettings = configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Get<RequiredDescriptionSettings>();
+    
     public const string YamlMarker = "---";
     public const string TomlMarker = "+++";
 
@@ -65,9 +66,8 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         }
 
         var (poem, _) = Import(poemContentPath);
-        var anomalies = CheckAnomaliesAfterImport();
-        foreach (var anomaly in anomalies)
-            Console.WriteLine($"[ERROR]: {anomaly}");
+        // TODO put back Console.WriteLine($"[ERROR]: {anomaly}");
+        VerifyAnomaliesAfterImport();
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         if (targetSeason is null)
@@ -112,9 +112,8 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         foreach (var poemContentPath in poemFilePaths)
         {
             var (poem, position) =Import(poemContentPath);
-            var anomalies = CheckAnomaliesAfterImport();
-            foreach (var anomaly in anomalies)
-                Console.WriteLine($"[ERROR]: {anomaly}");
+            // TODO put back Console.WriteLine($"[ERROR]: {anomaly}");
+            VerifyAnomaliesAfterImport();
 
             poemsByPosition.Add(position, poem);
         }
@@ -283,11 +282,14 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     }
 
     /// <summary>
-    /// Checks for anomalies in the imported poem data by calling <see cref="PoemMetadataChecker"/> and returning a list of strings representing the detected anomalies.
+    /// Verifies that no anomalies exist in the imported poem data by calling <see cref="PoemMetadataChecker"/>.
     /// </summary>
-    /// <returns>An enumerable collection of strings, where each string represents a specific anomaly detected during the import process.</returns>
-    public IEnumerable<string> CheckAnomaliesAfterImport()
+    /// <exception cref="MetadataConsistencyException">
+    /// Thrown when any metadata consistency check fails.
+    /// </exception>
+    public void VerifyAnomaliesAfterImport()
     {
+        // TODO return list of anomalies instead of throwing and update documentation
         var partialImport = new PartialImport
         {
             DetailedMetric = _poem.DetailedMetric,
@@ -295,9 +297,10 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             Tags = _metadataProcessor!.GetTags(),
             PoemId = _poem.Id,
             Year = _poem.Date.Year,
-            Info = _poem.Info
+            Info = _poem.Info,
+            Description = _poem.Description
         };
-        return PoemMetadataChecker.CheckAnomalies(partialImport, _metrics);
+        PoemMetadataChecker.VerifyAnomalies(partialImport, _metrics, _requiredDescriptionSettings);
     }
 
     /// <summary>
@@ -334,7 +337,8 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             Year = _poem.Date.Year,
             HasVariableMetric = _poem.HasVariableMetric,
             DetailedMetric = _poem.DetailedMetric,
-            Info = _poem.Info
+            Info = _poem.Info,
+            Description = _poem.Description
         };
     }
 
@@ -352,6 +356,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         public string DetailedMetric { get; set; }
         
         public string? Info { get; set; }
+        public string? Description { get; set; }
     }
 
     /// <summary>

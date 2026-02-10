@@ -14,5 +14,6 @@ public class Constants
     public const string MAIN_MENU = "MainMenu";
     public const string STORAGE_SETTINGS = "StorageSettings";
     public const string METRIC_SETTINGS = "MetricSettings";
+    public const string REQUIRED_DESCRIPTION_SETTINGS = "RequiredDescriptionSettings";
 
 }
