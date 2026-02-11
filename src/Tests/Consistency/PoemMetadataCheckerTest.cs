@@ -75,11 +75,14 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
-    [AutoDomainData]
-    public void ShouldThrowWhenPoemWithVariableVerseLengthHasNotExpectedInfo(Root data)
+    [InlineAutoDomainData(null)]
+    [InlineAutoDomainData("")]
+    [InlineAutoDomainData("Info")]
+    public void ShouldThrowWhenPoemWithVariableVerseLengthHasNotExpectedInfo(string? info, Root? data)
     {
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "4, 2";
+        poem.Info = info;
         var act = () => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(data);
         act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe($"[ERROR] First poem with variable metric unspecified in Info: {poem.Id}");
