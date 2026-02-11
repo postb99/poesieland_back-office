@@ -41,7 +41,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     /// - No content directory corresponding to the specified season id exists.
     /// - The poem content file is not found.
     /// </exception>
-    public Poem ImportPoem(string poemId, Root data)
+    public async Task<Poem> ImportPoemAsync(string poemId, Root data)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
@@ -66,8 +66,10 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         }
 
         var (poem, _) = Import(poemContentPath);
-        // TODO put back Console.WriteLine($"[ERROR]: {anomaly}");
-        VerifyAnomaliesAfterImportAsync();
+        var anomalies = await VerifyAnomaliesAfterImportAsync();
+        foreach (var anomaly in anomalies)
+            Console.WriteLine($"[ERROR]: {anomaly}");
+        
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         if (targetSeason is null)
@@ -101,7 +103,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     /// <exception cref="IOException">
     /// Thrown when file access errors occur during the import operation.
     /// </exception>
-    public void ImportPoemsOfSeason(int seasonId, Root data)
+    public async Task ImportPoemsOfSeasonAsync(int seasonId, Root data)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
@@ -111,9 +113,10 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         var poemsByPosition = new Dictionary<int, Poem>(50);
         foreach (var poemContentPath in poemFilePaths)
         {
-            var (poem, position) =Import(poemContentPath);
-            // TODO put back Console.WriteLine($"[ERROR]: {anomaly}");
-            VerifyAnomaliesAfterImportAsync();
+            var (poem, position) = Import(poemContentPath);
+            var anomalies = await VerifyAnomaliesAfterImportAsync();
+            foreach (var anomaly in anomalies)
+                Console.WriteLine($"[ERROR]: {anomaly}");
 
             poemsByPosition.Add(position, poem);
         }

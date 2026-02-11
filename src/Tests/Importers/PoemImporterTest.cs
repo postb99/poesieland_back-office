@@ -17,7 +17,7 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     public void ShouldNotImportPoemWithIdNotEndingWithSeasonId(string poemId, Root data)
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var act = () => poemContentImporter.ImportPoem(poemId, data);
+        var act = () => poemContentImporter.ImportPoemAsync(poemId, data);
         var ex = act.ShouldThrow<ArgumentException>();
         ex.Message.ShouldBe($"'{poemId}' does not end with season id");
     }
@@ -28,7 +28,7 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     public void ShouldNotImportPoemWhoseSeasonDirectoryDoesNotExist(Root data)
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var act = () => poemContentImporter.ImportPoem("some_poem_99", data);
+        var act = () => poemContentImporter.ImportPoemAsync("some_poem_99", data);
         var ex = act.ShouldThrow<ArgumentException>();
         ex.Message.ShouldBe($"No such season content directory for id '99'. Create season directory before importing poem");
     }
@@ -39,7 +39,7 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     public void ShouldNotImportPoemWhoseContentFileDoesNotExist(Root data)
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var act = () => poemContentImporter.ImportPoem("some_poem_16", data);
+        var act = () => poemContentImporter.ImportPoemAsync("some_poem_16", data);
         var ex = act.ShouldThrow<ArgumentException>();
         ex.Message.ShouldStartWith($"Poem content file not found: ");
     }
@@ -47,10 +47,10 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [AutoDomainData]
-    public void ShouldImportPoemsOfSeason(Root data)
+    public async Task ShouldImportPoemsOfSeason(Root data)
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        poemContentImporter.ImportPoemsOfSeason(16, data);
+        await poemContentImporter.ImportPoemsOfSeasonAsync(16, data);
         data.Seasons.FirstOrDefault(x => x.Id == 16).ShouldNotBeNull();
         data.Seasons.FirstOrDefault(x => x.Id == 16).Poems.ShouldNotBeEmpty();
     }
