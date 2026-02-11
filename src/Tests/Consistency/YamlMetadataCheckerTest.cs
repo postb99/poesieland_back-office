@@ -9,12 +9,10 @@ public class YamlMetadataCheckerTest(WithRealDataFixture fixture, ITestOutputHel
 {
     [Fact]
     [Trait("UnitTest", "MetadataCheck")]
-    public void ShouldNotFindMissingYearTagInYamlMetadata()
+    public async Task ShouldNotFindMissingYearTagInYamlMetadata()
     {
-        new YamlMetadataChecker(fixture.Configuration, fixture.Data).VerifyMissingTagsInYamlMetadata();
-        // TODO put back previous code
-        // var anomalies = new YamlMetadataChecker(fixture.Configuration, fixture.Data).GetMissingTagsInYamlMetadata();
-        // testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
-        // anomalies.ShouldBeEmpty();
+        var anomalies = await new YamlMetadataChecker(fixture.Configuration, fixture.Data).GetYamlMetadataAnomaliesAcrossSeasonsAsync().ToListAsync();
+        testOutputHelper.WriteLine(string.Join(Environment.NewLine, anomalies));
+        anomalies.ShouldBeEmpty();
     }
 }

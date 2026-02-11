@@ -26,7 +26,7 @@ public class Program
     private static Root _data;
     private static Root _dataEn;
 
-    public static void Main(string[] args)
+    public static async Task Main(string[] args)
     {
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
@@ -46,7 +46,7 @@ public class Program
         _yamlMetadataChecker = new YamlMetadataChecker(_configuration, _data);
 
         var menuEntry = MainMenu();
-        ValidateAndPerformMenuChoice(null, menuEntry);
+        await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
     }
 
     private static string MainMenu()
@@ -67,7 +67,7 @@ public class Program
         return string.IsNullOrWhiteSpace(input) ? defaultChoice : input;
     }
 
-    private static void ValidateAndPerformMenuChoice(MenuItem? parentMenuItem, string input)
+    private static async Task ValidateAndPerformMenuChoiceAsync(MenuItem? parentMenuItem, string input)
     {
         MenuItem? menuChoice = ValidateMenuEntry(parentMenuItem, input);
         while (menuChoice is null)
@@ -77,11 +77,11 @@ public class Program
             menuChoice = ValidateMenuEntry(parentMenuItem, input);
         }
 
-        if (!PerformAction(menuChoice)) return;
+        if (!(await PerformActionAsync(menuChoice))) return;
         Console.WriteLine();
         Console.WriteLine("Back to main menu");
         var menuEntry = MainMenu();
-        ValidateAndPerformMenuChoice(null, menuEntry);
+        ValidateAndPerformMenuChoiceAsync(null, menuEntry);
     }
 
     private static MenuItem? ValidateMenuEntry(MenuItem? parentMenuItem, string entry)
@@ -98,7 +98,7 @@ public class Program
         return null;
     }
 
-    private static bool PerformAction(MenuItem menuChoice)
+    private static async Task<bool> PerformActionAsync(MenuItem menuChoice)
     {
         switch ((MainMenuSettings.MenuChoices)menuChoice.Key)
         {
@@ -108,7 +108,7 @@ public class Program
             case MainMenuSettings.MenuChoices.GeneratePoemFiles:
             case MainMenuSettings.MenuChoices.Import:
             case MainMenuSettings.MenuChoices.GenerateChartsDataFiles:
-                ValidateAndPerformMenuChoice(menuChoice, MenuChoice(menuChoice.SubMenuItems));
+                ValidateAndPerformMenuChoiceAsync(menuChoice, MenuChoice(menuChoice.SubMenuItems));
                 return false;
             case MainMenuSettings.MenuChoices.GenerateSinglePoem:
                 GeneratePoemContentFile(menuChoice);
@@ -158,7 +158,11 @@ public class Program
                 SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data);
                 Console.WriteLine("Seasons with incorrect poem count checked");
                 _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null);
-                _yamlMetadataChecker.VerifyMissingTagsInYamlMetadata();
+                var outputs = await _yamlMetadataChecker.GetYamlMetadataAnomaliesAcrossSeasonsAsync().ToListAsync();
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
                 Console.WriteLine("YAML metadata checked for all poems since season 21");
                 // Custom pages
                 // Les mois

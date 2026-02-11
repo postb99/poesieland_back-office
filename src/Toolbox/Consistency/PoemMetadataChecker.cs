@@ -29,8 +29,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// </exception>
     public static void CheckPoemsWithVariableMetricNotPresentInInfo(Root data)
     {
-        var poems = data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric));
-        var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Métrique variable : "));
+        var poems = data.Seasons.SelectMany(x => x.Poems.Where(p => p.HasVariableMetric));
+        var incorrectPoem = poems.FirstOrDefault(x => x.Info is null || !x.Info.StartsWith("Métrique variable : "));
 
         if (incorrectPoem is not null)
             throw new MetadataConsistencyException($"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
@@ -80,15 +80,32 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
     /// <param name="metrics">A list of all available metrics.</param>
     /// <param name="descriptionSettings">Settings for required descriptions.</param>
-    public static void VerifyAnomalies(PoemImporter.PartialImport partialImport, List<Metric> metrics, RequiredDescriptionSettings descriptionSettings)
+    /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
+    public static async Task<IEnumerable<string>> VerifyAnomaliesAsync(PoemImporter.PartialImport partialImport, List<Metric> metrics, RequiredDescriptionSettings descriptionSettings)
     {
-        // TODO gather the thrown exceptions and return them as a list
-        VerifyMetricIsSpecified(partialImport);
-        VerifyYearTagIsPresent(partialImport);
-        VerifyVariableMetricTagIsPresent(partialImport);
-        VerifyVariableMetricInfoIsPresent(partialImport);
-        VerifyMetricTagsArePresent(partialImport, metrics);
-        VerifyRequiredDescription(partialImport, descriptionSettings);
+        List<string> anomalies = new List<string>();
+        
+        var tasks = new List<Task>
+        {
+            Task.Run(() => VerifyMetricIsSpecified(partialImport)),
+            Task.Run(() => VerifyYearTagIsPresent(partialImport)),
+            Task.Run(() => VerifyVariableMetricTagIsPresent(partialImport)),
+            Task.Run(() => VerifyVariableMetricInfoIsPresent(partialImport)),
+            Task.Run(() => VerifyMetricTagsArePresent(partialImport, metrics)),
+            Task.Run(() => VerifyRequiredDescription(partialImport, descriptionSettings))
+        };
+
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch (AggregateException ae)
+        {
+            // Access all exceptions
+            anomalies.AddRange(ae.InnerExceptions.Select(ex => ex.Message));
+        }
+
+        return anomalies;
     }
 
     /// <summary>
@@ -160,7 +177,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
                 break;
 
             var expectedTag = metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name
-                .ToLowerInvariant();
+                .ToLowerInvariant()!;
             if (!partialImport.Tags.Contains(expectedTag))
                 throw new MetadataConsistencyException($"Missing '{expectedTag}' tag");
         }

@@ -10,14 +10,18 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
     /// <summary>
     /// Verifies that no missing tags exist in the YAML metadata of poem content files
     /// contained within the directory structure defined by the provided data.
-    /// The method iterates through seasons and validates content files for
+    /// The method iterates through seasons, starting from season 21 and validates content files for
     /// anomalies in their YAML metadata.
     /// </summary>
-    public void VerifyMissingTagsInYamlMetadata()
+    /// <returns>
+    /// An enumerable collection of strings indicating the anomalies found in the YAML metadata.
+    /// Each string specifies the anomaly and the associated file path.
+    /// </returns>
+    public async IAsyncEnumerable<string> GetYamlMetadataAnomaliesAcrossSeasonsAsync()
     {
-        // TODO put back output of coufght exceptions
-        var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
-        var requiredDescriptionSettings = configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Get<RequiredDescriptionSettings>();
+        var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
+        var requiredDescriptionSettings = configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS)
+            .Get<RequiredDescriptionSettings>()!;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var poemContentImporter = new PoemImporter(configuration);
 
@@ -31,15 +35,11 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
             {
                 var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
                 if (!poemContentImporter.HasYamlMetadata) continue;
-                try
-                {
-                    PoemMetadataChecker.VerifyAnomalies(partialImport, metrics, requiredDescriptionSettings);
-                }
-                catch (MetadataConsistencyException ex)
-                {
-                    throw new MetadataConsistencyException(
-                        $"{ex.Message} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}");
-                }
+
+                var anomalies = await PoemMetadataChecker.VerifyAnomaliesAsync(partialImport, metrics, requiredDescriptionSettings);
+                foreach (var p in anomalies)
+                    yield return
+                        $"{p} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}";
             }
         }
     }

@@ -57,7 +57,7 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportVariableVerseLength()
+    public async Task ShouldImportVariableVerseLength()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/jeux_de_nuits.md");
@@ -67,13 +67,13 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
         poem.DetailedMetric.ShouldBe("8, 6, 4, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.ShouldBe("8, 6, 4, 2");
-        poemContentImporter.VerifyAnomaliesAfterImport();
-        // TODO put back anomalies.ShouldBeEmpty();
+        var anomalies = await poemContentImporter.VerifyAnomaliesAfterImportAsync();
+        anomalies.ShouldBeEmpty();
     }
     
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportVariableVerseLengthWhenMoreTextAfterVerseLength()
+    public async Task ShouldImportVariableVerseLengthWhenMoreTextAfterVerseLength()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "19_dix_neuvieme_saison/urgence.md");
@@ -85,8 +85,8 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
         poem.DetailedMetric.ShouldBe("5, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
         poem.VerseLength.ShouldBe("5, 2");
-        poemContentImporter.VerifyAnomaliesAfterImport();
-        // TODO put back anomalies.ShouldBeEmpty();
+        var anomalies = await poemContentImporter.VerifyAnomaliesAfterImportAsync();
+        anomalies.ShouldBeEmpty();
     }
 
     [Fact]

@@ -67,7 +67,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
 
         var (poem, _) = Import(poemContentPath);
         // TODO put back Console.WriteLine($"[ERROR]: {anomaly}");
-        VerifyAnomaliesAfterImport();
+        VerifyAnomaliesAfterImportAsync();
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         if (targetSeason is null)
@@ -113,7 +113,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         {
             var (poem, position) =Import(poemContentPath);
             // TODO put back Console.WriteLine($"[ERROR]: {anomaly}");
-            VerifyAnomaliesAfterImport();
+            VerifyAnomaliesAfterImportAsync();
 
             poemsByPosition.Add(position, poem);
         }
@@ -284,12 +284,9 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     /// <summary>
     /// Verifies that no anomalies exist in the imported poem data by calling <see cref="PoemMetadataChecker"/>.
     /// </summary>
-    /// <exception cref="MetadataConsistencyException">
-    /// Thrown when any metadata consistency check fails.
-    /// </exception>
-    public void VerifyAnomaliesAfterImport()
+    /// <returns>An enumerable collection of strings, where each string represents a specific anomaly detected during the import process.</returns>
+    public async Task<IEnumerable<string>> VerifyAnomaliesAfterImportAsync()
     {
-        // TODO return list of anomalies instead of throwing and update documentation
         var partialImport = new PartialImport
         {
             DetailedMetric = _poem.DetailedMetric,
@@ -300,7 +297,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             Info = _poem.Info,
             Description = _poem.Description
         };
-        PoemMetadataChecker.VerifyAnomalies(partialImport, _metrics, _requiredDescriptionSettings);
+        return await PoemMetadataChecker.VerifyAnomaliesAsync(partialImport, _metrics, _requiredDescriptionSettings);
     }
 
     /// <summary>
