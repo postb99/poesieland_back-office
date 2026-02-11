@@ -8,7 +8,7 @@ namespace Toolbox.Consistency;
 public class YamlMetadataChecker(IConfiguration configuration, Root data)
 {
     /// <summary>
-    /// Verifies that no missing tags exist in the YAML metadata of poem content files
+    /// Gathers any anomaly met in YAML metadata of poem content files
     /// contained within the directory structure defined by the provided data.
     /// The method iterates through seasons, starting from season 21 and validates content files for
     /// anomalies in their YAML metadata.
@@ -36,7 +36,7 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
                 var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
                 if (!poemContentImporter.HasYamlMetadata) continue;
 
-                var anomalies = await PoemMetadataChecker.VerifyAnomaliesAsync(partialImport, metrics, requiredDescriptionSettings);
+                var anomalies = await PoemMetadataChecker.GetAnomaliesAsync(partialImport, metrics, requiredDescriptionSettings);
                 foreach (var p in anomalies)
                     yield return
                         $"{p} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}";

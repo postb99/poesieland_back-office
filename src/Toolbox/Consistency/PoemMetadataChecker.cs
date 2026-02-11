@@ -75,13 +75,13 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     }
 
     /// <summary>
-    /// Verifies that all expected metadata consistency checks pass for a partial poem import.
+    /// Get all anomalies met when expected metadata consistency checks fail for a partial poem import.
     /// </summary>
     /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
     /// <param name="metrics">A list of all available metrics.</param>
     /// <param name="descriptionSettings">Settings for required descriptions.</param>
     /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
-    public static async Task<IEnumerable<string>> VerifyAnomaliesAsync(PoemImporter.PartialImport partialImport, List<Metric> metrics, RequiredDescriptionSettings descriptionSettings)
+    public static async Task<IEnumerable<string>> GetAnomaliesAsync(PoemImporter.PartialImport partialImport, List<Metric> metrics, RequiredDescriptionSettings descriptionSettings)
     {
         List<string> anomalies = new List<string>();
         

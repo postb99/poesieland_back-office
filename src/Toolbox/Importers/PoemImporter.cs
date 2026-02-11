@@ -300,7 +300,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             Info = _poem.Info,
             Description = _poem.Description
         };
-        return await PoemMetadataChecker.VerifyAnomaliesAsync(partialImport, _metrics, _requiredDescriptionSettings);
+        return await PoemMetadataChecker.GetAnomaliesAsync(partialImport, _metrics, _requiredDescriptionSettings);
     }
 
     /// <summary>
