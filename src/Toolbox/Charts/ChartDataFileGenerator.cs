@@ -244,6 +244,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             {
                 3 => 0,
                 26 => 1,
+                32 => 1,
                 _ => nbVerses / 2
             };
 

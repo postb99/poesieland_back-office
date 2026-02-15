@@ -10,7 +10,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <summary>
     /// Checks that all poems have a metric specified.
     /// </summary>
-    /// /// <exception cref="Exception">
+    /// /// <exception cref="MetadataConsistencyException">
     /// Thrown when the check fails.
     /// </exception>
     public static void CheckPoemsWithoutMetricSpecified(Root data)
@@ -18,24 +18,22 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         var incorrectPoem = data.Seasons.SelectMany(x => x.Poems).FirstOrDefault(x => !x.HasVerseLength);
 
         if (incorrectPoem is not null)
-            throw new(
-                $"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
+            throw new MetadataConsistencyException($"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
     }
 
     /// <summary>
     /// Checks that all poems whose metric is variable have metric specified as expected in Info.
     /// </summary>
-    /// /// <exception cref="Exception">
+    /// /// <exception cref="MetadataConsistencyException">
     /// Thrown when the check fails.
     /// </exception>
     public static void CheckPoemsWithVariableMetricNotPresentInInfo(Root data)
     {
-        var poems = data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric));
-        var incorrectPoem = poems.FirstOrDefault(x => !x.Info.StartsWith("Métrique variable : "));
+        var poems = data.Seasons.SelectMany(x => x.Poems.Where(p => p.HasVariableMetric));
+        var incorrectPoem = poems.FirstOrDefault(x => x.Info is null || !x.Info.StartsWith("Métrique variable : "));
 
         if (incorrectPoem is not null)
-            throw new(
-                $"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
+            throw new MetadataConsistencyException($"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
     }
 
     /// <summary>
@@ -46,7 +44,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <param name="seasonId">
     /// The ID of the season to be verified. If null, the verification is performed for the last two seasons in the data.
     /// </param>
-    /// <exception cref="Exception">
+    /// <exception cref="MetadataConsistencyException">
     /// Thrown if a poem's position (weight) in the file system does not match its expected position in the data structure.
     /// </exception>
     public void VerifySeasonHaveCorrectWeightInPoemFile(Root data, int? seasonId)
@@ -71,85 +69,141 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             var poemIndex = poemInSeason == null ? -1 : season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != position)
             {
-                throw new($"Poem {poem.Id} should have weight {poemIndex + 1}!");
+                throw new MetadataConsistencyException($"Poem {poem.Id} should have weight {poemIndex + 1}!");
             }
         }
     }
 
     /// <summary>
-    /// Checks for anomalies in a partial poem import.
-    /// Possible anomalies:
-    /// - Poem metric is unspecified
-    /// - Poem year is not found in tags
-    /// - Poem metric is not found in tags
-    /// - Poem 'métrique variable' tag is missing
-    /// - Poem variable metric value is missing in Info
+    /// Get all anomalies met when expected metadata consistency checks fail for a partial poem import.
     /// </summary>
     /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
     /// <param name="metrics">A list of all available metrics.</param>
+    /// <param name="descriptionSettings">Settings for required descriptions.</param>
     /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
-    public static IEnumerable<string> CheckAnomalies(PoemImporter.PartialImport partialImport, List<Metric> metrics)
+    public static async Task<IEnumerable<string>> GetAnomaliesAsync(PoemImporter.PartialImport partialImport, List<Metric> metrics, RequiredDescriptionSettings descriptionSettings)
     {
-        if (string.IsNullOrEmpty(partialImport.DetailedMetric) || partialImport.DetailedMetric == "0")
+        List<string> anomalies = new List<string>();
+        
+        var tasks = new List<Task>
         {
-            yield return "Poem metric is unspecified";
+            Task.Run(() => VerifyMetricValueIsSpecified(partialImport)),
+            Task.Run(() => VerifyYearTagIsPresent(partialImport)),
+            Task.Run(() => VerifyVariableMetricTagIsPresent(partialImport)),
+            Task.Run(() => VerifyVariableMetricInfoIsPresent(partialImport)),
+            Task.Run(() => VerifyMetricTagsArePresent(partialImport, metrics)),
+            Task.Run(() => VerifyRequiredDescription(partialImport, descriptionSettings))
+        };
+
+        try
+        {
+            await Task.WhenAll(tasks);
+        }
+        catch (AggregateException ae)
+        {
+            // Access all exceptions
+            anomalies.AddRange(ae.InnerExceptions.Select(ex => ex.Message));
         }
 
-        // Poem year should be found in tags
-        if (!partialImport.Tags.Contains(partialImport.Year.ToString()))
-        {
-            yield return "Missing year tag";
-        }
+        return anomalies;
+    }
 
-        // When metric is variable, "métrique variable" tag should be found and info should mention it
-        if (partialImport.HasVariableMetric)
-        {
-            if (!partialImport.Tags.Contains("métrique variable"))
-            {
-                yield return "Missing 'métrique variable' tag";
-            }
+    /// <summary>
+    /// Verifies that a poem's metric is specified.
+    /// </summary>
+    /// <param name="partialImport"></param>
+    /// <exception cref="MetadataConsistencyException"></exception>
+    public static void VerifyMetricValueIsSpecified(PoemImporter.PartialImport partialImport)
+    {
+        if (!string.IsNullOrEmpty(partialImport.DetailedMetric) && partialImport.DetailedMetric != "0")
+            return;
 
-            if (!partialImport.Info.Contains("Métrique variable : "))
-            {
-                yield return "Missing 'Métrique variable : ' in Info";
-            }
-        }
+        throw new MetadataConsistencyException("Poem metric is unspecified");
+    }
 
-        // Name of metric should be found in tags
+    /// <summary>
+    /// Verifies that a poem's year tag is present and matches the poem's year.
+    /// </summary>
+    /// <param name="partialImport"></param>
+    /// <exception cref="MetadataConsistencyException"></exception>
+    public static void VerifyYearTagIsPresent(PoemImporter.PartialImport partialImport)
+    {
+        if (partialImport.Tags.Contains(partialImport.Year.ToString()))
+            return;
+
+        throw new MetadataConsistencyException($"Missing year tag: {partialImport.Year}");
+    }
+
+    /// <summary>
+    /// Verifies that a poem has the 'métrique variable' tag if its metric is variable.
+    /// </summary>
+    /// <param name="partialImport"></param>
+    /// <exception cref="MetadataConsistencyException"></exception>
+    public static void VerifyVariableMetricTagIsPresent(PoemImporter.PartialImport partialImport)
+    {
+        if (!partialImport.HasVariableMetric || partialImport.Tags.Contains("métrique variable"))
+            return;
+
+        throw new MetadataConsistencyException("Missing 'métrique variable' tag");
+    }
+
+    /// <summary>
+    /// Verifies that a poem's Info specifies the variable metric value if its metric is variable.
+    /// </summary>
+    /// <param name="partialImport"></param>
+    /// <exception cref="MetadataConsistencyException"></exception>
+    public static void VerifyVariableMetricInfoIsPresent(PoemImporter.PartialImport partialImport)
+    {
+        if (!partialImport.HasVariableMetric)
+            return;
+
+        if (partialImport.Info?.Contains("Métrique variable : ") == true)
+            return;
+
+        throw new MetadataConsistencyException("Missing 'Métrique variable : ' in Info");
+    }
+
+    /// <summary>
+    /// Verifies that all expected metric tags are present for a poem, depending on its detailed metric.
+    /// </summary>
+    /// <param name="partialImport"></param>
+    /// <param name="metrics"></param>
+    /// <exception cref="MetadataConsistencyException"></exception>
+    public static void VerifyMetricTagsArePresent(PoemImporter.PartialImport partialImport, List<Metric> metrics)
+    {
         foreach (var metric in partialImport.DetailedMetric.Split(','))
         {
             if (metric == "poème en prose")
                 break;
+
             var expectedTag = metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name
-                .ToLowerInvariant();
+                .ToLowerInvariant()!;
             if (!partialImport.Tags.Contains(expectedTag))
-            {
-                yield return $"Missing '{expectedTag}' tag";
-            }
+                throw new MetadataConsistencyException($"Missing '{expectedTag}' tag");
         }
     }
 
     /// <summary>
-    /// Validates that a poem's description meets the requirements based on its extra tags and settings.
+    /// Verifies that a description is present and meets the requirements based on extra tags and settings.
     /// </summary>
-    /// <param name="poem">The poem to validate.</param>
-    /// <param name="settings">The settings defining required descriptions and formatting rules.</param>
-    /// <exception cref="Exception">
-    /// Thrown if the poem is missing a description or required bold formatting for a specified extra tag.
+    /// <param name="partialImport"></param>
+    /// <param name="settings"></param>
+    /// <exception cref="MetadataConsistencyException">
+    /// Thrown if the description is missing or required bold formatting is missing when expected.
     /// </exception>
-    public static void CheckRequiredDescription(Poem poem, RequiredDescriptionSettings settings)
+    public static void VerifyRequiredDescription(PoemImporter.PartialImport partialImport, RequiredDescriptionSettings settings)
     {
-        foreach (var extraTag in poem.ExtraTags)
+        foreach (var extraTag in partialImport.Tags)
         {
             var setting = settings.RequiredDescriptions.FirstOrDefault(x => x.ExtraTag == extraTag);
             if (setting is null)
                 continue;
 
-            if (string.IsNullOrWhiteSpace(poem.Description))
-                throw new($"Poem {poem.Id} is missing description because of extra tag '{extraTag}'");
+            if (string.IsNullOrWhiteSpace(partialImport.Description))
+                throw new MetadataConsistencyException($"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'");
 
-            if (setting.Bold && !poem.Description.Contains("**"))
-                throw new($"Poem {poem.Id} description is missing bold formatting because of extra tag '{extraTag}'");
+            if (setting.Bold && !partialImport.Description.Contains("**"))
+                throw new MetadataConsistencyException($"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'");
         }
     }
 }
