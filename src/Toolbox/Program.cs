@@ -166,32 +166,25 @@ public class Program
                 Console.WriteLine("YAML metadata checked for all poems since season 21");
                 // Custom pages
                 // Les mois
-                // TODO put back output
-                _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data);
-                // outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data);
-                // foreach (var output in outputs)
-                // {
-                //     Console.WriteLine(output);
-                // }
+                outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data).ToList();
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
 
                 // Ciel
-                // TODO put back output
-                _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _data);
-                // outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null,
-                //     _data);
-                // foreach (var output in outputs)
-                // {
-                //     Console.WriteLine(output);
-                // }
+                outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _data).ToList();
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
 
                 // Saisons
-                // TODO put back output
-                _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _data);
-                // outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _data);
-                // foreach (var output in outputs)
-                // {
-                //     Console.WriteLine(output);
-                // }
+                outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _data).ToList();
+                foreach (var output in outputs)
+                {
+                    Console.WriteLine(output);
+                }
 
                 Console.WriteLine(
                     $"Metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_data, out var _).Values.Sum(x => x.Last())}");
