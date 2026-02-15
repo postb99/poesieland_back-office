@@ -96,7 +96,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     public void ShouldThrowWhenMetricIsUnspecified(string? metric, PoemImporter.PartialImport? partialImport)
     {
         ArrangePartialImport(partialImport, 2000, metric, "Info");
-        var act = () => PoemMetadataChecker.VerifyMetricIsSpecified(partialImport);
+        var act = () => PoemMetadataChecker.VerifyMetricValueIsSpecified(partialImport);
         act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Poem metric is unspecified");
     }
 

@@ -38,9 +38,11 @@ This also helps perform statistical computations using an in-memory XML document
 
 Because CMS editor gives indications (fields descriptions) but a miss or typo can happen.
 
+- Missing metric value.
 - Missing required tags (e.g., year, metric name).
-- Missing required information when a metric is variable.
-- Ensures the weight field of a new poem is encoded correctly (index plus one within its Season).
+- Missing required tag and information when a metric is variable.
+- Missing required description when settings ask for it.
+- Ensures the weight field of a new poem is encoded correctly (index within its Season plus one).
 - Ensures a Season contains exactly 50 poems when it is considered complete.
 - Checks poems that should be listed on special pages based on tags or characteristics.
 

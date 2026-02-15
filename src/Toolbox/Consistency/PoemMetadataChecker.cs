@@ -87,7 +87,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         
         var tasks = new List<Task>
         {
-            Task.Run(() => VerifyMetricIsSpecified(partialImport)),
+            Task.Run(() => VerifyMetricValueIsSpecified(partialImport)),
             Task.Run(() => VerifyYearTagIsPresent(partialImport)),
             Task.Run(() => VerifyVariableMetricTagIsPresent(partialImport)),
             Task.Run(() => VerifyVariableMetricInfoIsPresent(partialImport)),
@@ -113,7 +113,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// </summary>
     /// <param name="partialImport"></param>
     /// <exception cref="MetadataConsistencyException"></exception>
-    public static void VerifyMetricIsSpecified(PoemImporter.PartialImport partialImport)
+    public static void VerifyMetricValueIsSpecified(PoemImporter.PartialImport partialImport)
     {
         if (!string.IsNullOrEmpty(partialImport.DetailedMetric) && partialImport.DetailedMetric != "0")
             return;

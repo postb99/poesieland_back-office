@@ -22,7 +22,7 @@ public class Program
     private static YamlMetadataChecker _yamlMetadataChecker;
     private static ChartDataFileGenerator _chartDataFileGenerator;
     private static PoemMetadataChecker _poemMetadataChecker;
-    
+
     private static Root _data;
     private static Root _dataEn;
 
@@ -32,10 +32,10 @@ public class Program
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         _configuration = configurationBuilder.Build();
         _mainMenuSettings = _configuration.GetSection(Constants.MAIN_MENU).Get<MainMenuSettings>();
-        
+
         _dataManager = new DataManager(_configuration);
         _dataManager.Load(out _data, out _dataEn);
-        
+
         _contentFileGenerator = new ContentFileGenerator(_configuration);
         _poemImporter = new PoemImporter(_configuration);
         _seasonMetadataImporter = new SeasonMetadataImporter(_configuration);
@@ -77,11 +77,22 @@ public class Program
             menuChoice = ValidateMenuEntry(parentMenuItem, input);
         }
 
-        if (!(await PerformActionAsync(menuChoice))) return;
-        Console.WriteLine();
-        Console.WriteLine("Back to main menu");
-        var menuEntry = MainMenu();
-        await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
+        try
+        {
+            if (!await PerformActionAsync(menuChoice)) return;
+            Console.WriteLine();
+            Console.WriteLine("Back to main menu");
+            var menuEntry = MainMenu();
+            await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
+        }
+        catch (MetadataConsistencyException ex)
+        {
+            Console.WriteLine($"ERROR: {ex.Message}");
+            Console.WriteLine("Type anything to go back to main menu");
+            Console.ReadLine();
+            var menuEntry = MainMenu();
+            await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
+        }
     }
 
     private static MenuItem? ValidateMenuEntry(MenuItem? parentMenuItem, string entry)
@@ -163,6 +174,7 @@ public class Program
                 {
                     Console.WriteLine(output);
                 }
+
                 Console.WriteLine("YAML metadata checked for all poems since season 21");
                 // Custom pages
                 // Les mois
@@ -173,7 +185,8 @@ public class Program
                 }
 
                 // Ciel
-                outputs = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _data).ToList();
+                outputs = _customPageChecker
+                    .GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _data).ToList();
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
