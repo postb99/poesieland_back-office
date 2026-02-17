@@ -85,7 +85,7 @@ public class Program
             var menuEntry = MainMenu();
             await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
         }
-        catch (MetadataConsistencyException ex)
+        catch (ConsistencyException ex)
         {
             Console.WriteLine($"ERROR: {ex.Message}");
             Console.WriteLine("Type anything to go back to main menu");
@@ -518,7 +518,7 @@ public class Program
         _contentFileGenerator.GeneratePoemCountFile(_data);
         Console.WriteLine("Poem count file OK");
 
-        // Poem length by metric and vice versa
+        // Poem length by metric
         _chartDataFileGenerator.GeneratePoemLengthByVerseLengthBubbleChartDataFile(_data);
         Console.WriteLine("Poems bubble chart data files OK");
 
@@ -541,18 +541,18 @@ public class Program
             // Les mois
             var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _data);
             if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-                Console.WriteLine(output);
+                throw new CustomPageConsistencyException(output.FirstOrDefault());
 
             // Ciel
             output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem,
                 _data);
             if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-                Console.WriteLine(output);
+                throw new CustomPageConsistencyException(output.FirstOrDefault());
 
             // Saisons
             output = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(importedPoem, _data);
             if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-                Console.WriteLine(output);
+                throw new CustomPageConsistencyException(output.FirstOrDefault());
         }
 
         Console.WriteLine(

@@ -12,7 +12,7 @@ public interface IPoemImporter
     (Poem, int) Import(string contentFilePath);
 }
 
-public class PoemImporter(IConfiguration configuration): IPoemImporter
+public class PoemImporter(IConfiguration configuration) : IPoemImporter
 {
     private Poem _poem;
     private int _position;
@@ -20,8 +20,10 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     private IPoemMetadataProcessor? _metadataProcessor;
     private PoemContentProcessor? _contentProcessor;
     private List<Metric> _metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
-    private RequiredDescriptionSettings _requiredDescriptionSettings = configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Get<RequiredDescriptionSettings>();
-    
+
+    private List<RequiredDescription> _requiredDescriptions =
+        configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Get<RequiredDescriptionSettings>().RequiredDescriptions;
+
     public const string YamlMarker = "---";
     public const string TomlMarker = "+++";
 
@@ -67,9 +69,11 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
 
         var (poem, _) = Import(poemContentPath);
         var anomalies = await VerifyAnomaliesAfterImportAsync();
-        foreach (var anomaly in anomalies)
-            Console.WriteLine($"[ERROR]: {anomaly}");
-        
+        if (anomalies.Any())
+        {
+            throw new MetadataConsistencyException(string.Join(' ', anomalies));
+        }
+
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         if (targetSeason is null)
@@ -115,8 +119,10 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         {
             var (poem, position) = Import(poemContentPath);
             var anomalies = await VerifyAnomaliesAfterImportAsync();
-            foreach (var anomaly in anomalies)
-                Console.WriteLine($"[ERROR]: {anomaly}");
+            if (anomalies.Any())
+            {
+                throw new MetadataConsistencyException(string.Join(' ', anomalies));
+            }
 
             poemsByPosition.Add(position, poem);
         }
@@ -161,7 +167,9 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
 
         _poem.Categories = GetCategories(_metadataProcessor!.GetCategories(), _poem.Id);
         _poem.Pictures = _metadataProcessor.GetPictures();
-        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
+            ? null
+            : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
         _poem.ExtraTags = FindExtraTags(_metadataProcessor.GetTags());
@@ -172,7 +180,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
 
         return (_poem, _position);
     }
-    
+
     /// <summary>
     /// Imports a poem in English from the specified content file, processes its YAML metadata and content,
     /// and returns a tuple with the constructed poem and its positional index.
@@ -184,7 +192,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     /// <exception cref="IOException">Thrown when there is an issue reading the content file.</exception>
     public (Poem, int) ImportEnYaml(string contentFilePath)
     {
-       Init();
+        Init();
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
@@ -195,7 +203,9 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         } while (line is not null);
 
         _poem.Categories = GetCategoriesEn(_metadataProcessor!.GetCategories(), _poem.Id);
-        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
+            ? null
+            : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
         _poem.Locations = _metadataProcessor.GetLocations();
@@ -268,10 +278,11 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
     public List<string> FindExtraTags(List<string> tags)
     {
         var tagsToIgnore = new List<string>();
-        
+
         // Should neither be a storage category
-        tagsToIgnore.AddRange(configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories.Select(x => x.Name.ToLowerInvariant()));
-        
+        tagsToIgnore.AddRange(configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
+            .Select(x => x.Name.ToLowerInvariant()));
+
         // Nor a metric name
         tagsToIgnore.AddRange(_metrics.Select(x => x.Name.ToLowerInvariant()));
 
@@ -280,7 +291,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
 
         // Nor a specific tag
         tagsToIgnore.AddRange(["pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
-        
+
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
     }
 
@@ -300,7 +311,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             Info = _poem.Info,
             Description = _poem.Description
         };
-        return await PoemMetadataChecker.GetAnomaliesAsync(partialImport, _metrics, _requiredDescriptionSettings);
+        return await PoemMetadataChecker.GetAnomaliesAsync(partialImport, _metrics, _requiredDescriptions);
     }
 
     /// <summary>
@@ -326,8 +337,10 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             line = streamReader.ReadLine();
             ProcessLine(line);
         } while (line is not null);
-        
-        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0 ? null : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+
+        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
+            ? null
+            : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
 
         return new()
@@ -352,9 +365,9 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
         public int Year { get; set; }
         public string PoemId { get; set; }
         public bool HasVariableMetric { get; set; }
-        
+
         public string DetailedMetric { get; set; }
-        
+
         public string? Info { get; set; }
         public string? Description { get; set; }
     }
@@ -517,7 +530,7 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
 
         return storageCategories.Values.ToList();
     }
-    
+
     /// <summary>
     /// Maps the provided metadata categories to their corresponding storage categories and organizes them
     /// based on the storage settings configuration.
@@ -539,12 +552,13 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
             var settingsCategory =
                 storageSettings.Categories.FirstOrDefault(x =>
                     x.Subcategories.Select(x => x.Alias).Contains(metadataCategory));
-             
+
             if (settingsCategory == null)
             {
                 throw new InvalidOperationException(
                     $"[{poemId}] No storage category found for metadata category {metadataCategory}");
             }
+
             storageCategories.TryGetValue(settingsCategory.Name, out var storageCategory);
             if (storageCategory == null)
             {
@@ -552,7 +566,8 @@ public class PoemImporter(IConfiguration configuration): IPoemImporter
                 storageCategories.Add(storageCategory.Name, storageCategory);
             }
 
-            storageCategory.SubCategories.Add(settingsCategory.Subcategories.First(x => x.Alias == metadataCategory).Name);
+            storageCategory.SubCategories.Add(settingsCategory.Subcategories.First(x => x.Alias == metadataCategory)
+                .Name);
         }
 
         return storageCategories.Values.ToList();

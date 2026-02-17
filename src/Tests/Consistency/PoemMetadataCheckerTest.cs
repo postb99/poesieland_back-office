@@ -152,10 +152,8 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         partialImport.Tags = [extraTag];
         partialImport.Description = "";
-        var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
-        {
-            RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = false }]
-        });
+        var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport,
+            [new RequiredDescription { ExtraTag = extraTag, Bold = false }]);
         act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe($"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'");
     }
@@ -168,10 +166,8 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         partialImport.Tags = [extraTag];
         partialImport.Description = "Not bold text";
-        var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
-        {
-            RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = true }]
-        });
+        var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport,
+            [new RequiredDescription { ExtraTag = extraTag, Bold = true }]);
         act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe(
                 $"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'");
@@ -185,11 +181,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         partialImport.Tags = [extraTag];
         partialImport.Description = "Some ordinary text";
-        PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
-            {
-                RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = false }]
-            }
-        );
+        PoemMetadataChecker.VerifyRequiredDescription(partialImport, [new RequiredDescription { ExtraTag = extraTag, Bold = false }]);
     }
 
     [Theory]
@@ -200,10 +192,6 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         partialImport.Tags = [extraTag];
         partialImport.Description = "Some **Bold text**";
-        PoemMetadataChecker.VerifyRequiredDescription(partialImport, new RequiredDescriptionSettings
-            {
-                RequiredDescriptions = [new RequiredDescription { ExtraTag = extraTag, Bold = true }]
-            }
-        );
+        PoemMetadataChecker.VerifyRequiredDescription(partialImport, [new RequiredDescription { ExtraTag = extraTag, Bold = true }]);
     }
 }

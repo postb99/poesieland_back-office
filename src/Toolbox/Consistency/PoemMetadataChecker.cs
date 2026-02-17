@@ -79,9 +79,9 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// </summary>
     /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
     /// <param name="metrics">A list of all available metrics.</param>
-    /// <param name="descriptionSettings">Settings for required descriptions.</param>
+    /// <param name="requiredDescriptions">Settings for required descriptions.</param>
     /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
-    public static async Task<IEnumerable<string>> GetAnomaliesAsync(PoemImporter.PartialImport partialImport, List<Metric> metrics, RequiredDescriptionSettings descriptionSettings)
+    public static async Task<IEnumerable<string>> GetAnomaliesAsync(PoemImporter.PartialImport partialImport, List<Metric> metrics, List<RequiredDescription> requiredDescriptions)
     {
         List<string> anomalies = new List<string>();
         
@@ -92,19 +92,19 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             Task.Run(() => VerifyVariableMetricTagIsPresent(partialImport)),
             Task.Run(() => VerifyVariableMetricInfoIsPresent(partialImport)),
             Task.Run(() => VerifyMetricTagsArePresent(partialImport, metrics)),
-            Task.Run(() => VerifyRequiredDescription(partialImport, descriptionSettings))
+            Task.Run(() => VerifyRequiredDescription(partialImport, requiredDescriptions))
         };
 
         try
         {
-            await Task.WhenAll(tasks);
+            Task.WaitAll(tasks);
         }
         catch (AggregateException ae)
         {
             // Access all exceptions
             anomalies.AddRange(ae.InnerExceptions.Select(ex => ex.Message));
         }
-
+        // TODO throw instead and adjust calling code
         return anomalies;
     }
 
@@ -113,7 +113,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// </summary>
     /// <param name="partialImport"></param>
     /// <exception cref="MetadataConsistencyException"></exception>
-    public static void VerifyMetricValueIsSpecified(PoemImporter.PartialImport partialImport)
+    internal static void VerifyMetricValueIsSpecified(PoemImporter.PartialImport partialImport)
     {
         if (!string.IsNullOrEmpty(partialImport.DetailedMetric) && partialImport.DetailedMetric != "0")
             return;
@@ -126,7 +126,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// </summary>
     /// <param name="partialImport"></param>
     /// <exception cref="MetadataConsistencyException"></exception>
-    public static void VerifyYearTagIsPresent(PoemImporter.PartialImport partialImport)
+    internal static void VerifyYearTagIsPresent(PoemImporter.PartialImport partialImport)
     {
         if (partialImport.Tags.Contains(partialImport.Year.ToString()))
             return;
@@ -139,7 +139,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// </summary>
     /// <param name="partialImport"></param>
     /// <exception cref="MetadataConsistencyException"></exception>
-    public static void VerifyVariableMetricTagIsPresent(PoemImporter.PartialImport partialImport)
+    internal static void VerifyVariableMetricTagIsPresent(PoemImporter.PartialImport partialImport)
     {
         if (!partialImport.HasVariableMetric || partialImport.Tags.Contains("métrique variable"))
             return;
@@ -152,7 +152,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// </summary>
     /// <param name="partialImport"></param>
     /// <exception cref="MetadataConsistencyException"></exception>
-    public static void VerifyVariableMetricInfoIsPresent(PoemImporter.PartialImport partialImport)
+    internal static void VerifyVariableMetricInfoIsPresent(PoemImporter.PartialImport partialImport)
     {
         if (!partialImport.HasVariableMetric)
             return;
@@ -169,7 +169,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <param name="partialImport"></param>
     /// <param name="metrics"></param>
     /// <exception cref="MetadataConsistencyException"></exception>
-    public static void VerifyMetricTagsArePresent(PoemImporter.PartialImport partialImport, List<Metric> metrics)
+    internal static void VerifyMetricTagsArePresent(PoemImporter.PartialImport partialImport, List<Metric> metrics)
     {
         foreach (var metric in partialImport.DetailedMetric.Split(','))
         {
@@ -187,22 +187,22 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// Verifies that a description is present and meets the requirements based on extra tags and settings.
     /// </summary>
     /// <param name="partialImport"></param>
-    /// <param name="settings"></param>
+    /// <param name="requiredDescriptions"></param>
     /// <exception cref="MetadataConsistencyException">
     /// Thrown if the description is missing or required bold formatting is missing when expected.
     /// </exception>
-    public static void VerifyRequiredDescription(PoemImporter.PartialImport partialImport, RequiredDescriptionSettings settings)
+    internal static void VerifyRequiredDescription(PoemImporter.PartialImport partialImport, List<RequiredDescription> requiredDescriptions)
     {
         foreach (var extraTag in partialImport.Tags)
         {
-            var setting = settings.RequiredDescriptions.FirstOrDefault(x => x.ExtraTag == extraTag);
-            if (setting is null)
+            var requiredDescription = requiredDescriptions.FirstOrDefault(x => x.ExtraTag == extraTag);
+            if (requiredDescription is null)
                 continue;
 
             if (string.IsNullOrWhiteSpace(partialImport.Description))
                 throw new MetadataConsistencyException($"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'");
 
-            if (setting.Bold && !partialImport.Description.Contains("**"))
+            if (requiredDescription.Bold && !partialImport.Description.Contains("**"))
                 throw new MetadataConsistencyException($"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'");
         }
     }

@@ -7,6 +7,10 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+        <InternalsVisibleTo Include="Tests" />
+    </ItemGroup>
+
     <PropertyGroup>
         <StartWorkingDirectory>$(MSBuildProjectDirectory)</StartWorkingDirectory>
     </PropertyGroup>

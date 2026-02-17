@@ -20,8 +20,8 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
     public async IAsyncEnumerable<string> GetYamlMetadataAnomaliesAcrossSeasonsAsync()
     {
         var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
-        var requiredDescriptionSettings = configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS)
-            .Get<RequiredDescriptionSettings>()!;
+        var requiredDescriptions = configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS)
+            .Get<RequiredDescriptionSettings>()!.RequiredDescriptions;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var poemContentImporter = new PoemImporter(configuration);
 
@@ -36,7 +36,7 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
                 var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
                 if (!poemContentImporter.HasYamlMetadata) continue;
 
-                var anomalies = await PoemMetadataChecker.GetAnomaliesAsync(partialImport, metrics, requiredDescriptionSettings);
+                var anomalies = await PoemMetadataChecker.GetAnomaliesAsync(partialImport, metrics, requiredDescriptions);
                 foreach (var p in anomalies)
                     yield return
                         $"{p} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}";
