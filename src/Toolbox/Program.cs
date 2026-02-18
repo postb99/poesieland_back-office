@@ -15,16 +15,16 @@ public class Program
     private static IConfiguration? _configuration;
     private static MainMenuSettings? _mainMenuSettings;
     private static DataManager? _dataManager;
-    private static ContentFileGenerator _contentFileGenerator;
-    private static PoemImporter _poemImporter;
-    private static SeasonMetadataImporter _seasonMetadataImporter;
-    private static CustomPageChecker _customPageChecker;
-    private static YamlMetadataChecker _yamlMetadataChecker;
-    private static ChartDataFileGenerator _chartDataFileGenerator;
-    private static PoemMetadataChecker _poemMetadataChecker;
+    private static ContentFileGenerator _contentFileGenerator = null!;
+    private static PoemImporter _poemImporter = null!;
+    private static SeasonMetadataImporter _seasonMetadataImporter = null!;
+    private static CustomPageChecker _customPageChecker = null!;
+    private static YamlMetadataChecker _yamlMetadataChecker = null!;
+    private static ChartDataFileGenerator _chartDataFileGenerator = null!;
+    private static PoemMetadataChecker _poemMetadataChecker = null!;
 
-    private static Root _data;
-    private static Root _dataEn;
+    private static Root _data = null!;
+    private static Root _dataEn = null!;
 
     public static async Task Main(string[] args)
     {
@@ -73,7 +73,7 @@ public class Program
         while (menuChoice is null)
         {
             Console.WriteLine("ERROR: No such choice");
-            input = Console.ReadLine();
+            input = Console.ReadLine()!;
             menuChoice = ValidateMenuEntry(parentMenuItem, input);
         }
 
@@ -125,13 +125,13 @@ public class Program
                 GeneratePoemContentFile(menuChoice);
                 break;
             case MainMenuSettings.MenuChoices.ImportSinglePoem:
-                await ImportPoemContentFileAsync(menuChoice);
+                ImportPoemContentFile(menuChoice);
                 break;
             case MainMenuSettings.MenuChoices.GeneratePoemsOfASeason:
                 GenerateSeasonPoemContentFiles(menuChoice);
                 break;
             case MainMenuSettings.MenuChoices.ImportPoemsOfASeason:
-                await ImportSeasonPoemContentFilesAsync(menuChoice);
+                ImportSeasonPoemContentFiles(menuChoice);
                 break;
             case MainMenuSettings.MenuChoices.ImportSeasonMetadata:
                 ImportSeasonMetadata(menuChoice);
@@ -159,7 +159,7 @@ public class Program
                 _chartDataFileGenerator.GenerateCategoryMetricBubbleChartDataFile(_data);
                 break;
             case MainMenuSettings.MenuChoices.ReloadDataFile:
-                _dataManager.Load(out _data, out _dataEn);
+                _dataManager!.Load(out _data, out _dataEn);
                 break;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
                 PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(_data);
@@ -169,7 +169,7 @@ public class Program
                 SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data);
                 Console.WriteLine("Seasons with incorrect poem count checked");
                 _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null);
-                var outputs = await _yamlMetadataChecker.GetYamlMetadataAnomaliesAcrossSeasonsAsync().ToListAsync();
+                var outputs = _yamlMetadataChecker.GetYamlMetadataAnomaliesAcrossSeasons();
                 foreach (var output in outputs)
                 {
                     Console.WriteLine(output);
@@ -243,7 +243,7 @@ public class Program
         if (int.TryParse(choice, out var intChoice) &&
             _data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
-            _contentFileGenerator.GenerateSeasonAllPoemFiles(_data, intChoice);
+            _ = _contentFileGenerator.GenerateSeasonAllPoemFiles(_data, intChoice);
             Console.WriteLine("Poem content files OK");
         }
         else
@@ -252,20 +252,20 @@ public class Program
         }
     }
 
-    private static async Task ImportSeasonPoemContentFilesAsync(MenuItem menuChoice)
+    private static void ImportSeasonPoemContentFiles(MenuItem menuChoice)
     {
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _data.Seasons.Count);
         var choice = Console.ReadLine();
         if (choice == "0")
         {
-            await ImportAllPoemsContentFilesAsync();
+            ImportAllPoemsContentFiles();
             return;
         }
 
         if (int.TryParse(choice, out var seasonId) &&
             _data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
-            await _poemImporter.ImportPoemsOfSeasonAsync(seasonId, _data);
+            _poemImporter.ImportPoemsOfSeason(seasonId, _data);
             _dataManager!.Save(_data);
             Console.WriteLine("Season import OK");
             GenerateDependantChartDataFilesAndCheckQuality(seasonId, null);
@@ -285,7 +285,7 @@ public class Program
             _data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
             _seasonMetadataImporter.ImportSeasonMetadata(seasonId, _data);
-            _dataManager.Save(_data);
+            _dataManager!.Save(_data);
             Console.WriteLine("Season metadata import OK");
         }
         else
@@ -297,7 +297,7 @@ public class Program
     private static void ImportEnPoemsContentFiles()
     {
         _poemImporter.ImportPoemsEn(_dataEn);
-        _dataManager.SaveEn(_dataEn);
+        _dataManager!.SaveEn(_dataEn);
         Console.WriteLine("Poems import OK");
 
         _contentFileGenerator.GeneratePoemEnCountFile(_dataEn);
@@ -336,14 +336,14 @@ public class Program
         }
     }
 
-    private static async Task ImportPoemContentFileAsync(MenuItem menuChoice)
+    private static void ImportPoemContentFile(MenuItem menuChoice)
     {
         Console.WriteLine(menuChoice.SubMenuItems.First().Label);
-        var poemId = Console.ReadLine();
+        var poemId = Console.ReadLine()!;
 
         try
         {
-            var importedPoem = await _poemImporter.ImportPoemAsync(poemId, _data);
+            var importedPoem = _poemImporter.ImportPoem(poemId, _data);
             _dataManager!.Save(_data);
             Console.WriteLine("Poem import OK");
             var seasonId = int.Parse(poemId.Substring(poemId.LastIndexOf('_') + 1));
@@ -359,12 +359,12 @@ public class Program
         }
     }
 
-    private static async Task ImportAllPoemsContentFilesAsync()
+    private static void ImportAllPoemsContentFiles()
     {
         var seasonCount = _data.Seasons.Count;
         for (var i = 1; i <= seasonCount; i++)
         {
-            await _poemImporter.ImportPoemsOfSeasonAsync(i, _data);
+            _poemImporter.ImportPoemsOfSeason(i, _data);
             GenerateDependantChartDataFilesAndCheckQuality(i, null);
         }
 
@@ -584,7 +584,7 @@ public class Program
             return;
         }
 
-        var colorSettings = _configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
+        var colorSettings = _configuration!.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
         var color = colorSettings!.Categories.SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == choice);
 
         if (color == null)

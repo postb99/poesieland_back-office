@@ -43,7 +43,8 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     /// - No content directory corresponding to the specified season id exists.
     /// - The poem content file is not found.
     /// </exception>
-    public async Task<Poem> ImportPoemAsync(string poemId, Root data)
+    /// <exception cref="MetadataConsistencyException">Thrown when any anomalies are found in the imported data.</exception>"
+    public Poem ImportPoem(string poemId, Root data)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
@@ -68,12 +69,8 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
         }
 
         var (poem, _) = Import(poemContentPath);
-        var anomalies = await VerifyAnomaliesAfterImportAsync();
-        if (anomalies.Any())
-        {
-            throw new MetadataConsistencyException(string.Join(' ', anomalies));
-        }
-
+        VerifyAnomaliesAfterImport();
+        
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
 
         if (targetSeason is null)
@@ -107,7 +104,8 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     /// <exception cref="IOException">
     /// Thrown when file access errors occur during the import operation.
     /// </exception>
-    public async Task ImportPoemsOfSeasonAsync(int seasonId, Root data)
+    /// <exception cref="MetadataConsistencyException">Thrown when any anomalies are found in the imported data.</exception>"
+    public void ImportPoemsOfSeason(int seasonId, Root data)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
@@ -118,12 +116,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
         foreach (var poemContentPath in poemFilePaths)
         {
             var (poem, position) = Import(poemContentPath);
-            var anomalies = await VerifyAnomaliesAfterImportAsync();
-            if (anomalies.Any())
-            {
-                throw new MetadataConsistencyException(string.Join(' ', anomalies));
-            }
-
+            VerifyAnomaliesAfterImport();
             poemsByPosition.Add(position, poem);
         }
 
@@ -298,8 +291,8 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     /// <summary>
     /// Verifies that no anomalies exist in the imported poem data by calling <see cref="PoemMetadataChecker"/>.
     /// </summary>
-    /// <returns>An enumerable collection of strings, where each string represents a specific anomaly detected during the import process.</returns>
-    public async Task<IEnumerable<string>> VerifyAnomaliesAfterImportAsync()
+    /// <exception cref="MetadataConsistencyException">Thrown when any anomalies are found in the imported data.</exception>
+    public void VerifyAnomaliesAfterImport()
     {
         var partialImport = new PartialImport
         {
@@ -311,7 +304,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
             Info = _poem.Info,
             Description = _poem.Description
         };
-        return await PoemMetadataChecker.GetAnomaliesAsync(partialImport, _metrics, _requiredDescriptions);
+        PoemMetadataChecker.VerifyMetadataConsistency(partialImport, _metrics, _requiredDescriptions);
     }
 
     /// <summary>

@@ -1,3 +1,3 @@
 namespace Toolbox.Consistency;
 
-public abstract class ConsistencyException(string message) : Exception(message);
+public abstract class ConsistencyException(string message) : InvalidOperationException(message);
