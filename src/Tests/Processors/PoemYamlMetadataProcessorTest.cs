@@ -142,8 +142,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.Count.ShouldBe(1);
         poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count.ShouldBe(1);
         poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault().ShouldBe("Ciel");
-        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault()
-            .ShouldBe("Crépuscule");
+        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault().ShouldBe("Crépuscule");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
