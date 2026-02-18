@@ -17,13 +17,15 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
     /// An enumerable collection of strings indicating the anomalies found in the YAML metadata.
     /// Each string specifies the anomaly and the associated file path.
     /// </returns>
-    public async IAsyncEnumerable<string> GetYamlMetadataAnomaliesAcrossSeasonsAsync()
+    public IEnumerable<string> GetYamlMetadataAnomaliesAcrossSeasons()
     {
         var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
         var requiredDescriptions = configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS)
             .Get<RequiredDescriptionSettings>()!.RequiredDescriptions;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var poemContentImporter = new PoemImporter(configuration);
+
+        var anomalies = new List<string>();
 
         var seasonMaxId = data.Seasons.Count;
         for (var i = 21; i < seasonMaxId + 1; i++)
@@ -36,11 +38,17 @@ public class YamlMetadataChecker(IConfiguration configuration, Root data)
                 var partialImport = poemContentImporter.GetPartialImport(poemContentPath);
                 if (!poemContentImporter.HasYamlMetadata) continue;
 
-                var anomalies = await PoemMetadataChecker.GetAnomaliesAsync(partialImport, metrics, requiredDescriptions);
-                foreach (var p in anomalies)
-                    yield return
-                        $"{p} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}";
+                try
+                {
+                    PoemMetadataChecker.VerifyMetadataConsistency(partialImport, metrics, requiredDescriptions);
+                }
+                catch (MetadataConsistencyException e)
+                {
+                    anomalies.Add($"{e.Message} in {poemContentPath.Substring(poemContentPath.IndexOf("seasons"))}");
+                }
             }
         }
+
+        return anomalies;
     }
 }

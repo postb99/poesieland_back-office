@@ -75,23 +75,27 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     }
 
     /// <summary>
-    /// Get all anomalies met when expected metadata consistency checks fail for a partial poem import.
+    /// Performs several metadata consistency checks:
+    /// - Poem metric is specified.
+    /// - Poem metric tags are present and match the poem's metric(s).
+    /// - Poem year tag is present and matches the poem's year.
+    /// - When applicable, poem variable metric tag is present and matches the poem's metric(s).
+    /// - When applicable, poem variable metric info is present and matches the poem's metric(s).
+    /// - When applicable, poem description is present and meets the requirements based on extra tags and settings.
     /// </summary>
     /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
     /// <param name="metrics">A list of all available metrics.</param>
     /// <param name="requiredDescriptions">Settings for required descriptions.</param>
-    /// <returns>A collection of strings describing anomalies found in the partial import.</returns>
-    public static async Task<IEnumerable<string>> GetAnomaliesAsync(PoemImporter.PartialImport partialImport, List<Metric> metrics, List<RequiredDescription> requiredDescriptions)
+    /// <exception cref="MetadataConsistencyException">Thrown when any of the expected metadata checks fail.</exception>
+    public static void VerifyMetadataConsistency(PoemImporter.PartialImport partialImport, List<Metric> metrics, List<RequiredDescription> requiredDescriptions)
     {
-        List<string> anomalies = new List<string>();
-        
         var tasks = new List<Task>
         {
             Task.Run(() => VerifyMetricValueIsSpecified(partialImport)),
+            Task.Run(() => VerifyMetricTagsArePresent(partialImport, metrics)),
             Task.Run(() => VerifyYearTagIsPresent(partialImport)),
             Task.Run(() => VerifyVariableMetricTagIsPresent(partialImport)),
             Task.Run(() => VerifyVariableMetricInfoIsPresent(partialImport)),
-            Task.Run(() => VerifyMetricTagsArePresent(partialImport, metrics)),
             Task.Run(() => VerifyRequiredDescription(partialImport, requiredDescriptions))
         };
 
@@ -101,11 +105,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         }
         catch (AggregateException ae)
         {
-            // Access all exceptions
-            anomalies.AddRange(ae.InnerExceptions.Select(ex => ex.Message));
+            throw new MetadataConsistencyException(ae.InnerExceptions.Select(ex => ex.Message));
         }
-        // TODO throw instead and adjust calling code
-        return anomalies;
     }
 
     /// <summary>
