@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Xml.Serialization;
+using Toolbox.Consistency;
 using Toolbox.Settings;
 
 namespace Toolbox.Domain;
@@ -58,7 +59,7 @@ public class Poem
 
             if (Info == null || !Info.StartsWith("Métrique variable : "))
             {
-                throw new InvalidOperationException(
+                throw new MetadataConsistencyException(
                     $"When metric is -1, info should begin with variable length indication: 'Métrique variable : ...'. Poem id: {Id}");
             }
 
@@ -102,7 +103,7 @@ public class Poem
                 return id;
             }
 
-            throw new InvalidOperationException($"No season ID can be guessed from poem ID {Id}");
+            throw new ArgumentException($"No season ID can be guessed from poem ID {Id}");
         }
     }
 

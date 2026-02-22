@@ -507,7 +507,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
                     x.Subcategories.Select(x => x.Name).Contains(metadataCategory));
             if (settingsCategory == null)
             {
-                throw new InvalidOperationException(
+                throw new MetadataConsistencyException(
                     $"[{poemId}] No storage category found for metadata category '{metadataCategory}', maybe you intended to add this value to tags instead of categories?");
             }
 
@@ -548,7 +548,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
 
             if (settingsCategory == null)
             {
-                throw new InvalidOperationException(
+                throw new MetadataConsistencyException(
                     $"[{poemId}] No storage category found for metadata category {metadataCategory}");
             }
 

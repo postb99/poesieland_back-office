@@ -174,7 +174,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     {
         foreach (var metric in partialImport.DetailedMetric.Split(','))
         {
-            if (metric == "poème en prose")
+            if (metric == "poème en prose" || metric == "0")
                 break;
 
             var expectedTag = metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name
