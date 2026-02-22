@@ -10,7 +10,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <summary>
     /// Checks that all poems have a metric specified.
     /// </summary>
-    /// /// <exception cref="MetadataConsistencyException">
+    /// <exception cref="MetadataConsistencyException">
     /// Thrown when the check fails.
     /// </exception>
     public static void CheckPoemsWithoutMetricSpecified(Root data)
@@ -18,13 +18,13 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         var incorrectPoem = data.Seasons.SelectMany(x => x.Poems).FirstOrDefault(x => !x.HasVerseLength);
 
         if (incorrectPoem is not null)
-            throw new MetadataConsistencyException($"[ERROR] First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
+            throw new MetadataConsistencyException($"First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
     }
 
     /// <summary>
     /// Checks that all poems whose metric is variable have metric specified as expected in Info.
     /// </summary>
-    /// /// <exception cref="MetadataConsistencyException">
+    /// <exception cref="MetadataConsistencyException">
     /// Thrown when the check fails.
     /// </exception>
     public static void CheckPoemsWithVariableMetricNotPresentInInfo(Root data)
@@ -33,7 +33,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         var incorrectPoem = poems.FirstOrDefault(x => x.Info is null || !x.Info.StartsWith("Métrique variable : "));
 
         if (incorrectPoem is not null)
-            throw new MetadataConsistencyException($"[ERROR] First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
+            throw new MetadataConsistencyException($"First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
     }
 
     /// <summary>

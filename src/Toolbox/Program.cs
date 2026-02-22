@@ -178,27 +178,15 @@ public class Program
                 Console.WriteLine("YAML metadata checked for all poems since season 21");
                 // Custom pages
                 // Les mois
-                outputs = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(null, _data).ToList();
-                foreach (var output in outputs)
-                {
-                    Console.WriteLine(output);
-                }
-
+                _customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(null, _data);
+                
                 // Ciel
-                outputs = _customPageChecker
-                    .GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(null, _data).ToList();
-                foreach (var output in outputs)
-                {
-                    Console.WriteLine(output);
-                }
-
+                _customPageChecker
+                    .VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(null, _data);
+                
                 // Saisons
-                outputs = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(null, _data).ToList();
-                foreach (var output in outputs)
-                {
-                    Console.WriteLine(output);
-                }
-
+                _customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(null, _data);
+                
                 Console.WriteLine(
                     $"Metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_data, out var _).Values.Sum(x => x.Last())}");
 
@@ -539,20 +527,14 @@ public class Program
         {
             // Check custom pages
             // Les mois
-            var output = _customPageChecker.GetPoemWithLesMoisExtraTagNotListedOnCustomPage(importedPoem, _data);
-            if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-                throw new CustomPageConsistencyException(output.FirstOrDefault());
+            _customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(importedPoem, _data);
 
             // Ciel
-            output = _customPageChecker.GetPoemOfSkyCategoryStartingWithSpecificWordsNotListedOnCustomPage(importedPoem,
-                _data);
-            if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-                throw new CustomPageConsistencyException(output.FirstOrDefault());
+            _customPageChecker
+                .VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(importedPoem, _data);
 
             // Saisons
-            output = _customPageChecker.GetPoemOfMoreThanOneSeasonNotListedOnCustomPage(importedPoem, _data);
-            if (!string.IsNullOrEmpty(output.FirstOrDefault()))
-                throw new CustomPageConsistencyException(output.FirstOrDefault());
+            _customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(importedPoem, _data);
         }
 
         Console.WriteLine(

@@ -53,7 +53,7 @@ public class ContentFileGenerator(IConfiguration configuration)
     /// </summary>
     /// <param name="data">The root object containing season and poem data.</param>
     /// <param name="seasonId">The ID of the season whose poems' content files will be generated.</param>
-    /// /// <returns>The file path of the generated poem content files.</returns>
+    /// <returns>The file path of the generated poem content files.</returns>
     public IEnumerable<string> GenerateSeasonAllPoemFiles(Root data, int seasonId)
     {
         var season = data.Seasons.First(x => x.Id == seasonId);

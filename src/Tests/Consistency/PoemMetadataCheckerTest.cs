@@ -47,7 +47,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         poem.VerseLength = "";
         var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
         act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe($"[ERROR] First poem with unspecified metric or equal to '0': {poem.Id}");
+            .ShouldBe($"First poem with unspecified metric or equal to '0': {poem.Id}");
     }
 
     [Theory]
@@ -59,7 +59,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         poem.VerseLength = "0";
         var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
         act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe($"[ERROR] First poem with unspecified metric or equal to '0': {poem.Id}");
+            .ShouldBe($"First poem with unspecified metric or equal to '0': {poem.Id}");
     }
 
     [Theory]
@@ -85,7 +85,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         poem.Info = info;
         var act = () => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(data);
         act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe($"[ERROR] First poem with variable metric unspecified in Info: {poem.Id}");
+            .ShouldBe($"First poem with variable metric unspecified in Info: {poem.Id}");
     }
 
     [Theory]
