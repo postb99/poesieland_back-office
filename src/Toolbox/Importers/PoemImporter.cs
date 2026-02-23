@@ -77,7 +77,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
         {
             targetSeason = new()
             {
-                Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Introduction = "TODO", Summary = "TODO",
+                Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Description = "TODO",
                 Poems = []
             };
             data.Seasons.Add(targetSeason);

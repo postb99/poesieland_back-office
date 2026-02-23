@@ -25,23 +25,9 @@ public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper test
 
     [Fact]
     [Trait("UnitTest", "Quality")]
-    public void SeasonShouldHaveNotTooLongSummary()
+    public void SeasonShouldHaveDescription()
     {
-        var seasons = _data.Seasons.ToList();
-        foreach (var season in seasons)
-        {
-            testOutputHelper.WriteLine("[{0}]: {1} words (info: {2} words)", season.Name,
-                season.Summary.Split(' ').Length, season.Introduction.Split(' ').Length);
-        }
-
-        seasons.All(x => x.Summary.Split(' ').Length <= 70).ShouldBeTrue();
-    }
-
-    [Fact]
-    [Trait("UnitTest", "Quality")]
-    public void SeasonShouldHaveInfo()
-    {
-        _data.Seasons.Count(x => string.IsNullOrEmpty(x.Introduction)).ShouldBe(0);
+        _data.Seasons.Count(x => string.IsNullOrEmpty(x.Description)).ShouldBe(0);
     }
 
     [Fact]
