@@ -8,16 +8,12 @@ public class SeasonIndexImporter()
 {
     private Season _season;
     private bool _isInMetadata;
-    private bool _doneImportingDescription;
     private readonly SeasonIndexTomlMetadataProcessor _metadataProcessor = new();
 
-    private const string YamlMarker = "---";
     private const string TomlMarker = "+++";
 
-    private readonly List<string> _descriptionLines = [];
-
     /// <summary>
-    /// Imports season metadata from a specified content file into a Season object.
+    /// Imports season metadata (TOML format only) from a specified content file into a Season object.
     /// </summary>
     /// <param name="contentFilePath">The file path of the content to be imported.</param>
     /// <returns>An instance of the <see cref="Season"/> class populated with the imported metadata.</returns>
@@ -25,7 +21,6 @@ public class SeasonIndexImporter()
     {
         _season = new();
         _isInMetadata = false;
-        _doneImportingDescription = false;
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
@@ -35,15 +30,10 @@ public class SeasonIndexImporter()
             ProcessLine(line);
         } while (line is not null);
 
-        var sb = new StringBuilder();
-        foreach (var descriptionLine in _descriptionLines)
-        {
-            sb.Append(descriptionLine).Append(Environment.NewLine);
-        }
-
-        _season.Introduction = sb.ToString().TrimStart('\r').TrimStart('\n');
-        while (_season.Introduction[^1] == '\n')
-            _season.Introduction = _season.Introduction.TrimEnd('\n').TrimEnd('\r');
+        var description = _metadataProcessor.DescriptionLines.Count == 0
+            ? null
+            : string.Join(Environment.NewLine, _metadataProcessor.DescriptionLines);
+        _season.Description = description;
         return _season;
     }
 
@@ -53,24 +43,16 @@ public class SeasonIndexImporter()
     /// <param name="line">The line of content to be processed. Can be null, metadata, or description line.</param>
     private void ProcessLine(string? line)
     {
-        if (line == null || _doneImportingDescription)
+        if (line == null)
             return;
 
         if (line.StartsWith(TomlMarker))
         {
             _isInMetadata = !_isInMetadata;
         }
-        else if (line.StartsWith(YamlMarker))
-        {
-            _doneImportingDescription = true;
-        }
 
         if (_isInMetadata)
             ProcessMetadataLine(line);
-        else if (line != TomlMarker && !_doneImportingDescription)
-        {
-            _descriptionLines.Add(line);
-        }
     }
 
     /// <summary>
@@ -85,13 +67,18 @@ public class SeasonIndexImporter()
             _season.NumberedName = longTitleParts[0][..^8];
             _season.Name = longTitleParts[1].TrimStart();
         }
-        else if (line.StartsWith("summary"))
+        else if (line.StartsWith("description"))
         {
-            _season.Summary = _metadataProcessor.GetSummary(line);
+            _metadataProcessor.BuildDescriptionLines(line);
         }
         else if (line.StartsWith("weight"))
         {
             _season.Id = _metadataProcessor.GetWeight(line);
+        }
+        else
+        {
+            // blank line or any text line, starting with spaces or not
+            _metadataProcessor.AddValue(line, -2);
         }
     }
 }

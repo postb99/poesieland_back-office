@@ -8,6 +8,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "data", "data", "{7C8884D2-A
 	ProjectSection(SolutionItems) = preProject
 		..\..\back-office-data\Saisons.xml = ..\..\back-office-data\Saisons.xml
 		..\..\back-office-data\Seasons.xml = ..\..\back-office-data\Seasons.xml
+		..\..\back-office-data\Saisons.xsd = ..\..\back-office-data\Saisons.xsd
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Doc", "Doc", "{AB0494DA-DAE2-42AB-9CD5-6FB6D4390B49}"

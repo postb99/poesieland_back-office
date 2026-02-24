@@ -18,7 +18,6 @@ public class SeasonIndexImporterTest(BasicFixture fixture): IClassFixture<BasicF
         season.Id.ShouldBe(7);
         season.Name.ShouldBe("Croire");
         season.NumberedName.ShouldBe("Septième");
-        season.Summary.ShouldBe("Mois obsédés, amour éperdu. Juin et juillet 1998");
-        season.Introduction.ShouldBe($"Mois obsédés où la création le dispute à l'être et l'art musical, tandis qu'un amour éperdu se partage entre romantisme et passion. La saison qui a le plus alimenté mon recueil.{Environment.NewLine}{Environment.NewLine}Juin et juillet 1998");
+        season.Description.ShouldBe($"Mois obsédés où la création m'a envahie, sur fond de dispute entre l'être et l'art musical, tandis qu'un amour éperdu se partage entre romantisme et passion. La saison qui a le plus alimenté mon recueil.{Environment.NewLine}{Environment.NewLine}Juin et juillet 1998");
     }
 }

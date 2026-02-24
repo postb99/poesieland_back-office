@@ -12,9 +12,7 @@ public class Season
 
     [XmlAttribute("nombre")] public string NumberedName { get; set; } = string.Empty;
 
-    [XmlElement("summary")] public string Summary { get; set; } = string.Empty;
-
-    [XmlElement("info")] public string Introduction { get; set; } = string.Empty;
+    [XmlElement("summary")] public string Description { get; set; } = string.Empty;
 
     [XmlElement("poeme")] public List<Poem> Poems { get; set; } = [];
 
@@ -75,14 +73,20 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append($"title = \"{LongTitle}\"");
         s.Append(Environment.NewLine);
-        s.Append($"summary = \"{Summary.Escaped()}\"");
-        s.Append(Environment.NewLine);
         s.Append($"weight = {Id}");
         s.Append(Environment.NewLine);
+        s.Append("type = \"seasonIndex\"");
+        s.Append(Environment.NewLine);
+        // When description is multiline, should be surrounded by """ followed by a line break
+        // Else it is surrounded by " but its " should be escaped
+        var sep = Description.Contains('\n') ? "\"\"\"" + Environment.NewLine : "\"";
+        var description = sep == "\"" ? Description.Escaped() : Description;
+        s.Append($"description = {sep}{description}{sep}");
+        s.Append(Description.Contains('\n') ? "" : Environment.NewLine);
         s.Append("+++");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);
-        s.Append(Introduction);
+        s.Append("{{% param \"description\" %}}");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);
         s.Append("---");
@@ -117,7 +121,6 @@ public class Season
     {
         Name = importedSeason.Name;
         NumberedName = importedSeason.NumberedName;
-        Summary = importedSeason.Summary;
-        Introduction = importedSeason.Introduction;
+        Description = importedSeason.Description;
     }
 }
