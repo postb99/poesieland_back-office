@@ -6,33 +6,36 @@ using Xunit;
 
 namespace Tests.Consistency;
 
-public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testOutputHelper)
-    : IClassFixture<BasicFixture>
+public class CustomPageCheckerTest(BasicFixture fixture) : IClassFixture<BasicFixture>
 {
     [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotFailWhenCheckingGloballyForPoemsNotListedOnLesMoisCustomPage(Root data)
+    public void ShouldThrowWhenCheckingGloballyForPoemsNotListedOnLesMoisCustomPage(Root data)
     {
         data.Seasons.First().Poems.First().ExtraTags.Add("les mois");
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(null, data);
+        var act = () => customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(null, data);
+        act.ShouldThrow<CustomPageConsistencyException>().Message.ShouldBe(
+            $"Poem {data.Seasons.First().Poems.First().Id} should be listed on 'les mois' tag index page!");
     }
 
     [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotFailWhenCheckingForPoemNotListedOnLesMoisCustomPage(Root data, Poem poem)
+    public void ShouldThrowFailWhenCheckingForPoemNotListedOnLesMoisCustomPage(Root data, Poem poem)
     {
         poem.ExtraTags.Add("les mois");
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(poem, data);
+        var act = () => customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(poem, data);
+        act.ShouldThrow<CustomPageConsistencyException>().Message
+            .ShouldBe($"Poem {poem.Id} should be listed on 'les mois' tag index page!");
     }
 
     [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotFailWhenCheckingGloballyForPoemsNotListedOnCielCustomPage(Root data)
+    public void ShouldThrowWhenCheckingGloballyForPoemsNotListedOnCielCustomPage(Root data)
     {
         data.Seasons.First().Poems[0].Categories.First().SubCategories.Add("Ciel");
         data.Seasons.First().Poems[0].Paragraphs.First().Verses[0] = "Le ciel est beau";
@@ -41,25 +44,31 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
         data.Seasons.First().Poems[1].Paragraphs.First().Verses[0] = "Le ciel est gris";
 
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        customPageChecker.VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(null, data);
+        var act = () =>
+            customPageChecker.VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(null, data);
+        act.ShouldThrow<CustomPageConsistencyException>().Message.ShouldBe(
+            $"Poem {data.Seasons.First().Poems.First().Id} should be listed on 'Ciel' category index page!");
     }
 
     [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotFailWhenCheckingForPoemNotListedOnCielCustomPage(Root data, Poem poem)
+    public void ShouldThrowWhenCheckingForPoemNotListedOnCielCustomPage(Root data, Poem poem)
     {
         poem.Categories.First().SubCategories.Add("Ciel");
         poem.Paragraphs.First().Verses[0] = "Le ciel est beau";
 
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(poem, data);
+        var act = () =>
+            customPageChecker.VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(poem, data);
+        act.ShouldThrow<CustomPageConsistencyException>().Message
+            .ShouldBe($"Poem {poem.Id} should be listed on 'Ciel' category index page!");
     }
 
     [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotFailWhenCheckingGloballyForPoemsNotListedOnSaisonsCustomPage(Root data)
+    public void ShouldThrowWhenCheckingGloballyForPoemsNotListedOnSaisonsCustomPage(Root data)
     {
         data.Seasons.First().Poems[0].Categories.Add(new Category
             { Name = "Saisons", SubCategories = ["Printemps", "Automne"] });
@@ -67,17 +76,21 @@ public class CustomPageCheckerTest(BasicFixture fixture, ITestOutputHelper testO
         data.Seasons.First().Poems[1].Categories.Add(new Category { Name = "Saisons", SubCategories = ["Printemps"] });
 
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(null, data);
+        var act = () => customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(null, data);
+        act.ShouldThrow<CustomPageConsistencyException>().Message.ShouldBe(
+            $"Poem {data.Seasons.First().Poems.First().Id} should be listed on 'saisons' tag index page!");
     }
 
     [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
-    public void ShouldNotFailWhenCheckingForPoemNotListedOnSaisonsCustomPage(Root data, Poem poem)
+    public void ShouldThrowWhenCheckingForPoemNotListedOnSaisonsCustomPage(Root data, Poem poem)
     {
         poem.Categories.Add(new Category { Name = "Saisons", SubCategories = ["Printemps", "Automne"] });
 
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(poem, data);
+        var act = () => customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(poem, data);
+        act.ShouldThrow<CustomPageConsistencyException>().Message
+            .ShouldBe($"Poem {poem.Id} should be listed on 'saisons' tag index page!");
     }
 }

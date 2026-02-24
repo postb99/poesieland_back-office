@@ -56,7 +56,7 @@ public class CustomPageChecker(IConfiguration configuration)
         Root data)
     {
         var errors = new List<string>();
-        if (importedPoem is not null && !importedPoem.Categories.SelectMany(c => c.SubCategories).Contains("ciel"))
+        if (importedPoem is not null && !importedPoem.Categories.SelectMany(c => c.SubCategories).Contains("Ciel"))
             return;
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);

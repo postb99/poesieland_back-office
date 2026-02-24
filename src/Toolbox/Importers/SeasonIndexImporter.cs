@@ -13,7 +13,7 @@ public class SeasonIndexImporter()
     private const string TomlMarker = "+++";
 
     /// <summary>
-    /// Imports season metadata from a specified content file into a Season object.
+    /// Imports season metadata (TOML format only) from a specified content file into a Season object.
     /// </summary>
     /// <param name="contentFilePath">The file path of the content to be imported.</param>
     /// <returns>An instance of the <see cref="Season"/> class populated with the imported metadata.</returns>
@@ -69,11 +69,16 @@ public class SeasonIndexImporter()
         }
         else if (line.StartsWith("description"))
         {
-            _metadataProcessor!.BuildDescriptionLines(line);
+            _metadataProcessor.BuildDescriptionLines(line);
         }
         else if (line.StartsWith("weight"))
         {
             _season.Id = _metadataProcessor.GetWeight(line);
+        }
+        else
+        {
+            // blank line or any text line, starting with spaces or not
+            _metadataProcessor.AddValue(line, -2);
         }
     }
 }

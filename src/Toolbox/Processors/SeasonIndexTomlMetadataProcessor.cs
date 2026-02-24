@@ -52,6 +52,6 @@ public class SeasonIndexTomlMetadataProcessor
 
     public string? GetDescription(string line)
     {
-        return line.Substring(12).CleanedContent();
+        return line.Substring(14).CleanedContent();
     }
 }
