@@ -73,14 +73,16 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append($"title = \"{LongTitle}\"");
         s.Append(Environment.NewLine);
+        s.Append($"weight = {Id}");
+        s.Append(Environment.NewLine);
+        s.Append("type = \"seasonIndex\"");
+        s.Append(Environment.NewLine);
         // When description is multiline, should be surrounded by """ followed by a line break
         // Else it is surrounded by " but its " should be escaped
         var sep = Description.Contains('\n') ? "\"\"\"" + Environment.NewLine : "\"";
         var description = sep == "\"" ? Description.Escaped() : Description;
         s.Append($"description = {sep}{description}{sep}");
-        s.Append(Environment.NewLine);
-        s.Append($"weight = {Id}");
-        s.Append(Environment.NewLine);
+        s.Append(Description.Contains('\n') ? "" : Environment.NewLine);
         s.Append("+++");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);
