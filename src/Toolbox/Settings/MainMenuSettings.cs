@@ -25,7 +25,7 @@ public class MainMenuSettings
         GenerateSeasonCategoriesPieChartAskSeasonId = 421,
         GeneratePoemsRadarChartDataFile = 430,
         GeneratePoemsRadarChartAskCategory = 431,
-        GeneratePoemVersesLengthBarChartDataFile = 440,
+        GeneratePoemMetricBarAndPieChartDataFiles = 440,
         GenerateAllSeasonsPoemIntervalBarChartDataFile = 450,
         GenerateBubbleChartDataFile = 460,
         GenerateLineChartDataFile = 470,

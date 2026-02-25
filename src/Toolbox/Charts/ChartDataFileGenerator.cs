@@ -472,38 +472,36 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// and categorizes them by seasons or a general context.
     /// This method processes the given poems from the Root object and distinguishes regular,
     /// variable, and undefined metrics. It outputs:
-    /// - A pie chart file "poems-verse-length-pie.js" when a general context is used (seasonId is null).
+    /// - A pie chart file "poems-verse-length-pie.js" when a general context is used (seasonId is null, forSonnet is falsy).
+    /// - A bar chart file "metrique_variable-bar.js" when a general context is used (seasonId is null, forSonnet is falsy).
     /// - A bar chart file "poems-verse-length-bar.js" when a specific season is selected.
-    /// - A bar chart file "metrique_variable-bar.js" when a general context is used (seasonId is null).
+    /// - A pie chart file "sonnet-verse-length-pie.js" when forSonnet is true.
     /// </summary>
     /// <param name="data">The root object containing seasons and poems data.</param>
     /// <param name="seasonId">An optional season identifier to filter poems by season. If null, all seasons are included.</param>
-    public void GeneratePoemMetricBarAndPieChartDataFile(Root data, int? seasonId)
+    /// <param name="forSonnet">A flag indicating that only poems of type sonnet are taken into account.</param>
+    public void GeneratePoemMetricBarAndPieChartDataFile(Root data, int? seasonId, bool? forSonnet = false)
     {
-        var isGeneral = seasonId is null;
+        var isGeneral = seasonId is null && forSonnet != true;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var fileName = isGeneral ? "poems-verse-length-pie.js" : "poems-verse-length-bar.js";
-        var subDir = isGeneral ? "general" : $"season-{seasonId}";
-        var chartId = isGeneral ? "poemVerseLengthPie" : $"season{seasonId}VerseLengthBar";
+        var fileName = seasonId is not null ? "poems-verse-length-bar.js" : forSonnet == true ? "sonnet-verse-length-pie.js" : "poems-verse-length-pie.js";
+        var subDir = seasonId is not null ? $"season-{seasonId}" : forSonnet == true ? "taxonomy" : "general";
+        var chartId = seasonId is not null ?  $"season{seasonId}VerseLengthBar" : forSonnet == true ? "sonnetVerseLengthPie" : "poemVerseLengthPie";
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
-            isGeneral ? ChartType.Pie : ChartType.Bar, 1);
+            seasonId is not null ? ChartType.Bar : ChartType.Pie, 1);
         chartDataFileHelper.WriteBeforeData();
         var regularMetricData = new Dictionary<int, int>();
         var variableMetricData = new Dictionary<string, int>();
-        var nbUndefinedVerseLength = 0;
         var poems = seasonId is not null
             ? data.Seasons.First(x => x.Id == seasonId).Poems
+            : forSonnet == true ? data.Seasons.SelectMany(x => x.Poems).Where(x => x.PoemType == "sonnet")
             : data.Seasons.SelectMany(x => x.Poems);
 
         foreach (var poem in poems)
         {
-            if (string.IsNullOrEmpty(poem.VerseLength))
-            {
-                nbUndefinedVerseLength++;
-            }
-            else if (poem.HasVariableMetric)
+            if (poem.HasVariableMetric)
             {
                 if (isGeneral)
                 {
@@ -563,14 +561,10 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             variableMetricChartData.Add(new(verseLength, variableMetricData[verseLength], "rgba(72, 149, 239, 1)"));
         }
 
-        var undefinedVerseLengthChartData = new ColoredDataLine
-        ("Pas de données pour l\\'instant", nbUndefinedVerseLength, "rgb(211, 211, 211)"
-        );
-
-        // General pie chart or Season's bar chart
+        // General/for sonnet pie chart vs Season's bar chart
         var dataLines = new List<DataLine>();
 
-        if (isGeneral)
+        if (seasonId is null || forSonnet == true)
         {
             var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
             var coloredDataLines = new List<ColoredDataLine>();
@@ -591,9 +585,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         {
             dataLines.AddRange(regularMetricChartData);
             dataLines.AddRange(variableMetricChartData);
-            if (nbUndefinedVerseLength > 0)
-                dataLines.Add(undefinedVerseLengthChartData);
-
+  
             chartDataFileHelper.WriteData(dataLines, true);
 
             chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
@@ -1634,7 +1626,6 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         streamWriter.Close();
     }
-
 
     /// <summary>
     /// Retrieves the top most represented months from the provided dictionary of month-day data.

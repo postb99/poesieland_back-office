@@ -139,8 +139,8 @@ public class Program
             case MainMenuSettings.MenuChoices.GeneratePoemsLengthBarChartDataFile:
                 GeneratePoemsLengthPieChartDataFile();
                 break;
-            case MainMenuSettings.MenuChoices.GeneratePoemVersesLengthBarChartDataFile:
-                GeneratePoemMetricPieChartDataFile();
+            case MainMenuSettings.MenuChoices.GeneratePoemMetricBarAndPieChartDataFiles:
+                GeneratePoemMetricPieChartDataFile(null);
                 break;
             case MainMenuSettings.MenuChoices.GenerateSeasonCategoriesPieChartDataFile:
                 GenerateSeasonCategoriesPieChart(menuChoice);
@@ -393,10 +393,15 @@ public class Program
         Console.WriteLine("Poems length pie chart data file OK");
     }
 
-    private static void GeneratePoemMetricPieChartDataFile()
+    private static void GeneratePoemMetricPieChartDataFile(int? seasonId)
     {
         _chartDataFileGenerator.GeneratePoemMetricBarAndPieChartDataFile(_data, null);
-        Console.WriteLine("Poem verses length pie chart data file OK");
+        _chartDataFileGenerator.GeneratePoemMetricBarAndPieChartDataFile(_data, null, forSonnet: true);
+        if (seasonId is not null)
+        {
+            _chartDataFileGenerator.GeneratePoemMetricBarAndPieChartDataFile(_data, seasonId);
+        }
+        Console.WriteLine("Poem metric pie chart data files OK");
     }
 
     private static void GenerateSeasonCategoriesPieChart(MenuItem menuChoice)
@@ -453,8 +458,7 @@ public class Program
         GeneratePoemsLengthPieChartDataFile();
 
         // General and season's metric
-        GeneratePoemMetricPieChartDataFile();
-        _chartDataFileGenerator.GeneratePoemMetricBarAndPieChartDataFile(_data, seasonId);
+        GeneratePoemMetricPieChartDataFile(seasonId);
 
         // Season categories' pie
         _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, seasonId);
