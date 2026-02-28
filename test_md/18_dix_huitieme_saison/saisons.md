@@ -16,20 +16,17 @@ ensureTagSaisons3: ""
 ensureTagSaisons4: ""
 tags:
     - "2023"
-    - saisons
     - nature
     - octosyllabe
+    - saisons
     - saison incertaine
-info: |-
-    {{% notice style="primary" %}}
-    Encore une variation sur cette question que j'adore...
-    {{% include "../../includes/est_ce_un_automne" hidefirstheading %}}
-    {{% /notice %}}
+info: Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-).
 poemType: ""
 acrostiche: ""
 doubleAcrostiche: ""
 verseLength: 8
 LastModifierDisplayName: Barbara Post - Licence CC BY-NC-ND 4.0
+description: "Est-ce un automne, est-ce un printemps / Qui dans mon coeur se renouvelle ?"
 ---
 Est-ce un automne, est-ce un printemps
 
@@ -58,6 +55,5 @@ Intenses phases du climat,
 Ainsi m'attache et me délivre.
 
 {{% notice style="primary" %}}
-Encore une variation sur cette question que j'adore...
-{{% include "../../includes/est_ce_un_automne" hidefirstheading %}}
+Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-).
 {{% /notice %}}
