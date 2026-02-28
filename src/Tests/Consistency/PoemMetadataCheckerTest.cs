@@ -35,7 +35,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     [AutoDomainData]
     public void ShouldNotFailWhenPoemHasVerseLength(Root data)
     {
-        PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
+        PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(data);
     }
 
     [Theory]
@@ -45,7 +45,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "";
-        var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
+        var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(data);
         act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe($"First poem with unspecified metric or equal to '0': {poem.Id}");
     }
@@ -57,7 +57,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "0";
-        var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
+        var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(data);
         act.ShouldThrow<MetadataConsistencyException>().Message
             .ShouldBe($"First poem with unspecified metric or equal to '0': {poem.Id}");
     }
@@ -70,7 +70,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "4, 2";
         poem.Info = "Métrique variable : 4, 2";
-        PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(data);
+        PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(data);
     }
 
     [Theory]

@@ -1,3 +1,8 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
 using Toolbox.Importers;
@@ -13,12 +18,13 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <exception cref="MetadataConsistencyException">
     /// Thrown when the check fails.
     /// </exception>
-    public static void CheckPoemsWithoutMetricSpecified(Root data)
+    public static void CheckPoemsWithoutMetricValueSpecified(Root data)
     {
         var incorrectPoem = data.Seasons.SelectMany(x => x.Poems).FirstOrDefault(x => !x.HasVerseLength);
 
         if (incorrectPoem is not null)
-            throw new MetadataConsistencyException($"First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
+            throw new MetadataConsistencyException(
+                $"First poem with unspecified metric or equal to '0': {incorrectPoem.Id}");
     }
 
     /// <summary>
@@ -33,7 +39,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         var incorrectPoem = poems.FirstOrDefault(x => x.Info is null || !x.Info.StartsWith("Métrique variable : "));
 
         if (incorrectPoem is not null)
-            throw new MetadataConsistencyException($"First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
+            throw new MetadataConsistencyException(
+                $"First poem with variable metric unspecified in Info: {incorrectPoem.Id}");
     }
 
     /// <summary>
@@ -75,6 +82,22 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     }
 
     /// <summary>
+    /// Checks that all poems have a description when required.
+    /// </summary>
+    /// <param name="data"></param>
+    /// <param name="requiredDescriptions"></param>
+    public static void CheckPoemsWithoutRequiredDescription(Root data, List<RequiredDescription> requiredDescriptions)
+    {
+        var poems = data.Seasons.SelectMany(x => x.Poems).Where(p => p.ExtraTags.Any());
+        foreach (var poem in poems)
+        {
+            VerifyRequiredDescription(
+                new PoemImporter.PartialImport { Description = poem.Description, Tags = poem.ExtraTags },
+                requiredDescriptions);
+        }
+    }
+
+    /// <summary>
     /// Performs several metadata consistency checks:
     /// - Poem metric is specified.
     /// - Poem metric tags are present and match the poem's metric(s).
@@ -86,8 +109,10 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <param name="partialImport">An object containing partial import data, including metadata tags, poem year, detailed metric, and additional information.</param>
     /// <param name="metrics">A list of all available metrics.</param>
     /// <param name="requiredDescriptions">Settings for required descriptions.</param>
+    /// <param name="poemContentPath">When provided, poem content file path</param>
     /// <exception cref="MetadataConsistencyException">Thrown when any of the expected metadata checks fail.</exception>
-    public static void VerifyMetadataConsistency(PoemImporter.PartialImport partialImport, List<Metric> metrics, List<RequiredDescription> requiredDescriptions)
+    public static void VerifyMetadataConsistency(PoemImporter.PartialImport partialImport, List<Metric> metrics,
+        List<RequiredDescription> requiredDescriptions, string? poemContentPath = null)
     {
         var tasks = new List<Task>
         {
@@ -105,7 +130,10 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         }
         catch (AggregateException ae)
         {
-            throw new MetadataConsistencyException(ae.InnerExceptions.Select(ex => ex.Message));
+            if (poemContentPath is null)
+                throw new MetadataConsistencyException(ae.InnerExceptions.Select(ex => ex.Message));
+
+            throw new MetadataConsistencyException(poemContentPath, ae.InnerExceptions.Select(ex => ex.Message));
         }
     }
 
@@ -192,7 +220,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     /// <exception cref="MetadataConsistencyException">
     /// Thrown if the description is missing or required bold formatting is missing when expected.
     /// </exception>
-    internal static void VerifyRequiredDescription(PoemImporter.PartialImport partialImport, List<RequiredDescription> requiredDescriptions)
+    internal static void VerifyRequiredDescription(PoemImporter.PartialImport partialImport,
+        List<RequiredDescription> requiredDescriptions)
     {
         foreach (var extraTag in partialImport.Tags)
         {
@@ -201,10 +230,12 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
                 continue;
 
             if (string.IsNullOrWhiteSpace(partialImport.Description))
-                throw new MetadataConsistencyException($"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'");
+                throw new MetadataConsistencyException(
+                    $"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'");
 
             if (requiredDescription.Bold && !partialImport.Description.Contains("**"))
-                throw new MetadataConsistencyException($"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'");
+                throw new MetadataConsistencyException(
+                    $"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'");
         }
     }
 }

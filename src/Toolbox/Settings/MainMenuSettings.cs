@@ -1,4 +1,6 @@
-﻿namespace Toolbox.Settings;
+﻿using System.Collections.Generic;
+
+namespace Toolbox.Settings;
 
 public class MainMenuSettings
 {

@@ -1,4 +1,9 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
 using Toolbox.Charts;
 using Toolbox.Consistency;
 using Toolbox.Domain;
@@ -19,7 +24,6 @@ public class Program
     private static PoemImporter _poemImporter = null!;
     private static SeasonMetadataImporter _seasonMetadataImporter = null!;
     private static CustomPageChecker _customPageChecker = null!;
-    private static YamlMetadataChecker _yamlMetadataChecker = null!;
     private static ChartDataFileGenerator _chartDataFileGenerator = null!;
     private static PoemMetadataChecker _poemMetadataChecker = null!;
 
@@ -42,8 +46,6 @@ public class Program
         _customPageChecker = new CustomPageChecker(_configuration);
         _chartDataFileGenerator = new ChartDataFileGenerator(_configuration);
         _poemMetadataChecker = new PoemMetadataChecker(_configuration, _poemImporter);
-
-        _yamlMetadataChecker = new YamlMetadataChecker(_configuration, _data);
 
         var menuEntry = MainMenu();
         await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
@@ -162,31 +164,78 @@ public class Program
                 _dataManager!.Load(out _data, out _dataEn);
                 break;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
-                PoemMetadataChecker.CheckPoemsWithoutMetricSpecified(_data);
-                Console.WriteLine("Poems without metric specified checked");
-                PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(_data);
-                Console.WriteLine("Poems with variable metric not present in info checked");
-                SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data);
-                Console.WriteLine("Seasons with incorrect poem count checked");
-                _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null);
-                var outputs = _yamlMetadataChecker.GetYamlMetadataAnomaliesAcrossSeasons();
-                foreach (var output in outputs)
+                var requiredDescriptions = _configuration!.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS)
+                    .Get<RequiredDescriptionSettings>()!.RequiredDescriptions;
+
+                Console.WriteLine("** Checking from storage data");
+
+                var storageCheckTaks = new List<Task>
                 {
-                    Console.WriteLine(output);
+                    Task.Run(() => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(_data)),
+                    Task.Run(() => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(_data)),
+                    Task.Run(() =>
+                        PoemMetadataChecker.CheckPoemsWithoutRequiredDescription(_data, requiredDescriptions)),
+                    Task.Run(() => SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data)),
+                    Task.Run(() => _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null))
+                };
+
+                try
+                {
+                    Task.WaitAll(storageCheckTaks);
+                }
+                catch (AggregateException ae)
+                {
+                    throw new MetadataConsistencyException(ae.InnerExceptions.Select(ex => ex.Message));
                 }
 
-                Console.WriteLine("YAML metadata checked for all poems since season 21");
+                Console.WriteLine("Poems without metric specified checked");
+                Console.WriteLine("Poems with variable metric not present in info checked");
+                Console.WriteLine("Poems without required description checked");
+                Console.WriteLine("Seasons with incorrect poem count checked");
+                Console.WriteLine("Season with incorrect weight in poem file checked");
+
+                Console.WriteLine("** Checking from content files");
+
+                var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
+                    _configuration![Constants.CONTENT_ROOT_DIR]!);
+
+                var seasonMaxId = _data.Seasons.Count;
+                var poemImporter = new PoemImporter(_configuration);
+                var metrics = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
+
+                for (var i = 1; i < seasonMaxId + 1; i++)
+                {
+                    var season = _data.Seasons.First(x => x.Id == i);
+                    var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+                    var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
+                    var contentCheckTasks = new List<Task>();
+                    foreach (var poemContentPath in poemContentPaths)
+                    {
+                        var partialImport = poemImporter.GetPartialImport(poemContentPath);
+                        contentCheckTasks.Add(Task.Run(() =>
+                            PoemMetadataChecker.VerifyMetadataConsistency(partialImport, metrics,
+                                requiredDescriptions, poemContentPath)));
+                    }
+
+                    try
+                    {
+                        Task.WaitAll(contentCheckTasks);
+                    }
+                    catch (AggregateException ae)
+                    {
+                        throw new MetadataConsistencyException(ae.InnerExceptions.Select(ex => ex.Message));
+                    }
+                }
+
                 // Custom pages
-                // Les mois
-                _customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(null, _data);
-                
+
                 // Ciel
                 _customPageChecker
                     .VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(null, _data);
-                
+
                 // Saisons
                 _customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(null, _data);
-                
+
                 Console.WriteLine(
                     $"Metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_data, out var _).Values.Sum(x => x.Last())}");
 
@@ -401,6 +450,7 @@ public class Program
         {
             _chartDataFileGenerator.GeneratePoemMetricBarAndPieChartDataFile(_data, seasonId);
         }
+
         Console.WriteLine("Poem metric pie chart data files OK");
     }
 
@@ -526,8 +576,6 @@ public class Program
         if (importedPoem is not null)
         {
             // Check custom pages
-            // Les mois
-            _customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(importedPoem, _data);
 
             // Ciel
             _customPageChecker

@@ -8,31 +8,7 @@ namespace Tests.Consistency;
 
 public class CustomPageCheckerTest(BasicFixture fixture) : IClassFixture<BasicFixture>
 {
-    [Theory]
-    [Trait("UnitTest", "ContentConsistencyCheck")]
-    [AutoDomainData]
-    public void ShouldThrowWhenCheckingGloballyForPoemsNotListedOnLesMoisCustomPage(Root data)
-    {
-        data.Seasons.First().Poems.First().ExtraTags.Add("les mois");
-        var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        var act = () => customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(null, data);
-        act.ShouldThrow<CustomPageConsistencyException>().Message.ShouldBe(
-            $"Poem {data.Seasons.First().Poems.First().Id} should be listed on 'les mois' tag index page!");
-    }
-
-    [Theory]
-    [Trait("UnitTest", "ContentConsistencyCheck")]
-    [AutoDomainData]
-    public void ShouldThrowFailWhenCheckingForPoemNotListedOnLesMoisCustomPage(Root data, Poem poem)
-    {
-        poem.ExtraTags.Add("les mois");
-        var customPageChecker = new CustomPageChecker(fixture.Configuration);
-        var act = () => customPageChecker.VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(poem, data);
-        act.ShouldThrow<CustomPageConsistencyException>().Message
-            .ShouldBe($"Poem {poem.Id} should be listed on 'les mois' tag index page!");
-    }
-
-    [Theory]
+   [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldThrowWhenCheckingGloballyForPoemsNotListedOnCielCustomPage(Root data)

@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
@@ -7,43 +10,6 @@ namespace Toolbox.Consistency;
 
 public class CustomPageChecker(IConfiguration configuration)
 {
-    /// <summary>
-    /// Verifies that poems with the "les mois" extra tag are properly listed on the "les mois" tag index page.
-    /// </summary>
-    /// <param name="importedPoem">The specific poem to check. If null, all poems with the "les mois" extra tag are checked.</param>
-    /// <param name="data">The root data containing seasons and their associated poems.</param>
-    /// <exception cref="CustomPageConsistencyException">
-    /// Thrown when the check fails.
-    /// </exception>
-    public void VerifyPoemsWithLesMoisExtraTagIsListedOnCustomPage(Poem? importedPoem, Root data)
-    {
-        var errors = new List<string>();
-        if (importedPoem is not null && !importedPoem.ExtraTags.Contains("les mois"))
-            return;
-
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
-        var pageFile = Path.Combine(rootDir, "..", "tags", "les-mois", "_index.md");
-        var pageContent = File.ReadAllText(pageFile);
-
-        var poems = importedPoem is not null
-            ? [importedPoem]
-            : data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("les mois"))).ToList();
-        foreach (var poem in poems)
-        {
-            var seasonId = poem.SeasonId;
-            var poemFileName = poem.Id.Substring(0, poem.Id.LastIndexOf('_'));
-            var regexp = new Regex($"(../../seasons/{seasonId}\\w*/{poemFileName})");
-            var match = regexp.Match(pageContent);
-            if (!match.Success)
-            {
-                errors.Add($"Poem {poem.Id} should be listed on 'les mois' tag index page!");
-            }
-        }
-
-        if (errors.Any())
-            throw new CustomPageConsistencyException(errors);
-    }
-
     /// <summary>
     /// Verifies that poems in the "Ciel" category that start with specific words are listed on the "Ciel" category index page.
     /// </summary>
