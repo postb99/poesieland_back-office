@@ -11,6 +11,7 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     private List<string> _tags = [];
     private List<string> _pictures = [];
     private List<string> _infoLines = [];
+    private List<string> _descriptionLines = [];
     private List<string> _locations = [];
 
     public string GetTitle(string line)
@@ -34,6 +35,11 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
         return line.Substring(7).CleanedContent();
     }
 
+    public string? GetDescription(string line)
+    {
+        return line.Substring(14).CleanedContent();
+    }
+
     public string? GetAcrostiche(string line)
     {
         return line.Substring(13).CleanedContent();
@@ -42,11 +48,6 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     public string GetVerseLength(string line)
     {
         return line.Substring(14);
-    }
-    
-    public string GetDescription(string line)
-    {
-        return line.Substring(14).CleanedContent()!;
     }
 
     public int GetWeight(string line)
@@ -67,7 +68,8 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
 
     public void BuildCategories(string line)
     {
-        _categories = line.Substring(13).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != string.Empty && x != ", ")
+        _categories = line.Substring(13).Trim('[').Trim(']').Trim(' ').Split('"')
+            .Where(x => x != string.Empty && x != ", ")
             .ToList();
     }
 
@@ -98,16 +100,36 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     {
         MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
         var inlineInfo = GetInfo(line);
-        if (inlineInfo != null && inlineInfo != "\"")
+        if (inlineInfo is null)
+        {
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        }
+        else if (inlineInfo != "\"")
         {
             AddValue(inlineInfo, -2);
             MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
         }
     }
-    
+
+    public void BuildDescriptionLines(string line)
+    {
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.DescriptionLines;
+        var inlineDescription = GetDescription(line);
+        if (inlineDescription is null)
+        {
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        }
+        else if (inlineDescription != "\"")
+        {
+            AddValue(inlineDescription, -2);
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        }
+    }
+
     public void BuildLocations(string line)
     {
-        _locations = line.Substring(12).Trim('[').Trim(']').Trim(' ').Split('"').Where(x => x != string.Empty && x != ", ")
+        _locations = line.Substring(12).Trim('[').Trim(']').Trim(' ').Split('"')
+            .Where(x => x != string.Empty && x != ", ")
             .ToList();
     }
 
@@ -142,6 +164,20 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 }
 
                 break;
+            case MultilineMetadataProcessingType.DescriptionLines:
+
+                if (lineValue.EndsWith("\"\"\""))
+                {
+                    // Encountered """ end marker
+                    _descriptionLines.Add(lineValue.Substring(0, lineValue.Length - 3));
+                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+                }
+                else
+                {
+                    _descriptionLines.Add(lineValue);
+                }
+
+                break;
         }
     }
 
@@ -165,6 +201,11 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
         return _infoLines;
     }
     
+    public List<string> GetDescriptionLines()
+    {
+        return _descriptionLines;
+    }
+
     public List<string> GetLocations()
     {
         return _locations;

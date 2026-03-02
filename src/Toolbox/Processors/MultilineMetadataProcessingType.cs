@@ -7,5 +7,6 @@ public enum MultilineMetadataProcessingType
     Tags,
     Pictures,
     InfoLines,
+    DescriptionLines,
     Locations
 }

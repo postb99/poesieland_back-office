@@ -168,6 +168,10 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
             ? null
             : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
         _poem.Info = poemInfo;
+        var poemDescription = _metadataProcessor.GetDescriptionLines().Count == 0
+            ? null
+            : string.Join(Environment.NewLine, _metadataProcessor.GetDescriptionLines());
+        _poem.Description = poemDescription;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
         _poem.ExtraTags = FindExtraTags(_metadataProcessor.GetTags());
         _poem.Locations = _metadataProcessor.GetLocations();
@@ -447,7 +451,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
         }
         else if (line.StartsWith("description"))
         {
-            _poem.Description = _metadataProcessor!.GetDescription(line);
+            _metadataProcessor!.BuildDescriptionLines(line);
         }
         else if (line.StartsWith("acrostiche"))
         {

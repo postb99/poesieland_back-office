@@ -10,7 +10,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 {
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportTomlMetadata()
+    public void ShouldImportMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!,
@@ -35,24 +35,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportSingleLineInfoTomlMetadata()
-    {
-        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison/barcarolle.md");
-        var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Categories.Count.ShouldBe(1);
-        poem.Categories.First().SubCategories.Count.ShouldBe(1);
-        poem.Categories.First().SubCategories.First().ShouldBe("Musique et chant");
-        poem.Info.ShouldBe("Inspiré par l'air homonyme d'Offenbach.");
-        poemContentImporter.VerifyAnomaliesAfterImport();
-    }
-
-    [Fact]
-    [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultiLineInfoTomlMetadata()
+    public void ShouldImportMultiLineInfo()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "11_onzieme_saison/rester.md");
@@ -74,7 +57,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportDoubleAcrosticheTomlMetadata()
+    public void ShouldImportDoubleAcrostiche()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "10_dixieme_saison/cathedrale_de_lumieres.md");
@@ -89,7 +72,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultipleCategoriesTomlMetadata()
+    public void ShouldImportMultipleCategories()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "15_quinzieme_saison/du_gris_au_noir.md");
@@ -174,7 +157,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportVariableVerseTomlMetadata()
+    public void ShouldImportVariableVerse()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_quai.md");
@@ -199,13 +182,59 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.ExtraTags.ShouldBeEquivalentTo(new List<string> { "refrain", "les mois" });
+        poem.ExtraTags.ShouldBeEquivalentTo(new List<string> { "refrain", "les mois", "août" });
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportDescription()
+    public void ShouldImportEmptyInfo()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "22_vingt_deuxieme_saison/est_ce_un_automne.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
+        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        poem.Info.ShouldBeNull();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+    }
+
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportSingleLineInfo()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison/barcarolle.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
+        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        poem.Categories.Count.ShouldBe(1);
+        poem.Categories.First().SubCategories.Count.ShouldBe(1);
+        poem.Categories.First().SubCategories.First().ShouldBe("Musique et chant");
+        poem.Info.ShouldBe("Inspiré par l'air homonyme d'Offenbach.");
+        poemContentImporter.VerifyAnomaliesAfterImport();
+    }
+
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportMultilineInfo()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "11_onzieme_saison/rester.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
+        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        poem.Info.ShouldStartWith("\"Tu es beau\" en italien.");
+        poem.Info.ShouldEndWith("hidefirstheading %}}");
+        poemContentImporter.VerifyAnomaliesAfterImport();
+    }
+
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportSingleLineDescription()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/est_ce_un_automne.md");
@@ -214,6 +243,21 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         poem.Description.ShouldBe("Est-ce un automne, est-ce un printemps / Qui dans mon cœur se renouvelle");
+        poemContentImporter.VerifyAnomaliesAfterImport();
+    }
+
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportMultiLineDescription()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/juillet_aout.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
+        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        poem.Description.ShouldBe(
+            $"Aux portes de juillet, c'est le mois des langueurs{Environment.NewLine}C'est le mois le plus pur avant qu'août le sauvage{Environment.NewLine}juillet tout neuf a comme un air fragile");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 }

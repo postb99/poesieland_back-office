@@ -10,6 +10,7 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
     private readonly List<string> _tags = [];
     private readonly List<string> _pictures = [];
     private readonly List<string> _infoLines = [];
+    private readonly List<string> _descriptionLines = [];
     private readonly List<string> _locations = [];
 
     public string GetTitle(string line)
@@ -97,6 +98,17 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
             MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
         }
     }
+    
+    public void BuildDescriptionLines(string line)
+    {
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.DescriptionLines;
+        var inlineDescription = GetDescription(line);
+        if (inlineDescription != null && inlineDescription != "|-")
+        {
+            _descriptionLines.Add(inlineDescription);
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        }
+    }
 
     public void BuildPictures(string line)
     {
@@ -135,6 +147,10 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
                 if (lineValue.StartsWith("Acrostiche :")) return;
                 _infoLines.Add(lineValue);
                 break;
+            case MultilineMetadataProcessingType.DescriptionLines:
+                lineValue = lineValue.TrimStart(' ');
+                _descriptionLines.Add(lineValue);
+                break;
             case MultilineMetadataProcessingType.Locations:
                 _locations.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
                 break;
@@ -161,6 +177,11 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
         return _infoLines;
     }
 
+    public List<string> GetDescriptionLines()
+    {
+        return _descriptionLines;
+    }
+    
     public List<string> GetLocations()
     {
         return _locations;

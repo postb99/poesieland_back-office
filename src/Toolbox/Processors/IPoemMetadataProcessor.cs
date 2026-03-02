@@ -11,13 +11,13 @@ public interface IPoemMetadataProcessor
     string? GetAcrostiche(string line);
     string? GetVerseLength(string line);
     string? GetType(string line);
-    string? GetDescription(string line);
     int GetWeight(string line);
     DoubleAcrostiche GetDoubleAcrostiche(string line);
     void BuildCategories(string line);
     void BuildTags(string line);
     void BuildPictures(string line);
     void BuildInfoLines(string line);
+    void BuildDescriptionLines(string line);
     void BuildLocations(string line);
     /// <summary>
     /// When YAML, add a value to a list of value determined by current context.
@@ -28,6 +28,6 @@ public interface IPoemMetadataProcessor
     List<string> GetTags();
     List<string> GetPictures();
     List<string> GetInfoLines();
+    List<string> GetDescriptionLines();
     List<string> GetLocations();
-    MultilineMetadataProcessingType MultilineMetadataProcessingType { get; }
 }

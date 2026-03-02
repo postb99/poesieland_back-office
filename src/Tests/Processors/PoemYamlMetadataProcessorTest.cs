@@ -9,7 +9,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 {
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportYamlMetadata()
+    public void ShouldImportMetadata()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/saisons.md");
@@ -34,7 +34,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact(Skip = "Metadata updated to TOML, no more test case available")]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportDoubleAcrosticheYamlMetadata()
+    public void ShouldImportDoubleAcrostiche()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "16_seizieme_saison/les_chenes.md");
@@ -49,7 +49,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportTypeYamlMetadata()
+    public void ShouldImportType()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_bacchus.md");
@@ -63,7 +63,21 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportSingleLineInfoYamlMetadata()
+    public void ShouldImportEmptyInfo()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/novembre.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Info.ShouldBeNull();
+        poemContentImporter.VerifyAnomaliesAfterImport();
+    }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportSingleLineInfo()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_bacchus.md");
@@ -74,10 +88,10 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         poem.Info.ShouldBe("Reprise d'un poème-chanson de 1994");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
-
+    
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultilineInfoYamlMetadata()
+    public void ShouldImportMultilineInfo()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "26_vingt_sixieme_saison/quatre_soupirs.md");
@@ -99,21 +113,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportNullInfoYamlMetadata()
-    {
-        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/novembre.md");
-        var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
-        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        poem.Info.ShouldBeNull();
-        poemContentImporter.VerifyAnomaliesAfterImport();
-    }
-
-    [Fact]
-    [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportPicturesYamlMetadata()
+    public void ShouldImportPictures()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "18_dix_huitieme_saison/present_simple.md");
@@ -130,7 +130,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultipleCategoriesWithMoreSpacesYamlMetadata()
+    public void ShouldImportMultipleCategories()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/soir_parfait.md");
@@ -194,7 +194,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportDescription()
+    public void ShouldImportSingleLineDescription()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "27_vingt_septieme_saison/gare_au_chat.md");
@@ -203,6 +203,20 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
         poem.Description.ShouldBe("Gare au chat qui **dort** / Car il te surveille");
+        poemContentImporter.VerifyAnomaliesAfterImport();
+    }
+    
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportMultiLineDescription()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "28_vingt_huitieme_saison/equinoxes.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.Description.ShouldBe($"Septembre est comme mars, il ouvre une charnière{Environment.NewLine}Septembre qui s'amène emporte faux-semblants");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 }
