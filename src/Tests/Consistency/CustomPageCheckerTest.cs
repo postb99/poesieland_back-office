@@ -8,7 +8,7 @@ namespace Tests.Consistency;
 
 public class CustomPageCheckerTest(BasicFixture fixture) : IClassFixture<BasicFixture>
 {
-   [Theory]
+    [Theory]
     [Trait("UnitTest", "ContentConsistencyCheck")]
     [AutoDomainData]
     public void ShouldThrowWhenCheckingGloballyForPoemsNotListedOnCielCustomPage(Root data)
