@@ -339,11 +339,8 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
             ProcessLine(line);
         } while (line is not null);
 
-        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
-            ? null
-            : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
-        _poem.Info = poemInfo;
-
+        // Necessary for _poem.DetailedMetric not to crash
+        _poem.Info = string.Join(Environment.NewLine, _metadataProcessor!.GetInfoLines());
         return new()
         {
             Tags = _metadataProcessor.GetTags(),
@@ -351,8 +348,8 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
             Year = _poem.Date.Year,
             HasVariableMetric = _poem.HasVariableMetric,
             DetailedMetric = _poem.DetailedMetric,
-            Info = _poem.Info,
-            Description = _poem.Description
+            Info = string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines()),
+            Description = string.Join(Environment.NewLine, _metadataProcessor.GetDescriptionLines())
         };
     }
 
