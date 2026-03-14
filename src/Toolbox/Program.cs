@@ -345,6 +345,7 @@ public class Program
         Console.WriteLine("Charts for day radar OK");
 
         _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
+        _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
         Console.WriteLine("Poem intensity chart OK");
 
         _chartDataFileGenerator.GenerateEnPoemByDayOfWeekPieChartDataFile(_dataEn);
@@ -533,6 +534,7 @@ public class Program
         _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
             forLaMortExtraTag: true);
         _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
+        _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
         _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
         Console.WriteLine(
             "Poems by day general and specific, poem intensity, poem by day of week, chart data files OK");
@@ -604,6 +606,7 @@ public class Program
             _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
                 forLaMortExtraTag: true);
             _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
+            _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
             _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
             Console.WriteLine(
                 "Poems by day general and specific, poem intensity, poem by day of week, chart data files OK");

@@ -485,9 +485,11 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         var isGeneral = seasonId is null && forSonnet != true;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var fileName = seasonId is not null ? "poems-verse-length-bar.js" : forSonnet == true ? "sonnet-verse-length-pie.js" : "poems-verse-length-pie.js";
+        var fileName = seasonId is not null ? "poems-verse-length-bar.js" :
+            forSonnet == true ? "sonnet-verse-length-pie.js" : "poems-verse-length-pie.js";
         var subDir = seasonId is not null ? $"season-{seasonId}" : forSonnet == true ? "taxonomy" : "general";
-        var chartId = seasonId is not null ?  $"season{seasonId}VerseLengthBar" : forSonnet == true ? "sonnetVerseLengthPie" : "poemVerseLengthPie";
+        var chartId = seasonId is not null ? $"season{seasonId}VerseLengthBar" :
+            forSonnet == true ? "sonnetVerseLengthPie" : "poemVerseLengthPie";
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
             seasonId is not null ? ChartType.Bar : ChartType.Pie, 1);
@@ -496,8 +498,9 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         var variableMetricData = new Dictionary<string, int>();
         var poems = seasonId is not null
             ? data.Seasons.First(x => x.Id == seasonId).Poems
-            : forSonnet == true ? data.Seasons.SelectMany(x => x.Poems).Where(x => x.PoemType == "sonnet")
-            : data.Seasons.SelectMany(x => x.Poems);
+            : forSonnet == true
+                ? data.Seasons.SelectMany(x => x.Poems).Where(x => x.PoemType == "sonnet")
+                : data.Seasons.SelectMany(x => x.Poems);
 
         foreach (var poem in poems)
         {
@@ -585,7 +588,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         {
             dataLines.AddRange(regularMetricChartData);
             dataLines.AddRange(variableMetricChartData);
-  
+
             chartDataFileHelper.WriteData(dataLines, true);
 
             chartDataFileHelper.WriteAfterData(chartId, ["Poèmes"],
@@ -619,8 +622,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     /// <summary>
     /// Generates a pie chart data file representing the intensity of poem creation by counting the number of poems created on each day.
     /// The method aggregates poem data from two `Root` objects, processes the intensity of poem creation,
-    /// and generates output files: a pie chart data file "poem-intensity-pie.js"
-    /// and a markdown file "most_intense_days.md" listing the most intense creation days.
+    /// and generates output file: a pie chart data file "poem-intensity-pie.js"
     /// </summary>
     /// <param name="data">The primary source of French poems data.</param>
     /// <param name="dataEn">The secondary source of English poems data.</param>
@@ -676,34 +678,6 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         chartDataFileHelper.WriteData(dataLines, true);
         chartDataFileHelper.WriteAfterData("poemIntensityPie", ["Les jours de création sont-ils intenses ?"]);
         streamWriter.Close();
-
-        // Most intense days content file
-        var intensityKeys = intensityDict.Keys.OrderDescending().Where(x => x > 2);
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!,
-            "../includes/most_intense_days.md");
-        var streamWriter2 = new StreamWriter(filePath);
-
-        streamWriter2.WriteLine("+++");
-        streamWriter2.WriteLine("title = \"Les jours les plus intenses\"");
-        streamWriter2.WriteLine("+++");
-
-        foreach (var key in intensityKeys)
-        {
-            streamWriter2.WriteLine($"- {key} poèmes en un jour :");
-            var matchingIntensities = dataDict.Where(x => x.Value == key).Select(x => x.Key);
-            // ReSharper disable once PossibleMultipleEnumeration
-            var years = matchingIntensities.Select(x => x.Substring(6)).Distinct();
-
-            foreach (var year in years)
-            {
-                // ReSharper disable once PossibleMultipleEnumeration
-                var dates = matchingIntensities.Where(x => x.Substring(6) == year).Select(x => x.ToDateTime()).Order();
-                streamWriter2.Write($"  - {year} : ");
-                streamWriter2.WriteLine(string.Join(", ", dates.Select(x => x.ToString("ddd dd MMM"))));
-            }
-        }
-
-        streamWriter2.Close();
     }
 
     /// <summary>
@@ -734,6 +708,11 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             }
         }
 
+        WriteByDayOfWeekChartFile(dataDict, "poem-dayofweek-pie.js", "poemDayOfWeekPie");
+    }
+
+    private void WriteByDayOfWeekChartFile(Dictionary<int, int> dataDict, string fileName, string chartId)
+    {
         var dataLines = new List<DataLine>();
         var baseColor = "rgba(72, 149, 239, {0})";
         var baseAlpha = 0.2;
@@ -753,15 +732,49 @@ public class ChartDataFileGenerator(IConfiguration configuration)
                         { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
         }
 
-        var fileName = "poem-dayofweek-pie.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         chartDataFileHelper.WriteData(dataLines, true);
-        chartDataFileHelper.WriteAfterData("poemDayOfWeekPie", ["Par jour de la semaine"]);
+        chartDataFileHelper.WriteAfterData(chartId, ["Par jour de la semaine"]);
         streamWriter.Close();
+    }
+
+    /// <summary>
+    /// Processes and generates a pie chart data file representing the distribution of poems
+    /// categorized by the day of the week on which they were written, for days when more than two poems were written.
+    /// This method consolidates
+    /// data from two `Root` objects (primary and secondary sources) and calculates poem counts
+    /// for each day of the week, identified as Monday through Sunday.
+    /// The generated "intenseDays-dayofweek-pie.js" file will include visual data for each day of the week with corresponding
+    /// values and colors.
+    /// </summary>
+    /// <param name="data">The primary source of French poems data.</param>
+    /// <param name="dataEn">The secondary source of English poems data.</param>
+    public void GenerateIntenseByDayOfWeekPieChartDataFile(Root data, Root dataEn)
+    {
+        // Get poems grouped by TextDate when there are more than 2 poems for a given date
+        var poems = data.Seasons.SelectMany(x => x.Poems)
+            .Where(x => x.TextDate != "01.01.1994")
+            .ToList();
+        poems.AddRange(dataEn.Seasons.SelectMany(x => x.Poems));
+        var groups = poems.GroupBy(x => x.TextDate)
+            .Where(x => x.Count() > 2)
+            .ToDictionary(x => x.Key, x => x.Count());
+
+        var dataDict = new Dictionary<int, int>();
+        foreach (var group in groups)
+        {
+            var dayOfWeek = group.Key.ToDateTime().DayOfWeek;
+            if (!dataDict.TryAdd((int)dayOfWeek, group.Value))
+            {
+                dataDict[(int)dayOfWeek] += group.Value;
+            }
+        }
+
+        WriteByDayOfWeekChartFile(dataDict, "intenseDays-dayofweek-pie.js", "intenseDaysDayOfWeekPie");
     }
 
     /// <summary>
