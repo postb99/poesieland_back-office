@@ -22,8 +22,14 @@ public class CustomPageChecker(IConfiguration configuration)
         Root data)
     {
         var errors = new List<string>();
-        if (importedPoem is not null && !importedPoem.Categories.SelectMany(c => c.SubCategories).Contains("Ciel"))
-            return;
+        if (importedPoem is not null)
+        {
+            if (!importedPoem.Categories.SelectMany(c => c.SubCategories).Contains("Ciel"))
+                return;
+            if (!importedPoem.Paragraphs.First().Verses.First().StartsWith("Le ciel est ")
+                && !importedPoem.Paragraphs.First().Verses.First().StartsWith("Les cieux sont "))
+                return;
+        }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var pageFile = Path.Combine(rootDir, "..", "categories", "ciel", "_index.md");
@@ -38,23 +44,22 @@ public class CustomPageChecker(IConfiguration configuration)
 
         foreach (var poem in poems)
         {
+            // When starting with "Le ciel est gris" or "Les cieux sont gris" they are listed on special repeats custom listing
+            if (poem.Paragraphs.First().Verses.First().StartsWith("Le ciel est gris"))
+                continue;
+            if (poem.Paragraphs.First().Verses.First().StartsWith("Les cieux sont gris"))
+                continue;
+            
             var seasonId = poem.SeasonId;
             var poemFileName = poem.Id.Substring(0, poem.Id.LastIndexOf('_'));
             var regexp = new Regex($"(../../seasons/{seasonId}\\w*/{poemFileName})");
             var match = regexp.Match(pageContent);
             if (match.Success) continue;
 
-            // When starting with "Le ciel est gris" or "Les cieux sont gris" they are listed on special repeats custom listing
-            if (poem.Paragraphs.First().Verses.First().StartsWith("Le ciel est gris"))
-                continue;
-            if (poem.Paragraphs.First().Verses.First().StartsWith("Les cieux sont gris"))
-                continue;
-
             errors.Add($"Poem {poem.Id} should be listed on 'Ciel' category index page!");
-
-            if (errors.Any())
-                throw new CustomPageConsistencyException(errors);
         }
+        if (errors.Any())
+            throw new CustomPageConsistencyException(errors);
     }
 
     /// <summary>
