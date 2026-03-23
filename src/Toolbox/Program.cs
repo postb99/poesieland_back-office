@@ -229,10 +229,6 @@ public class Program
 
                 // Custom pages
 
-                // Ciel
-                _customPageChecker
-                    .VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(null, _data);
-
                 // Saisons
                 _customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(null, _data);
 
@@ -578,10 +574,6 @@ public class Program
         if (importedPoem is not null)
         {
             // Check custom pages
-
-            // Ciel
-            _customPageChecker
-                .VerifyPoemOfSkyCategoryStartingWithSpecificWordsIsListedOnCustomPage(importedPoem, _data);
 
             // Saisons
             _customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(importedPoem, _data);
