@@ -16,17 +16,26 @@ public interface IPoemImporter
     (Poem, int) Import(string contentFilePath);
 }
 
-public class PoemImporter(IConfiguration configuration) : IPoemImporter
+public class PoemImporter : IPoemImporter
 {
-    private Poem _poem;
+    private Poem? _poem;
     private int _position;
     private bool _isInMetadata;
     private IPoemMetadataProcessor? _metadataProcessor;
     private PoemContentProcessor? _contentProcessor;
-    private List<Metric> _metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
+    private readonly MetricSettings _metricSettings = new();
+    private readonly RequiredDescriptionSettings _requiredDescriptionSettings = new();
+    private readonly StorageSettings _storageSettings = new();
 
-    private List<RequiredDescription> _requiredDescriptions =
-        configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Get<RequiredDescriptionSettings>().RequiredDescriptions;
+    private readonly IConfiguration _configuration;
+
+    public PoemImporter(IConfiguration configuration)
+    {
+        _configuration = configuration;
+        _configuration.GetSection(Constants.METRIC_SETTINGS).Bind(_metricSettings);
+        configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Bind(_requiredDescriptionSettings);
+        configuration.GetSection(Constants.STORAGE_SETTINGS).Bind(_storageSettings);
+    }
 
     public const string YamlMarker = "---";
     public const string TomlMarker = "+++";
@@ -50,7 +59,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     /// <exception cref="MetadataConsistencyException">Thrown when any anomalies are found in the imported data.</exception>"
     public Poem ImportPoem(string poemId, Root data)
     {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
         if (!int.TryParse(seasonId, out _))
         {
@@ -111,7 +120,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     /// <exception cref="MetadataConsistencyException">Thrown when any anomalies are found in the imported data.</exception>"
     public void ImportPoemsOfSeason(int seasonId, Root data)
     {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == seasonId);
@@ -232,7 +241,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     /// </exception>
     public void ImportPoemsEn(Root dataEn)
     {
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR_EN]!);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR_EN]!);
 
         foreach (var season in dataEn.Seasons)
         {
@@ -281,11 +290,11 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
         var tagsToIgnore = new List<string>();
 
         // Should neither be a storage category
-        tagsToIgnore.AddRange(configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>().Categories
+        tagsToIgnore.AddRange(_storageSettings.Categories
             .Select(x => x.Name.ToLowerInvariant()));
 
         // Nor a metric name
-        tagsToIgnore.AddRange(_metrics.Select(x => x.Name.ToLowerInvariant()));
+        tagsToIgnore.AddRange(_metricSettings.Metrics.Select(x => x.Name.ToLowerInvariant()));
 
         // Nor a year
         tagsToIgnore.AddRange(Enumerable.Range(1994, DateTime.Now.Year - 1993).Select(x => x.ToString()));
@@ -312,7 +321,7 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
             Info = _poem.Info,
             Description = _poem.Description
         };
-        PoemMetadataChecker.VerifyMetadataConsistency(partialImport, _metrics, _requiredDescriptions);
+        PoemMetadataChecker.VerifyMetadataConsistency(partialImport, _metricSettings.Metrics, _requiredDescriptionSettings.RequiredDescriptions);
     }
 
     /// <summary>
@@ -503,12 +512,11 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     private List<Category> GetCategories(List<string> metadataCategories, string poemId)
     {
         var storageCategories = new Dictionary<string, Category>();
-        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
         foreach (var metadataCategory in metadataCategories)
         {
             var settingsCategory =
-                storageSettings.Categories.FirstOrDefault(x =>
+                _storageSettings.Categories.FirstOrDefault(x =>
                     x.Subcategories.Select(x => x.Name).Contains(metadataCategory));
             if (settingsCategory == null)
             {
@@ -543,12 +551,11 @@ public class PoemImporter(IConfiguration configuration) : IPoemImporter
     private List<Category> GetCategoriesEn(List<string> metadataCategories, string poemId)
     {
         var storageCategories = new Dictionary<string, Category>();
-        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
 
         foreach (var metadataCategory in metadataCategories)
         {
             var settingsCategory =
-                storageSettings.Categories.FirstOrDefault(x =>
+                _storageSettings.Categories.FirstOrDefault(x =>
                     x.Subcategories.Select(x => x.Alias).Contains(metadataCategory));
 
             if (settingsCategory == null)

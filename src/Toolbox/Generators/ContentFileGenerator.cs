@@ -4,8 +4,17 @@ using Toolbox.Settings;
 
 namespace Toolbox.Generators;
 
-public class ContentFileGenerator(IConfiguration configuration)
+public class ContentFileGenerator
 {
+    private readonly IConfiguration _configuration;
+    private readonly MetricSettings _metricsSettings = new();
+    
+    public ContentFileGenerator(IConfiguration configuration)
+    {
+        _configuration = configuration;
+        _configuration.GetSection(Constants.METRIC_SETTINGS).Bind(_metricsSettings);
+    }
+
     /// <summary>
     /// Generates _index.md file for a season.
     /// </summary>
@@ -15,13 +24,13 @@ public class ContentFileGenerator(IConfiguration configuration)
     public string GenerateSeasonIndexFile(Root data, int seasonId)
     {
         var season = data.Seasons.First(x => x.Id == seasonId);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
         var indexFile = Path.Combine(contentDir, "_index.md");
         Directory.CreateDirectory(contentDir);
         File.WriteAllText(indexFile, season.IndexFileContent());
 
-        rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         contentDir = Path.Combine(rootDir, $"season-{seasonId}");
         Directory.CreateDirectory(contentDir);
 
@@ -36,14 +45,13 @@ public class ContentFileGenerator(IConfiguration configuration)
     /// <returns>The file path of the generated poem content file.</returns>
     public string GeneratePoemFile(Root data, Poem poem)
     {
-        var metricSettings = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>();
         var season = data.Seasons.First(x => x.Id == poem.SeasonId);
         var poemIndex = season.Poems.IndexOf(poem);
-        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
         Directory.CreateDirectory(contentDir);
         var indexFile = Path.Combine(contentDir, poem.ContentFileName);
-        File.WriteAllText(indexFile, poem.FileContent(poemIndex, metricSettings!));
+        File.WriteAllText(indexFile, poem.FileContent(poemIndex, _metricsSettings));
 
         return indexFile;
     }
@@ -85,13 +93,13 @@ public class ContentFileGenerator(IConfiguration configuration)
     {
         var poemCount = data.Seasons.Select(x => x.Poems.Count).Sum();
         var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
 
         // And for variable verse
         var variableMetricPoemCount = data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasVariableMetric)).Count();
         var variableMetricPoemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "variable_metric_poem_count.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "variable_metric_poem_count.md");
         File.WriteAllText(variableMetricPoemCountFilePath, variableMetricPoemCount.ToString());
     }
 
@@ -104,7 +112,7 @@ public class ContentFileGenerator(IConfiguration configuration)
     {
         var poemCount = dataEn.Seasons.Select(x => x.Poems.Count).Sum();
         var poemCountFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count_en.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../../common", "poem_count_en.md");
         File.WriteAllText(poemCountFilePath, poemCount.ToString());
     }
 }

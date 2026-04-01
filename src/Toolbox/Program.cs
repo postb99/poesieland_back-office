@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Toolbox.Charts;
 using Toolbox.Consistency;
 using Toolbox.Domain;
@@ -18,7 +13,12 @@ namespace Toolbox;
 public class Program
 {
     private static IConfiguration? _configuration;
-    private static MainMenuSettings? _mainMenuSettings;
+    
+    private static readonly MainMenuSettings MainMenuSettings = new();
+    private static readonly RequiredDescriptionSettings RequiredDescriptionSettings = new();
+    private static readonly MetricSettings MetricSettings = new();
+    private static readonly StorageSettings StorageSettings = new();
+    
     private static DataManager? _dataManager;
     private static ContentFileGenerator _contentFileGenerator = null!;
     private static PoemImporter _poemImporter = null!;
@@ -35,7 +35,11 @@ public class Program
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         _configuration = configurationBuilder.Build();
-        _mainMenuSettings = _configuration.GetSection(Constants.MAIN_MENU).Get<MainMenuSettings>();
+        
+        _configuration.GetSection(Constants.MAIN_MENU).Bind(MainMenuSettings);
+        _configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Bind(RequiredDescriptionSettings);
+        _configuration.GetSection(Constants.METRIC_SETTINGS).Bind(MetricSettings);
+        _configuration.GetSection(Constants.STORAGE_SETTINGS).Bind(StorageSettings);
 
         _dataManager = new DataManager(_configuration);
         _dataManager.Load(out _data, out _dataEn);
@@ -53,7 +57,7 @@ public class Program
 
     private static string MainMenu()
     {
-        return MenuChoice(_mainMenuSettings!.MenuItems);
+        return MenuChoice(MainMenuSettings!.MenuItems);
     }
 
     private static string MenuChoice(List<MenuItem> menuItems)
@@ -104,7 +108,7 @@ public class Program
         {
             var menuItem = parentMenuItem is not null
                 ? parentMenuItem.SubMenuItems.FirstOrDefault(x => x.Key == (int)menuChoice)
-                : _mainMenuSettings!.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
+                : MainMenuSettings!.MenuItems.FirstOrDefault(x => x.Key == (int)menuChoice);
             return menuItem;
         }
 
@@ -164,9 +168,6 @@ public class Program
                 _dataManager!.Load(out _data, out _dataEn);
                 break;
             case MainMenuSettings.MenuChoices.CheckContentMetadataQuality:
-                var requiredDescriptions = _configuration!.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS)
-                    .Get<RequiredDescriptionSettings>()!.RequiredDescriptions;
-
                 Console.WriteLine("** Checking from storage data");
 
                 var storageCheckTaks = new List<Task>
@@ -174,7 +175,7 @@ public class Program
                     Task.Run(() => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(_data)),
                     Task.Run(() => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(_data)),
                     Task.Run(() =>
-                        PoemMetadataChecker.CheckPoemsWithoutRequiredDescription(_data, requiredDescriptions)),
+                        PoemMetadataChecker.CheckPoemsWithoutRequiredDescription(_data, RequiredDescriptionSettings.RequiredDescriptions)),
                     Task.Run(() => SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data)),
                     Task.Run(() => _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null))
                 };
@@ -201,7 +202,6 @@ public class Program
 
                 var seasonMaxId = _data.Seasons.Count;
                 var poemImporter = new PoemImporter(_configuration);
-                var metrics = _configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
 
                 for (var i = 1; i < seasonMaxId + 1; i++)
                 {
@@ -213,8 +213,8 @@ public class Program
                     {
                         var partialImport = poemImporter.GetPartialImport(poemContentPath);
                         contentCheckTasks.Add(Task.Run(() =>
-                            PoemMetadataChecker.VerifyMetadataConsistency(partialImport, metrics,
-                                requiredDescriptions, poemContentPath)));
+                            PoemMetadataChecker.VerifyMetadataConsistency(partialImport, MetricSettings.Metrics,
+                                RequiredDescriptionSettings.RequiredDescriptions, poemContentPath)));
                     }
 
                     try
@@ -609,8 +609,7 @@ public class Program
             return;
         }
 
-        var colorSettings = _configuration!.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
-        var color = colorSettings!.Categories.SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == choice);
+        var color = StorageSettings.Categories.SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == choice);
 
         if (color == null)
         {
@@ -637,9 +636,7 @@ public class Program
 
     private static void GeneratePoemsCategoriesAndTagsRadarChartDataFile()
     {
-        var storageSettings = _configuration!.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
-
-        foreach (var category in storageSettings!.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
+        foreach (var category in StorageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
                      .Distinct())
         {
             _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, category, null);
@@ -647,7 +644,7 @@ public class Program
 
         Console.WriteLine("Poems by day for all categories chart data files OK");
 
-        foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
+        foreach (var category in StorageSettings.Categories.Select(x => x.Name).Distinct())
         {
             _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, category);
         }
@@ -657,16 +654,14 @@ public class Program
 
     private static void GenerateOverSeasonsCategoriesAndTagsBarChartDataFile()
     {
-        var storageSettings = _configuration!.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
-
-        foreach (var category in storageSettings!.SubcategorieNames)
+        foreach (var category in StorageSettings.SubcategorieNames)
         {
             _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, category, null);
         }
 
         Console.WriteLine("Poems over seasons for all categories chart data files OK");
 
-        foreach (var category in storageSettings.Categories.Select(x => x.Name).Distinct())
+        foreach (var category in StorageSettings.Categories.Select(x => x.Name).Distinct())
         {
             _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, category);
         }

@@ -5,14 +5,21 @@ using Xunit;
 
 namespace Tests;
 
-public class StorageSettingsTest(BasicFixture fixture) : IClassFixture<BasicFixture>
+public class StorageSettingsTest : IClassFixture<BasicFixture>
 {
+    private readonly BasicFixture _fixture;
+    private static readonly StorageSettings StorageSettings = new();
+
+    public StorageSettingsTest(BasicFixture fixture)
+    {
+        _fixture = fixture;
+        fixture.Configuration.GetSection(Constants.STORAGE_SETTINGS).Bind(StorageSettings);
+    }
+
     [Fact]
     [Trait("UnitTest", "Computation")]
     public void ShouldGetCorrectSubcategorieNames()
     {
-        var storageSettings = fixture.Configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>();
-        storageSettings.ShouldNotBeNull();
-        storageSettings!.SubcategorieNames.Count.ShouldBe(35);
+        StorageSettings.SubcategorieNames.Count.ShouldBe(35);
     }
 }

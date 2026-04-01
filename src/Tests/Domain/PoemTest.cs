@@ -7,8 +7,15 @@ using Xunit;
 
 namespace Tests.Domain;
 
-public class PoemTest(BasicFixture fixture) : IClassFixture<BasicFixture>
+public class PoemTest : IClassFixture<BasicFixture>
 {
+    readonly MetricSettings _metricSettings = new();
+
+    public PoemTest(BasicFixture fixture)
+    {
+        fixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Bind(_metricSettings);
+    }
+
     [Fact]
     [Trait("UnitTest", "Computation")]
     public void ShouldHaveIntegerDetailedVerseLength()
@@ -93,7 +100,7 @@ public class PoemTest(BasicFixture fixture) : IClassFixture<BasicFixture>
             ExtraTags = ["wonderful"],
             VerseLength = "12"
         };
-        poem.FileContent(-1, fixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+        poem.FileContent(-1, _metricSettings)
             .ShouldContain("tags = [\"wonderful\", \"2025\", \"acrostiche\", \"alexandrin\"]");
     }
 
@@ -107,7 +114,7 @@ public class PoemTest(BasicFixture fixture) : IClassFixture<BasicFixture>
             TextDate = "01.01.2025",
             VerseLength = "6, 3"
         };
-        poem.FileContent(-1, fixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+        poem.FileContent(-1, _metricSettings)
             .ShouldContain("tags = [\"2025\", \"métrique variable\", \"hexasyllabe\", \"trisyllabe\"]");
     }
 
@@ -122,7 +129,7 @@ public class PoemTest(BasicFixture fixture) : IClassFixture<BasicFixture>
             VerseLength = "8",
             Locations = ["Ici", "Là", "ailleurs"]
         };
-        poem.FileContent(-1, fixture.Configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!)
+        poem.FileContent(-1, _metricSettings)
             .ShouldContain("locations = [\"Ici\", \"Là\", \"ailleurs\"]");
     }
 }

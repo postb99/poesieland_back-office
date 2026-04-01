@@ -5,8 +5,19 @@ using Toolbox.Settings;
 
 namespace Toolbox.Charts;
 
-public class ChartDataFileGenerator(IConfiguration configuration)
+public class ChartDataFileGenerator
 {
+    private readonly IConfiguration _configuration;
+    private static readonly MetricSettings MetricSettings = new();
+    private static readonly StorageSettings StorageSettings = new();
+
+    public ChartDataFileGenerator(IConfiguration configuration)
+    {
+        _configuration = configuration;
+        _configuration.GetSection(Constants.METRIC_SETTINGS).Bind(MetricSettings);
+        _configuration.GetSection(Constants.STORAGE_SETTINGS).Bind(StorageSettings);
+    }
+
     /// <summary>
     /// Generates a radar chart data file for poems categorized by the day of the month.
     /// The method processes poem data from the provided `Root` objects, optionally filtered
@@ -86,7 +97,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = string.Empty;
 
         var chartId = string.Empty;
@@ -97,7 +108,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             // categories
             fileName = $"poems-day-{storageSubCategory.UnaccentedCleaned()}-radar.js";
             chartId = $"poemDay-{storageSubCategory.UnaccentedCleaned()}Radar";
-            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+            borderColor = StorageSettings.Categories
                 .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory)!.Color;
 
             switch (borderColor)
@@ -119,7 +130,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             // tags
             fileName = $"poems-day-{storageCategory.UnaccentedCleaned()}-radar.js";
             chartId = $"poemDay-{storageCategory.UnaccentedCleaned()}Radar";
-            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+            borderColor = StorageSettings.Categories
                 .FirstOrDefault(x => x.Name == storageCategory)!.Color;
         }
         else if (forLesMoisExtraTag)
@@ -176,7 +187,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         // Days without poems listing
 
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!,
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/days_without_creation.md");
         var streamWriter2 = new StreamWriter(filePath);
 
@@ -227,7 +238,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         // General pie chart
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var subDirPath = Path.Combine(rootDir, "general");
         Directory.CreateDirectory(subDirPath);
         using var streamWriter = new StreamWriter(Path.Combine(subDirPath, "poems-length-pie.js"));
@@ -235,7 +246,6 @@ public class ChartDataFileGenerator(IConfiguration configuration)
             ChartType.Pie, 1);
         chartDataFileHelper.WriteBeforeData();
 
-        var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
         var coloredDataLines = new List<ColoredDataLine>();
 
         foreach (var nbVerses in nbVersesRange)
@@ -248,7 +258,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
                 _ => nbVerses / 2
             };
 
-            var color = metrics.First(m => m.Length == lookup).Color;
+            var color = MetricSettings.Metrics.First(m => m.Length == lookup).Color;
             coloredDataLines.Add(new(nbVerses.ToString(),
                 nbVersesData[nbVerses], color));
         }
@@ -273,9 +283,9 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     public void GenerateSeasonCategoriesPieChartDataFile(Root data, int? seasonId)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var subDir = seasonId.HasValue ? $"season-{seasonId}" : "general";
-        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!;
+        var storageSettings = StorageSettings;
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, "categories-pie.js"));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
@@ -332,8 +342,8 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         if (!poems.Any()) return;
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var storageSettings = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!;
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+        var storageSettings = StorageSettings;
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", $"categories-{year}-pie.js"));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
@@ -397,7 +407,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR_EN]!, "../charts/general");
+            _configuration[Constants.CONTENT_ROOT_DIR_EN]!, "../charts/general");
 
         var fileName = "poems-en-day-radar.js";
         var chartId = "poemEnDayRadar";
@@ -444,7 +454,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = $"poems-day-{year}-radar.js";
         var chartId = $"poemDay-{year}Radar";
 
@@ -484,7 +494,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
     {
         var isGeneral = seasonId is null && forSonnet != true;
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = seasonId is not null ? "poems-verse-length-bar.js" :
             forSonnet == true ? "sonnet-verse-length-pie.js" : "poems-verse-length-pie.js";
         var subDir = seasonId is not null ? $"season-{seasonId}" : forSonnet == true ? "taxonomy" : "general";
@@ -569,14 +579,13 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         if (seasonId is null || forSonnet == true)
         {
-            var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>()!.Metrics;
             var coloredDataLines = new List<ColoredDataLine>();
 
             foreach (var metricValue in regularMetricRange)
             {
                 var term = metricValue == 1 ? "syllabe" : "syllabes";
                 coloredDataLines.Add(new($"{metricValue} {term}",
-                    regularMetricData[metricValue], metrics.First(m => m.Length == metricValue).Color));
+                    regularMetricData[metricValue], MetricSettings.Metrics.First(m => m.Length == metricValue).Color));
             }
 
             chartDataFileHelper.WriteData(coloredDataLines, true);
@@ -671,7 +680,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         var fileName = "poem-intensity-pie.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
@@ -733,7 +742,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
@@ -819,7 +828,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         var fileName = "poem-en-dayofweek-pie.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR_EN]!);
+            _configuration[Constants.CONTENT_ROOT_DIR_EN]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "../charts/general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
@@ -856,7 +865,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         bool forLaMort = false)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         var fileName = string.Empty;
 
         var chartId = string.Empty;
@@ -866,7 +875,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         {
             fileName = $"poems-{storageSubCategory.UnaccentedCleaned()}-bar.js";
             chartId = $"poems-{storageSubCategory.UnaccentedCleaned()}Bar";
-            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+            borderColor = StorageSettings.Categories
                 .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory)!.Color;
 
             switch (borderColor)
@@ -887,7 +896,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         {
             fileName = $"poems-{storageCategory.UnaccentedCleaned()}-bar.js";
             chartId = $"poems-{storageCategory.UnaccentedCleaned()}Bar";
-            borderColor = configuration.GetSection(Constants.STORAGE_SETTINGS).Get<StorageSettings>()!.Categories
+            borderColor = StorageSettings.Categories
                 .FirstOrDefault(x => x.Name == storageCategory)!.Color;
         }
         else if (forAcrostiche)
@@ -1133,7 +1142,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         var fileName = "poem-interval-bar.js";
         var subDir = seasonId is not null ? $"season-{seasonId}" : "general";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bar);
         chartDataFileHelper.WriteBeforeData();
@@ -1148,7 +1157,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         // Longest intervals content file
 
         var longestIntervalKeys = orderedIntervalKeys.OrderDescending().ToList();
-        var filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!,
+        var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/longest_intervals.md");
         var streamWriter3b = new StreamWriter(filePath);
 
@@ -1229,7 +1238,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         // longest series content file
 
         var longestSeriesKeys = sortedKeys.OrderDescending().Take(5);
-        filePath = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!,
+        filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/longest_series.md");
         var streamWriter3 = new StreamWriter(filePath);
 
@@ -1290,7 +1299,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         var fileName = "poem-length-by-verse-length.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
@@ -1339,9 +1348,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         var dataDict = ChartDataFileHelper.FillMetricDataDict(data, out var xLabels);
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-
-        var metrics = configuration.GetSection(Constants.METRIC_SETTINGS).Get<MetricSettings>().Metrics;
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
 
         var fileName = "poems-verseLength-line.js";
 
@@ -1351,43 +1358,43 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         var oneFootDataLines =
             new LineChartDataLine("1 syllabe", dataDict[1],
-                metrics.First(x => x.Length == 1).Color);
+                MetricSettings.Metrics.First(x => x.Length == 1).Color);
         var twoFeetDataLines =
             new LineChartDataLine("2 syllabes", dataDict[2],
-                metrics.First(x => x.Length == 2).Color);
+                MetricSettings.Metrics.First(x => x.Length == 2).Color);
         var threeFeetDataLines =
             new LineChartDataLine("3 syllabes", dataDict[3],
-                metrics.First(x => x.Length == 3).Color);
+                MetricSettings.Metrics.First(x => x.Length == 3).Color);
         var fourFeetDataLines =
             new LineChartDataLine("4 syllabes", dataDict[4],
-                metrics.First(x => x.Length == 4).Color);
+                MetricSettings.Metrics.First(x => x.Length == 4).Color);
         var fiveFeetDataLines =
             new LineChartDataLine("5 syllabes", dataDict[5],
-                metrics.First(x => x.Length == 5).Color);
+                MetricSettings.Metrics.First(x => x.Length == 5).Color);
         var sixFeetDataLines =
             new LineChartDataLine("6 syllabes", dataDict[6],
-                metrics.First(x => x.Length == 6).Color);
+                MetricSettings.Metrics.First(x => x.Length == 6).Color);
         var sevenFeetDataLines =
             new LineChartDataLine("7 syllabes", dataDict[7],
-                metrics.First(x => x.Length == 7).Color);
+                MetricSettings.Metrics.First(x => x.Length == 7).Color);
         var eightFeetDataLines =
             new LineChartDataLine("8 syllabes", dataDict[8],
-                metrics.First(x => x.Length == 8).Color);
+                MetricSettings.Metrics.First(x => x.Length == 8).Color);
         var nineFeetDataLines =
             new LineChartDataLine("9 syllabes", dataDict[9],
-                metrics.First(x => x.Length == 9).Color);
+                MetricSettings.Metrics.First(x => x.Length == 9).Color);
         var tenFeetDataLines =
             new LineChartDataLine("10 syllabes", dataDict[10],
-                metrics.First(x => x.Length == 10).Color);
+                MetricSettings.Metrics.First(x => x.Length == 10).Color);
         var elevenFeetDataLines =
             new LineChartDataLine("11 syllabes", dataDict[11],
-                metrics.First(x => x.Length == 11).Color);
+                MetricSettings.Metrics.First(x => x.Length == 11).Color);
         var twelveFeetDataLines =
             new LineChartDataLine("12 syllabes", dataDict[12],
-                metrics.First(x => x.Length == 12).Color);
+                MetricSettings.Metrics.First(x => x.Length == 12).Color);
         var fourteenFeetDataLines =
             new LineChartDataLine("14 syllabes", dataDict[14],
-                metrics.First(x => x.Length == 14).Color);
+                MetricSettings.Metrics.First(x => x.Length == 14).Color);
 
         chartDataFileHelper.WriteData(oneFootDataLines);
         chartDataFileHelper.WriteData(twoFeetDataLines);
@@ -1454,7 +1461,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         var fileName = "associated-categories.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "taxonomy", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
@@ -1545,7 +1552,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
 
         var fileName = "category-metric.js";
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
+            _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, "general", fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Bubble, 4);
         chartDataFileHelper.WriteBeforeData();
@@ -1589,7 +1596,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         var sortedDict = dataDict.OrderByDescending(x => x.Value).Take(10).ToList();
 
         var outFile = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", "associated_categories.md");
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", "associated_categories.md");
         using var streamWriter = new StreamWriter(outFile);
 
         streamWriter.WriteLine("+++");
@@ -1625,7 +1632,7 @@ public class ChartDataFileGenerator(IConfiguration configuration)
         var topMost = dict.OrderByDescending(x => x.Value).Take(10).ToList();
 
         var outFile = Path.Combine(Directory.GetCurrentDirectory(),
-            configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", fileName);
+            _configuration[Constants.CONTENT_ROOT_DIR]!, "../includes", fileName);
         using var streamWriter = new StreamWriter(outFile);
 
         streamWriter.WriteLine("+++");
