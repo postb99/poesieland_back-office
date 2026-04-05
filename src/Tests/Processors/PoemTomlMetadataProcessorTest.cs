@@ -35,28 +35,6 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultiLineInfo()
-    {
-        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "11_onzieme_saison/rester.md");
-        var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        /*
-        "Tu es beau" en italien.
-
-        {{% include "../../includes/trop_de_choses_auront_change" hidefirstheading %}}
-        */
-        poem.Info.ShouldStartWith($"\"Tu es beau\" en italien.");
-        poem.Info.ShouldEndWith("hidefirstheading %}}");
-        poem.Info.ShouldBe(
-            $"\"Tu es beau\" en italien.{Environment.NewLine}{Environment.NewLine}{{{{% include \"../../includes/trop_de_choses_auront_change\" hidefirstheading %}}}}");
-        poemContentImporter.VerifyAnomaliesAfterImport();
-    }
-
-    [Fact]
-    [Trait("UnitTest", "ContentImport")]
     public void ShouldImportDoubleAcrostiche()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
@@ -216,19 +194,26 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         poem.Info.ShouldBe("Inspiré par l'air homonyme d'Offenbach.");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
-
+    
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultilineInfo()
+    public void ShouldImportMultiLineInfo()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "11_onzieme_saison/rester.md");
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "19_dix_neuvieme_saison/je_te_promets_les_quatre_saisons.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Info.ShouldStartWith("\"Tu es beau\" en italien.");
-        poem.Info.ShouldEndWith("hidefirstheading %}}");
+        /*
+        [Cette chanson de Johnny Hallyday](https://www.google.com/search?q=je+te+promets+johnny+hallyday) dans ma tête ce matin... Deux grands artistes qui me sont chers.
+
+        Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-)
+        */
+        poem.Info.ShouldStartWith($"[Cette chanson de Johnny Hallyday]");
+        poem.Info.ShouldEndWith("(../../tags/saisons/_index#les-quatre-saisons-)");
+        poem.Info.ShouldBe(
+            $"[Cette chanson de Johnny Hallyday](https://www.google.com/search?q=je+te+promets+johnny+hallyday) dans ma tête ce matin... Deux grands artistes qui me sont chers.{Environment.NewLine}{Environment.NewLine}Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-)");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
