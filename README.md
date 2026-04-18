@@ -34,6 +34,17 @@ This also helps perform statistical computations using an in-memory XML document
 - Line chart, rather than bar chart, for metrics over Seasons.
 - More advanced charts (e.g., bubble charts) to show relationships between variables, such as poem length/metric, associated categories, or category/metric associations.
 
+### Generation of word cloud text files
+
+When a poem contains a month name in its tags, I generate a word cloud text file (archived in poetry site at `content\fr\other-perspectives\les-mois\[month name]`) then use it on the following website:
+https://nuagedemots.co/
+- Remove some irrelevant terms
+- Use rectangular form
+- Use Roboto font
+- Use blue theme
+
+Then I cut out the figure to have fewer space around content. And I save it as `featured.png` in `content\fr\other-perspectives\les-mois\[month name]`.
+
 ### Content quality check
 
 Because CMS editor gives indications (fields descriptions) but a miss or typo can happen.

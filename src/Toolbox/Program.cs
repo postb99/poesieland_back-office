@@ -254,6 +254,9 @@ public class Program
                 }
 
                 break;
+            case MainMenuSettings.MenuChoices.GenerateWordCloudTextFiles:
+                new WordCloudTextGenerator(_configuration!).GenerateWordCloudFiles(_data);
+                break;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
                 Environment.Exit(0);
