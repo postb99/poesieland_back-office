@@ -15,20 +15,17 @@ public class DataManager : IDataManager
     {
         _configuration = configuration;
         XmlSerializer = new(typeof(Root));
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
     
     public void Load(out Root data, out Root dataEn)
     {
         var xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE]!);
-        using var streamReader = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]!));
+        using var streamReader = new StreamReader(xmlDocPath);
 
         data = XmlSerializer.Deserialize(streamReader) as Root;
 
         xmlDocPath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.XML_STORAGE_FILE_EN]!);
-        using var streamReaderEn = new StreamReader(xmlDocPath,
-            Encoding.GetEncoding(_configuration[Constants.XML_STORAGE_FILE_ENCODING]!));
+        using var streamReaderEn = new StreamReader(xmlDocPath);
 
         dataEn = XmlSerializer.Deserialize(streamReaderEn) as Root;
     }
