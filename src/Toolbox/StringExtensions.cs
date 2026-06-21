@@ -1,6 +1,5 @@
 ﻿using System.Globalization;
 using System.Text;
-using System.Text.RegularExpressions;
 
 namespace Toolbox;
 
@@ -25,7 +24,7 @@ public static class StringExtensions
     public static string? Unescaped(this string s) => string.IsNullOrEmpty(s) ? null : s.Replace("\\\"", "\"");
 
     /// <summary>
-    /// Remove accents and replace space, single quote and dash by underscore.
+    /// Remove accents and replace space, ' and - signs by underscore.
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
@@ -63,7 +62,7 @@ public static class StringExtensions
     }
 
     /// <summary>
-    /// Expect a quoted string, cleanup the quotes around the string and the escaping of any quote into the string.
+    /// Expect a quoted string, cleanup the quotes around the string, and the escaping of any quote into the string.
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>
@@ -98,6 +97,11 @@ public static class StringExtensions
     /// <returns></returns>
     public static string MarkdownLink(this string item, string itemTypes) => $"[{item}](/{itemTypes}/{item.ToLowerInvariant().Replace(' ', '-')})";
     
+    /// <summary>
+    /// Parses a string of comma separated integers.
+    /// </summary>
+    /// <param name="s"></param>
+    /// <returns></returns>
     public static int[] ToIntArray(this string s)
     {
         var span = s.AsSpan();

@@ -26,23 +26,18 @@ public class ChartDataFileGenerator
     /// Following files will be generated in appropriate locations:
     /// - poems-day-{storageSubCategory, i.e. "automne"}-radar.js,
     /// - poems-day-{storageCategory, i.e. "saisons"}-radar.js
-    /// - poems-day-les-mois-radar.js, poems-day-noel-radar.js
-    /// - poems-day-radar.js
+    /// - poems-day-{extraTag, i.e. "les-mois"}-radar.js
     /// - days_without_creation.md
     /// </summary>
     /// <param name="data">The primary source of French poems data.</param>
     /// <param name="dataEn">The secondary source of English poems data.</param>
-    /// <param name="storageSubCategory">The sub-category to filter poems. If null, sub-category filtering is skipped.</param>
-    /// <param name="storageCategory">The category to filter poems. If null, category filtering is skipped.</param>
-    /// <param name="forLesMoisExtraTag">A flag indicating whether to filter poems containing the tag "les mois".</param>
-    /// <param name="forNoelExtraTag">A flag indicating whether to filter poems containing the tag "noël".</param>
-    /// <param name="forLaMortExtraTag">A flag indicating whether to filter poems containing the tag "la mort".</param>
+    /// <param name="storageSubCategory">The optional sub-category to filter poems.</param>
+    /// <param name="storageCategory">The optional category to filter poems.</param>
+    /// <param name="extraTag">The optional extra tag to filter poems.</param>
     public void GeneratePoemsByDayRadarChartDataFile(Root data, Root dataEn,
-        string? storageSubCategory, string? storageCategory,
-        bool forLesMoisExtraTag = false, bool forNoelExtraTag = false, bool forLaMortExtraTag = false)
+        string? storageSubCategory = null, string? storageCategory = null, string? extraTag = null)
     {
-        var isGeneral = storageSubCategory is null && storageCategory is null && !forLesMoisExtraTag &&
-                        !forNoelExtraTag && !forLaMortExtraTag;
+        var isGeneral = storageSubCategory is null && storageCategory is null && extraTag is null;
 
         List<string> poemStringDates;
 
@@ -58,22 +53,10 @@ public class ChartDataFileGenerator
                 .Where(x => x.Categories.Any(x => x.Name == storageCategory)).Select(x => x.TextDate)
                 .ToList();
         }
-        else if (forLesMoisExtraTag)
+        else if (extraTag is not null)
         {
             poemStringDates = data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains("les mois")).Select(x => x.TextDate)
-                .ToList();
-        }
-        else if (forNoelExtraTag)
-        {
-            poemStringDates = data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains("noël")).Select(x => x.TextDate)
-                .ToList();
-        }
-        else if (forLaMortExtraTag)
-        {
-            poemStringDates = data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains("la mort")).Select(x => x.TextDate)
+                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag)).Select(x => x.TextDate)
                 .ToList();
         }
         else
@@ -98,10 +81,10 @@ public class ChartDataFileGenerator
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var fileName = string.Empty;
-
-        var chartId = string.Empty;
-        var borderColor = string.Empty;
+        
+        string fileName;
+        string chartId;
+        string borderColor = string.Empty;
 
         if (storageSubCategory is not null)
         {
@@ -133,20 +116,10 @@ public class ChartDataFileGenerator
             borderColor = StorageSettings.Categories
                 .FirstOrDefault(x => x.Name == storageCategory)!.Color;
         }
-        else if (forLesMoisExtraTag)
+        else if (extraTag is not null)
         {
-            fileName = "poems-day-les-mois-radar.js";
-            chartId = "poemDayLesMoisRadar";
-        }
-        else if (forNoelExtraTag)
-        {
-            fileName = "poems-day-noel-radar.js";
-            chartId = "poemDayNoelRadar";
-        }
-        else if (forLaMortExtraTag)
-        {
-            fileName = "poems-day-la-mort-radar.js";
-            chartId = "poemDayLaMortRadar";
+            fileName = $"poems-day-{extraTag.UnaccentedCleaned().Replace('_', '-')}-radar.js";
+            chartId = $"poemDay{extraTag.ToChartKey()}Radar";
         }
         else
         {
@@ -176,7 +149,7 @@ public class ChartDataFileGenerator
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        var backgroundColor = borderColor?.Replace("1)", "0.5)");
+        var backgroundColor = borderColor.Replace("1)", "0.5)");
 
         var title = $"Mois les plus représentés : {string.Join(", ", GetTopMostMonths(dataDict))}";
 
