@@ -18,6 +18,7 @@ public class Program
     private static readonly RequiredDescriptionSettings RequiredDescriptionSettings = new();
     private static readonly MetricSettings MetricSettings = new();
     private static readonly StorageSettings StorageSettings = new();
+    private static readonly ChartsSettings ChartsSettings = new();
     
     private static DataManager? _dataManager;
     private static ContentFileGenerator _contentFileGenerator = null!;
@@ -40,6 +41,7 @@ public class Program
         _configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Bind(RequiredDescriptionSettings);
         _configuration.GetSection(Constants.METRIC_SETTINGS).Bind(MetricSettings);
         _configuration.GetSection(Constants.STORAGE_SETTINGS).Bind(StorageSettings);
+        _configuration.GetSection(Constants.CHARTS_SETTINGS).Bind(ChartsSettings);
 
         _dataManager = new DataManager(_configuration);
         _dataManager.Load(out _data, out _dataEn);
@@ -526,9 +528,10 @@ public class Program
 
         // Poem by day
         _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn);
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: "les mois");
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn,extraTag: "noël");
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: "la mort");
+        foreach (var extraTag in ChartsSettings.Radar.ByDayExtraTags)
+        {
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: extraTag);
+        }
         _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
         _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
         _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
@@ -591,9 +594,10 @@ public class Program
         if (string.IsNullOrEmpty(choice))
         {
             _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn);
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: "les mois");
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: "noël");
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: "la mort");
+            foreach (var extraTag in ChartsSettings.Radar.ByDayExtraTags)
+            {
+                _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: extraTag);
+            }
             _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
             _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
             _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
