@@ -29,6 +29,18 @@ public class StringExtensionsTest
     {
         input.UnaccentedCleaned().ShouldBe(expected);
     }
+    
+    [Theory]
+    [Trait("UnitTest", "Computation")]
+    [InlineData("Simple", "Simple")]
+    [InlineData("Au matin", "Au matin")]
+    [InlineData("A la dérive", "A la derive")]
+    [InlineData("Comme toi, aile", "Comme toi, aile")]
+    [InlineData("Mais où vais-je ?", "Mais ou vais-je ?")]
+    public void ShouldBeUnaccented(string input, string expected)
+    {
+        input.Unaccented().ShouldBe(expected);
+    }
 
     [Theory]
     [Trait("UnitTest", "Computation")]

@@ -119,7 +119,7 @@ public class ChartDataFileGenerator
         else if (extraTag is not null)
         {
             fileName = $"poems-day-{extraTag.UnaccentedCleaned().Replace('_', '-')}-radar.js";
-            chartId = $"poemDay{extraTag.ToChartKey()}Radar";
+            chartId = $"poemDay{extraTag.Unaccented().ToChartKey()}Radar";
         }
         else
         {
