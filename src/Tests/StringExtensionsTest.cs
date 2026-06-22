@@ -1,9 +1,9 @@
 ﻿using System.Text;
 using Shouldly;
-using Toolbox.Domain;
+using Toolbox;
 using Xunit;
 
-namespace Tests.Domain;
+namespace Tests;
 
 public class StringExtensionsTest
 {
@@ -12,7 +12,6 @@ public class StringExtensionsTest
     public StringExtensionsTest(ITestOutputHelper testOutputHelper)
     {
         _testOutputHelper = testOutputHelper;
-        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
     }
 
     [Theory]
@@ -72,4 +71,11 @@ public class StringExtensionsTest
     [InlineData("Enfance et adolescence", "[Enfance et adolescence](/categories/enfance-et-adolescence)")]
     public void ShouldBeMarkdownLink(string input, string expected) =>
         input.MarkdownLink("categories").ShouldBe(expected);
+    
+    [Theory]
+    [Trait("UnitTest", "Computation")]
+    [InlineData("1", 1)]
+    [InlineData("1, 2", 1, 2)]
+    public void ShouldBeIntArray(string input, params int[] expected) =>
+        input.ToIntArray().ShouldBe(expected);
 }

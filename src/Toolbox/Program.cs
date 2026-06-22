@@ -18,6 +18,7 @@ public class Program
     private static readonly RequiredDescriptionSettings RequiredDescriptionSettings = new();
     private static readonly MetricSettings MetricSettings = new();
     private static readonly StorageSettings StorageSettings = new();
+    private static readonly ChartsSettings ChartsSettings = new();
     
     private static DataManager? _dataManager;
     private static ContentFileGenerator _contentFileGenerator = null!;
@@ -40,6 +41,7 @@ public class Program
         _configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Bind(RequiredDescriptionSettings);
         _configuration.GetSection(Constants.METRIC_SETTINGS).Bind(MetricSettings);
         _configuration.GetSection(Constants.STORAGE_SETTINGS).Bind(StorageSettings);
+        _configuration.GetSection(Constants.CHARTS_SETTINGS).Bind(ChartsSettings);
 
         _dataManager = new DataManager(_configuration);
         _dataManager.Load(out _data, out _dataEn);
@@ -340,7 +342,7 @@ public class Program
         Console.WriteLine("Poems count OK");
 
         _chartDataFileGenerator.GeneratePoemsEnByDayRadarChartDataFile(_dataEn);
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null);
+        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn);
         Console.WriteLine("Charts for day radar OK");
 
         _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
@@ -525,13 +527,11 @@ public class Program
             : $"Season {seasonId} categories pie chart data file OK");
 
         // Poem by day
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null);
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
-            forLesMoisExtraTag: true);
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
-            forNoelExtraTag: true);
-        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
-            forLaMortExtraTag: true);
+        _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn);
+        foreach (var extraTag in ChartsSettings.Radar.ByDayExtraTags)
+        {
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: extraTag);
+        }
         _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
         _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
         _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
@@ -593,13 +593,11 @@ public class Program
 
         if (string.IsNullOrEmpty(choice))
         {
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null);
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
-                forLesMoisExtraTag: true);
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
-                forNoelExtraTag: true);
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, null,
-                forLaMortExtraTag: true);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn);
+            foreach (var extraTag in ChartsSettings.Radar.ByDayExtraTags)
+            {
+                _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: extraTag);
+            }
             _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
             _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
             _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
@@ -620,7 +618,7 @@ public class Program
         }
         else
         {
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, choice, null);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, storageSubCategory: choice);
             Console.WriteLine($"Poems by day for '{choice}' chart data file OK");
         }
     }
@@ -642,14 +640,14 @@ public class Program
         foreach (var category in StorageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name)
                      .Distinct())
         {
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, category, null);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, storageSubCategory: category);
         }
 
         Console.WriteLine("Poems by day for all categories chart data files OK");
 
         foreach (var category in StorageSettings.Categories.Select(x => x.Name).Distinct())
         {
-            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, null, category);
+            _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, storageCategory: category);
         }
 
         Console.WriteLine("Poems by day for all tags chart data files OK");
@@ -675,10 +673,10 @@ public class Program
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forSonnet: true);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forPantoun: true);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forVariableMetric: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forRefrain: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forLovecat: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forLesMois: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forLaMort: true);
+        foreach (var extraTag in ChartsSettings.Bar.OverSeasonsExtraTags)
+        {
+            _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, extraTag: extraTag);
+        }
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 1);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 2);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 3);
