@@ -26,7 +26,7 @@ public class ChartDataFileGenerator
     /// Following files will be generated in appropriate locations:
     /// - poems-day-{storageSubCategory, i.e. "automne"}-radar.js,
     /// - poems-day-{storageCategory, i.e. "saisons"}-radar.js
-    /// - poems-day-{extraTag, i.e. "les-mois"}-radar.js
+    /// - poems-day-{extraTag, i.e. "les_mois"}-radar.js
     /// - days_without_creation.md
     /// </summary>
     /// <param name="data">The primary source of French poems data.</param>
