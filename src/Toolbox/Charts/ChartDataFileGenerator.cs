@@ -119,7 +119,7 @@ public class ChartDataFileGenerator
         else if (extraTag is not null)
         {
             fileName = $"poems-day-{extraTag.UnaccentedCleaned().Replace('_', '-')}-radar.js";
-            chartId = $"poemDay{extraTag.Unaccented().ToChartKey()}Radar";
+            chartId = $"poemDay-{extraTag.UnaccentedCleaned()}Radar";
         }
         else
         {
@@ -827,15 +827,11 @@ public class ChartDataFileGenerator
     /// <param name="forSonnet">A flag indicating to include poems of type "sonnet".</param>
     /// <param name="forPantoun">A flag indicating to include poems of type "pantoun".</param>
     /// <param name="forVariableMetric">A flag indicating to include poems with variable metrics.</param>
-    /// <param name="forRefrain">A flag indicating to include poems with "refrain" extra tag.</param>
     /// <param name="forMetric">An optional numeric metric filter for poems.</param>
-    /// <param name="forLovecat">A flag indicating to include poems with "lovecat" extra tag.</param>
-    /// <param name="forLesMois">A flag indicating to include poems with "les mois" extra tag.</param>
-    /// <param name="forLaMort">A flag indicating to include poems with "la mort" extra tag.</param>
+    /// <param name="extraTag">A flag indicating to include poems with this extra tag.</param>
     public void GenerateOverSeasonsChartDataFile(Root data, string? storageSubCategory, string? storageCategory,
         bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
-        bool forRefrain = false, int? forMetric = null, bool forLovecat = false, bool forLesMois = false,
-        bool forLaMort = false)
+        int? forMetric = null, string? extraTag = null)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
@@ -892,30 +888,15 @@ public class ChartDataFileGenerator
             fileName = $"poems-metrique_variable-bar.js";
             chartId = $"poems-metrique_variableBar";
         }
-        else if (forRefrain)
-        {
-            fileName = $"poems-refrain-bar.js";
-            chartId = $"poems-refrainBar";
-        }
         else if (forMetric is not null)
         {
             fileName = $"poems-metric-{forMetric}-bar.js";
             chartId = $"poems-metric{forMetric}Bar";
         }
-        else if (forLovecat)
+        else if (extraTag is not null)
         {
-            fileName = $"poems-lovecat-bar.js";
-            chartId = $"poems-lovecatBar";
-        }
-        else if (forLesMois)
-        {
-            fileName = $"poems-les-mois-bar.js";
-            chartId = $"poems-les-moisBar";
-        }
-        else if (forLaMort)
-        {
-            fileName = $"poems-la-mort-bar.js";
-            chartId = $"poems-la-mortBar";
+            fileName = $"poems-{extraTag.UnaccentedCleaned().Replace('_', '-')}-bar.js";
+            chartId = $"poems-{extraTag.UnaccentedCleaned()}Bar";
         }
 
         var backgroundColor = borderColor.Replace("1)", "0.5)");
@@ -959,25 +940,13 @@ public class ChartDataFileGenerator
             {
                 poemCount = season.Poems.Count(x => x.HasVariableMetric);
             }
-            else if (forRefrain)
-            {
-                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("refrain"));
-            }
             else if (forMetric is not null)
             {
                 poemCount = season.Poems.Count(x => x.HasMetric(forMetric.Value));
             }
-            else if (forLovecat)
+            else if (extraTag is not null)
             {
-                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("lovecat"));
-            }
-            else if (forLesMois)
-            {
-                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("les mois"));
-            }
-            else if (forLaMort)
-            {
-                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains("la mort"));
+                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag));
             }
 
             dataLines.Add(new ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",

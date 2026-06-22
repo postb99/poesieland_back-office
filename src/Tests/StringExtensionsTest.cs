@@ -29,18 +29,6 @@ public class StringExtensionsTest
     {
         input.UnaccentedCleaned().ShouldBe(expected);
     }
-    
-    [Theory]
-    [Trait("UnitTest", "Computation")]
-    [InlineData("Simple", "Simple")]
-    [InlineData("Au matin", "Au matin")]
-    [InlineData("A la dérive", "A la derive")]
-    [InlineData("Comme toi, aile", "Comme toi, aile")]
-    [InlineData("Mais où vais-je ?", "Mais ou vais-je ?")]
-    public void ShouldBeUnaccented(string input, string expected)
-    {
-        input.Unaccented().ShouldBe(expected);
-    }
 
     [Theory]
     [Trait("UnitTest", "Computation")]
@@ -83,13 +71,6 @@ public class StringExtensionsTest
     [InlineData("Enfance et adolescence", "[Enfance et adolescence](/categories/enfance-et-adolescence)")]
     public void ShouldBeMarkdownLink(string input, string expected) =>
         input.MarkdownLink("categories").ShouldBe(expected);
-    
-    [Theory]
-    [Trait("UnitTest", "Computation")]
-    [InlineData("test", "Test")]
-    [InlineData("les mois", "LesMois")]
-    public void ShouldBeChartKey(string input, string expected) =>
-        input.ToChartKey().ShouldBe(expected);
     
     [Theory]
     [Trait("UnitTest", "Computation")]

@@ -673,10 +673,10 @@ public class Program
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forSonnet: true);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forPantoun: true);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forVariableMetric: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forRefrain: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forLovecat: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forLesMois: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forLaMort: true);
+        foreach (var extraTag in ChartsSettings.Bar.OverSeasonsExtraTags)
+        {
+            _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, extraTag: extraTag);
+        }
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 1);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 2);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 3);

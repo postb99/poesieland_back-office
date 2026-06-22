@@ -60,30 +60,6 @@ public static class StringExtensions
 
         return pos == start ? string.Empty : new string(buffer[start..pos]);
     }
-    
-    /// <summary>
-    /// Remove accents only, keep original casing and characters.
-    /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
-    public static string Unaccented(this string s)
-    {
-        var normalized = s.Normalize(NormalizationForm.FormD);
-        Span<char> buffer = normalized.Length <= 256
-            ? stackalloc char[normalized.Length]
-            : new char[normalized.Length];
-
-        int pos = 0;
-        foreach (var c in normalized)
-        {
-            if (CharUnicodeInfo.GetUnicodeCategory(c) == UnicodeCategory.NonSpacingMark)
-                continue; // removed accent
-
-            buffer[pos++] = c;
-        }
-
-        return new string(buffer[..pos]).Normalize(NormalizationForm.FormC);
-    }
 
     /// <summary>
     /// Expect a quoted string, cleanup the quotes around the string, and the escaping of any quote into the string.
@@ -150,11 +126,4 @@ public static class StringExtensions
         }
         return result;
     }
-
-    /// <summary>
-    /// Formats extra tag name like "les mois" to "LesMois".
-    /// </summary>
-    /// <param name="s"></param>
-    /// <returns></returns>
-    public static string ToChartKey(this string s) => CultureInfo.CurrentCulture.TextInfo.ToTitleCase(s).Replace(" ", "");
 }
