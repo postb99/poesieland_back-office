@@ -1,8 +1,8 @@
 using Tests.Customizations;
 using Toolbox.Domain;
 using Toolbox.Generators;
-using Toolbox.Settings;
 using Xunit;
+using Constants = Toolbox.Settings.Constants;
 
 namespace Tests.Generators;
 

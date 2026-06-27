@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using Toolbox.Consistency;
 using Toolbox.Domain;
+using Toolbox.Generators;
 using Xunit;
 
 namespace Tests;
@@ -437,6 +438,17 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
             if (verseLengthDiff > 2 && poem.VerseLength != "12")
                 testOutputHelper.WriteLine(
                     $"[{poem.Id} - {poem.DetailedMetric}] {verseLengthDiff} ({poem.Paragraphs[0].Verses[0]} / {poem.Paragraphs[0].Verses[1]})");
+        }
+    }
+    
+    [Fact(Skip = "Utility")]
+    [Trait("UnitTest", "Temp")]
+    public void ExportPoemsWithVariableMetric()
+    {
+        var contentFileGenerator = new ContentFileGenerator(fixture.Configuration);
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x => x.HasVariableMetric))
+        {
+            contentFileGenerator.GeneratePoemFile(_data, poem);
         }
     }
 }

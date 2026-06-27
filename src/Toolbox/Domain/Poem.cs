@@ -26,9 +26,8 @@ public class Poem
     /// </summary>
     [XmlAttribute("longueurVers")]
     public string? VerseLength { get; set; }
-    
-    [XmlIgnore]
-    public bool HasVerseLength => !string.IsNullOrEmpty(VerseLength) && VerseLength != "0";
+
+    [XmlIgnore] public bool HasVerseLength => !string.IsNullOrEmpty(VerseLength) && VerseLength != "0";
 
     [XmlIgnore]
     public bool HasVariableMetric => VerseLength is not null &&
@@ -45,6 +44,7 @@ public class Poem
         {
             return false;
         }
+
         return int.Parse(VerseLength) == metric;
     }
 
@@ -71,7 +71,7 @@ public class Poem
     }
 
     [XmlElement("info")] public string? Info { get; set; }
-    
+
     [XmlElement("description")] public string? Description { get; set; }
 
     [XmlElement("picture")] public List<string>? Pictures { get; set; }
@@ -278,29 +278,35 @@ public class Poem
             }
         }
 
-        if (Info is not null && Info.StartsWith("[^"))
+        string? noticeInfo = null;
+        if (Info is not null)
         {
-            s.Append(Info);
-            if (!Info.EndsWith("."))
-                s.Append('.');
+            // Remove variable metric information
+            var infoLines = Info.Split(Environment.NewLine).Where(x => !x.StartsWith("Métrique variable")).ToList();
+            noticeInfo = infoLines.Any() ? string.Join(Environment.NewLine, infoLines) : null;
         }
 
-        if ((Info is not null && !Info.StartsWith("[^")) || Acrostiche is not null || DoubleAcrostiche is not null)
+        if (noticeInfo is not null && noticeInfo.StartsWith("[^"))
+        {
+            s.Append(noticeInfo);
+        }
+
+        if ((noticeInfo is not null && !noticeInfo.StartsWith("[^")) || Acrostiche is not null || DoubleAcrostiche is not null)
         {
             s.Append(Environment.NewLine);
             s.Append("{{% notice style=\"primary\" %}}");
             s.Append(Environment.NewLine);
 
-            if (Info is not null)
+            if (noticeInfo is not null)
             {
-                s.Append(Info);
-                if (!Info.EndsWith("."))
+                s.Append(noticeInfo);
+                if (!noticeInfo.EndsWith("."))
                     s.Append('.');
             }
 
             if (Acrostiche is not null || DoubleAcrostiche is not null)
             {
-                if (Info is not null)
+                if (noticeInfo is not null)
                 {
                     s.Append(Environment.NewLine);
                     s.Append(Environment.NewLine);
