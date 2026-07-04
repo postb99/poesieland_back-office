@@ -12,6 +12,7 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
     private readonly List<string> _infoLines = [];
     private readonly List<string> _descriptionLines = [];
     private readonly List<string> _locations = [];
+    private readonly List<string> _wordCloudLines = [];
 
     public string GetTitle(string line)
     {
@@ -58,10 +59,16 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
         var value = line.Substring(13);
         return value == "\"\"" ? null : value;
     }
-    
+
     public string? GetDescription(string line)
     {
         var value = line?.Substring(13);
+        return value == "\"\"" ? null : value.Trim('"');
+    }
+
+    public string? GetWordCloud(string line)
+    {
+        var value = line?.Substring(11);
         return value == "\"\"" ? null : value.Trim('"');
     }
 
@@ -92,21 +99,29 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
     {
         MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
         var inlineInfo = GetInfo(line);
-        if (inlineInfo != null && inlineInfo != "|-")
+        if (AddInlineValue(inlineInfo))
         {
-            _infoLines.Add(inlineInfo);
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+            _infoLines.Add(inlineInfo!);
         }
     }
-    
+
     public void BuildDescriptionLines(string line)
     {
         MultilineMetadataProcessingType = MultilineMetadataProcessingType.DescriptionLines;
         var inlineDescription = GetDescription(line);
-        if (inlineDescription != null && inlineDescription != "|-")
+        if (AddInlineValue(inlineDescription))
         {
-            _descriptionLines.Add(inlineDescription);
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+            _descriptionLines.Add(inlineDescription!);
+        }
+    }
+
+    public void BuildWordCloudLines(string line)
+    {
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.WordCloudLines;
+        var inlineWordCloud = GetWordCloud(line);
+        if (AddInlineValue(inlineWordCloud))
+        {
+            _wordCloudLines.Add(inlineWordCloud!);
         }
     }
 
@@ -181,9 +196,21 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
     {
         return _descriptionLines;
     }
-    
+
+    public List<string> GetWordCloudLines()
+    {
+        return _wordCloudLines;
+    }
+
     public List<string> GetLocations()
     {
         return _locations;
+    }
+
+    private bool AddInlineValue(string? inlineValue)
+    {
+        if (inlineValue is null || inlineValue == "|-") return false;
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        return true;
     }
 }

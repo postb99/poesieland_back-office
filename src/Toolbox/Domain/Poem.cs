@@ -83,6 +83,8 @@ public class Poem
     [XmlElement("acrostiche")] public string? Acrostiche { get; set; }
 
     [XmlElement("acrosticheDouble")] public DoubleAcrostiche? DoubleAcrostiche { get; set; }
+    
+    [XmlElement("wordcloud")] public string? WordCloud { get; set; }
 
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; } = [];
 
@@ -200,6 +202,11 @@ public class Poem
         if (Description is not null)
         {
             s.Append($"description = \"{Description}\"");
+            s.Append(Environment.NewLine);
+        }
+        if (WordCloud is not null)
+        {
+            s.Append($"wordcloud = \"{WordCloud}\"");
             s.Append(Environment.NewLine);
         }
 

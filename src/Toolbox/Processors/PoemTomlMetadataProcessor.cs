@@ -13,6 +13,7 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     private List<string> _infoLines = [];
     private List<string> _descriptionLines = [];
     private List<string> _locations = [];
+    private List<string> _wordCloudLines = [];
 
     public string GetTitle(string line)
     {
@@ -38,6 +39,11 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     public string? GetDescription(string line)
     {
         return line.Substring(14).CleanedContent();
+    }
+    
+    public string? GetWordCloud(string line)
+    {
+        return line.Substring(12).CleanedContent();
     }
 
     public string? GetAcrostiche(string line)
@@ -100,30 +106,21 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     {
         MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
         var inlineInfo = GetInfo(line);
-        if (inlineInfo is null)
-        {
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-        }
-        else if (inlineInfo != "\"")
-        {
-            AddValue(inlineInfo, -2);
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-        }
+        ProcessInlineValue(inlineInfo);
     }
 
     public void BuildDescriptionLines(string line)
     {
         MultilineMetadataProcessingType = MultilineMetadataProcessingType.DescriptionLines;
         var inlineDescription = GetDescription(line);
-        if (inlineDescription is null)
-        {
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-        }
-        else if (inlineDescription != "\"")
-        {
-            AddValue(inlineDescription, -2);
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-        }
+        ProcessInlineValue(inlineDescription);
+    }
+    
+    public void BuildWordCloudLines(string line)
+    {
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.WordCloudLines;
+        var inlineWordCloud = GetWordCloud(line);
+        ProcessInlineValue(inlineWordCloud);
     }
 
     public void BuildLocations(string line)
@@ -178,6 +175,20 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 }
 
                 break;
+            case MultilineMetadataProcessingType.WordCloudLines:
+
+                if (lineValue.EndsWith("\"\"\""))
+                {
+                    // Encountered """ end marker
+                    _wordCloudLines.Add(lineValue.Substring(0, lineValue.Length - 3));
+                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+                }
+                else
+                {
+                    _wordCloudLines.Add(lineValue);
+                }
+
+                break;
         }
     }
 
@@ -205,9 +216,27 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
     {
         return _descriptionLines;
     }
+    
+    public List<string> GetWordCloudLines()
+    {
+        return _wordCloudLines;
+    }
 
     public List<string> GetLocations()
     {
         return _locations;
+    }
+    
+    private void ProcessInlineValue(string? inlineValue)
+    {
+        if (inlineValue is null)
+        {
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        }
+        else if (inlineValue != "\"")
+        {
+            AddValue(inlineValue, -2);
+            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        }
     }
 }

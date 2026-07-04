@@ -23,7 +23,7 @@ public class WordCloudTextGenerator(IConfiguration configuration)
             File.WriteAllText(filePath, string.Empty);
             foreach (var poem in poems)
             {
-                File.AppendAllText(filePath, poem.Description.ToLowerInvariant());
+                File.AppendAllText(filePath, poem.WordCloud?.ToLowerInvariant());
                 File.AppendAllText(filePath, Environment.NewLine);
             }
         }

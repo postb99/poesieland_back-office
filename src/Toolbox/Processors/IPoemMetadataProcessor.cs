@@ -19,6 +19,7 @@ public interface IPoemMetadataProcessor
     void BuildInfoLines(string line);
     void BuildDescriptionLines(string line);
     void BuildLocations(string line);
+    void BuildWordCloudLines(string line);
     /// <summary>
     /// When YAML, add a value to a list of value determined by current context.
     /// </summary>
@@ -30,4 +31,5 @@ public interface IPoemMetadataProcessor
     List<string> GetInfoLines();
     List<string> GetDescriptionLines();
     List<string> GetLocations();
+    List<string> GetWordCloudLines();
 }

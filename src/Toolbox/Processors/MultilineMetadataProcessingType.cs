@@ -8,5 +8,6 @@ public enum MultilineMetadataProcessingType
     Pictures,
     InfoLines,
     DescriptionLines,
-    Locations
+    Locations,
+    WordCloudLines
 }

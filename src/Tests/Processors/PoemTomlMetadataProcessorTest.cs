@@ -233,7 +233,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultiLineDescription()
+    public void ShouldImportMultiLineDescriptionAndWordCloud()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/juillet_aout.md");
@@ -242,6 +242,8 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         poemContentImporter.HasTomlMetadata.ShouldBeTrue();
         poemContentImporter.HasYamlMetadata.ShouldBeFalse();
         poem.Description.ShouldBe(
+            $"Aux portes de juillet, c'est le mois des langueurs / [...] avant qu'août le sauvage");
+        poem.WordCloud.ShouldBe(
             $"Aux portes de juillet, c'est le mois des langueurs{Environment.NewLine}C'est le mois le plus pur avant qu'août le sauvage{Environment.NewLine}juillet tout neuf a comme un air fragile");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }

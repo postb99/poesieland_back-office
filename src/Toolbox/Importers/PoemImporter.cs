@@ -184,6 +184,9 @@ public class PoemImporter : IPoemImporter
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
         _poem.ExtraTags = FindExtraTags(_metadataProcessor.GetTags());
         _poem.Locations = _metadataProcessor.GetLocations();
+        _poem.WordCloud = _metadataProcessor.GetWordCloudLines().Count == 0
+            ? null
+            : string.Join(Environment.NewLine, _metadataProcessor.GetWordCloudLines());
 
         // Copy for XML save
         _poem.VerseLength = _poem.DetailedMetric;
@@ -482,6 +485,10 @@ public class PoemImporter : IPoemImporter
         else if (line.StartsWith("locations"))
         {
             _metadataProcessor!.BuildLocations(line);
+        }
+        else if (line.StartsWith("wordcloud"))
+        {
+            _metadataProcessor!.BuildWordCloudLines(line);
         }
         else if (line.StartsWith("    - "))
         {
