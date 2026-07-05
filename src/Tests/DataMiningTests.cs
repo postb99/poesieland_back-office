@@ -451,4 +451,14 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
             contentFileGenerator.GeneratePoemFile(_data, poem);
         }
     }
+    
+    [Fact]
+    [Trait("UnitTest", "Temp")]
+    public void FindPoemsWithLesMoisExtraTagAndMissingWordCloud()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x => x.ExtraTags.Contains("les mois") && x.WordCloud == null))
+        {
+            testOutputHelper.WriteLine(poem.Id);
+        }
+    }
 }

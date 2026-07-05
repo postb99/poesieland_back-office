@@ -219,4 +219,17 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         poem.Description.ShouldBe($"Septembre est comme mars, il ouvre une charnière{Environment.NewLine}Septembre qui s'amène emporte faux-semblants");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
+
+    [Fact]
+    [Trait("UnitTest", "ContentImport")]
+    public void ShouldImportMultilineWordcloud()
+    {
+        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "28_vingt_huitieme_saison/aout.md");
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
+        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
+        poem.WordCloud.ShouldStartWith("Le mois d'août centrifuge");
+    }
 }
