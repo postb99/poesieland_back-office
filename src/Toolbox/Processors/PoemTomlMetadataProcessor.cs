@@ -135,6 +135,8 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
         switch (MultilineMetadataProcessingType)
         {
+            case MultilineMetadataProcessingType.None :
+                break;
             case MultilineMetadataProcessingType.InfoLines:
 
                 if (lineValue.EndsWith("\"\"\""))
@@ -147,7 +149,6 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 {
                     _infoLines.Add(lineValue);
                 }
-
                 break;
             case MultilineMetadataProcessingType.Tags:
                 if (lineValue == "]")
@@ -159,7 +160,6 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 {
                     _tags.Add(lineValue.TrimStart(' ').TrimEnd(',').Trim('"'));
                 }
-
                 break;
             case MultilineMetadataProcessingType.DescriptionLines:
 
@@ -173,7 +173,6 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 {
                     _descriptionLines.Add(lineValue);
                 }
-
                 break;
             case MultilineMetadataProcessingType.WordCloudLines:
 
@@ -187,8 +186,9 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 {
                     _wordCloudLines.Add(lineValue);
                 }
-
                 break;
+            default :
+                throw new InvalidOperationException("AddValue not implemented for type " + MultilineMetadataProcessingType);
         }
     }
 

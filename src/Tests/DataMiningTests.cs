@@ -441,6 +441,16 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         }
     }
     
+    [Fact]
+    [Trait("UnitTest", "Quality")]
+    public void FindPoemsWithLesMoisExtraTagAndMissingWordCloud()
+    {
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x => x.ExtraTags.Contains("les mois") && x.WordCloud == null))
+        {
+            testOutputHelper.WriteLine(poem.Id);
+        }
+    }
+    
     [Fact(Skip = "Utility")]
     [Trait("UnitTest", "Temp")]
     public void ExportPoemsWithVariableMetric()
@@ -449,16 +459,6 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x => x.HasVariableMetric))
         {
             contentFileGenerator.GeneratePoemFile(_data, poem);
-        }
-    }
-    
-    [Fact]
-    [Trait("UnitTest", "Temp")]
-    public void FindPoemsWithLesMoisExtraTagAndMissingWordCloud()
-    {
-        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x => x.ExtraTags.Contains("les mois") && x.WordCloud == null))
-        {
-            testOutputHelper.WriteLine(poem.Id);
         }
     }
 }

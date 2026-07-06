@@ -208,7 +208,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
     
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultiLineDescription()
+    public void ShouldImportDescription()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "28_vingt_huitieme_saison/equinoxes.md");
@@ -216,7 +216,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        poem.Description.ShouldBe($"Septembre est comme mars, il ouvre une charnière{Environment.NewLine}Septembre qui s'amène emporte faux-semblants");
+        poem.Description.ShouldBe($"Septembre est comme mars, il ouvre une charnière");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -230,6 +230,6 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         var (poem, _) = poemContentImporter.Import(poemContentFilePath);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        poem.WordCloud.ShouldStartWith("Le mois d'août centrifuge");
+        poem.WordCloud.ShouldStartWith($"Le mois d'août centrifuge{Environment.NewLine}Le mois d'août est spectacles");
     }
 }

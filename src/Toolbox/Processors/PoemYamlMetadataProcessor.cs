@@ -146,6 +146,8 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
         var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
         switch (MultilineMetadataProcessingType)
         {
+            case MultilineMetadataProcessingType.None :
+                break;
             case MultilineMetadataProcessingType.Categories:
                 _categories.Add(lineValue);
                 break;
@@ -166,9 +168,15 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
                 lineValue = lineValue.TrimStart(' ');
                 _descriptionLines.Add(lineValue);
                 break;
+            case MultilineMetadataProcessingType.WordCloudLines:
+                lineValue = lineValue.TrimStart(' ');
+                _wordCloudLines.Add(lineValue);
+                break;
             case MultilineMetadataProcessingType.Locations:
                 _locations.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
                 break;
+            default:
+                throw new InvalidOperationException("AddValue not implemented for type " + MultilineMetadataProcessingType);
         }
     }
 
