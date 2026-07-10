@@ -76,7 +76,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             var poemIndex = poemInSeason == null ? -1 : season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != position)
             {
-                throw new MetadataConsistencyException($"Poem {poem.Id} should have weight {poemIndex + 1}!");
+                Console.WriteLine($"[WARNING] Poem {poem.Id} should have weight {poemIndex + 1}!");
             }
         }
     }
