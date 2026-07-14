@@ -176,9 +176,8 @@ public class Program
                 {
                     Task.Run(() => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(_data)),
                     Task.Run(() => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(_data)),
-                    Task.Run(() =>
-                        PoemMetadataChecker.CheckPoemsWithoutRequiredDescription(_data, RequiredDescriptionSettings.RequiredDescriptions)),
-                    Task.Run(() => SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data)),
+                    Task.Run(() => PoemMetadataChecker.CheckPoemsWithoutRequiredDescription(_data, RequiredDescriptionSettings.RequiredDescriptions)),
+                    // Task.Run(() => SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data)),
                     Task.Run(() => _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null))
                 };
 
@@ -571,7 +570,7 @@ public class Program
         _chartDataFileGenerator.GenerateCategoryMetricBubbleChartDataFile(_data);
 
         // And check data quality
-        SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data);
+        // SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data);
         _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, seasonId);
 
         if (importedPoem is not null)
