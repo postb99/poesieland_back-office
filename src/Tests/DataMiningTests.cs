@@ -333,7 +333,7 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
         {
             if (poem.ExtraTags.Contains("refrain")) continue;
-            if (poem.IsPantoun) continue;
+            if (poem.HasType(Toolbox.Domain.PoemType.Pantoun)) continue;
             if (poem.Paragraphs.Count == 1) continue;
             try
             {

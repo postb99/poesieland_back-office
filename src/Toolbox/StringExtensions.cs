@@ -24,7 +24,7 @@ public static class StringExtensions
     public static string? Unescaped(this string s) => string.IsNullOrEmpty(s) ? null : s.Replace("\\\"", "\"");
 
     /// <summary>
-    /// Remove accents and replace space, ' and - signs by underscore.
+    /// Put lowercase, remove accents and replace space, ' and - signs by underscore.
     /// </summary>
     /// <param name="s"></param>
     /// <returns></returns>

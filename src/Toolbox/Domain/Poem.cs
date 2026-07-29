@@ -90,11 +90,9 @@ public class Poem
 
     [XmlIgnore] public DateTime Date => TextDate.ToDateTime();
 
-    [XmlIgnore]
-    public bool IsSonnet => PoemType?.ToLowerInvariant() == Domain.PoemType.Sonnet.ToString().ToLowerInvariant();
-
-    [XmlIgnore]
-    public bool IsPantoun => PoemType?.ToLowerInvariant() == Domain.PoemType.Pantoun.ToString().ToLowerInvariant();
+    public bool HasType(PoemType poemType) => PoemType?.ToLowerInvariant() == poemType.ToString().ToLowerInvariant();
+    
+    [XmlIgnore] public bool IsSonnet => HasType(Domain.PoemType.Sonnet);
 
     [XmlIgnore] public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
 

@@ -284,7 +284,7 @@ public class PoemImporter : IPoemImporter
     }
 
     /// <summary>
-    /// Filters out specific tags by removing those that match predefined categories, metrics, certain year ranges, or other specific tags to ignore.
+    /// Filters out specific tags by removing those that match predefined categories, metric name, year value, or specific tags to ignore (poem type, acrostiche).
     /// </summary>
     /// <param name="tags">A list of tags to be evaluated and filtered.</param>
     /// <returns>Returns a list of tags that do not fall under the predefined exclusion criteria.</returns>
@@ -303,7 +303,7 @@ public class PoemImporter : IPoemImporter
         tagsToIgnore.AddRange(Enumerable.Range(1994, DateTime.Now.Year - 1993).Select(x => x.ToString()));
 
         // Nor a specific tag
-        tagsToIgnore.AddRange(["pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
+        tagsToIgnore.AddRange(["pantoun", "sonnet", "haïku", "acrostiche", "doubleAcrostiche"]);
 
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
     }

@@ -669,8 +669,8 @@ public class Program
         Console.WriteLine("Poems over seasons for all tags chart data files OK");
 
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forAcrostiche: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forSonnet: true);
-        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forPantoun: true);
+        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, poemType: PoemType.Sonnet);
+        _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, poemType: PoemType.Pantoun);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forVariableMetric: true);
         foreach (var extraTag in ChartsSettings.Bar.OverSeasonsExtraTags)
         {

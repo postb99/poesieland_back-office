@@ -824,13 +824,12 @@ public class ChartDataFileGenerator
     /// <param name="storageSubCategory">The sub-category to filter poems. If null, filtering is skipped.</param>
     /// <param name="storageCategory">The category to filter poems. If null, filtering is skipped.</param>
     /// <param name="forAcrostiche">A flag indicating to include poems of type "acrostiche".</param>
-    /// <param name="forSonnet">A flag indicating to include poems of type "sonnet".</param>
-    /// <param name="forPantoun">A flag indicating to include poems of type "pantoun".</param>
+    /// <param name="poemType">The optional type of poem.</param>
     /// <param name="forVariableMetric">A flag indicating to include poems with variable metrics.</param>
     /// <param name="forMetric">An optional numeric metric filter for poems.</param>
     /// <param name="extraTag">A flag indicating to include poems with this extra tag.</param>
     public void GenerateOverSeasonsChartDataFile(Root data, string? storageSubCategory, string? storageCategory,
-        bool forAcrostiche = false, bool forSonnet = false, bool forPantoun = false, bool forVariableMetric = false,
+        bool forAcrostiche = false, PoemType? poemType = null, bool forVariableMetric = false,
         int? forMetric = null, string? extraTag = null)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
@@ -873,15 +872,10 @@ public class ChartDataFileGenerator
             fileName = $"poems-acrostiche-bar.js";
             chartId = $"poems-acrosticheBar";
         }
-        else if (forSonnet)
+        else if (poemType is not null)
         {
-            fileName = $"poems-sonnet-bar.js";
-            chartId = $"poems-sonnetBar";
-        }
-        else if (forPantoun)
-        {
-            fileName = $"poems-pantoun-bar.js";
-            chartId = $"poems-pantounBar";
+            fileName = $"poems-{poemType.ToString().UnaccentedCleaned()}-bar.js";
+            chartId = $"poems-{poemType.ToString().UnaccentedCleaned()}Bar";
         }
         else if (forVariableMetric)
         {
@@ -928,13 +922,9 @@ public class ChartDataFileGenerator
             {
                 poemCount = season.Poems.Count(x => x.Acrostiche is not null || x.DoubleAcrostiche is not null);
             }
-            else if (forSonnet)
+            else if (poemType is not null)
             {
-                poemCount = season.Poems.Count(x => x.IsSonnet);
-            }
-            else if (forPantoun)
-            {
-                poemCount = season.Poems.Count(x => x.IsPantoun);
+                poemCount = season.Poems.Count(x => x.HasType(poemType.Value));
             }
             else if (forVariableMetric)
             {
