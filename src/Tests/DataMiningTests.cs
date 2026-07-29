@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
+using Toolbox.Charts;
 using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Generators;
@@ -459,6 +460,44 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x => x.HasVariableMetric))
         {
             contentFileGenerator.GeneratePoemFile(_data, poem);
+        }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Lookup")]
+    public void FindDaysIWroteOnceOnly()
+    {
+        List<string> poemStringDates;
+        // General
+        poemStringDates = _data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
+
+        // Would better add EN poems...
+        
+        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
+
+        foreach (var poemStringDate in poemStringDates)
+        {
+            var year = poemStringDate.Substring(6);
+            if (year == "1994")
+                continue;
+            var monthDay = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
+            dataDict[monthDay]++;
+        }
+        
+        var dayWithSinglePoems = new List<string>();
+        
+        foreach (var monthDay in dataDict.Keys)
+        {
+            var value = dataDict[monthDay];
+            if (value == 1)
+            {
+                dayWithSinglePoems.Add(monthDay);
+            }
+        }
+
+        foreach (var dayWithSinglePoem in dayWithSinglePoems)
+        {
+            testOutputHelper.WriteLine(dayWithSinglePoem);
         }
     }
 }
