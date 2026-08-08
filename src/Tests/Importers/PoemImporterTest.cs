@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Shouldly;
 using Tests.Customizations;
+using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Importers;
 using Toolbox.Settings;
@@ -8,7 +9,7 @@ using Xunit;
 
 namespace Tests.Importers;
 
-public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
+public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture>
 {
     [Theory]
     [Trait("UnitTest", "ContentImport")]
@@ -18,10 +19,10 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var act = () => poemContentImporter.ImportPoem(poemId, data);
-        var ex = act.ShouldThrow<ArgumentException>();
+        var ex = act.ShouldThrow<MetadataConsistencyException>();
         ex.Message.ShouldBe($"'{poemId}' does not end with season id");
     }
-    
+
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [AutoDomainData]
@@ -29,10 +30,11 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var act = () => poemContentImporter.ImportPoem("some_poem_99", data);
-        var ex = act.ShouldThrow<ArgumentException>();
-        ex.Message.ShouldBe($"No such season content directory for id '99'. Create season directory before importing poem");
+        var ex = act.ShouldThrow<MetadataConsistencyException>();
+        ex.Message.ShouldBe(
+            $"No such season content directory for id '99'. Create season directory before importing poem");
     }
-    
+
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [AutoDomainData]
@@ -40,10 +42,50 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var act = () => poemContentImporter.ImportPoem("some_poem_16", data);
-        var ex = act.ShouldThrow<ArgumentException>();
+        var ex = act.ShouldThrow<MetadataConsistencyException>();
         ex.Message.ShouldStartWith($"Poem content file not found: ");
     }
-    
+
+    [Theory]
+    [Trait("UnitTest", "ContentImport")]
+    [AutoDomainData]
+    public void ShouldImportPoemToANewSeason(Root data, Poem poem)
+    {
+        var seasonCount = data.Seasons.Count;
+        var seasonId = seasonCount + 1;
+        poem.Id = $"some_title_{seasonId}";
+
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        poemContentImporter.ImportPoemToSeason(data, poem);
+
+        data.Seasons.Count.ShouldBe(seasonCount + 1);
+        data.Seasons.First(x => x.Id == seasonId).Poems.Count.ShouldBe(1);
+    }
+
+    [Theory]
+    [Trait("UnitTest", "ContentImport")]
+    [AutoDomainData]
+    public void ShouldImportPoemToASeason(Root data, Poem poem)
+    {
+        var poemCount = data.Seasons.Last().Poems.Count;
+        var seasonId = data.Seasons.Last().Id;
+        poem.Id = $"some_title_{seasonId}";
+
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        poemContentImporter.ImportPoemToSeason(data, poem);
+
+        data.Seasons.First(x => x.Id == seasonId).Poems.Count.ShouldBe(poemCount + 1);
+        data.Seasons.First(x => x.Id == seasonId).Poems.Last().Id.ShouldBe(poem.Id);
+    }
+
+    [Theory]
+    [Trait("UnitTest", "ContentImport")]
+    [AutoDomainData]
+    public void ShouldUpdatePositionOfPoemToASeason(Root data)
+    {
+        // TODO use weight and not only position to import
+    }
+
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [AutoDomainData]
@@ -54,7 +96,7 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
         data.Seasons.FirstOrDefault(x => x.Id == 16).ShouldNotBeNull();
         data.Seasons.FirstOrDefault(x => x.Id == 16).Poems.ShouldNotBeEmpty();
     }
-    
+
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     public void ShouldImportVariableVerseLength()
@@ -69,7 +111,7 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
         poem.VerseLength.ShouldBe("8, 6, 4, 2");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
-    
+
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     public void ShouldImportVariableVerseLengthWhenMoreTextAfterVerseLength()
@@ -92,9 +134,11 @@ public class PoemImporterTest(BasicFixture fixture): IClassFixture<BasicFixture>
     public void ShouldFindExtraTags()
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        poemContentImporter.FindExtraTags(["lovecat", "2025", "nature", "sonnet", "métrique variable", "other", "octosyllabe"]).ShouldBe(["lovecat", "other"]);
+        poemContentImporter
+            .FindExtraTags(["lovecat", "2025", "nature", "sonnet", "métrique variable", "other", "octosyllabe"])
+            .ShouldBe(["lovecat", "other"]);
     }
-    
+
     [Fact]
     [Trait("UnitTest", "ContentImport")]
     public void ShouldImportEnPoem()

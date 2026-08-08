@@ -50,7 +50,7 @@ public class PoemImporter : IPoemImporter
     /// <param name="poemId">The unique identifier of the poem to import. It should end with the season id.</param>
     /// <param name="data">The root data model that contains seasons and poems where the imported poem will be added or updated.</param>
     /// <returns>Returns the imported <see cref="Poem"/> object representing the poem's details.</returns>
-    /// <exception cref="ArgumentException">
+    /// <exception cref="MetadataConsistencyException">
     /// Thrown when:
     /// - The <paramref name="poemId"/> does not end with a valid season id.
     /// - No content directory corresponding to the specified season id exists.
@@ -63,14 +63,14 @@ public class PoemImporter : IPoemImporter
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
         if (!int.TryParse(seasonId, out _))
         {
-            throw new ArgumentException($"'{poemId}' does not end with season id");
+            throw new MetadataConsistencyException($"'{poemId}' does not end with season id");
         }
 
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         if (seasonDirName is null)
         {
-            throw new ArgumentException(
+            throw new MetadataConsistencyException(
                 $"No such season content directory for id '{seasonId}'. Create season directory before importing poem");
         }
 
@@ -78,32 +78,42 @@ public class PoemImporter : IPoemImporter
         var poemContentPath = Path.Combine(rootDir, seasonDirName, poemFileName);
         if (!File.Exists(poemContentPath))
         {
-            throw new ArgumentException($"Poem content file not found: {poemContentPath}");
+            throw new MetadataConsistencyException($"Poem content file not found: {poemContentPath}");
         }
 
         var (poem, _) = Import(poemContentPath);
         VerifyAnomaliesAfterImport();
-        
-        var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == int.Parse(seasonId));
+
+        ImportPoemToSeason(data, poem);
+
+        return poem;
+    }
+
+    /// <summary>
+    /// Import a poem to a season.
+    /// </summary>
+    /// <param name="data">The root data model that contains seasons and poems where the imported poem will be added or updated.</param>
+    /// <param name="poem">A poem</param>
+    public void ImportPoemToSeason(Root data, Poem poem)
+    {
+        var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == poem.SeasonId);
 
         if (targetSeason is null)
         {
             targetSeason = new()
             {
-                Id = int.Parse(seasonId), Name = "TODO", NumberedName = "TODO", Description = "TODO",
+                Id = poem.SeasonId, Name = "", NumberedName = "", Description = "",
                 Poems = []
             };
             data.Seasons.Add(targetSeason);
         }
 
-        var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poemId);
+        var existingPosition = targetSeason.Poems.FindIndex(x => x.Id == poem.Id);
 
         if (existingPosition > -1)
             targetSeason.Poems[existingPosition] = poem;
         else
             targetSeason.Poems.Add(poem);
-
-        return poem;
     }
 
     /// <summary>
@@ -324,7 +334,8 @@ public class PoemImporter : IPoemImporter
             Info = _poem.Info,
             Description = _poem.Description
         };
-        PoemMetadataChecker.VerifyMetadataConsistency(partialImport, _metricSettings.Metrics, _requiredDescriptionSettings.RequiredDescriptions);
+        PoemMetadataChecker.VerifyMetadataConsistency(partialImport, _metricSettings.Metrics,
+            _requiredDescriptionSettings.RequiredDescriptions);
     }
 
     /// <summary>
