@@ -15,6 +15,7 @@ tags:
     - octosyllabe
 locations:
     - Lorraine
+    - Mont des Cats
 info: ""
 pictures: []
 type: default

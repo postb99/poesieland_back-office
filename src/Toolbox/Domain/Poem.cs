@@ -89,8 +89,6 @@ public class Poem
     [XmlElement("para")] public List<Paragraph> Paragraphs { get; set; } = [];
 
     [XmlIgnore] public DateTime Date => TextDate.ToDateTime();
-
-    public bool HasType(PoemType poemType) => PoemType?.ToLowerInvariant() == poemType.ToString().ToLowerInvariant();
     
     [XmlIgnore] public bool IsSonnet => HasType(Domain.PoemType.Sonnet);
 
@@ -113,6 +111,13 @@ public class Poem
     [XmlIgnore] public int VersesCount => Paragraphs.SelectMany(x => x.Verses).Count();
 
     [XmlIgnore] public bool HasQuatrains => VersesCount == Paragraphs.Count * 4 && VersesCount % 4 == 0;
+    
+    /// <summary>
+    /// Filled from poem import only. Starts from 1.
+    /// </summary>
+    [XmlIgnore] public int ContentFileIndex { get; set; }
+    
+    public bool HasType(PoemType poemType) => PoemType?.ToLowerInvariant() == poemType.ToString().ToLowerInvariant();
 
     public string FileContent(int poemIndex, MetricSettings metricSettings)
     {

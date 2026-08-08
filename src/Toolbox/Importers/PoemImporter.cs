@@ -113,7 +113,22 @@ public class PoemImporter : IPoemImporter
         if (existingPosition > -1)
             targetSeason.Poems[existingPosition] = poem;
         else
+        {
             targetSeason.Poems.Add(poem);
+            existingPosition = targetSeason.Poems.Count - 1;
+        }
+
+        if (poem.ContentFileIndex != 0 && existingPosition != poem.ContentFileIndex - 1)
+        {
+            if (poem.ContentFileIndex > targetSeason.Poems.Count)
+            {
+                throw new MetadataConsistencyException($"Cannot move poem to position greater than {targetSeason.Poems.Count - 1} (weight {poem.ContentFileIndex})");
+            }
+            
+            var poemToMove = targetSeason.Poems[existingPosition];
+            targetSeason.Poems.RemoveAt(existingPosition);
+            targetSeason.Poems.Insert(poem.ContentFileIndex - 1, poemToMove);
+        }
     }
 
     /// <summary>

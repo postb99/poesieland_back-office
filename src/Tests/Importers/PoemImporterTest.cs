@@ -65,25 +65,67 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [AutoDomainData]
-    public void ShouldImportPoemToASeason(Root data, Poem poem)
+    public void ShouldImportPoemToASeason(Root data, Poem poem, params List<Poem> existingPoems)
     {
-        var poemCount = data.Seasons.Last().Poems.Count;
-        var seasonId = data.Seasons.Last().Id;
-        poem.Id = $"some_title_{seasonId}";
+        var season = data.Seasons.Last();
+        season.Poems.AddRange(existingPoems);
+        var poemCount = season.Poems.Count;
+        poem.Id = $"some_title_{season.Id}";
 
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemToSeason(data, poem);
 
-        data.Seasons.First(x => x.Id == seasonId).Poems.Count.ShouldBe(poemCount + 1);
-        data.Seasons.First(x => x.Id == seasonId).Poems.Last().Id.ShouldBe(poem.Id);
+        data.Seasons.First(x => x.Id == season.Id).Poems.Count.ShouldBe(poemCount + 1);
+        data.Seasons.First(x => x.Id == season.Id).Poems.Last().Id.ShouldBe(poem.Id);
+    }
+    
+    [Theory]
+    [Trait("UnitTest", "ContentImport")]
+    [AutoDomainData]
+    public void ShouldImportPoemToAPositionInSeason(Root data, Poem poem, params List<Poem> existingPoems)
+    {
+        var season = data.Seasons.Last();
+        season.Poems.AddRange(existingPoems);
+        var poemCount = season.Poems.Count;
+        poem.Id = $"some_title_{season.Id}";
+        var contentFileIndex = 1;
+        foreach (var existingPoem in data.Seasons.Last().Poems)
+        {
+            existingPoem.ContentFileIndex = contentFileIndex++;
+        }
+
+        poem.ContentFileIndex = 2;
+
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        poemContentImporter.ImportPoemToSeason(data, poem);
+
+        data.Seasons.First(x => x.Id == season.Id).Poems.Count.ShouldBe(poemCount + 1);
+        data.Seasons.First(x => x.Id == season.Id).Poems[1].Id.ShouldBe(poem.Id);
     }
 
     [Theory]
     [Trait("UnitTest", "ContentImport")]
     [AutoDomainData]
-    public void ShouldUpdatePositionOfPoemToASeason(Root data)
+    public void ShouldUpdatePoemPositionToASeason(Root data, params List<Poem> existingPoems)
     {
-        // TODO use weight and not only position to import
+        var season = data.Seasons.Last();
+        season.Poems.AddRange(existingPoems);
+        var poemCount = season.Poems.Count;
+        var contentFileIndex = 1;
+        foreach (var existingPoem in existingPoems)
+        {
+            existingPoem.ContentFileIndex = contentFileIndex++;
+        }
+
+        var poemToUpdate = season.Poems.Last();
+        poemToUpdate.Id = $"some_title_{season.Id}";
+        poemToUpdate.ContentFileIndex = 2;
+
+        var poemContentImporter = new PoemImporter(fixture.Configuration);
+        poemContentImporter.ImportPoemToSeason(data, poemToUpdate);
+
+        data.Seasons.First(x => x.Id == season.Id).Poems.Count.ShouldBe(poemCount);
+        data.Seasons.First(x => x.Id == season.Id).Poems[1].Id.ShouldBe(poemToUpdate.Id);
     }
 
     [Theory]
