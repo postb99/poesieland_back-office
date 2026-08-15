@@ -13,13 +13,13 @@ namespace Toolbox;
 public class Program
 {
     private static IConfiguration? _configuration;
-    
+
     private static readonly MainMenuSettings MainMenuSettings = new();
     private static readonly RequiredDescriptionSettings RequiredDescriptionSettings = new();
     private static readonly MetricSettings MetricSettings = new();
     private static readonly StorageSettings StorageSettings = new();
     private static readonly ChartsSettings ChartsSettings = new();
-    
+
     private static DataManager? _dataManager;
     private static ContentFileGenerator _contentFileGenerator = null!;
     private static PoemImporter _poemImporter = null!;
@@ -36,7 +36,7 @@ public class Program
         var configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
         _configuration = configurationBuilder.Build();
-        
+
         _configuration.GetSection(Constants.MAIN_MENU).Bind(MainMenuSettings);
         _configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Bind(RequiredDescriptionSettings);
         _configuration.GetSection(Constants.METRIC_SETTINGS).Bind(MetricSettings);
@@ -176,7 +176,9 @@ public class Program
                 {
                     Task.Run(() => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(_data)),
                     Task.Run(() => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(_data)),
-                    Task.Run(() => PoemMetadataChecker.CheckPoemsWithoutRequiredDescription(_data, RequiredDescriptionSettings.RequiredDescriptions)),
+                    Task.Run(() =>
+                        PoemMetadataChecker.CheckPoemsWithoutRequiredDescription(_data,
+                            RequiredDescriptionSettings.RequiredDescriptions)),
                     // Task.Run(() => SeasonChecker.VerifySeasonHaveCorrectPoemCount(_data)),
                     Task.Run(() => _poemMetadataChecker.VerifySeasonHaveCorrectWeightInPoemFile(_data, null))
                 };
@@ -517,9 +519,22 @@ public class Program
         // General categories' pie
         _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, null);
 
-        // Year categories' pie
+        // Year tag's radar and year categories' pie
         if (importedPoem is not null)
+        {
+            _chartDataFileGenerator.GeneratePoemsOfYearByDayRadarChartDataFile(_data, importedPoem.Date.Year);
             _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_data, importedPoem.Date.Year);
+        }
+        else
+        {
+            var season = _data.Seasons.First(x => x.Id == seasonId);
+            var years = new List<int> { season.Poems.First().Date.Year, season.Poems.Last().Date.Year }.Distinct();
+            foreach (var year in years)
+            {
+                _chartDataFileGenerator.GeneratePoemsOfYearByDayRadarChartDataFile(_data, year);
+                _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_data, year);
+            }
+        }
 
         Console.WriteLine(seasonId == 0
             ? "All seasons categories pie chart data file OK"
@@ -531,6 +546,7 @@ public class Program
         {
             _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: extraTag);
         }
+
         _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
         _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
         _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
@@ -544,13 +560,6 @@ public class Program
 
         // Categories' and tags' radar
         GeneratePoemsCategoriesAndTagsRadarChartDataFile();
-
-        // Year tag's radar
-        if (importedPoem is not null)
-        {
-            _chartDataFileGenerator.GeneratePoemsOfYearByDayRadarChartDataFile(_data, importedPoem.Date.Year);
-            Console.WriteLine("Poem's year by day chart data file OK");
-        }
 
         // Poem count
         _contentFileGenerator.GeneratePoemCountFile(_data);
@@ -597,6 +606,7 @@ public class Program
             {
                 _chartDataFileGenerator.GeneratePoemsByDayRadarChartDataFile(_data, _dataEn, extraTag: extraTag);
             }
+
             _chartDataFileGenerator.GeneratePoemIntensityPieChartDataFile(_data, _dataEn);
             _chartDataFileGenerator.GenerateIntenseByDayOfWeekPieChartDataFile(_data, _dataEn);
             _chartDataFileGenerator.GeneratePoemByDayOfWeekPieChartDataFile(_data, _dataEn);
@@ -676,6 +686,7 @@ public class Program
         {
             _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, extraTag: extraTag);
         }
+
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 1);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 2);
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 3);
