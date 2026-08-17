@@ -13,13 +13,12 @@ namespace Toolbox.Importers;
 
 public interface IPoemImporter
 {
-    (Poem, int) Import(string contentFilePath);
+    Poem Import(string contentFilePath);
 }
 
 public class PoemImporter : IPoemImporter
 {
     private Poem? _poem;
-    private int _position;
     private bool _isInMetadata;
     private IPoemMetadataProcessor? _metadataProcessor;
     private PoemContentProcessor? _contentProcessor;
@@ -81,7 +80,7 @@ public class PoemImporter : IPoemImporter
             throw new MetadataConsistencyException($"Poem content file not found: {poemContentPath}");
         }
 
-        var (poem, _) = Import(poemContentPath);
+        var poem = Import(poemContentPath);
         VerifyAnomaliesAfterImport();
 
         ImportPoemToSeason(data, poem);
@@ -118,16 +117,16 @@ public class PoemImporter : IPoemImporter
             existingPosition = targetSeason.Poems.Count - 1;
         }
 
-        if (poem.ContentFileIndex != 0 && existingPosition != poem.ContentFileIndex - 1)
+        if (poem.ContentFileIndex != -1 && existingPosition != poem.ContentFileIndex)
         {
-            if (poem.ContentFileIndex > targetSeason.Poems.Count)
+            if (poem.ContentFileIndex > targetSeason.Poems.Count - 1)
             {
-                throw new MetadataConsistencyException($"Cannot move poem to position greater than {targetSeason.Poems.Count - 1} (weight {poem.ContentFileIndex})");
+                throw new MetadataConsistencyException($"Cannot move poem to position greater than {targetSeason.Poems.Count - 1} (weight {poem.ContentFileIndex + 1})");
             }
             
             var poemToMove = targetSeason.Poems[existingPosition];
             targetSeason.Poems.RemoveAt(existingPosition);
-            targetSeason.Poems.Insert(poem.ContentFileIndex - 1, poemToMove);
+            targetSeason.Poems.Insert(poem.ContentFileIndex, poemToMove);
         }
     }
 
@@ -153,9 +152,9 @@ public class PoemImporter : IPoemImporter
         var poemsByPosition = new Dictionary<int, Poem>(50);
         foreach (var poemContentPath in poemFilePaths)
         {
-            var (poem, position) = Import(poemContentPath);
+            var poem = Import(poemContentPath);
             VerifyAnomaliesAfterImport();
-            poemsByPosition.Add(position, poem);
+            poemsByPosition.Add(poem.ContentFileIndex, poem);
         }
 
         if (targetSeason is not null)
@@ -180,11 +179,11 @@ public class PoemImporter : IPoemImporter
     /// and returns a tuple with the constructed poem and its positional index.
     /// </summary>
     /// <param name="contentFilePath">The full file path to the poem content file to be imported. This should include any metadata and content related to the poem.</param>
-    /// <returns>Returns a tuple where the first element is the <see cref="Poem"/> object containing the processed poem information, and the second element is an integer representing the position or index of the poem.</returns>
+    /// <returns>Returns a <see cref="Poem"/> object containing the processed poem information.</returns>
     /// <exception cref="FileNotFoundException">Thrown when the specified content file does not exist.</exception>
     /// <exception cref="InvalidDataException">Thrown when the content file contains invalid or malformed data.</exception>
     /// <exception cref="IOException">Thrown when there is an issue reading the content file.</exception>
-    public (Poem, int) Import(string contentFilePath)
+    public Poem Import(string contentFilePath)
     {
         Init();
 
@@ -216,7 +215,7 @@ public class PoemImporter : IPoemImporter
         // Copy for XML save
         _poem.VerseLength = _poem.DetailedMetric;
 
-        return (_poem, _position);
+        return _poem;
     }
 
     /// <summary>
@@ -224,11 +223,11 @@ public class PoemImporter : IPoemImporter
     /// and returns a tuple with the constructed poem and its positional index.
     /// </summary>
     /// <param name="contentFilePath">The full file path to the poem content file to be imported. This should include any metadata and content related to the poem.</param>
-    /// <returns>Returns a tuple where the first element is the <see cref="Poem"/> object containing the processed poem information, and the second element is an integer representing the position or index of the poem.</returns>
+    /// <returns>Returns a <see cref="Poem"/> object containing the processed poem information.</returns>
     /// <exception cref="FileNotFoundException">Thrown when the specified content file does not exist.</exception>
     /// <exception cref="InvalidDataException">Thrown when the content file contains invalid or malformed data.</exception>
     /// <exception cref="IOException">Thrown when there is an issue reading the content file.</exception>
-    public (Poem, int) ImportEnYaml(string contentFilePath)
+    public Poem ImportEnYaml(string contentFilePath)
     {
         Init();
 
@@ -251,7 +250,7 @@ public class PoemImporter : IPoemImporter
         // Copy for XML save
         _poem.VerseLength = _poem.DetailedMetric;
 
-        return (_poem, _position);
+        return _poem;
     }
 
     /// <summary>
@@ -285,9 +284,9 @@ public class PoemImporter : IPoemImporter
 
             foreach (var poemContentPath in poemFilePaths)
             {
-                var (poem, position) = ImportEnYaml(poemContentPath);
+                var poem = ImportEnYaml(poemContentPath);
 
-                poemsByPosition.Add(position, poem);
+                poemsByPosition.Add(poem.ContentFileIndex, poem);
             }
 
             for (var i = 0; i < 50; i++)
@@ -506,7 +505,7 @@ public class PoemImporter : IPoemImporter
         }
         else if (line.StartsWith("weight"))
         {
-            _position = _metadataProcessor!.GetWeight(line) - 1;
+            _poem.ContentFileIndex = _metadataProcessor!.GetWeight(line) - 1;
         }
         else if (line.StartsWith("locations"))
         {

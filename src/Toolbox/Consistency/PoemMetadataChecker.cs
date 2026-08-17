@@ -71,10 +71,10 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
 
         foreach (var poemFile in poemFiles)
         {
-            var (poem, position) = poemImporter.Import(poemFile);
+            var poem = poemImporter.Import(poemFile);
             var poemInSeason = season.Poems.FirstOrDefault(x => x.Id == poem.Id);
             var poemIndex = poemInSeason == null ? -1 : season.Poems.IndexOf(poemInSeason);
-            if (poemIndex != -1 && poemIndex != position)
+            if (poemIndex != -1 && poemIndex != poem.ContentFileIndex)
             {
                 Console.WriteLine($"[WARNING] Poem {poem.Id} should have weight {poemIndex + 1}!");
             }

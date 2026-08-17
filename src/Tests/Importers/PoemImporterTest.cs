@@ -88,13 +88,13 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         season.Poems.AddRange(existingPoems);
         var poemCount = season.Poems.Count;
         poem.Id = $"some_title_{season.Id}";
-        var contentFileIndex = 1;
+        var contentFileIndex = 0;
         foreach (var existingPoem in data.Seasons.Last().Poems)
         {
             existingPoem.ContentFileIndex = contentFileIndex++;
         }
 
-        poem.ContentFileIndex = 2;
+        poem.ContentFileIndex = 1;
 
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemToSeason(data, poem);
@@ -111,7 +111,7 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var season = data.Seasons.Last();
         season.Poems.AddRange(existingPoems);
         var poemCount = season.Poems.Count;
-        var contentFileIndex = 1;
+        var contentFileIndex = 0;
         foreach (var existingPoem in existingPoems)
         {
             existingPoem.ContentFileIndex = contentFileIndex++;
@@ -119,7 +119,7 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
 
         var poemToUpdate = season.Poems.Last();
         poemToUpdate.Id = $"some_title_{season.Id}";
-        poemToUpdate.ContentFileIndex = 2;
+        poemToUpdate.ContentFileIndex = 1;
 
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemToSeason(data, poemToUpdate);
@@ -146,7 +146,7 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/jeux_de_nuits.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        var poem = poemContentImporter.Import(poemContentFilePath);
         poem.Info.ShouldBe("Métrique variable : 8, 6, 4, 2");
         poem.DetailedMetric.ShouldBe("8, 6, 4, 2");
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
@@ -161,7 +161,7 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "19_dix_neuvieme_saison/urgence.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        var poem = poemContentImporter.Import(poemContentFilePath);
         var expectedInfo = new StringBuilder("Métrique variable : 5, 2.").Append(Environment.NewLine)
             .Append(Environment.NewLine).Append("{{% include").ToString();
         poem.Info.ShouldStartWith(expectedInfo);
@@ -188,7 +188,7 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR_EN]!, "2024", "wisdom.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.ImportEnYaml(poemContentFilePath);
+        var poem = poemContentImporter.ImportEnYaml(poemContentFilePath);
         poem.ShouldNotBeNull();
         poem.Categories.FirstOrDefault()?.Name.ShouldBe("Philosophie");
         poem.Categories.FirstOrDefault()?.SubCategories.FirstOrDefault().ShouldBe("Etre");

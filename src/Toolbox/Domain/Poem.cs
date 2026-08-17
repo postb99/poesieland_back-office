@@ -113,7 +113,7 @@ public class Poem
     [XmlIgnore] public bool HasQuatrains => VersesCount == Paragraphs.Count * 4 && VersesCount % 4 == 0;
     
     /// <summary>
-    /// Filled from poem import only. Starts from 1.
+    /// Filled from poem import only. Starts from 0, equal to imported weight - 1.
     /// </summary>
     [XmlIgnore] public int ContentFileIndex { get; set; }
     

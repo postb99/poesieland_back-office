@@ -16,7 +16,7 @@ public class PoemContentProcessorTest(BasicFixture fixture) : IClassFixture<Basi
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, poemContentPath);
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var (poem, _) = poemContentImporter.Import(poemContentFilePath);
+        var poem = poemContentImporter.Import(poemContentFilePath);
         poem.Paragraphs.Count.ShouldBe(paragraphs);
         poem.Paragraphs.ForEach(p => p.Verses.Count.ShouldBe(verses));
         poemContentImporter.VerifyAnomaliesAfterImport();

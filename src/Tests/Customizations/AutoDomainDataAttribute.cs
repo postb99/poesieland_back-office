@@ -40,6 +40,6 @@ public class PoemCustomization : ICustomization
         fixture.Customize<Poem>(composer =>
             composer.With(p => p.Id, randomString + "_" + MyCustomization.SeasonId())
                 .With(p => p.TextDate, DateTime.Now.ToString("dd.MM.yyyy"))
-                .With(p => p.ContentFileIndex, 0));
+                .With(p => p.ContentFileIndex, -1));
     }
 }
