@@ -121,7 +121,7 @@ public class PoemImporter : IPoemImporter
         {
             if (poem.ContentFileIndex > targetSeason.Poems.Count - 1)
             {
-                throw new MetadataConsistencyException($"Cannot move poem to position greater than {targetSeason.Poems.Count - 1} (weight {poem.ContentFileIndex + 1})");
+                throw new MetadataConsistencyException($"Cannot move poem to weight greater than {targetSeason.Poems.Count} (current weight {poem.ContentFileIndex + 1})");
             }
             
             var poemToMove = targetSeason.Poems[existingPosition];
