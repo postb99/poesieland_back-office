@@ -701,7 +701,7 @@ public class Program
         _chartDataFileGenerator.GenerateOverSeasonsChartDataFile(_data, null, null, forMetric: 12);
 
         Console.WriteLine(
-            "Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain', 'lovecat', 'les mois', 'la mort', 1-12 metrics chart data files OK");
+            "Poems over seasons for 'acrostiche', 'sonnet', 'pantoun', 'métrique variable', 'refrain', 'les mois', 'la mort', 1-12 metrics chart data files OK");
     }
 
     private static void GenerateAllSeasonsPoemIntervalBarChartDataFile()

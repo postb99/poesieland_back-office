@@ -20,6 +20,6 @@ public class StorageSettingsTest : IClassFixture<BasicFixture>
     [Trait("UnitTest", "Computation")]
     public void ShouldGetCorrectSubcategorieNames()
     {
-        StorageSettings.SubcategorieNames.Count.ShouldBe(35);
+        StorageSettings.SubcategorieNames.Count.ShouldBe(36);
     }
 }
