@@ -166,20 +166,6 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportLovecatExtraTag()
-    {
-        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/humeurs_de_chats.md");
-        var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasYamlMetadata.ShouldBeTrue();
-        poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        poem.ExtraTags.ShouldBe(["lovecat"]);
-        poemContentImporter.VerifyAnomaliesAfterImport();
-    }
-
-    [Fact]
-    [Trait("UnitTest", "ContentImport")]
     public void ShouldImportLocations()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),

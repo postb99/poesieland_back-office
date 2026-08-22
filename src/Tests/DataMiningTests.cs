@@ -477,7 +477,6 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         }
     }
 
-    [Fact]
     [Trait("DataMining", "Rework")]
     public void ReplaceLovecatTag()
     {
@@ -506,7 +505,7 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         fixture.DataManager.Save(_data);
     }
 
-    [Fact]
+    [Fact(Skip = "Utility")]
     [Trait("DataMining", "Rework")]
     public void ExportReworkedPoems()
     {
