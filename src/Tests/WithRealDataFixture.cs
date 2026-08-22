@@ -8,11 +8,14 @@ public class WithRealDataFixture : BasicFixture
 {
     public Root Data { get; }
     public Root DataEn { get; }
+    
+    public DataManager DataManager { get; }
 
     public WithRealDataFixture()
     {
         // Do "global" initialization here; Only called once.
-        new DataManager(Configuration).Load(out Root data, out Root dataEn);
+        DataManager = new DataManager(Configuration);
+        DataManager.Load(out Root data, out Root dataEn);
         Data = data;
         DataEn = dataEn;
     }

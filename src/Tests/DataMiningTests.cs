@@ -236,7 +236,7 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
 
     [Fact]
     [Trait("DataMining", "Lookup")]
-    public void PoemsWithoutMoreThanOneCapitalLetterInTitle()
+    public void PoemsWithMoreThanOneCapitalLetterInTitle()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
         {
@@ -263,18 +263,6 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
             }
 
             testOutputHelper.WriteLine($"[{poem.Id}] {sb}");
-        }
-    }
-
-    [Fact]
-    [Trait("DataMining", "Lookup")]
-    public void PoemReusedTitles()
-    {
-        var reusedTitlesChecker = new ReusedTitlesChecker(fixture.Data);
-        var reusedTitles = reusedTitlesChecker.GetReusedTitles();
-        foreach (var reusedTitle in reusedTitles)
-        {
-            testOutputHelper.WriteLine(reusedTitle);
         }
     }
 
@@ -404,19 +392,6 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
 
     [Fact]
     [Trait("DataMining", "Quality")]
-    public void PoemsThatCouldHaveQuatrainsButHaveNot()
-    {
-        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems))
-        {
-            if (poem.VersesCount % 4 == 0 && !poem.HasQuatrains)
-            {
-                testOutputHelper.WriteLine(poem.Id);
-            }
-        }
-    }
-
-    [Fact]
-    [Trait("DataMining", "Quality")]
     public void PoemsThatShouldBeSonnetButAreNot()
     {
         foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x =>
@@ -441,17 +416,18 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
                     $"[{poem.Id} - {poem.DetailedMetric}] {verseLengthDiff} ({poem.Paragraphs[0].Verses[0]} / {poem.Paragraphs[0].Verses[1]})");
         }
     }
-    
+
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void FindPoemsWithLesMoisExtraTagAndMissingWordCloud()
     {
-        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems).Where(x => x.ExtraTags.Contains("les mois") && x.WordCloud == null))
+        foreach (var poem in _data.Seasons.SelectMany(x => x.Poems)
+                     .Where(x => x.ExtraTags.Contains("les mois") && x.WordCloud == null))
         {
             testOutputHelper.WriteLine(poem.Id);
         }
     }
-    
+
     [Fact(Skip = "Utility")]
     [Trait("UnitTest", "Temp")]
     public void ExportPoemsWithVariableMetric()
@@ -472,7 +448,7 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         poemStringDates = _data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
 
         // Would better add EN poems...
-        
+
         var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
@@ -483,9 +459,9 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
             var monthDay = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
             dataDict[monthDay]++;
         }
-        
+
         var dayWithSinglePoems = new List<string>();
-        
+
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
@@ -499,5 +475,34 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
         {
             testOutputHelper.WriteLine(dayWithSinglePoem);
         }
+    }
+
+    [Fact]
+    [Trait("DataMining", "Rework")]
+    public void ReplaceLovecatTag()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x => x.ExtraTags.Contains("lovecat")).ToList();
+
+        foreach (var poem in poems)
+        {
+            poem.ExtraTags.Remove("lovecat");
+            poem.Categories.Add(new Category
+            {
+                Name = "Attitudes",
+                SubCategories = ["Félinement vôtre"]
+            });
+            var natureSubCategories =
+                poem.Categories.Where(x => x.Name == "Nature").ToList().SelectMany(x => x.SubCategories).ToList();
+            if (natureSubCategories.Count > 1)
+            {
+                testOutputHelper.WriteLine($"{poem.Id} has multiple nature subcategories, edit manually");
+            }
+            else
+            {
+                poem.Categories.Remove(poem.Categories.Find(x => x.Name == "Nature")!);
+            }
+        }
+
+        fixture.DataManager.Save(_data);
     }
 }
