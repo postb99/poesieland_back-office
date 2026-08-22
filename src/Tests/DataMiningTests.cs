@@ -505,4 +505,17 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
 
         fixture.DataManager.Save(_data);
     }
+
+    [Fact]
+    [Trait("DataMining", "Rework")]
+    public void ExportReworkedPoems()
+    {
+        var poems = _data.Seasons.SelectMany(x => x.Poems).Where(x =>
+            x.Categories.Any(x => x.Name == "Attitudes" && x.SubCategories.Contains("Félinement vôtre"))).ToList();
+        var exporter = new ContentFileGenerator(fixture.Configuration);
+        foreach (var poem in poems)
+        {
+            exporter.GeneratePoemFile(_data, poem);
+        }
+    }
 }
