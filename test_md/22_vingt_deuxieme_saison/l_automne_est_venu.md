@@ -13,12 +13,7 @@ tags:
     - saisons
     - octosyllabe
 locations: []
-info: |-
-    {{% notice style="primary" %}}
-    Acrostiche : l'automne venu.
-
-    {{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
-    {{% /notice %}}
+info: ""
 pictures: []
 poemType: ""
 acrostiche: L'automne venu
@@ -53,6 +48,4 @@ Un pâle doigt traçant destin.
 
 {{% notice style="primary" %}}
 Acrostiche : l'automne venu.
-
-{{% include "../../includes/l_automne_est_venu" hidefirstheading %}}
 {{% /notice %}}
