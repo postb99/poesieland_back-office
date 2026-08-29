@@ -188,7 +188,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         var poem = poemContentImporter.Import(poemContentFilePath);
         poemContentImporter.HasYamlMetadata.ShouldBeTrue();
         poemContentImporter.HasTomlMetadata.ShouldBeFalse();
-        poem.Description.ShouldBe("Gare au chat qui **dort** / Car il te surveille");
+        poem.Description.ShouldBe("Gare au 🐈 qui **dort** / Car il te surveille");
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
     
