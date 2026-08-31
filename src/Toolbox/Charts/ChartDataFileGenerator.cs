@@ -81,7 +81,7 @@ public class ChartDataFileGenerator
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        
+
         string fileName;
         string chartId;
         string borderColor = string.Empty;
@@ -244,28 +244,54 @@ public class ChartDataFileGenerator
     }
 
     /// <summary>
-    /// Generates a pie chart data file for categories within a season or across all seasons.
+    /// Generates a pie chart data file for categories within a season, for a given metric, or across all seasons.
     /// The method processes poem data from the provided `Root` object, optionally filtered
     /// by a specific season identifier, and writes the resulting chart data to a "categories-pie.js" file
     /// in the appropriate directory structure.
     /// </summary>
     /// <param name="data">The root object containing all seasons and poems data to be processed for chart generation.</param>
-    /// <param name="seasonId">
-    /// An optional season identifier to filter poems by season. If set to null, the chart data will include poems across all seasons.
-    /// </param>
-    public void GenerateSeasonCategoriesPieChartDataFile(Root data, int? seasonId)
+    /// <param name="seasonId"> An optional season identifier to filter poems by season. If set to null, the chart data will include poems across all seasons. </param>
+    /// <param name="metric">An optional metric value to filter poems by.</param>
+    public void GenerateSubsetCategoriesPieChartDataFile(Root data, int? seasonId, int? metric)
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
             _configuration[Constants.CHART_DATA_FILES_ROOT_DIR]!);
-        var subDir = seasonId.HasValue ? $"season-{seasonId}" : "general";
+
+        List<Poem> poems = [];
+        string chartId = string.Empty;
+        string subDir = string.Empty;
+        string chartTitle = string.Empty;
+
+        if (seasonId.HasValue)
+        {
+            var season = data.Seasons.First(x => x.Id == seasonId);
+            poems = season.Poems;
+            chartId = $"season{seasonId}Pie";
+            subDir = $"season-{seasonId}";
+            chartTitle = $"{season.EscapedTitleForChartsWithPeriod}";
+        }
+        else if (metric.HasValue)
+        {
+            poems = data.Seasons.SelectMany(x => x.Poems).Where(x => x.HasMetric(metric.Value)).ToList();
+            chartId = $"metric{metric}Pie";
+            subDir = $"metric-{metric}";
+        }
+        else
+        {
+            poems = data.Seasons.SelectMany(x => x.Poems).ToList();
+            chartId = "categoriesPie";
+            subDir = "general";
+        }
+
         var storageSettings = StorageSettings;
-        using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, "categories-pie.js"));
+        var subDirPath = Path.Combine(rootDir, subDir);
+        Directory.CreateDirectory(subDirPath);
+        using var streamWriter = new StreamWriter(Path.Combine(subDirPath, "categories-pie.js"));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter, ChartType.Pie);
         chartDataFileHelper.WriteBeforeData();
         var byStorageSubcategoryCount = new Dictionary<string, int>();
 
-        var season = seasonId.HasValue ? data.Seasons.First(x => x.Id == seasonId) : null;
-        foreach (var poem in season?.Poems ?? data.Seasons.SelectMany(x => x.Poems))
+        foreach (var poem in poems)
         {
             foreach (var subCategory in poem.Categories.SelectMany(x => x.SubCategories))
             {
@@ -295,10 +321,7 @@ public class ChartDataFileGenerator
 
         chartDataFileHelper.WriteData(pieChartData);
 
-        chartDataFileHelper.WriteAfterData(seasonId.HasValue ? $"season{seasonId}Pie" : "categoriesPie",
-        [
-            seasonId.HasValue ? $"{season!.EscapedTitleForChartsWithPeriod}" : string.Empty
-        ]);
+        chartDataFileHelper.WriteAfterData(chartId, [chartTitle]);
         streamWriter.Close();
     }
 
@@ -855,7 +878,7 @@ public class ChartDataFileGenerator
                 case "rgba(247, 235, 253, 1)": // Enfance et adolescance
                     borderColor = "rgba(234, 191, 250, 1)";
                     break;
-                case "rgba(244, 254, 254, 1)":  // Neige
+                case "rgba(244, 254, 254, 1)": // Neige
                     borderColor = "rgba(119, 181, 254, 1)";
                     break;
             }
@@ -1372,7 +1395,6 @@ public class ChartDataFileGenerator
     /// - refrain_categories.md: Lists topmost categories associations for poems with the "refrain" extra tag.
     /// - la_mort_categories.md: Lists topmost categories associations for poems related to "la mort".
     /// - sonnet_categories.md: Lists topmost categories associations for sonnets.
-    /// - metric-{metric}_categories.md: Lists topmost categories associations for 1-12 metric.
     /// </summary>
     /// <param name="data">The primary source of French poems data.</param>
     public void GenerateCategoriesBubbleChartDataFile(Root data)
@@ -1450,13 +1472,6 @@ public class ChartDataFileGenerator
         // Listing of topmost associations with sonnet
         GenerateTopMostCategoriesListing(data.Seasons.SelectMany(x => x.Poems.Where(x => x.IsSonnet)).ToList(),
             "sonnet_categories.md");
-
-        // Listing of topmost associations with metrics
-        foreach (var metric in Enumerable.Range(1, 12))
-        {
-            poems = data.Seasons.SelectMany(x => x.Poems.Where(x => x.HasMetric(metric))).ToList();
-            GenerateTopMostCategoriesListing(poems, $"metric-{metric}_categories.md");
-        }
     }
 
     /// <summary>

@@ -150,8 +150,8 @@ public class Program
             case MainMenuSettings.MenuChoices.GeneratePoemMetricBarAndPieChartDataFiles:
                 GeneratePoemMetricPieChartDataFile(null);
                 break;
-            case MainMenuSettings.MenuChoices.GenerateSeasonCategoriesPieChartDataFile:
-                GenerateSeasonCategoriesPieChart(menuChoice);
+            case MainMenuSettings.MenuChoices.GenerateSubsetCategoriesPieChartDataFile:
+                GenerateSubsetCategoriesPieChart(menuChoice);
                 break;
             case MainMenuSettings.MenuChoices.GeneratePoemsRadarChartDataFile:
                 GeneratePoemsRadarChartDataFile(menuChoice);
@@ -457,7 +457,7 @@ public class Program
         Console.WriteLine("Poem metric pie chart data files OK");
     }
 
-    private static void GenerateSeasonCategoriesPieChart(MenuItem menuChoice)
+    private static void GenerateSubsetCategoriesPieChart(MenuItem menuChoice)
     {
         Console.WriteLine(menuChoice.SubMenuItems.First().Label, _data.Seasons.Count);
         var choice = Console.ReadLine();
@@ -467,11 +467,17 @@ public class Program
             // Seasons categories' pie
             for (var i = 1; i < _data.Seasons.Count + 1; i++)
             {
-                _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, i);
+                _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, i, null);
             }
-
+            
             // General categories' pie
-            _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, null);
+            _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, null, null);
+
+            // Metrics categories' pie
+            foreach (var metric in Enumerable.Range(1, 12))
+            {
+                _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, null, metric);
+            }
 
             // Year categories' pie
             var currentYear = DateTime.Now.Year;
@@ -492,10 +498,16 @@ public class Program
                  _data.Seasons.FirstOrDefault(x => x.Id == seasonId) is not null)
         {
             // Season categories' pie
-            _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, seasonId);
+            _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, seasonId, null);
 
             // General categories' pie
-            _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, null);
+            _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, null, null);
+            
+            // Metrics categories' pie
+            foreach (var metric in Enumerable.Range(1, 12))
+            {
+                _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, null, metric);
+            }
 
             Console.WriteLine($"Season {seasonId} categories pie chart data file OK");
         }
@@ -514,11 +526,17 @@ public class Program
         GeneratePoemMetricPieChartDataFile(seasonId);
 
         // Season categories' pie
-        _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, seasonId);
+        _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, seasonId, null);
 
         // General categories' pie
-        _chartDataFileGenerator.GenerateSeasonCategoriesPieChartDataFile(_data, null);
+        _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, null, null);
 
+        // Metrics categories' pie
+        foreach (var metric in Enumerable.Range(1, 12))
+        {
+            _chartDataFileGenerator.GenerateSubsetCategoriesPieChartDataFile(_data, null, metric);
+        }
+        
         // Year tag's radar and year categories' pie
         if (importedPoem is not null)
         {
