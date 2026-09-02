@@ -496,6 +496,7 @@ public class ChartDataFileGenerator
         var subDir = seasonId is not null ? $"season-{seasonId}" : forSonnet == true ? "taxonomy" : "general";
         var chartId = seasonId is not null ? $"season{seasonId}VerseLengthBar" :
             forSonnet == true ? "sonnetVerseLengthPie" : "poemVerseLengthPie";
+        Directory.CreateDirectory(Path.Combine(rootDir, subDir));
         using var streamWriter = new StreamWriter(Path.Combine(rootDir, subDir, fileName));
         var chartDataFileHelper = new ChartDataFileHelper(streamWriter,
             seasonId is not null ? ChartType.Bar : ChartType.Pie, 1);
