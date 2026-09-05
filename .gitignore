@@ -492,3 +492,6 @@ FodyWeavers.xsd
 # Everything .idea in root folder
 .idea/**
 src/.idea/**
+
+# Work plans
+/plans
