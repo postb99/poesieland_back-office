@@ -37,6 +37,7 @@ public class MainMenuSettings
         OutputSeasonsDuration = 700,
         OutputReusedTitles = 800,
         GenerateWordCloudTextFiles = 900,
+        GenerateWordCloudSourceImages = 910,
         ExitProgram = 99
     }
 

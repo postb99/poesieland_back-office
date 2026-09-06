@@ -15,5 +15,6 @@ public class Constants
     public const string METRIC_SETTINGS = "MetricSettings";
     public const string REQUIRED_DESCRIPTION_SETTINGS = "RequiredDescriptionSettings";
     public const string CHARTS_SETTINGS = "ChartsSettings";
+    public const string WORD_CLOUD_SETTINGS = "WordCloudSettings";
 
 }

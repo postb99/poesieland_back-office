@@ -255,10 +255,15 @@ public class Program
                 {
                     Console.WriteLine(reusedTitle);
                 }
+                Console.WriteLine($"Done checking reused titles.");            
 
                 break;
             case MainMenuSettings.MenuChoices.GenerateWordCloudTextFiles:
                 new WordCloudTextGenerator(_configuration!).GenerateWordCloudFiles(_data);
+                break;
+            case MainMenuSettings.MenuChoices.GenerateWordCloudSourceImages:
+                await new WordCloudImageGenerator(_configuration!).GenerateAllAsync();
+                Console.WriteLine("Word cloud source images OK");
                 break;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
