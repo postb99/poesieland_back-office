@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 using Toolbox.Charts;
 using Toolbox.Consistency;
 using Toolbox.Domain;
@@ -34,7 +34,9 @@ public class Program
     public static async Task Main(string[] args)
     {
         var configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true);
+        // Les options sont liées une fois au démarrage : surveiller le fichier ne les
+        // mettrait pas à jour et maintiendrait inutilement un FileSystemWatcher.
+        configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
         _configuration = configurationBuilder.Build();
 
         _configuration.GetSection(Constants.MAIN_MENU).Bind(MainMenuSettings);
@@ -72,34 +74,49 @@ public class Program
         var defaultChoice = menuItems[0].Key.ToString();
         Console.WriteLine($"Choice [{defaultChoice}]:");
         var input = Console.ReadLine();
-        return string.IsNullOrWhiteSpace(input) ? defaultChoice : input;
+        // Une entrée redirigée fermée doit terminer la session, pas rejouer le choix par défaut.
+        return input is null ? "99" : string.IsNullOrWhiteSpace(input) ? defaultChoice : input;
     }
 
     private static async Task ValidateAndPerformMenuChoiceAsync(MenuItem? parentMenuItem, string input)
     {
-        MenuItem? menuChoice = ValidateMenuEntry(parentMenuItem, input);
-        while (menuChoice is null)
+        // Une seule boucle possède la navigation : les retours au menu et les sous-menus
+        // ne conservent plus une chaîne de tâches/rappels récursifs pendant toute la session.
+        // ReadLine reste bloquant : il ne s'agit pas d'une boucle de polling.
+        while (true)
         {
-            Console.WriteLine("ERROR: No such choice");
-            input = Console.ReadLine()!;
-            menuChoice = ValidateMenuEntry(parentMenuItem, input);
-        }
-
-        try
-        {
-            if (!await PerformActionAsync(menuChoice)) return;
+            if (input == "99") return;
+            var menuChoice = ValidateMenuEntry(parentMenuItem, input);
+            if (menuChoice is null)
+            {
+                Console.WriteLine("ERROR: No such choice");
+                var nextInput = Console.ReadLine();
+                if (nextInput is null) return;
+                input = nextInput;
+                continue;
+            }
+            if ((MainMenuSettings.MenuChoices)menuChoice.Key is
+                MainMenuSettings.MenuChoices.GeneratePoemFiles or MainMenuSettings.MenuChoices.Import or
+                MainMenuSettings.MenuChoices.GenerateChartsDataFiles)
+            {
+                parentMenuItem = menuChoice;
+                input = MenuChoice(menuChoice.SubMenuItems);
+                continue;
+            }
+            try
+            {
+                if (!await PerformActionAsync(menuChoice)) return;
+            }
+            catch (ConsistencyException ex)
+            {
+                Console.WriteLine($"ERROR: {ex.Message}");
+                Console.WriteLine("Type anything to go back to main menu");
+                if (Console.ReadLine() is null) return;
+            }
             Console.WriteLine();
             Console.WriteLine("Back to main menu");
-            var menuEntry = MainMenu();
-            await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
-        }
-        catch (ConsistencyException ex)
-        {
-            Console.WriteLine($"ERROR: {ex.Message}");
-            Console.WriteLine("Type anything to go back to main menu");
-            Console.ReadLine();
-            var menuEntry = MainMenu();
-            await ValidateAndPerformMenuChoiceAsync(null, menuEntry);
+            parentMenuItem = null;
+            input = MainMenu();
         }
     }
 
@@ -124,11 +141,6 @@ public class Program
             case MainMenuSettings.MenuChoices.GenerateSeasonIndexFile:
                 GenerateSeasonIndexFiles(menuChoice);
                 break;
-            case MainMenuSettings.MenuChoices.GeneratePoemFiles:
-            case MainMenuSettings.MenuChoices.Import:
-            case MainMenuSettings.MenuChoices.GenerateChartsDataFiles:
-                await ValidateAndPerformMenuChoiceAsync(menuChoice, MenuChoice(menuChoice.SubMenuItems));
-                return false;
             case MainMenuSettings.MenuChoices.GenerateSinglePoem:
                 GeneratePoemContentFile(menuChoice);
                 break;
@@ -203,12 +215,10 @@ public class Program
                 var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
                     _configuration![Constants.CONTENT_ROOT_DIR]!);
 
-                var seasonMaxId = _data.Seasons.Count;
                 var poemImporter = new PoemImporter(_configuration);
 
-                for (var i = 1; i < seasonMaxId + 1; i++)
+                foreach (var season in _data.Seasons)
                 {
-                    var season = _data.Seasons.First(x => x.Id == i);
                     var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
                     var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
                     var contentCheckTasks = new List<Task>();
@@ -267,8 +277,7 @@ public class Program
                 break;
             case MainMenuSettings.MenuChoices.ExitProgram:
                 Console.WriteLine("Closing program...");
-                Environment.Exit(0);
-                break;
+                return false;
         }
 
         return true;
@@ -287,7 +296,8 @@ public class Program
         if (int.TryParse(choice, out var intChoice) &&
             _data.Seasons.FirstOrDefault(x => x.Id == intChoice) is not null)
         {
-            _ = _contentFileGenerator.GenerateSeasonAllPoemFiles(_data, intChoice);
+            // La génération utilise yield : sans énumération aucun fichier n'est écrit.
+            foreach (var _ in _contentFileGenerator.GenerateSeasonAllPoemFiles(_data, intChoice)) { }
             Console.WriteLine("Poem content files OK");
         }
         else

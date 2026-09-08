@@ -38,7 +38,11 @@ public class CustomPageChecker(IConfiguration configuration)
         {
             var seasonId = poem.SeasonId;
             var poemFileName = poem.Id.Substring(0, poem.Id.LastIndexOf('_'));
-            var regexp = new Regex($"(../../seasons/{seasonId}\\w*/{poemFileName})");
+            // Un identifiant doit être recherché littéralement, jamais interprété comme
+            // une expression régulière. NonBacktracking garantit un parcours linéaire sous
+            // .NET 10 ; le délai borne aussi le travail sur une page anormalement volumineuse.
+            var regexp = new Regex($@"\.\./\.\./seasons/{seasonId}\w*/{Regex.Escape(poemFileName)}",
+                RegexOptions.NonBacktracking | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
             var match = regexp.Match(pageContent);
             if (!match.Success)
             {

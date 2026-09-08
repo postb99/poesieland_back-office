@@ -49,6 +49,12 @@ public class ContentFileGenerator
         var poemIndex = season.Poems.IndexOf(poem);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+        // Même protection que pour un lot : deux titres normalisés identiques ne doivent
+        // jamais permettre à une génération individuelle d'écraser le fichier voisin.
+        if (poem.ContentFileName is ".md" or "_index.md" ||
+            season.Poems.Any(other => !ReferenceEquals(other, poem) &&
+                string.Equals(other.ContentFileName, poem.ContentFileName, StringComparison.OrdinalIgnoreCase)))
+            throw new InvalidDataException($"Empty or duplicate poem filename: {poem.ContentFileName}");
         Directory.CreateDirectory(contentDir);
         var indexFile = Path.Combine(contentDir, poem.ContentFileName);
         File.WriteAllText(indexFile, poem.FileContent(poemIndex, _metricsSettings));
@@ -65,8 +71,23 @@ public class ContentFileGenerator
     public IEnumerable<string> GenerateSeasonAllPoemFiles(Root data, int seasonId)
     {
         var season = data.Seasons.First(x => x.Id == seasonId);
-        foreach (var poem in season.Poems)
-            yield return GeneratePoemFile(data, poem);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
+        var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+        // Calculer les noms avant d'écrire : la normalisation des titres peut provoquer
+        // des collisions (accents, ponctuation). Les refuser évite d'écraser un autre poème.
+        var names = season.Poems.Select(x => x.ContentFileName).ToList();
+        if (names.Any(x => x is ".md" or "_index.md") ||
+            names.Distinct(StringComparer.OrdinalIgnoreCase).Count() != names.Count)
+            throw new InvalidDataException($"Empty or duplicate poem filename in season {seasonId}");
+        Directory.CreateDirectory(contentDir);
+        // L'indice est déjà connu : supprimer IndexOf pour chaque poème évite un parcours
+        // quadratique de la saison, ainsi que les recherches et créations de dossier répétées.
+        for (var index = 0; index < season.Poems.Count; index++)
+        {
+            var path = Path.Combine(contentDir, names[index]);
+            File.WriteAllText(path, season.Poems[index].FileContent(index, _metricsSettings));
+            yield return path;
+        }
     }
 
     /// <summary>
@@ -75,11 +96,8 @@ public class ContentFileGenerator
     /// <param name="data">The root object containing season and poem data.</param>
     public void GenerateAllPoemFiles(Root data)
     {
-        var poems = data.Seasons.SelectMany(x => x.Poems).ToList();
-        foreach (var poem in poems)
-        {
-            GeneratePoemFile(data, poem);
-        }
+        foreach (var season in data.Seasons)
+            foreach (var _ in GenerateSeasonAllPoemFiles(data, season.Id)) { }
     }
 
     /// <summary>

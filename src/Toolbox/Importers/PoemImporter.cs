@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -20,6 +20,7 @@ public class PoemImporter : IPoemImporter
 {
     private Poem? _poem;
     private bool _isInMetadata;
+    private bool _metadataComplete;
     private IPoemMetadataProcessor? _metadataProcessor;
     private PoemContentProcessor? _contentProcessor;
     private readonly MetricSettings _metricSettings = new();
@@ -58,12 +59,19 @@ public class PoemImporter : IPoemImporter
     /// <exception cref="MetadataConsistencyException">Thrown when any anomalies are found in the imported data.</exception>"
     public Poem ImportPoem(string poemId, Root data)
     {
+        ArgumentException.ThrowIfNullOrWhiteSpace(poemId);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
-        if (!int.TryParse(seasonId, out _))
+        if (poemId.LastIndexOf('_') <= 0 || !int.TryParse(seasonId, out _))
         {
             throw new MetadataConsistencyException($"'{poemId}' does not end with season id");
         }
+
+        // L'identifiant est un nom logique, jamais un chemin. Rejeter les séparateurs
+        // des deux plateformes et les deux-points (lecteurs/flux NTFS) avant tout accès disque.
+        // Cela interdit aussi les chemins absolus et les traversées ../ sous Windows et Unix.
+        if (poemId.IndexOfAny(['/', '\\', ':']) >= 0 || poemId.Any(char.IsControl))
+            throw new MetadataConsistencyException($"Invalid poem identifier: '{poemId}'");
 
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
@@ -83,6 +91,11 @@ public class PoemImporter : IPoemImporter
         var poem = Import(poemContentPath);
         VerifyAnomaliesAfterImport();
 
+        // Le fichier choisi doit décrire le poème demandé, sinon l'import pourrait
+        // remplacer silencieusement un autre enregistrement via son identifiant interne.
+        if (!string.Equals(poem.Id, poemId, StringComparison.Ordinal))
+            throw new MetadataConsistencyException($"Expected poem '{poemId}', found '{poem.Id}'");
+
         ImportPoemToSeason(data, poem);
 
         return poem;
@@ -96,6 +109,13 @@ public class PoemImporter : IPoemImporter
     public void ImportPoemToSeason(Root data, Poem poem)
     {
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == poem.SeasonId);
+
+        // Vérifier la position avant toute création de saison, substitution ou suppression.
+        // Un poids invalide doit laisser le modèle intact, y compris lors d'une mise à jour.
+        var existingIndex = targetSeason?.Poems.FindIndex(x => x.Id == poem.Id) ?? -1;
+        var resultingCount = (targetSeason?.Poems.Count ?? 0) + (existingIndex < 0 ? 1 : 0);
+        if (poem.ContentFileIndex < -1 || poem.ContentFileIndex >= resultingCount)
+            throw new MetadataConsistencyException($"Invalid poem weight: {poem.ContentFileIndex + 1}");
 
         if (targetSeason is null)
         {
@@ -148,13 +168,21 @@ public class PoemImporter : IPoemImporter
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == seasonId);
-        var poemFilePaths = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("_index.md"));
+        var poemFilePaths = Directory.EnumerateFiles(seasonDirName!, "*.md").Where(x => !string.Equals(Path.GetFileName(x), "_index.md", StringComparison.OrdinalIgnoreCase));
         var poemsByPosition = new Dictionary<int, Poem>(50);
+        var poemIds = new HashSet<string>(StringComparer.Ordinal);
         foreach (var poemContentPath in poemFilePaths)
         {
             var poem = Import(poemContentPath);
             VerifyAnomaliesAfterImport();
-            poemsByPosition.Add(poem.ContentFileIndex, poem);
+            // Le lot entier est validé avant de remplacer les données existantes.
+            // Ne plus ignorer silencieusement les positions >= 50 : la limite n'est pas
+            // une règle métier du modèle et pouvait entraîner une perte à la sauvegarde.
+            if (poem.SeasonId != seasonId || poem.ContentFileIndex < 0 ||
+                !poemIds.Add(poem.Id))
+                throw new MetadataConsistencyException($"Invalid or duplicate poem in season {seasonId}: {poem.Id}");
+            if (!poemsByPosition.TryAdd(poem.ContentFileIndex, poem))
+                throw new MetadataConsistencyException($"Duplicate poem weight: {poem.ContentFileIndex + 1}");
         }
 
         if (targetSeason is not null)
@@ -167,11 +195,7 @@ public class PoemImporter : IPoemImporter
             data.Seasons.Add(targetSeason);
         }
 
-        for (var i = 0; i < 50; i++)
-        {
-            if (poemsByPosition.TryGetValue(i, out var poem))
-                targetSeason.Poems.Add(poem);
-        }
+        targetSeason.Poems.AddRange(poemsByPosition.OrderBy(x => x.Key).Select(x => x.Value));
     }
 
     /// <summary>
@@ -195,6 +219,8 @@ public class PoemImporter : IPoemImporter
             ProcessLine(line);
         } while (line is not null);
 
+        if (!_metadataComplete)
+            throw new InvalidDataException($"Missing or unterminated poem metadata: {contentFilePath}");
         _poem.Categories = GetCategories(_metadataProcessor!.GetCategories(), _poem.Id);
         _poem.Pictures = _metadataProcessor.GetPictures();
         var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
@@ -239,6 +265,8 @@ public class PoemImporter : IPoemImporter
             ProcessLine(line);
         } while (line is not null);
 
+        if (!_metadataComplete)
+            throw new InvalidDataException($"Missing or unterminated poem metadata: {contentFilePath}");
         _poem.Categories = GetCategoriesEn(_metadataProcessor!.GetCategories(), _poem.Id);
         var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
             ? null
@@ -270,41 +298,46 @@ public class PoemImporter : IPoemImporter
     {
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR_EN]!);
 
-        foreach (var season in dataEn.Seasons)
-        {
-            season.Poems.Clear();
-        }
+        // Préparer toutes les listes avant de publier : une erreur dans le dernier fichier
+        // anglais ne doit pas effacer les saisons déjà chargées. Les métadonnées de saison
+        // sont conservées ; seules les listes de poèmes sont remplacées après validation.
+        var staged = new Root();
+        var poemIds = new HashSet<string>(StringComparer.Ordinal);
 
         var yearDirNames = Directory.EnumerateDirectories(rootDir);
 
         foreach (var yearDirName in yearDirNames)
         {
-            var poemFilePaths = Directory.EnumerateFiles(yearDirName).Where(x => !x.EndsWith("_index.md"));
+            var poemFilePaths = Directory.EnumerateFiles(yearDirName, "*.md").Where(x => !string.Equals(Path.GetFileName(x), "_index.md", StringComparison.OrdinalIgnoreCase));
             var poemsByPosition = new Dictionary<int, Poem>(50);
 
             foreach (var poemContentPath in poemFilePaths)
             {
                 var poem = ImportEnYaml(poemContentPath);
 
-                poemsByPosition.Add(poem.ContentFileIndex, poem);
+                if (!poemsByPosition.TryAdd(poem.ContentFileIndex, poem))
+                    throw new MetadataConsistencyException($"Duplicate poem weight: {poem.ContentFileIndex + 1}");
             }
 
-            for (var i = 0; i < 50; i++)
+            foreach (var poem in poemsByPosition.OrderBy(x => x.Key).Select(x => x.Value))
             {
-                if (poemsByPosition.TryGetValue(i, out var poem))
+                if (poem.ContentFileIndex < 0)
+                    throw new MetadataConsistencyException($"Invalid poem weight: {poem.Id}");
+                var targetSeason = staged.Seasons.FirstOrDefault(x => x.Id == poem.SeasonId);
+                if (targetSeason is null)
                 {
-                    var seasonId = poem.SeasonId;
-                    var targetSeason = dataEn.Seasons.FirstOrDefault(x => x.Id == seasonId);
-                    if (targetSeason is null)
-                    {
-                        targetSeason = new() { Id = seasonId, Poems = [] };
-                        dataEn.Seasons.Add(targetSeason);
-                    }
-
-                    targetSeason.Poems.Add(poem);
+                    targetSeason = new() { Id = poem.SeasonId, Poems = [] };
+                    staged.Seasons.Add(targetSeason);
                 }
+                if (!poemIds.Add(poem.Id))
+                    throw new MetadataConsistencyException($"Duplicate poem: {poem.Id}");
+                targetSeason.Poems.Add(poem);
             }
         }
+
+        foreach (var season in dataEn.Seasons)
+            season.Poems = staged.Seasons.FirstOrDefault(x => x.Id == season.Id)?.Poems ?? [];
+        dataEn.Seasons.AddRange(staged.Seasons.Where(x => dataEn.Seasons.All(existing => existing.Id != x.Id)).ToList());
     }
 
     /// <summary>
@@ -361,12 +394,7 @@ public class PoemImporter : IPoemImporter
     /// <exception cref="InvalidDataException">Thrown when the content file contains invalid or unexpected format preventing metadata processing.</exception>
     public PartialImport GetPartialImport(string contentFilePath)
     {
-        _poem = new();
-        _isInMetadata = false;
-        _metadataProcessor = null;
-        _contentProcessor = null;
-        HasYamlMetadata = false;
-        HasTomlMetadata = false;
+        Init();
 
         using var streamReader = new StreamReader(contentFilePath);
         string line;
@@ -374,7 +402,12 @@ public class PoemImporter : IPoemImporter
         {
             line = streamReader.ReadLine();
             ProcessLine(line);
-        } while (line is not null);
+            // Ce contrôle ne consulte que l'en-tête : ne pas lire et construire les
+            // paragraphes du corps pour chaque vérification de métadonnées.
+        } while (line is not null && !_metadataComplete);
+
+        if (!_metadataComplete)
+            throw new InvalidDataException($"Missing or unterminated poem metadata: {contentFilePath}");
 
         // Necessary for _poem.DetailedMetric not to crash
         _poem.Info = string.Join(Environment.NewLine, _metadataProcessor!.GetInfoLines());
@@ -415,6 +448,7 @@ public class PoemImporter : IPoemImporter
     {
         _poem = new();
         _isInMetadata = false;
+        _metadataComplete = false;
         _metadataProcessor = null;
         _contentProcessor = null;
         HasYamlMetadata = false;
@@ -430,16 +464,23 @@ public class PoemImporter : IPoemImporter
         if (line == null)
             return;
 
-        if (line.StartsWith(TomlMarker))
+        // Le front matter est un bloc unique. Une règle Markdown "---" dans le corps
+        // ne doit pas rouvrir l'en-tête et permettre de remplacer l'id ou les catégories.
+        // Exiger le marqueur exact évite aussi de traiter un vers "---texte" comme borne.
+        if (!_metadataComplete && line == TomlMarker)
         {
+            if (HasYamlMetadata) throw new InvalidDataException("Mixed metadata markers");
             HasTomlMetadata = true;
             _metadataProcessor ??= new PoemTomlMetadataProcessor();
+            _metadataComplete = _isInMetadata;
             _isInMetadata = !_isInMetadata;
         }
-        else if (line.StartsWith(YamlMarker))
+        else if (!_metadataComplete && line == YamlMarker)
         {
+            if (HasTomlMetadata) throw new InvalidDataException("Mixed metadata markers");
             HasYamlMetadata = true;
             _metadataProcessor ??= new PoemYamlMetadataProcessor();
+            _metadataComplete = _isInMetadata;
             _isInMetadata = !_isInMetadata;
         }
 

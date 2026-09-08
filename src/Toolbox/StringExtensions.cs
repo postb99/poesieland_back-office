@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 
 namespace Toolbox;
@@ -109,7 +109,10 @@ public static class StringExtensions
         foreach (var c in span) if (c == ',') count++;
 
         var result = new int[count];
-        Span<char> buffer = stackalloc char[span.Length];
+        // La taille vient des métadonnées : une allocation de pile non bornée permettrait
+        // à une longue entrée de provoquer un StackOverflowException non récupérable.
+        // Les entrées courantes restent sur la pile ; les grandes utilisent le tas.
+        Span<char> buffer = span.Length <= 256 ? stackalloc char[span.Length] : new char[span.Length];
         int idx = 0, bufLen = 0;
 
         for (int i = 0; i <= span.Length; i++)

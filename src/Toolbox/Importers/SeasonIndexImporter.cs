@@ -8,7 +8,7 @@ public class SeasonIndexImporter()
 {
     private Season _season;
     private bool _isInMetadata;
-    private readonly SeasonIndexTomlMetadataProcessor _metadataProcessor = new();
+    private SeasonIndexTomlMetadataProcessor _metadataProcessor = new();
 
     private const string TomlMarker = "+++";
 
@@ -19,6 +19,9 @@ public class SeasonIndexImporter()
     /// <returns>An instance of the <see cref="Season"/> class populated with the imported metadata.</returns>
     public Season Import(string contentFilePath)
     {
+        // Chaque fichier possède son processeur : ne pas réutiliser les descriptions et
+        // l'état multiligne d'un import précédent lorsque cette instance est réemployée.
+        _metadataProcessor = new();
         _season = new();
         _isInMetadata = false;
 
