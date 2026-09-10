@@ -10,6 +10,9 @@ namespace Toolbox.Consistency;
 
 public class CustomPageChecker(IConfiguration configuration)
 {
+    private static readonly Regex SeasonPathRegex = new(@"\.\./\.\./seasons/(?<season>[^/]+)/(?<file>[^/]+)",
+        RegexOptions.CultureInvariant);
+    
     /// <summary>
     /// Verifies that poems associated with more than one season are listed on the "saisons" tag index page.
     /// </summary>
@@ -34,17 +37,17 @@ public class CustomPageChecker(IConfiguration configuration)
             : data.Seasons.SelectMany(x =>
                 x.Poems.Where(x => x.Categories.Any(x => x is { Name: "Saisons", SubCategories.Count: > 1 }))).ToList();
 
+        var allMatches = SeasonPathRegex.Matches(pageContent); // calculé UNE fois, hors boucle
+
         foreach (var poem in poems)
         {
-            var seasonId = poem.SeasonId;
             var poemFileName = poem.Id.Substring(0, poem.Id.LastIndexOf('_'));
-            // Un identifiant doit être recherché littéralement, jamais interprété comme
-            // une expression régulière. NonBacktracking garantit un parcours linéaire sous
-            // .NET 10 ; le délai borne aussi le travail sur une page anormalement volumineuse.
-            var regexp = new Regex($@"\.\./\.\./seasons/{seasonId}\w*/{Regex.Escape(poemFileName)}",
-                RegexOptions.NonBacktracking | RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
-            var match = regexp.Match(pageContent);
-            if (!match.Success)
+
+            var isListed = allMatches.Any(m =>
+                m.Groups["season"].Value.StartsWith(poem.SeasonId.ToString())
+                && m.Groups["file"].Value == poemFileName);
+
+            if (!isListed)
             {
                 errors.Add($"Poem {poem.Id} should be listed on 'saisons' tag index page!");
             }
