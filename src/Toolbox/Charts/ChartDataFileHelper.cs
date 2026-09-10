@@ -144,7 +144,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         foreach (var dataLine in dataLines)
         {
             streamWriter.WriteLine(
-                $"    {{ label: '{JavaScriptString(dataLine.Label)}', value: {dataLine.Value}, color: '{JavaScriptString(dataLine.RgbaColor)}' }},");
+                $"    {{ label: '{JavaScriptString(dataLine.Label)}', value: {dataLine.Value}, color: '{dataLine.RgbaColor}' }},");
         }
 
         if (nbDatasets > 1)
@@ -162,7 +162,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         foreach (var dataLine in dataLines)
         {
             streamWriter.WriteLine(
-                $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {decimal.Parse(dataLine.Value, NumberStyles.Float, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture)}, color: '{JavaScriptString(dataLine.RgbaColor)}' }},");
+                $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {decimal.Parse(dataLine.Value, NumberStyles.Float, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture)}, color: '{dataLine.RgbaColor}' }},");
         }
 
         streamWriter.WriteLine(isLastDataLine ? "]" : "],");
@@ -172,7 +172,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
     public void WriteData(LineChartDataLine dataLine)
     {
         streamWriter.WriteLine(
-            $"    {{ label: '{JavaScriptString(dataLine.Label)}', data: [{string.Join(',', dataLine.Values.Select(x => x.ToString(CultureInfo.InvariantCulture)))}], borderColor: '{JavaScriptString(dataLine.RgbaColor)}', backgroundColor: '{JavaScriptString(dataLine.RgbaColor)}', fill: true }},");
+            $"    {{ label: '{JavaScriptString(dataLine.Label)}', data: [{string.Join(',', dataLine.Values.Select(x => x.ToString(CultureInfo.InvariantCulture)))}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
 
         streamWriter.Flush();
     }
