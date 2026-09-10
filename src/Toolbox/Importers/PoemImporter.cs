@@ -181,8 +181,6 @@ public class PoemImporter : IPoemImporter
             var poem = Import(poemContentPath);
             VerifyAnomaliesAfterImport();
             // Le lot entier est validé avant de remplacer les données existantes.
-            // Ne plus ignorer silencieusement les positions >= 50 : la limite n'est pas
-            // une règle métier du modèle et pouvait entraîner une perte à la sauvegarde.
             if (poem.SeasonId != seasonId || poem.ContentFileIndex < 0 ||
                 !poemIds.Add(poem.Id))
                 throw new MetadataConsistencyException($"Invalid or duplicate poem in season {seasonId}: {poem.Id}");
@@ -410,8 +408,6 @@ public class PoemImporter : IPoemImporter
         {
             line = streamReader.ReadLine();
             ProcessLine(line);
-            // Ce contrôle ne consulte que l'en-tête : ne pas lire et construire les
-            // paragraphes du corps pour chaque vérification de métadonnées.
         } while (line is not null && !_metadataComplete);
 
         if (!_metadataComplete)
