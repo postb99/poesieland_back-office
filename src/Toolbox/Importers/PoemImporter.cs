@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -61,8 +61,8 @@ public class PoemImporter : IPoemImporter
     {
         ArgumentException.ThrowIfNullOrWhiteSpace(poemId);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
-        var seasonId = poemId.Substring(poemId.LastIndexOf('_') + 1);
-        if (poemId.LastIndexOf('_') <= 0 || !int.TryParse(seasonId, out _))
+        var separatorIndex = poemId.LastIndexOf('_');
+        if (separatorIndex <= 0 || !int.TryParse(poemId.AsSpan(separatorIndex + 1), out var seasonId))
         {
             throw new MetadataConsistencyException($"'{poemId}' does not end with season id");
         }
@@ -112,8 +112,11 @@ public class PoemImporter : IPoemImporter
 
         // Vérifier la position avant toute création de saison, substitution ou suppression.
         // Un poids invalide doit laisser le modèle intact, y compris lors d'une mise à jour.
-        var existingIndex = targetSeason?.Poems.FindIndex(x => x.Id == poem.Id) ?? -1;
-        var resultingCount = (targetSeason?.Poems.Count ?? 0) + (existingIndex < 0 ? 1 : 0);
+        var poems = targetSeason?.Poems;
+        var existingIndex = poems?.FindIndex(x => x.Id == poem.Id) ?? -1;
+        var isNewPoem = existingIndex < 0;
+        var resultingCount = (poems?.Count ?? 0) + (isNewPoem ? 1 : 0);
+
         if (poem.ContentFileIndex < -1 || poem.ContentFileIndex >= resultingCount)
             throw new MetadataConsistencyException($"Invalid poem weight: {poem.ContentFileIndex + 1}");
 
@@ -141,9 +144,10 @@ public class PoemImporter : IPoemImporter
         {
             if (poem.ContentFileIndex > targetSeason.Poems.Count - 1)
             {
-                throw new MetadataConsistencyException($"Cannot move poem to weight greater than {targetSeason.Poems.Count} (current weight {poem.ContentFileIndex + 1})");
+                throw new MetadataConsistencyException(
+                    $"Cannot move poem to weight greater than {targetSeason.Poems.Count} (current weight {poem.ContentFileIndex + 1})");
             }
-            
+
             var poemToMove = targetSeason.Poems[existingPosition];
             targetSeason.Poems.RemoveAt(existingPosition);
             targetSeason.Poems.Insert(poem.ContentFileIndex, poemToMove);
@@ -168,7 +172,8 @@ public class PoemImporter : IPoemImporter
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
         var targetSeason = data.Seasons.FirstOrDefault(x => x.Id == seasonId);
-        var poemFilePaths = Directory.EnumerateFiles(seasonDirName!, "*.md").Where(x => !string.Equals(Path.GetFileName(x), "_index.md", StringComparison.OrdinalIgnoreCase));
+        var poemFilePaths = Directory.EnumerateFiles(seasonDirName!, "*.md").Where(x =>
+            !string.Equals(Path.GetFileName(x), "_index.md", StringComparison.OrdinalIgnoreCase));
         var poemsByPosition = new Dictionary<int, Poem>(50);
         var poemIds = new HashSet<string>(StringComparer.Ordinal);
         foreach (var poemContentPath in poemFilePaths)
@@ -308,7 +313,8 @@ public class PoemImporter : IPoemImporter
 
         foreach (var yearDirName in yearDirNames)
         {
-            var poemFilePaths = Directory.EnumerateFiles(yearDirName, "*.md").Where(x => !string.Equals(Path.GetFileName(x), "_index.md", StringComparison.OrdinalIgnoreCase));
+            var poemFilePaths = Directory.EnumerateFiles(yearDirName, "*.md").Where(x =>
+                !string.Equals(Path.GetFileName(x), "_index.md", StringComparison.OrdinalIgnoreCase));
             var poemsByPosition = new Dictionary<int, Poem>(50);
 
             foreach (var poemContentPath in poemFilePaths)
@@ -329,6 +335,7 @@ public class PoemImporter : IPoemImporter
                     targetSeason = new() { Id = poem.SeasonId, Poems = [] };
                     staged.Seasons.Add(targetSeason);
                 }
+
                 if (!poemIds.Add(poem.Id))
                     throw new MetadataConsistencyException($"Duplicate poem: {poem.Id}");
                 targetSeason.Poems.Add(poem);
@@ -337,7 +344,8 @@ public class PoemImporter : IPoemImporter
 
         foreach (var season in dataEn.Seasons)
             season.Poems = staged.Seasons.FirstOrDefault(x => x.Id == season.Id)?.Poems ?? [];
-        dataEn.Seasons.AddRange(staged.Seasons.Where(x => dataEn.Seasons.All(existing => existing.Id != x.Id)).ToList());
+        dataEn.Seasons.AddRange(staged.Seasons.Where(x => dataEn.Seasons.All(existing => existing.Id != x.Id))
+            .ToList());
     }
 
     /// <summary>
