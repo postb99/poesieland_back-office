@@ -671,8 +671,7 @@ public class ChartDataFileGenerator
             dataLines.Add(new ColoredDataLine($"{key} {(key == 1 ? "poème" : "poèmes")}",
                 intensityDict[key],
                 string.Format(baseColor,
-                    (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    (baseAlpha + 0.1 * (key - 1)).ToString("F1", CultureInfo.InvariantCulture))));
         }
 
         var fileName = "poem-intensity-pie.js";
@@ -734,8 +733,7 @@ public class ChartDataFileGenerator
                 key == 6 ? "Samedi" : "Dimanche",
                 dataDict[key],
                 string.Format(baseColor,
-                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString("F1", CultureInfo.InvariantCulture))));
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
@@ -819,8 +817,7 @@ public class ChartDataFileGenerator
                 key == 6 ? "Saturday" : "Sunday",
                 dataDict[key],
                 string.Format(baseColor,
-                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString("F1", CultureInfo.InvariantCulture))));
         }
 
         var fileName = "poem-en-dayofweek-pie.js";

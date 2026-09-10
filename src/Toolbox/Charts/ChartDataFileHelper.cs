@@ -383,7 +383,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
             bubbleSize *= 4;
             bubbleColor = "rgba(121, 248, 248, 1)";
             quarterBubbleChartDatalines[0].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
         {
@@ -391,7 +391,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
             bubbleSize *= 2;
             bubbleColor = "rgba(119, 181, 254, 1)";
             quarterBubbleChartDatalines[1].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
         {
@@ -399,14 +399,14 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
             bubbleSize *= 1.5m;
             bubbleColor = "rgba(0, 127, 255, 1)";
             quarterBubbleChartDatalines[2].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
         else
         {
             // Fourth quarter
             bubbleColor = "rgba(50, 122, 183, 1)";
             quarterBubbleChartDatalines[3].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
     }
     
