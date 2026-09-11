@@ -91,10 +91,10 @@ public class PoemImporter : IPoemImporter
         var poem = Import(poemContentPath);
         VerifyAnomaliesAfterImport();
 
-        // Le fichier choisi doit décrire le poème demandé, sinon l'import pourrait
-        // remplacer silencieusement un autre enregistrement via son identifiant interne.
+        // When provided poem ID does not match the one in front matter
+        // the import could silently overwrite another record via its internal identifier
         if (!string.Equals(poem.Id, poemId, StringComparison.Ordinal))
-            throw new MetadataConsistencyException($"Expected poem '{poemId}', found '{poem.Id}'");
+            throw new MetadataConsistencyException($"Expected poem ID in front matter: '{poemId}' but found '{poem.Id}'");
 
         ImportPoemToSeason(data, poem);
 

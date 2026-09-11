@@ -67,7 +67,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
-        var poemFiles = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("index.md"));
+        var poemFiles = Directory.EnumerateFiles(seasonDirName!).Where(x =>
+            !Path.GetFileName(x).Equals("_index.md", StringComparison.OrdinalIgnoreCase));
 
         foreach (var poemFile in poemFiles)
         {
@@ -76,7 +77,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             var poemIndex = poemInSeason == null ? -1 : season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != poem.ContentFileIndex)
             {
-                throw new MetadataConsistencyException($"[WARNING] Poem {poem.Id} may have weight {poemIndex + 1}, check adjacent poems weight");
+                throw new MetadataConsistencyException(
+                    $"[WARNING] Poem {poem.Id} may have weight {poemIndex + 1}, check adjacent poems weight");
             }
         }
     }
@@ -131,9 +133,16 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         var errors = new List<string>();
         foreach (var check in checks)
         {
-            try { check(); }
-            catch (MetadataConsistencyException ex) { errors.Add(ex.Message); }
+            try
+            {
+                check();
+            }
+            catch (MetadataConsistencyException ex)
+            {
+                errors.Add(ex.Message);
+            }
         }
+
         // Les erreurs inattendues restent visibles avec leur type et leur pile d'origine.
         // Seules les anomalies métier sont agrégées en diagnostic de cohérence.
         if (errors.Count == 0) return;

@@ -34,8 +34,7 @@ public class Program
     public static async Task Main(string[] args)
     {
         var configurationBuilder = new ConfigurationBuilder();
-        // Les options sont liées une fois au démarrage : surveiller le fichier ne les
-        // mettrait pas à jour et maintiendrait inutilement un FileSystemWatcher.
+        // Settings are bound once at startup: setting reloadOnChange to true creates a useless FileSystemWatcher.
         configurationBuilder.AddJsonFile("appsettings.json", optional: true, reloadOnChange: false);
         _configuration = configurationBuilder.Build();
 
@@ -220,7 +219,8 @@ public class Program
                 foreach (var season in _data.Seasons)
                 {
                     var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-                    var poemContentPaths = Directory.EnumerateFiles(contentDir).Where(x => !x.EndsWith("_index.md"));
+                    var poemContentPaths = Directory.EnumerateFiles(contentDir)
+                        .Where(x => !Path.GetFileName(x).Equals("_index.md", StringComparison.OrdinalIgnoreCase));
                     var contentCheckTasks = new List<Task>();
                     foreach (var poemContentPath in poemContentPaths)
                     {

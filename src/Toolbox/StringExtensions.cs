@@ -60,6 +60,21 @@ public static class StringExtensions
 
         return pos == start ? string.Empty : new string(buffer[start..pos]);
     }
+    
+    /// <summary>
+    /// Returns the substring before the last underscore ('_') in the input string.
+    /// If no underscore is found, the original string is returned unchanged.
+    /// </summary>
+    /// <param name="s">The source string to process.</param>
+    /// <returns>The portion of the string preceding the last underscore.</returns>
+    public static string GetStringBeforeLastUnderscore(this string s)
+    {
+        if (string.IsNullOrEmpty(s))
+            return s;
+
+        int lastIndex = s.LastIndexOf('_');
+        return lastIndex == -1 ? s : s.Substring(0, lastIndex);
+    }
 
     /// <summary>
     /// Expect a quoted string, cleanup the quotes around the string, and the escaping of any quote into the string.

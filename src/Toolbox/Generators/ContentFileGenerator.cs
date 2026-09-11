@@ -49,12 +49,6 @@ public class ContentFileGenerator
         var poemIndex = season.Poems.IndexOf(poem);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-        // Même protection que pour un lot : deux titres normalisés identiques ne doivent
-        // jamais permettre à une génération individuelle d'écraser le fichier voisin.
-        if (poem.ContentFileName is ".md" or "_index.md" ||
-            season.Poems.Any(other => !ReferenceEquals(other, poem) &&
-                string.Equals(other.ContentFileName, poem.ContentFileName, StringComparison.OrdinalIgnoreCase)))
-            throw new InvalidDataException($"Empty or duplicate poem filename: {poem.ContentFileName}");
         Directory.CreateDirectory(contentDir);
         var indexFile = Path.Combine(contentDir, poem.ContentFileName);
         File.WriteAllText(indexFile, poem.FileContent(poemIndex, _metricsSettings));
@@ -73,12 +67,7 @@ public class ContentFileGenerator
         var season = data.Seasons.First(x => x.Id == seasonId);
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
         var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
-        // Calculer les noms avant d'écrire : la normalisation des titres peut provoquer
-        // des collisions (accents, ponctuation). Les refuser évite d'écraser un autre poème.
         var names = season.Poems.Select(x => x.ContentFileName).ToList();
-        if (names.Any(x => x is ".md" or "_index.md") ||
-            names.Distinct(StringComparer.OrdinalIgnoreCase).Count() != names.Count)
-            throw new InvalidDataException($"Empty or duplicate poem filename in season {seasonId}");
         Directory.CreateDirectory(contentDir);
         // L'indice est déjà connu : supprimer IndexOf pour chaque poème évite un parcours
         // quadratique de la saison, ainsi que les recherches et créations de dossier répétées.

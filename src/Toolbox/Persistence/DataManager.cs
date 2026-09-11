@@ -59,31 +59,8 @@ public class DataManager : IDataManager
     private void Write(string path, Root data)
     {
         ArgumentNullException.ThrowIfNull(data);
-        path = Path.GetFullPath(path);
-        // Le temporaire est voisin du fichier final pour rester sur le même volume. Une
-        // erreur de sérialisation ou d'écriture ne tronque ainsi jamais la version précédente.
-        // Le remplacement publie un fichier complet ; il ne constitue pas une transaction
-        // entre les stockages français et anglais, dont les sauvegardes restent indépendantes.
-        var temporaryPath = Path.Combine(Path.GetDirectoryName(path)!, $".{Guid.NewGuid():N}.tmp");
-        try
-        {
-            using (var stream = new FileStream(temporaryPath, FileMode.CreateNew, FileAccess.Write, FileShare.None))
-            {
-                using (var writer = new StreamWriter(stream, new UTF8Encoding(false), leaveOpen: true))
-                    XmlSerializer.Serialize(writer, data);
-                stream.Flush(flushToDisk: true);
-            }
-
-            if (File.Exists(path))
-                File.Replace(temporaryPath, path, null);
-            else
-                File.Move(temporaryPath, path);
-        }
-        finally
-        {
-            // Après succès le temporaire n'existe plus ; après échec il ne doit pas rester
-            // sur disque. L'échec initial est propagé, aucune sauvegarde réussie n'est simulée.
-            File.Delete(temporaryPath);
-        }
+        using var streamWriter = new StreamWriter(path);
+        XmlSerializer.Serialize(streamWriter, data);
+        streamWriter.Close();
     }
 }
