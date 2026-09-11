@@ -82,6 +82,29 @@ public static class StringExtensions
 
         return pos == 0 ? null : new string(buffer[..pos]);
     }
+    
+    /// <summary>
+    /// Échappe le contenu d'une chaîne JavaScript entre apostrophes. Les appelants fournissent
+    /// du texte brut : l'échappement se fait une seule fois, au point d'émission du code.
+    /// Les antislashs doivent être traités avant les apostrophes pour qu'une entrée comme
+    /// \\';alert(1) ne puisse pas fermer la chaîne. Les contrôles, séparateurs Unicode et
+    /// chevrons sont encodés aussi, y compris si le fichier est ensuite inséré dans du HTML.
+    /// customScalesOptions reste une option de code réservée aux appelants de confiance.
+    /// </summary>
+    public static string JavaScriptString(this string? s)
+    {
+        if (s is null) return string.Empty;
+        var result = new StringBuilder(s.Length);
+        foreach (var c in s)
+        {
+            if (c is '\\' or '\'') result.Append('\\').Append(c);
+            else if (char.IsControl(c) || c is '\u2028' or '\u2029' or '<' or '>')
+                result.Append("\\u").Append(((int)c).ToString("x4", CultureInfo.InvariantCulture));
+            else result.Append(c);
+        }
+        return result.ToString();
+    }
+    
     /// <summary>
     /// Parses to a date using "dd.MM.yyyy" format.
     /// </summary>

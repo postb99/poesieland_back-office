@@ -33,6 +33,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Theory]
+    [Trait("UnitTest", "Security")]
     [InlineData("../outside_1")]
     [InlineData("..\\outside_1")]
     [InlineData("C:outside_1")]
@@ -44,6 +45,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void FailedXmlSerializationPreservesPreviousFileAndCleansTemporaryFile()
     {
         var manager = new DataManager(_configuration);
@@ -56,6 +58,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void XmlRoundTripAndReplacementWorkForBothLanguages()
     {
         var manager = new DataManager(_configuration);
@@ -69,6 +72,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void XmlRejectsDtdAndDoesNotPublishPartialReload()
     {
         var manager = new DataManager(_configuration);
@@ -85,6 +89,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Theory]
+    [Trait("UnitTest", "Security")]
     [InlineData(-2)]
     [InlineData(3)]
     public void InvalidWeightDoesNotReplaceOrRemoveExistingPoem(int index)
@@ -97,6 +102,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void FailedEnglishImportPreservesExistingPoems()
     {
         var directory = Path.Combine(_configuration[Constants.CONTENT_ROOT_DIR_EN]!, "2026");
@@ -109,6 +115,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void LongIntegerInputDoesNotAllocateUnboundedStack()
     {
         var input = string.Join(',', Enumerable.Repeat(" 12 ", 100_000));
@@ -118,9 +125,10 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
-    public void ChartEscapingPreservesDataAndBlocksCodeBoundaries()
+    [Trait("UnitTest", "Security")]
+    public void ChartEscapingShouldPreserveDataAndBlocksCodeBoundaries()
     {
-        (ChartDataFileHelper.JavaScriptString("\\';alert(1);//\n</script>\u2028")).ShouldBe("\\\\\\';alert(1);//\\u000a\\u003c/script\\u003e\\u2028");
+        "\\';alert(1);//\n</script>\u2028".JavaScriptString().ShouldBe("\\\\\\';alert(1);//\\u000a\\u003c/script\\u003e\\u2028");
         using var stream = new MemoryStream();
         using var writer = new StreamWriter(stream, new UTF8Encoding(false), leaveOpen: true);
         var helper = new ChartDataFileHelper(writer, ChartType.Bar);
@@ -133,6 +141,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void BubbleRadiusCannotContainJavaScript()
     {
         using var stream = new MemoryStream();
@@ -143,6 +152,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void DuplicateNormalizedFilenamesAreRejectedBeforeWriting()
     {
         var first = new Poem { Id = "a_1", Title = "Été" };
@@ -154,6 +164,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void WordCloudPreservesOrderAndIgnoresDuplicateMonthTags()
     {
         string[] months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
@@ -172,6 +183,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void BodyCannotReopenMetadataAndChangeIdentity()
     {
         var path = Path.Combine(_directory, "poem.md");
@@ -182,6 +194,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Theory]
+    [Trait("UnitTest", "Security")]
     [InlineData("plain text")]
     [InlineData("+++\nid = \"test_1\"")]
     [InlineData("+++\n---")]
@@ -193,6 +206,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void SeasonImporterDoesNotReuseDescriptionFromPreviousFile()
     {
         var path = Path.Combine(_directory, "season.md");
@@ -204,6 +218,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void SeasonImportKeepsPoemsBeyondPositionFiftyAndIgnoresOtherFiles()
     {
         var directory = Path.Combine(_configuration[Constants.CONTENT_ROOT_DIR]!, "1_first");
@@ -223,6 +238,7 @@ public sealed class SecurityRegressionTest : IDisposable
     }
 
     [Fact]
+    [Trait("UnitTest", "Security")]
     public void CustomPageSearchTreatsRegexCharactersLiterally()
     {
         var directory = Path.Combine(_directory, "tags", "saisons");
