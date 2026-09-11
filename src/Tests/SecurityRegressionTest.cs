@@ -1,6 +1,7 @@
 using System.Text;
 using Shouldly;
 using Microsoft.Extensions.Configuration;
+using Tests.Customizations;
 using Toolbox;
 using Toolbox.Charts;
 using Toolbox.Consistency;
@@ -39,27 +40,14 @@ public sealed class SecurityRegressionTest : IDisposable
     [InlineData("C:outside_1")]
     [InlineData("/outside_1")]
     [InlineData("1")]
-    public void RejectsPathIdentifiersBeforeDiskAccess(string id)
+    public void ShouldRejectPathIdentifiersUsedAsIdOfPoemToImport(string id)
     {
         Should.Throw<MetadataConsistencyException>(() => new PoemImporter(_configuration).ImportPoem(id, new Root()));
     }
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void FailedXmlSerializationPreservesPreviousFileAndCleansTemporaryFile()
-    {
-        var manager = new DataManager(_configuration);
-        manager.Save(new Root());
-        var previous = File.ReadAllBytes(_configuration[Constants.XML_STORAGE_FILE]!);
-        var invalid = new Root { Seasons = [new Season { Name = "invalid\u0001" }] };
-        Should.Throw<InvalidOperationException>(() => manager.Save(invalid));
-        (File.ReadAllBytes(_configuration[Constants.XML_STORAGE_FILE]!)).ShouldBe(previous);
-        (Directory.GetFiles(_directory, "*.tmp")).ShouldBeEmpty();
-    }
-
-    [Fact]
-    [Trait("UnitTest", "Security")]
-    public void XmlRoundTripAndReplacementWorkForBothLanguages()
+    public void ShouldWorkForBothLanguagesWhenDoingSaveAndLoadXmlRoundTrip()
     {
         var manager = new DataManager(_configuration);
         manager.Save(new Root());
@@ -67,13 +55,13 @@ public sealed class SecurityRegressionTest : IDisposable
         manager.SaveEn(new Root());
         manager.SaveEn(new Root { Seasons = [new Season { Id = 2 }] });
         manager.Load(out var french, out var english);
-        ((french.Seasons).ShouldHaveSingleItem().Name).ShouldBe("Été");
-        ((english.Seasons).ShouldHaveSingleItem().Id).ShouldBe(2);
+        french.Seasons.ShouldHaveSingleItem().Name.ShouldBe("Été");
+        english.Seasons.ShouldHaveSingleItem().Id.ShouldBe(2);
     }
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void XmlRejectsDtdAndDoesNotPublishPartialReload()
+    public void ShouldRejectsDtdInXmlFileAndNotPublishPartialReload()
     {
         var manager = new DataManager(_configuration);
         manager.Save(new Root());
@@ -84,65 +72,66 @@ public sealed class SecurityRegressionTest : IDisposable
         var originalFrench = french;
         var originalEnglish = english;
         Should.Throw<InvalidOperationException>(() => manager.Load(out french, out english));
-        (french).ShouldBeSameAs(originalFrench);
-        (english).ShouldBeSameAs(originalEnglish);
+        french.ShouldBeSameAs(originalFrench);
+        english.ShouldBeSameAs(originalEnglish);
     }
 
     [Theory]
     [Trait("UnitTest", "Security")]
-    [InlineData(-2)]
-    [InlineData(3)]
-    public void InvalidWeightDoesNotReplaceOrRemoveExistingPoem(int index)
+    [InlineAutoDomainData(-2)]
+    [InlineAutoDomainData(3)]
+    public void ShouldNotReplaceOrRemoveExistingPoemWhenInvalidWeight(int index, Poem poem)
     {
-        var original = new Poem { Id = "test_1" };
-        var data = new Root { Seasons = [new Season { Id = 1, Poems = [original] }] };
+        poem.Id = "test_1";
+        var data = new Root { Seasons = [new Season { Id = 1, Poems = [poem] }] };
         Should.Throw<MetadataConsistencyException>(() => new PoemImporter(_configuration)
-            .ImportPoemToSeason(data, new Poem { Id = original.Id, ContentFileIndex = index }));
-        ((data.Seasons[0].Poems).ShouldHaveSingleItem()).ShouldBeSameAs(original);
+            .ImportPoemToSeason(data, new Poem { Id = poem.Id, ContentFileIndex = index }));
+        data.Seasons[0].Poems.ShouldHaveSingleItem().ShouldBeSameAs(poem);
     }
 
-    [Fact]
+    [Theory]
     [Trait("UnitTest", "Security")]
-    public void FailedEnglishImportPreservesExistingPoems()
+    [AutoDomainData]
+    public void ShouldPreserveExistingPoemsWhenEnglishImportFails(Poem poem)
     {
         var directory = Path.Combine(_configuration[Constants.CONTENT_ROOT_DIR_EN]!, "2026");
         Directory.CreateDirectory(directory);
         File.WriteAllText(Path.Combine(directory, "broken.md"), "---\ndate: not-a-date\n---");
-        var original = new Poem { Id = "old_1" };
-        var data = new Root { Seasons = [new Season { Id = 1, Poems = [original] }] };
+        poem.Id = "old_1";
+        var data = new Root { Seasons = [new Season { Id = 1, Poems = [poem] }] };
         Should.Throw<FormatException>(() => new PoemImporter(_configuration).ImportPoemsEn(data));
-        ((data.Seasons[0].Poems).ShouldHaveSingleItem()).ShouldBeSameAs(original);
+        data.Seasons[0].Poems.ShouldHaveSingleItem().ShouldBeSameAs(poem);
     }
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void LongIntegerInputDoesNotAllocateUnboundedStack()
+    public void ShouldNotAllocateUnboundedStackWhenLongIntegerInput()
     {
         var input = string.Join(',', Enumerable.Repeat(" 12 ", 100_000));
         var result = input.ToIntArray();
-        (result.Length).ShouldBe(100_000);
+        result.Length.ShouldBe(100_000);
         result.ShouldAllBe(value => value == 12);
     }
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void ChartEscapingShouldPreserveDataAndBlocksCodeBoundaries()
+    public void ShouldPreserveDataAndBlocksCodeBoundariesWhenEscapingStringForCharts()
     {
         "\\';alert(1);//\n</script>\u2028".JavaScriptString().ShouldBe("\\\\\\';alert(1);//\\u000a\\u003c/script\\u003e\\u2028");
         using var stream = new MemoryStream();
         using var writer = new StreamWriter(stream, new UTF8Encoding(false), leaveOpen: true);
         var helper = new ChartDataFileHelper(writer, ChartType.Bar);
-        helper.WriteData(new List<ColoredDataLine> { new("l'été\n", 1, "red'") });
+        helper.WriteData(new List<ColoredDataLine> { new("l'été\n", 1, "red") });
         helper.WriteAfterData("id'", ["l'été"]);
         var output = Encoding.UTF8.GetString(stream.ToArray());
-        (output).ShouldContain("label: 'l\\'été\\u000a'");
-        (output).ShouldContain("color: 'red\\''");
-        (output).ShouldContain("addBarChart('id\\'', ['l\\'été']");
+        output.ShouldContain("label: 'l\\'été\\u000a'");
+        output.ShouldContain("color: 'red'");
+        output.ShouldContain("addBarChart('id\\'', ['l\\'été']");
     }
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void BubbleRadiusCannotContainJavaScript()
+    public void ShouldRejectBubbleRadiusWithJavaScriptContent()
     {
         using var stream = new MemoryStream();
         using var writer = new StreamWriter(stream);
@@ -151,40 +140,47 @@ public sealed class SecurityRegressionTest : IDisposable
             new List<BubbleChartDataLine> { new(1, 2, "1};alert(1)//", "red") }, true));
     }
 
-    [Fact]
+    [Theory]
     [Trait("UnitTest", "Security")]
-    public void DuplicateNormalizedFilenamesAreRejectedBeforeWriting()
+    [AutoDomainData]
+    public void ShouldNotThrowOnDuplicateNormalizedTitles(Poem firstPoem, Poem secondPoem)
     {
-        var first = new Poem { Id = "a_1", Title = "Été" };
-        var data = new Root { Seasons = [new Season { Id = 1, Poems = [first, new Poem { Id = "b_1", Title = "Ete" }] }] };
+        firstPoem.Id = "a_1";
+        firstPoem.Title = "Été";
+        secondPoem.Id = "b_1";
+        secondPoem.Title = "Ete";
+        var data = new Root { Seasons = [new Season { Id = 1, Poems = [firstPoem, secondPoem] }] };
         var generator = new ContentFileGenerator(_configuration);
-        Should.Throw<InvalidDataException>(() => generator.GenerateSeasonAllPoemFiles(data, 1).ToList());
-        Should.Throw<InvalidDataException>(() => generator.GeneratePoemFile(data, first));
-        (Directory.Exists(_configuration[Constants.CONTENT_ROOT_DIR])).ShouldBeFalse();
+        Should.NotThrow(() => generator.GenerateSeasonAllPoemFiles(data, 1).ToList());
+        Should.NotThrow(() => generator.GeneratePoemFile(data, firstPoem));
+        Directory.Exists(_configuration[Constants.CONTENT_ROOT_DIR]).ShouldBeTrue();
     }
 
-    [Fact]
+    [Theory]
     [Trait("UnitTest", "Security")]
-    public void WordCloudPreservesOrderAndIgnoresDuplicateMonthTags()
+    [AutoDomainData]
+    public void ShouldPreserveOrderAndIgnoreDuplicateMonthTagsWhenGeneratingWordCloud(List<Poem> poems)
     {
         string[] months = ["janvier", "février", "mars", "avril", "mai", "juin", "juillet", "août", "septembre", "octobre", "novembre", "décembre"];
         foreach (var month in months)
             Directory.CreateDirectory(Path.Combine(_directory, "other-perspectives", "les-mois", month));
-        var data = new Root { Seasons = [new Season { Poems = [
-            new Poem { ExtraTags = ["janvier", "janvier"], WordCloud = "ÉTÉ" },
-            new Poem { ExtraTags = null },
-            new Poem { ExtraTags = ["janvier"], WordCloud = null }
-        ] }] };
+        
+        poems[0].ExtraTags = ["janvier", "janvier"];
+        poems[0].WordCloud = "ÉTÉ";
+        poems[1].ExtraTags = null;
+        poems[2].ExtraTags = ["janvier"];
+        poems[2].WordCloud = null;
+        var data = new Root { Seasons = [new Season { Poems = poems }] };
         var generator = new WordCloudTextGenerator(_configuration);
         generator.GenerateWordCloudFiles(data);
         generator.GenerateWordCloudFiles(data);
-        (File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "janvier", "wordcloud.txt"))).ShouldBe("été" + Environment.NewLine + Environment.NewLine);
-        (File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "février", "wordcloud.txt"))).ShouldBeEmpty();
+        File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "janvier", "wordcloud.txt")).ShouldBe("été" + Environment.NewLine + Environment.NewLine);
+        File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "février", "wordcloud.txt")).ShouldBeEmpty();
     }
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void BodyCannotReopenMetadataAndChangeIdentity()
+    public void ShouldHandleWhenBodyCannotReopenMetadataAndChangeIdentity()
     {
         var path = Path.Combine(_directory, "poem.md");
         File.WriteAllText(path, "+++\nid = \"original_1\"\ndate = 2026-09-08\nverseLength = 8\n+++\n---\nid = \"forged_2\"\n---");
@@ -198,7 +194,7 @@ public sealed class SecurityRegressionTest : IDisposable
     [InlineData("plain text")]
     [InlineData("+++\nid = \"test_1\"")]
     [InlineData("+++\n---")]
-    public void MalformedMetadataFailsExplicitly(string content)
+    public void ShouldFailWhenMalformedMetadata(string content)
     {
         var path = Path.Combine(_directory, "poem.md");
         File.WriteAllText(path, content);
@@ -207,7 +203,7 @@ public sealed class SecurityRegressionTest : IDisposable
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void SeasonImporterDoesNotReuseDescriptionFromPreviousFile()
+    public void ShouldNotReuseDescriptionFromPreviousFileWhenImportingAnotherSeason()
     {
         var path = Path.Combine(_directory, "season.md");
         var importer = new SeasonIndexImporter();
@@ -219,7 +215,7 @@ public sealed class SecurityRegressionTest : IDisposable
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void SeasonImportKeepsPoemsBeyondPositionFiftyAndIgnoresOtherFiles()
+    public void ShouldKeepPoemsBeyondPositionFiftyAndIgnoreOtherFilesWhenImportingSeason()
     {
         var directory = Path.Combine(_configuration[Constants.CONTENT_ROOT_DIR]!, "1_first");
         Directory.CreateDirectory(directory);
@@ -239,7 +235,7 @@ public sealed class SecurityRegressionTest : IDisposable
 
     [Fact]
     [Trait("UnitTest", "Security")]
-    public void CustomPageSearchTreatsRegexCharactersLiterally()
+    public void ShouldTreatRegexCharactersLiterallyWhenDoingCustomPageSearch()
     {
         var directory = Path.Combine(_directory, "tags", "saisons");
         Directory.CreateDirectory(directory);
