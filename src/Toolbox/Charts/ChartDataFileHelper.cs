@@ -403,7 +403,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         {
             // Multiplication to get 50
             var multiple = 50m / season.Poems.Count;
-            xLabels.Add($"{season.Name} ({season.Id}) {season.Years}");
+            xLabels.Add(season.TitleForChartsWithYears);
 
             foreach (var metric in metricRange)
             {

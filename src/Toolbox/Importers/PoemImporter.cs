@@ -94,7 +94,8 @@ public class PoemImporter : IPoemImporter
         // When provided poem ID does not match the one in front matter
         // the import could silently overwrite another record via its internal identifier
         if (!string.Equals(poem.Id, poemId, StringComparison.Ordinal))
-            throw new MetadataConsistencyException($"Expected poem ID in front matter: '{poemId}' but found '{poem.Id}'");
+            throw new MetadataConsistencyException(
+                $"Expected poem ID in front matter: '{poemId}' but found '{poem.Id}'");
 
         ImportPoemToSeason(data, poem);
 
@@ -342,6 +343,7 @@ public class PoemImporter : IPoemImporter
 
         foreach (var season in dataEn.Seasons)
             season.Poems = staged.Seasons.FirstOrDefault(x => x.Id == season.Id)?.Poems ?? [];
+        
         dataEn.Seasons.AddRange(staged.Seasons.Where(x => dataEn.Seasons.All(existing => existing.Id != x.Id))
             .ToList());
     }
