@@ -9,38 +9,59 @@ on:
   pull_request:
     branches: [ "main" ]
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    timeout-minutes: 3
+    permissions:
+      checks: write
+      contents: read
     if: "!contains(github.event.head_commit.message, 'skip ci')"
-    env: 
+    env:
       ASPNETCORE_ENVIRONMENT: github
+    defaults:
+      run:
+        working-directory: src
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 10.x
-    - name: Restore dependencies
-      run: dotnet restore
-      working-directory: src
-    - name: Build
-      run: dotnet build --no-restore
-      working-directory: src
-    - name: Test computation
-      run: dotnet test --no-build --filter "UnitTest=Computation"
-      working-directory: src
-    - name: Test consistency
-      run: dotnet test --no-build --filter "UnitTest=ConsistencyCheck"
-      working-directory: src
-    - name: Test content import
-      run: dotnet test --no-build --filter "UnitTest=ContentImport"
-      working-directory: src
-    - name: Test content generation
-      run: dotnet test --no-build --filter "UnitTest=ContentGeneration"
-      working-directory: src
-    - name: Test XML serialization
-      run: dotnet test --no-build --filter "UnitTest=XmlSerialization"
-      working-directory: src
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.x
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build
+        run: dotnet build --no-restore
+      - name: Test computation
+        if: always()
+        run: dotnet test --no-build --filter "UnitTest=Computation" --logger "trx;LogFileName=computation.trx" --results-directory ../TestResults
+      - name: Test consistency
+        if: always()
+        run: dotnet test --no-build --filter "UnitTest=ConsistencyCheck" --logger "trx;LogFileName=consistency.trx" --results-directory ../TestResults
+      - name: Test content import
+        if: always()
+        run: dotnet test --no-build --filter "UnitTest=ContentImport" --logger "trx;LogFileName=content-import.trx" --results-directory ../TestResults
+      - name: Test content generation
+        if: always()
+        run: dotnet test --no-build --filter "UnitTest=ContentGeneration" --logger "trx;LogFileName=content-generation.trx" --results-directory ../TestResults
+      - name: Test XML serialization
+        if: always()
+        run: dotnet test --no-build --filter "UnitTest=XmlSerialization" --logger "trx;LogFileName=xml-serialization.trx" --results-directory ../TestResults
+      - name: Test Security
+        if: always()
+        run: dotnet test --no-build --filter "UnitTest=Security" --logger "trx;LogFileName=security.trx" --results-directory ../TestResults
+
+      - name: Publish test report
+        if: always()
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test results
+          path: 'TestResults/*.trx'
+          reporter: dotnet-trx
+          fail-on-error: true
