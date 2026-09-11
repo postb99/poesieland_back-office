@@ -40,7 +40,7 @@ jobs:
         run: dotnet build --no-restore
       - name: Test computation
         if: always()
-        run: dotnet test --no-build --filter-trait-trait "UnitTest=Computation" --report-trx --report-trx-filename computation.trx --results-directory ../TestResults
+        run: dotnet test --no-build --filter-trait "UnitTest=Computation" --report-trx --report-trx-filename computation.trx --results-directory ../TestResults
       - name: Test consistency
         if: always()
         run: dotnet test --no-build --filter-trait "UnitTest=ConsistencyCheck" --report-trx --report-trx-filename consistency.trx --results-directory ../TestResults
