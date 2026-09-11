@@ -92,7 +92,7 @@ public class Poem
     
     [XmlIgnore] public bool IsSonnet => HasType(Domain.PoemType.Sonnet);
 
-    [XmlIgnore] public string ContentFileName => $"{Title.UnaccentedCleaned()}.md";
+    [XmlIgnore] public string ContentFileName => $"{Id.GetStringBeforeLastUnderscore()}.md";
 
     [XmlIgnore]
     public int SeasonId

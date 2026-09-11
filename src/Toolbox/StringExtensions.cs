@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 
 namespace Toolbox;
@@ -60,6 +60,21 @@ public static class StringExtensions
 
         return pos == start ? string.Empty : new string(buffer[start..pos]);
     }
+    
+    /// <summary>
+    /// Returns the substring before the last underscore ('_') in the input string.
+    /// If no underscore is found, the original string is returned unchanged.
+    /// </summary>
+    /// <param name="s">The source string to process.</param>
+    /// <returns>The portion of the string preceding the last underscore.</returns>
+    public static string GetStringBeforeLastUnderscore(this string s)
+    {
+        if (string.IsNullOrEmpty(s))
+            return s;
+
+        int lastIndex = s.LastIndexOf('_');
+        return lastIndex == -1 ? s : s.Substring(0, lastIndex);
+    }
 
     /// <summary>
     /// Expect a quoted string, cleanup the quotes around the string, and the escaping of any quote into the string.
@@ -82,6 +97,29 @@ public static class StringExtensions
 
         return pos == 0 ? null : new string(buffer[..pos]);
     }
+    
+    /// <summary>
+    /// Échappe le contenu d'une chaîne JavaScript entre apostrophes. Les appelants fournissent
+    /// du texte brut : l'échappement se fait une seule fois, au point d'émission du code.
+    /// Les antislashs doivent être traités avant les apostrophes pour qu'une entrée comme
+    /// \\';alert(1) ne puisse pas fermer la chaîne. Les contrôles, séparateurs Unicode et
+    /// chevrons sont encodés aussi, y compris si le fichier est ensuite inséré dans du HTML.
+    /// customScalesOptions reste une option de code réservée aux appelants de confiance.
+    /// </summary>
+    public static string JavaScriptString(this string? s)
+    {
+        if (s is null) return string.Empty;
+        var result = new StringBuilder(s.Length);
+        foreach (var c in s)
+        {
+            if (c is '\\' or '\'') result.Append('\\').Append(c);
+            else if (char.IsControl(c) || c is '\u2028' or '\u2029' or '<' or '>')
+                result.Append("\\u").Append(((int)c).ToString("x4", CultureInfo.InvariantCulture));
+            else result.Append(c);
+        }
+        return result.ToString();
+    }
+    
     /// <summary>
     /// Parses to a date using "dd.MM.yyyy" format.
     /// </summary>
@@ -109,7 +147,10 @@ public static class StringExtensions
         foreach (var c in span) if (c == ',') count++;
 
         var result = new int[count];
-        Span<char> buffer = stackalloc char[span.Length];
+        // La taille vient des métadonnées : une allocation de pile non bornée permettrait
+        // à une longue entrée de provoquer un StackOverflowException non récupérable.
+        // Les entrées courantes restent sur la pile ; les grandes utilisent le tas.
+        Span<char> buffer = span.Length <= 256 ? stackalloc char[span.Length] : new char[span.Length];
         int idx = 0, bufLen = 0;
 
         for (int i = 0; i <= span.Length; i++)

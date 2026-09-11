@@ -67,7 +67,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(), configuration[Constants.CONTENT_ROOT_DIR]!);
         var seasonDirName = Directory.EnumerateDirectories(rootDir)
             .FirstOrDefault(x => Path.GetFileName(x).StartsWith($"{seasonId}_"));
-        var poemFiles = Directory.EnumerateFiles(seasonDirName!).Where(x => !x.EndsWith("index.md"));
+        var poemFiles = Directory.EnumerateFiles(seasonDirName!).Where(x =>
+            !Path.GetFileName(x).Equals("_index.md", StringComparison.OrdinalIgnoreCase));
 
         foreach (var poemFile in poemFiles)
         {
@@ -76,7 +77,8 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             var poemIndex = poemInSeason == null ? -1 : season.Poems.IndexOf(poemInSeason);
             if (poemIndex != -1 && poemIndex != poem.ContentFileIndex)
             {
-                throw new MetadataConsistencyException($"[WARNING] Poem {poem.Id} may have weight {poemIndex + 1}, check adjacent poems weight");
+                throw new MetadataConsistencyException(
+                    $"[WARNING] Poem {poem.Id} may have weight {poemIndex + 1}, check adjacent poems weight");
             }
         }
     }
@@ -114,27 +116,38 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     public static void VerifyMetadataConsistency(PoemImporter.PartialImport partialImport, List<Metric> metrics,
         List<RequiredDescription> requiredDescriptions, string? poemContentPath = null)
     {
-        var tasks = new List<Task>
+        // Ces six validations ne font que consulter quelques champs en mémoire. Créer
+        // puis attendre six tâches par poème coûte davantage que le travail lui-même et
+        // sature inutilement le pool lorsque le contrôle appelant est déjà parallèle.
+        // Les exécuter localement conserve toutes les erreurs et leur ordre de déclaration.
+        Action[] checks =
         {
-            Task.Run(() => VerifyMetricValueIsSpecified(partialImport)),
-            Task.Run(() => VerifyMetricTagsArePresent(partialImport, metrics)),
-            Task.Run(() => VerifyYearTagIsPresent(partialImport)),
-            Task.Run(() => VerifyVariableMetricTagIsPresent(partialImport)),
-            Task.Run(() => VerifyVariableMetricInfoIsPresent(partialImport)),
-            Task.Run(() => VerifyRequiredDescription(partialImport, requiredDescriptions))
+            () => VerifyMetricValueIsSpecified(partialImport),
+            () => VerifyMetricTagsArePresent(partialImport, metrics),
+            () => VerifyYearTagIsPresent(partialImport),
+            () => VerifyVariableMetricTagIsPresent(partialImport),
+            () => VerifyVariableMetricInfoIsPresent(partialImport),
+            () => VerifyRequiredDescription(partialImport, requiredDescriptions)
         };
 
-        try
+        var errors = new List<string>();
+        foreach (var check in checks)
         {
-            Task.WaitAll(tasks);
+            try
+            {
+                check();
+            }
+            catch (MetadataConsistencyException ex)
+            {
+                errors.Add(ex.Message);
+            }
         }
-        catch (AggregateException ae)
-        {
-            if (poemContentPath is null)
-                throw new MetadataConsistencyException(ae.InnerExceptions.Select(ex => ex.Message));
 
-            throw new MetadataConsistencyException(poemContentPath, ae.InnerExceptions.Select(ex => ex.Message));
-        }
+        // Les erreurs inattendues restent visibles avec leur type et leur pile d'origine.
+        // Seules les anomalies métier sont agrégées en diagnostic de cohérence.
+        if (errors.Count == 0) return;
+        if (poemContentPath is null) throw new MetadataConsistencyException(errors);
+        throw new MetadataConsistencyException(poemContentPath, errors);
     }
 
     /// <summary>

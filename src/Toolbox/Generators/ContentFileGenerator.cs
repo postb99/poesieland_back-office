@@ -65,8 +65,18 @@ public class ContentFileGenerator
     public IEnumerable<string> GenerateSeasonAllPoemFiles(Root data, int seasonId)
     {
         var season = data.Seasons.First(x => x.Id == seasonId);
-        foreach (var poem in season.Poems)
-            yield return GeneratePoemFile(data, poem);
+        var rootDir = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!);
+        var contentDir = Path.Combine(rootDir, season.ContentDirectoryName);
+        var names = season.Poems.Select(x => x.ContentFileName).ToList();
+        Directory.CreateDirectory(contentDir);
+        // L'indice est déjà connu : supprimer IndexOf pour chaque poème évite un parcours
+        // quadratique de la saison, ainsi que les recherches et créations de dossier répétées.
+        for (var index = 0; index < season.Poems.Count; index++)
+        {
+            var path = Path.Combine(contentDir, names[index]);
+            File.WriteAllText(path, season.Poems[index].FileContent(index, _metricsSettings));
+            yield return path;
+        }
     }
 
     /// <summary>
@@ -75,11 +85,8 @@ public class ContentFileGenerator
     /// <param name="data">The root object containing season and poem data.</param>
     public void GenerateAllPoemFiles(Root data)
     {
-        var poems = data.Seasons.SelectMany(x => x.Poems).ToList();
-        foreach (var poem in poems)
-        {
-            GeneratePoemFile(data, poem);
-        }
+        foreach (var season in data.Seasons)
+            foreach (var _ in GenerateSeasonAllPoemFiles(data, season.Id)) { }
     }
 
     /// <summary>

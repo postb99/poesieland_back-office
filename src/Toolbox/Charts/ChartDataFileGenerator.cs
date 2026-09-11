@@ -162,7 +162,7 @@ public class ChartDataFileGenerator
 
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/days_without_creation.md");
-        var streamWriter2 = new StreamWriter(filePath);
+        using var streamWriter2 = new StreamWriter(filePath);
 
         streamWriter2.WriteLine("+++");
         streamWriter2.WriteLine("title = \"Les jours sans\"");
@@ -268,7 +268,7 @@ public class ChartDataFileGenerator
             poems = season.Poems;
             chartId = $"season{seasonId}Pie";
             subDir = $"season-{seasonId}";
-            chartTitle = $"{season.EscapedTitleForChartsWithPeriod}";
+            chartTitle = season.TitleForChartsWithPeriod.JavaScriptString();
         }
         else if (metric.HasValue)
         {
@@ -468,7 +468,7 @@ public class ChartDataFileGenerator
 
         chartDataFileHelper.WriteData(dataLines, true);
 
-        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l\\\'année"], string.Empty,
+        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes selon le jour de l'année"], string.Empty,
             string.Empty);
         streamWriter.Close();
     }
@@ -671,8 +671,7 @@ public class ChartDataFileGenerator
             dataLines.Add(new ColoredDataLine($"{key} {(key == 1 ? "poème" : "poèmes")}",
                 intensityDict[key],
                 string.Format(baseColor,
-                    (baseAlpha + 0.1 * (key - 1)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    (baseAlpha + 0.1 * (key - 1)).ToString("F1", CultureInfo.InvariantCulture))));
         }
 
         var fileName = "poem-intensity-pie.js";
@@ -734,8 +733,7 @@ public class ChartDataFileGenerator
                 key == 6 ? "Samedi" : "Dimanche",
                 dataDict[key],
                 string.Format(baseColor,
-                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString("F1", CultureInfo.InvariantCulture))));
         }
 
         var rootDir = Path.Combine(Directory.GetCurrentDirectory(),
@@ -819,8 +817,7 @@ public class ChartDataFileGenerator
                 key == 6 ? "Saturday" : "Sunday",
                 dataDict[key],
                 string.Format(baseColor,
-                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString(new NumberFormatInfo
-                        { NumberDecimalSeparator = ".", NumberDecimalDigits = 1 }))));
+                    (baseAlpha + 0.1 * (key == 0 ? 7 : key)).ToString("F1", CultureInfo.InvariantCulture))));
         }
 
         var fileName = "poem-en-dayofweek-pie.js";
@@ -963,7 +960,7 @@ public class ChartDataFileGenerator
                 poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag));
             }
 
-            dataLines.Add(new ColoredDataLine($"{season.EscapedTitleForChartsWithYears}",
+            dataLines.Add(new ColoredDataLine(season.TitleForChartsWithYears.JavaScriptString(),
                 poemCount,
                 backgroundColor));
         }
@@ -1052,7 +1049,7 @@ public class ChartDataFileGenerator
             if (key == 0)
             {
                 dataLines.Add(
-                    new("Moins d\\'un jour", intervalLengthDict[key],
+                    new("Moins d'un jour", intervalLengthDict[key],
                         zeroDayColor));
             }
             else if (key == 1)
@@ -1092,7 +1089,7 @@ public class ChartDataFileGenerator
                 upToOneYearColor));
 
         if (moreThanOneYearCount > 0)
-            dataLines.Add(new("Plus d\\'un an", moreThanOneYearCount,
+            dataLines.Add(new("Plus d'un an", moreThanOneYearCount,
                 moreThanOneYearColor));
 
         var fileName = "poem-interval-bar.js";
@@ -1115,7 +1112,7 @@ public class ChartDataFileGenerator
         var longestIntervalKeys = orderedIntervalKeys.OrderDescending().ToList();
         var filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/longest_intervals.md");
-        var streamWriter3b = new StreamWriter(filePath);
+        using var streamWriter3b = new StreamWriter(filePath);
 
         streamWriter3b.WriteLine("+++");
         streamWriter3b.WriteLine("title = \"Les plus longs intervalles\"");
@@ -1196,7 +1193,7 @@ public class ChartDataFileGenerator
         var longestSeriesKeys = sortedKeys.OrderDescending().Take(5);
         filePath = Path.Combine(Directory.GetCurrentDirectory(), _configuration[Constants.CONTENT_ROOT_DIR]!,
             "../includes/longest_series.md");
-        var streamWriter3 = new StreamWriter(filePath);
+        using var streamWriter3 = new StreamWriter(filePath);
 
         streamWriter3.WriteLine("+++");
         streamWriter3.WriteLine("title = \"Les plus longues séries\"");

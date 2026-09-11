@@ -20,8 +20,8 @@ public class Season
 
     [XmlIgnore] public string LongTitle => $"{NumberedName} Saison : {Name}";
 
-    [XmlIgnore] public string EscapedTitleForChartsWithYears => $"{Name.Replace("'", "\\'")} ({Id}) {Years}";
-    [XmlIgnore] public string EscapedTitleForChartsWithPeriod => $"{Name.Replace("'", "\\'")} ({Id}) {Period}";
+    [XmlIgnore] public string TitleForChartsWithYears => $"{Name} ({Id}) {Years}";
+    [XmlIgnore] public string TitleForChartsWithPeriod => $"{Name} ({Id}) {Period}";
 
     [XmlIgnore]
     public string Years

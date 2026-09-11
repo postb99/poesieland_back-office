@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using Toolbox.Domain;
 
@@ -62,21 +62,21 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         var chartTitlesBuilder = new StringBuilder();
         foreach (var chartTitle in chartTitles)
         {
-            chartTitlesBuilder.Append('\'').Append(chartTitle).Append("',");
+            chartTitlesBuilder.Append('\'').Append(chartTitle.JavaScriptString()).Append("',");
         }
 
-        chartTitlesBuilder.Remove(chartTitlesBuilder.Length - 1, 1);
+        if (chartTitlesBuilder.Length > 0) chartTitlesBuilder.Length--;
 
         switch (chartType)
         {
             case ChartType.Bar:
                 streamWriter.WriteLine(nbDatasets == 1
-                    ? $"    addBarChart('{chartId}', [{chartTitlesBuilder}], [data], {{{customScalesOptions ?? ""}}});"
-                    : $"    addBarChart('{chartId}', [{chartTitlesBuilder}], data, {{{customScalesOptions ?? ""}}});");
+                    ? $"    addBarChart('{chartId.JavaScriptString()}', [{chartTitlesBuilder}], [data], {{{customScalesOptions ?? ""}}});"
+                    : $"    addBarChart('{chartId.JavaScriptString()}', [{chartTitlesBuilder}], data, {{{customScalesOptions ?? ""}}});");
                 break;
             case ChartType.Pie:
                 streamWriter.WriteLine(
-                    $"  addPieChart('{chartId}', [data], {{ plugins: {{ title: {{ display: true, text: '{chartTitles[0]}' }} }} }});");
+                    $"  addPieChart('{chartId.JavaScriptString()}', [data], {{ plugins: {{ title: {{ display: true, text: '{chartTitles[0].JavaScriptString()}' }} }} }});");
                 break;
             case ChartType.Radar:
                 var backgroundColor = string.IsNullOrEmpty(radarChartBackgroundColor)
@@ -87,24 +87,24 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
                     : radarChartBorderColor;
 
                 streamWriter.WriteLine(
-                    $"  addRadarChart('{chartId}', ['{chartTitles[0]}'], [data], {{ backgroundColor: '{backgroundColor}', borderColor: '{borderColor}', pointBackgroundColor: '{borderColor}', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgb(54, 162, 235)', elements: {{ line: {{ borderWidth: 1  }} }}, scales: {{ r: {{ ticks: {{ stepSize: 1 }} }} }} }});");
+                    $"  addRadarChart('{chartId.JavaScriptString()}', ['{chartTitles[0].JavaScriptString()}'], [data], {{ backgroundColor: '{backgroundColor}', borderColor: '{borderColor}', pointBackgroundColor: '{borderColor}', pointBorderColor: '#fff', pointHoverBackgroundColor: '#fff', pointHoverBorderColor: 'rgb(54, 162, 235)', elements: {{ line: {{ borderWidth: 1  }} }}, scales: {{ r: {{ ticks: {{ stepSize: 1 }} }} }} }});");
                 break;
             case ChartType.Bubble:
                 var scalesOptions = customScalesOptions ??
-                                    $"scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle}'}}}}}}";
+                                    $"scales: {{x:{{ticks:{{stepSize:{xAxisStep}}}, title: {{display:true, text:'{chartXAxisTitle.JavaScriptString()}'}}}},y:{{ticks:{{stepSize:{yAxisStep}}}, title: {{display:true, text:'{chartYAxisTitle.JavaScriptString()}'}}}}}}";
                 streamWriter.WriteLine(
-                    $"  addBubbleChart('{chartId}', [{chartTitlesBuilder}], data, {{{scalesOptions}}});");
+                    $"  addBubbleChart('{chartId.JavaScriptString()}', [{chartTitlesBuilder}], data, {{{scalesOptions}}});");
                 break;
             case ChartType.Line:
                 var xLabelsBuilder = new StringBuilder();
-                foreach (var xLabel in xLabels)
+                foreach (var xLabel in xLabels ?? [])
                 {
-                    xLabelsBuilder.Append('\'').Append(xLabel).Append("',");
+                    xLabelsBuilder.Append('\'').Append(xLabel.JavaScriptString()).Append("',");
                 }
 
-                xLabelsBuilder.Remove(xLabelsBuilder.Length - 1, 1);
+                if (xLabelsBuilder.Length > 0) xLabelsBuilder.Length--;
                 streamWriter.WriteLine(
-                    $"    addLineChart('{chartId}', [{chartTitlesBuilder}], data, [{xLabelsBuilder}], '{stack}', {{{customScalesOptions ?? ""}}});");
+                    $"    addLineChart('{chartId.JavaScriptString()}', [{chartTitlesBuilder}], data, [{xLabelsBuilder}], '{stack.JavaScriptString()}', {{{customScalesOptions ?? ""}}});");
                 break;
         }
 
@@ -122,8 +122,8 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         foreach (var dataLine in dataLines)
         {
             streamWriter.WriteLine(dataLine.DefaultColor
-                ? $"    {{ label: '{dataLine.Label}', value: {dataLine.Value} }},"
-                : $"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{((ColoredDataLine)dataLine).RgbaColor}' }},");
+                ? $"    {{ label: '{dataLine.Label.JavaScriptString()}', value: {dataLine.Value} }},"
+                : $"    {{ label: '{dataLine.Label.JavaScriptString()}', value: {dataLine.Value}, color: '{((ColoredDataLine)dataLine).RgbaColor}' }},");
         }
 
         if (nbDatasets > 1)
@@ -144,7 +144,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         foreach (var dataLine in dataLines)
         {
             streamWriter.WriteLine(
-                $"    {{ label: '{dataLine.Label}', value: {dataLine.Value}, color: '{dataLine.RgbaColor}' }},");
+                $"    {{ label: '{dataLine.Label.JavaScriptString()}', value: {dataLine.Value}, color: '{dataLine.RgbaColor}' }},");
         }
 
         if (nbDatasets > 1)
@@ -162,7 +162,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         foreach (var dataLine in dataLines)
         {
             streamWriter.WriteLine(
-                $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {dataLine.Value}, color: '{dataLine.RgbaColor}' }},");
+                $"    {{ x: {dataLine.X}, y: {dataLine.Y}, r: {decimal.Parse(dataLine.Value, NumberStyles.Float, CultureInfo.InvariantCulture).ToString(CultureInfo.InvariantCulture)}, color: '{dataLine.RgbaColor}' }},");
         }
 
         streamWriter.WriteLine(isLastDataLine ? "]" : "],");
@@ -172,7 +172,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
     public void WriteData(LineChartDataLine dataLine)
     {
         streamWriter.WriteLine(
-            $"    {{ label: '{dataLine.Label}', data: [{string.Join(',', dataLine.Values.Select(x => x.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." })))}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
+            $"    {{ label: '{dataLine.Label.JavaScriptString()}', data: [{string.Join(',', dataLine.Values.Select(x => x.ToString(CultureInfo.InvariantCulture)))}], borderColor: '{dataLine.RgbaColor}', backgroundColor: '{dataLine.RgbaColor}', fill: true }},");
 
         streamWriter.Flush();
     }
@@ -180,8 +180,8 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
     public string FormatCategoriesBubbleChartLabelOptions(List<string>? xAxisLabelsForCallback,
         List<string>? yAxisLabelsForCallback = null, string? xAxisTitle = null, string? yAxisTitle = null)
     {
-        var xAxisTitleOption = xAxisTitle is null ? " " : $", title: {{display:true, text:'{xAxisTitle}'}} ";
-        var yAxisTitleOption = yAxisTitle is null ? " " : $", title: {{display:true, text:'{yAxisTitle}'}} ";
+        var xAxisTitleOption = xAxisTitle is null ? " " : $", title: {{display:true, text:'{xAxisTitle.JavaScriptString()}'}} ";
+        var yAxisTitleOption = yAxisTitle is null ? " " : $", title: {{display:true, text:'{yAxisTitle.JavaScriptString()}'}} ";
 
         // https://www.chartjs.org/docs/latest/axes/labelling.html
         var sb = new StringBuilder("scales: { x: { ")
@@ -190,7 +190,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         if (xAxisLabelsForCallback is not null)
         {
             sb.Append(", callback: function(value, index, ticks) { return [")
-                .Append(string.Join(',', xAxisLabelsForCallback.Select(x => $"'{x}'")))
+                .Append(string.Join(',', xAxisLabelsForCallback.Select(x => $"'{x.JavaScriptString()}'")))
                 .Append("][index]; }");
         }
         sb.Append(" }")
@@ -203,7 +203,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         if (yAxisLabelsForCallback is not null)
         {
             sb.Append(", callback: function(value, index, ticks) { return [")
-                .Append(string.Join(',', yAxisLabelsForCallback.Select(x => $"'{x}'")))
+                .Append(string.Join(',', yAxisLabelsForCallback.Select(x => $"'{x.JavaScriptString()}'")))
                 .Append("][index]; }");
         }
         sb.Append(" }")
@@ -361,7 +361,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
             bubbleSize *= 4;
             bubbleColor = "rgba(121, 248, 248, 1)";
             quarterBubbleChartDatalines[0].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels / 2))
         {
@@ -369,7 +369,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
             bubbleSize *= 2;
             bubbleColor = "rgba(119, 181, 254, 1)";
             quarterBubbleChartDatalines[1].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
         else if (bubbleSize < (bubbleMaxRadiusPixels * 3 / 4))
         {
@@ -377,14 +377,14 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
             bubbleSize *= 1.5m;
             bubbleColor = "rgba(0, 127, 255, 1)";
             quarterBubbleChartDatalines[2].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
         else
         {
             // Fourth quarter
             bubbleColor = "rgba(50, 122, 183, 1)";
             quarterBubbleChartDatalines[3].Add(new(x, y,
-                bubbleSize.ToString(new NumberFormatInfo { NumberDecimalSeparator = "." }), bubbleColor));
+                bubbleSize.ToString(CultureInfo.InvariantCulture), bubbleColor));
         }
     }
     
@@ -403,7 +403,7 @@ public class ChartDataFileHelper(StreamWriter streamWriter, ChartType chartType,
         {
             // Multiplication to get 50
             var multiple = 50m / season.Poems.Count;
-            xLabels.Add($"{season.EscapedTitleForChartsWithYears}");
+            xLabels.Add(season.TitleForChartsWithYears);
 
             foreach (var metric in metricRange)
             {

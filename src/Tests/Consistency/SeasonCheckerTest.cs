@@ -10,10 +10,10 @@ public class SeasonCheckerTest : IClassFixture<BasicFixture>
 {
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
-    [InlineAutoDomainData(50, 50)]
-    [InlineAutoDomainData(50, 49)]
-    [InlineAutoDomainData(50, 0)]
-    [InlineAutoDomainData(49, 0)]
+    [InlineData(50, 50)]
+    [InlineData(50, 49)]
+    [InlineData(50, 0)]
+    [InlineData(49, 0)]
     public void ShouldNotThrowWhenSeasonPoemCountsAreBelowLimit(int firstSeasonPoemCount, int secondSeasonPoemCount)
     {
         var data = new Root
@@ -32,8 +32,8 @@ public class SeasonCheckerTest : IClassFixture<BasicFixture>
 
     [Theory]
     [Trait("UnitTest", "ConsistencyCheck")]
-    [InlineAutoDomainData(50, 51, 1, "Last season. More than 50 poems for {desc}!")]
-    [InlineAutoDomainData(51, 50, 0, "Not last season. Not 50 poems for {desc}!")]
+    [InlineData(50, 51, 1, "Last season. More than 50 poems for {desc}!")]
+    [InlineData(51, 50, 0, "Not last season. Not 50 poems for {desc}!")]
     public void ShouldThrowWhenSeasonPoemCountsAreAboveLimit(int firstSeasonPoemCount, int secondSeasonPoemCount,
         int expectedInErrorSeasonIndex, string expectedErrorMessage)
     {
