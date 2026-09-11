@@ -40,22 +40,22 @@ jobs:
         run: dotnet build --no-restore
       - name: Test computation
         if: always()
-        run: dotnet test --no-build --filter "UnitTest=Computation" --logger "trx;LogFileName=computation.trx" --results-directory ../TestResults
+        run: dotnet test --no-build --filter-trait-trait "UnitTest=Computation" --report-trx --report-trx-filename computation.trx --results-directory ../TestResults
       - name: Test consistency
         if: always()
-        run: dotnet test --no-build --filter "UnitTest=ConsistencyCheck" --logger "trx;LogFileName=consistency.trx" --results-directory ../TestResults
+        run: dotnet test --no-build --filter-trait "UnitTest=ConsistencyCheck" --report-trx --report-trx-filename consistency.trx --results-directory ../TestResults
       - name: Test content import
         if: always()
-        run: dotnet test --no-build --filter "UnitTest=ContentImport" --logger "trx;LogFileName=content-import.trx" --results-directory ../TestResults
+        run: dotnet test --no-build --filter-trait "UnitTest=ContentImport" --report-trx --report-trx-filename content-import.trx --results-directory ../TestResults
       - name: Test content generation
         if: always()
-        run: dotnet test --no-build --filter "UnitTest=ContentGeneration" --logger "trx;LogFileName=content-generation.trx" --results-directory ../TestResults
+        run: dotnet test --no-build --filter-trait "UnitTest=ContentGeneration" --report-trx --report-trx-filename content-generation.trx --results-directory ../TestResults
       - name: Test XML serialization
         if: always()
-        run: dotnet test --no-build --filter "UnitTest=XmlSerialization" --logger "trx;LogFileName=xml-serialization.trx" --results-directory ../TestResults
+        run: dotnet test --no-build --filter-trait "UnitTest=XmlSerialization" --report-trx --report-trx-filename xml-serialization.trx --results-directory ../TestResults
       - name: Test Security
         if: always()
-        run: dotnet test --no-build --filter "UnitTest=Security" --logger "trx;LogFileName=security.trx" --results-directory ../TestResults
+        run: dotnet test --no-build --filter-trait "UnitTest=Security" --report-trx --report-trx-filename security.trx --results-directory ../TestResults
 
       - name: Publish test report
         if: always()
