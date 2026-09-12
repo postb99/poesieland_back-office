@@ -268,7 +268,7 @@ public class ChartDataFileGenerator
             poems = season.Poems;
             chartId = $"season{seasonId}Pie";
             subDir = $"season-{seasonId}";
-            chartTitle = season.TitleForChartsWithPeriod.JavaScriptString();
+            chartTitle = season.TitleForChartsWithPeriod;
         }
         else if (metric.HasValue)
         {
@@ -960,7 +960,7 @@ public class ChartDataFileGenerator
                 poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag));
             }
 
-            dataLines.Add(new ColoredDataLine(season.TitleForChartsWithYears.JavaScriptString(),
+            dataLines.Add(new ColoredDataLine(season.TitleForChartsWithYears,
                 poemCount,
                 backgroundColor));
         }
