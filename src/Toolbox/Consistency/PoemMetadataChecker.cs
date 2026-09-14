@@ -116,10 +116,6 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
     public static void VerifyMetadataConsistency(PoemImporter.PartialImport partialImport, List<Metric> metrics,
         List<RequiredDescription> requiredDescriptions, string? poemContentPath = null)
     {
-        // Ces six validations ne font que consulter quelques champs en mémoire. Créer
-        // puis attendre six tâches par poème coûte davantage que le travail lui-même et
-        // sature inutilement le pool lorsque le contrôle appelant est déjà parallèle.
-        // Les exécuter localement conserve toutes les erreurs et leur ordre de déclaration.
         Action[] checks =
         {
             () => VerifyMetricValueIsSpecified(partialImport),
@@ -160,7 +156,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         if (!string.IsNullOrEmpty(partialImport.DetailedMetric) && partialImport.DetailedMetric != "0")
             return;
 
-        throw new MetadataConsistencyException("Poem metric is unspecified");
+        throw new MetadataConsistencyException($"[{partialImport.PoemId}] Poem metric is unspecified");
     }
 
     /// <summary>
@@ -173,7 +169,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         if (partialImport.Tags.Contains(partialImport.Year.ToString()))
             return;
 
-        throw new MetadataConsistencyException($"Missing year tag: {partialImport.Year}");
+        throw new MetadataConsistencyException($"[{partialImport.PoemId}] Missing year tag: {partialImport.Year}");
     }
 
     /// <summary>
@@ -186,7 +182,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         if (!partialImport.HasVariableMetric || partialImport.Tags.Contains("métrique variable"))
             return;
 
-        throw new MetadataConsistencyException("Missing 'métrique variable' tag");
+        throw new MetadataConsistencyException($"[{partialImport.PoemId}] Missing 'métrique variable' tag");
     }
 
     /// <summary>
@@ -202,7 +198,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
         if (partialImport.Info?.Contains("Métrique variable : ") == true)
             return;
 
-        throw new MetadataConsistencyException("Missing 'Métrique variable : ' in Info");
+        throw new MetadataConsistencyException($"[{partialImport.PoemId}] Missing 'Métrique variable : ' in Info");
     }
 
     /// <summary>
@@ -221,7 +217,7 @@ public class PoemMetadataChecker(IConfiguration configuration, IPoemImporter poe
             var expectedTag = metrics.FirstOrDefault(x => x.Length.ToString() == metric.Trim())?.Name
                 .ToLowerInvariant()!;
             if (!partialImport.Tags.Contains(expectedTag))
-                throw new MetadataConsistencyException($"Missing '{expectedTag}' tag");
+                throw new MetadataConsistencyException($"[{partialImport.PoemId}] Missing '{expectedTag}' tag");
         }
     }
 

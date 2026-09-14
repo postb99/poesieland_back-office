@@ -97,7 +97,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         ArrangePartialImport(partialImport, 2000, metric, "Info");
         var act = () => PoemMetadataChecker.VerifyMetricValueIsSpecified(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Poem metric is unspecified");
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Poem metric is unspecified");
     }
 
     [Theory]
@@ -108,7 +108,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         ArrangePartialImport(partialImport, 2000, "4", "Info");
         partialImport.Tags.Remove("2000");
         var act = () => PoemMetadataChecker.VerifyYearTagIsPresent(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"Missing year tag: {partialImport.Year}");
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing year tag: {partialImport.Year}");
     }
 
     [Theory]
@@ -120,7 +120,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         partialImport.HasVariableMetric = true;
         partialImport.Tags.Remove("métrique variable");
         var act = () => PoemMetadataChecker.VerifyVariableMetricTagIsPresent(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Missing 'métrique variable' tag");
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing 'métrique variable' tag");
     }
 
     [Theory]
@@ -131,7 +131,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         ArrangePartialImport(partialImport, 2000, "4, 2", "Info");
         partialImport.HasVariableMetric = true;
         var act = () => PoemMetadataChecker.VerifyVariableMetricInfoIsPresent(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Missing 'Métrique variable : ' in Info");
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing 'Métrique variable : ' in Info");
     }
 
     [Theory]
@@ -142,7 +142,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         ArrangePartialImport(partialImport, 2000, "4", "Info");
         partialImport.Tags.Remove("testmetric4");
         var act = () => PoemMetadataChecker.VerifyMetricTagsArePresent(partialImport, CreateMetrics());
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe("Missing 'testmetric4' tag");
+        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing 'testmetric4' tag");
     }
 
     [Theory]
