@@ -1,5 +1,6 @@
 using System.Globalization;
 using System.Text;
+using Toolbox.Settings;
 
 namespace Toolbox;
 
@@ -135,6 +136,14 @@ public static class StringExtensions
     /// <returns></returns>
     public static string MarkdownLink(this string item, string itemTypes) => $"[{item}](/{itemTypes}/{item.ToLowerInvariant().Replace(' ', '-')})";
     
+    /// <summary>
+    /// Renders a markdown link.
+    /// </summary>
+    /// <param name="item">SubCategory item with potentially different Name and Title</param>
+    /// <param name="itemTypes">For example "categories"</param>
+    /// <returns></returns>
+    public static string MarkdownLink(this SubCategory item, string itemTypes) => $"[{item.Title}](/{itemTypes}/{item.Name.ToLowerInvariant().Replace(' ', '-')})";
+
     /// <summary>
     /// Parses a string of comma separated integers.
     /// </summary>

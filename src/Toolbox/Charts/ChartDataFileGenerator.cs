@@ -307,15 +307,15 @@ public class ChartDataFileGenerator
         }
 
         var orderedSubcategories =
-            storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).ToList();
+            storageSettings.Categories.SelectMany(x => x.Subcategories).ToList();
         var pieChartData = new List<ColoredDataLine>();
 
         foreach (var subcategory in orderedSubcategories)
         {
-            if (byStorageSubcategoryCount.TryGetValue(subcategory, out var value))
-                pieChartData.Add(new(subcategory, value,
+            if (byStorageSubcategoryCount.TryGetValue(subcategory.Name, out var value))
+                pieChartData.Add(new(subcategory.Title, value,
                     storageSettings.Categories.SelectMany(x => x.Subcategories)
-                        .First(x => x.Name == subcategory).Color
+                        .First(x => x.Name == subcategory.Name).Color
                 ));
         }
 
@@ -361,15 +361,15 @@ public class ChartDataFileGenerator
         }
 
         var orderedSubcategories =
-            storageSettings.Categories.SelectMany(x => x.Subcategories).Select(x => x.Name).ToList();
+            storageSettings.Categories.SelectMany(x => x.Subcategories).ToList();
         var pieChartData = new List<ColoredDataLine>();
 
         foreach (var subcategory in orderedSubcategories)
         {
-            if (byStorageSubcategoryCount.TryGetValue(subcategory, out var value))
-                pieChartData.Add(new(subcategory, value,
+            if (byStorageSubcategoryCount.TryGetValue(subcategory.Name, out var value))
+                pieChartData.Add(new(subcategory.Title, value,
                     storageSettings.Categories.SelectMany(x => x.Subcategories)
-                        .First(x => x.Name == subcategory).Color
+                        .First(x => x.Name == subcategory.Name).Color
                 ));
         }
 
@@ -1443,6 +1443,20 @@ public class ChartDataFileGenerator
         chartDataFileHelper.WriteData(secondQuarterDataLines, false);
         chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
         chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
+        
+        // Sometimes replace subcategory name by label
+        var subcategories = StorageSettings.Categories
+            .SelectMany(x => x.Subcategories)
+            .ToDictionary(x => x.Name);
+
+        var xAxisTitles = xAxisKeys
+            .Select(key => subcategories[key].Title)
+            .ToList();
+        
+        var yAxisTitles = yAxisKeys
+            .Select(key => subcategories[key].Title)
+            .ToList();
+        
         chartDataFileHelper.WriteAfterData("associatedCategories",
             [
                 "Premier quart (taille fois 4)",
@@ -1450,8 +1464,8 @@ public class ChartDataFileGenerator
                 "Troisième quart (taille fois 1.5)",
                 "Quatrième quart"
             ],
-            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
-                yAxisLabels.ToList()));
+            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisTitles,
+                yAxisTitles));
         streamWriter.Close();
 
         // Automatic listing of topmost associations
@@ -1510,7 +1524,7 @@ public class ChartDataFileGenerator
         // Get the values for x-axis
         var xAxisKeys = categoryMetricDataDictionary.Keys.Select(x => x.Key).Distinct().ToList();
         xAxisKeys.Sort();
-
+        
         foreach (var dataKey in categoryMetricDataDictionary.Keys)
         {
             var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
@@ -1524,6 +1538,16 @@ public class ChartDataFileGenerator
         chartDataFileHelper.WriteData(secondQuarterDataLines, false);
         chartDataFileHelper.WriteData(thirdQuarterDataLines, false);
         chartDataFileHelper.WriteData(fourthQuarterDataLines, true);
+        
+        // Sometimes replace subcategory name by label
+        var subcategories = StorageSettings.Categories
+            .SelectMany(x => x.Subcategories)
+            .ToDictionary(x => x.Name);
+
+        var xAxisTitles = xAxisKeys
+            .Select(key => subcategories[key].Title)
+            .ToList();
+        
         chartDataFileHelper.WriteAfterData("categoryMetric",
             [
                 "Premier quart (taille fois 4)",
@@ -1531,7 +1555,7 @@ public class ChartDataFileGenerator
                 "Troisième quart (taille fois 1.5)",
                 "Quatrième quart"
             ],
-            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisLabels.ToList(),
+            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisTitles,
                 xAxisTitle: "Catégorie", yAxisTitle: "Métrique (0 = variable)"));
         streamWriter.Close();
     }
@@ -1547,10 +1571,15 @@ public class ChartDataFileGenerator
         streamWriter.WriteLine("+++");
         streamWriter.WriteLine("title = \"Associations privilégiées\"");
         streamWriter.WriteLine("+++");
-        foreach (var (key, _) in sortedDict)
+        
+        var subcategories = StorageSettings.Categories
+            .SelectMany(x => x.Subcategories)
+            .ToDictionary(x => x.Name);
+
+       foreach (var (key, _) in sortedDict)
         {
             streamWriter.WriteLine(
-                $"- {key.Key.MarkdownLink("categories")} et {key.Value.MarkdownLink("categories")}");
+                $"- {subcategories[key.Key].MarkdownLink("categories")} et {subcategories[key.Value].MarkdownLink("categories")}");
         }
 
         streamWriter.Close();
@@ -1583,10 +1612,15 @@ public class ChartDataFileGenerator
         streamWriter.WriteLine("+++");
         streamWriter.WriteLine("title = \"Associations privilégiées\"");
         streamWriter.WriteLine("+++");
+        
+        var subcategories = StorageSettings.Categories
+            .SelectMany(x => x.Subcategories)
+            .ToDictionary(x => x.Name);
+
         foreach (var topmost in topMost)
         {
             streamWriter.WriteLine(
-                $"- {topmost.Key.MarkdownLink("categories")}");
+                $"- {subcategories[topmost.Key].MarkdownLink("categories")}");
         }
 
         streamWriter.Close();

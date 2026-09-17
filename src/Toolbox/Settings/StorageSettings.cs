@@ -18,7 +18,20 @@ public class Category
 
 public class SubCategory
 {
+    /// <summary>
+    /// Name, whose normalized string gives frontmatter value.
+    /// </summary>
     public required string Name { get; set; }
+    
+    /// <summary>
+    /// Optional label.
+    /// </summary>
+    public string Label { get; set; }
+    
+    /// <summary>
+    /// Title, whose value (Label, defaulting to Name) is used for chart titles.
+    /// </summary>
+    public string Title => Label ?? Name;
 
     public required string Color { get; set; }
     
