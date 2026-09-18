@@ -55,4 +55,25 @@ public partial class ChartDataFileGenerator
         WriteMarkdownListFile(fileName, "Associations privilégiées",
             topMost.Select(x => $"- {subcategories[x.Key].MarkdownLink("categories")}"));
     }
+    /// <summary>
+    /// Generates all Markdown listings related to category associations.
+    /// The listings include the most frequently associated category pairs and
+    /// the most frequently represented categories for poems matching specific
+    /// properties such as the refrain tag, the "la mort" tag, or the sonnet form.
+    /// </summary>
+    /// <param name="categoriesDataDictionary">The category association data already calculated for the associated-categories bubble chart.</param>
+    /// <param name="poems">The poems used to generate the category-specific listings.</param>
+    private void GenerateCategoryAssociationListings(
+        Dictionary<KeyValuePair<string, string>, int> categoriesDataDictionary,
+        IEnumerable<Poem> poems)
+    {
+        GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary);
+        GenerateTopMostCategoriesListing(
+            poems.Where(x => x.ExtraTags.Contains("refrain")), "refrain_categories.md");
+        GenerateTopMostCategoriesListing(
+            poems.Where(x => x.ExtraTags.Contains("la mort")), "la_mort_categories.md");
+        GenerateTopMostCategoriesListing(
+            poems.Where(x => x.IsSonnet), "sonnet_categories.md");
+    }
+
 }

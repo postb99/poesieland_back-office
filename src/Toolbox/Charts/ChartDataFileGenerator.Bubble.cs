@@ -164,22 +164,7 @@ public partial class ChartDataFileGenerator
                 yAxisTitles));
         streamWriter.Close();
 
-        // Automatic listing of topmost associations
-        GenerateTopMostAssociatedCategoriesListing(categoriesDataDictionary);
-
-        // Listing of topmost associations with refrain extra tag
-        GenerateTopMostCategoriesListing(
-            data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("refrain"))).ToList(),
-            "refrain_categories.md");
-
-        // Listing of topmost associations with la mort extra tag
-        GenerateTopMostCategoriesListing(
-            data.Seasons.SelectMany(x => x.Poems.Where(x => x.ExtraTags.Contains("la mort"))).ToList(),
-            "la_mort_categories.md");
-
-        // Listing of topmost associations with sonnet
-        GenerateTopMostCategoriesListing(data.Seasons.SelectMany(x => x.Poems.Where(x => x.IsSonnet)).ToList(),
-            "sonnet_categories.md");
+        GenerateCategoryAssociationListings(categoriesDataDictionary, poems);
     }
 
     /// <summary>
