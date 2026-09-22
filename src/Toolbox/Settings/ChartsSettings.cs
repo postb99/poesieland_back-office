@@ -9,10 +9,33 @@ public class ChartsSettings
 
 public class Radar
 {
-    public List<string> ByDayExtraTags { get; set; } = new();
+    public List<RadarItem> ByDayExtraTags { get; set; } = new();
 }
 
 public class Bar
 {
-    public List<string> OverSeasonsExtraTags { get; set; } = new();
+    public List<BarItem> OverSeasonsItems { get; set; } = new();
+}
+
+public class BarItem
+{
+    public string Name { get; set; }
+    
+    public BarItemType Type { get; set; }
+    
+    public BarItem? StackedItem { get; set; }
+}
+
+public enum BarItemType
+{
+    Category,
+    SubCategory,
+    ExtraTag
+}
+
+public class RadarItem
+{
+    public string Name { get; set; }
+    
+    public string? Color { get; set; }
 }

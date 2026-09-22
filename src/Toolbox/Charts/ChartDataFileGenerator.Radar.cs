@@ -25,9 +25,9 @@ public partial class ChartDataFileGenerator
     /// <param name="dataEn">The secondary source of English poems data.</param>
     /// <param name="storageSubCategory">The optional sub-category to filter poems.</param>
     /// <param name="storageCategory">The optional category to filter poems.</param>
-    /// <param name="extraTag">The optional extra tag to filter poems.</param>
+    /// <param name="extraTag">The optional item with extra tag value to filter poems.</param>
     public void GeneratePoemsByDayRadarChartDataFile(Root data, Root dataEn,
-        string? storageSubCategory = null, string? storageCategory = null, string? extraTag = null)
+        string? storageSubCategory = null, string? storageCategory = null, RadarItem? extraTag = null)
     {
         var isGeneral = storageSubCategory is null && storageCategory is null && extraTag is null;
 
@@ -48,7 +48,7 @@ public partial class ChartDataFileGenerator
         else if (extraTag is not null)
         {
             poemStringDates = data.Seasons.SelectMany(x => x.Poems)
-                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag)).Select(x => x.TextDate)
+                .Where(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag.Name)).Select(x => x.TextDate)
                 .ToList();
         }
         else
@@ -107,8 +107,13 @@ public partial class ChartDataFileGenerator
         }
         else if (extraTag is not null)
         {
-            fileName = $"poems-day-{extraTag.UnaccentedCleaned().Replace('_', '-')}-radar.js";
-            chartId = $"poemDay-{extraTag.UnaccentedCleaned()}Radar";
+            fileName = $"poems-day-{extraTag.Name.UnaccentedCleaned().Replace('_', '-')}-radar.js";
+            chartId = $"poemDay-{extraTag.Name.UnaccentedCleaned()}Radar";
+
+            if (extraTag.Color is not null)
+            {
+                borderColor = extraTag.Color;
+            }
         }
         else
         {
@@ -152,7 +157,8 @@ public partial class ChartDataFileGenerator
             dayWithoutPoems.Select(monthDay =>
             {
                 var splitted = monthDay.Split('-');
-                return $"- {splitted[1].TrimStart('0')} {ChartDataFileHelper.GetRadarChartLabel($"{splitted[0]}-01").ToLower()}";
+                return
+                    $"- {splitted[1].TrimStart('0')} {ChartDataFileHelper.GetRadarChartLabel($"{splitted[0]}-01").ToLower()}";
             }));
     }
 
@@ -220,6 +226,7 @@ public partial class ChartDataFileGenerator
             var day = $"{poemStringDate.Substring(3, 2)}-{poemStringDate.Substring(0, 2)}";
             dataDict[day]++;
         }
+
         var fileName = $"poems-day-{year}-radar.js";
         var chartId = $"poemDay-{year}Radar";
 

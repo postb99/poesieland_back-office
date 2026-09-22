@@ -142,7 +142,8 @@ public partial class ChartDataFileGenerator
         {
             fileName = "metrique_variable-bar.js";
             chartId = "metrique_variableBar";
-            using var streamWriter2 = OpenChartWriter("general", fileName, ChartType.Bar, out var chartDataFileHelper2, 1);
+            using var streamWriter2 =
+                OpenChartWriter("general", fileName, ChartType.Bar, out var chartDataFileHelper2, 1);
 
             dataLines = [];
             dataLines.AddRange(variableMetricChartData.Select(UpdateVariableMetricColor));
@@ -176,14 +177,19 @@ public partial class ChartDataFileGenerator
     /// <param name="forVariableMetric">A flag indicating to include poems with variable metrics.</param>
     /// <param name="forMetric">An optional numeric metric filter for poems.</param>
     /// <param name="extraTag">A flag indicating to include poems with this extra tag.</param>
+    /// <param name="stackedItem">An optional stacked item.</param>
     public void GenerateOverSeasonsChartDataFile(Root data, string? storageSubCategory, string? storageCategory,
         bool forAcrostiche = false, PoemType? poemType = null, bool forVariableMetric = false,
-        int? forMetric = null, string? extraTag = null)
+        int? forMetric = null, string? extraTag = null, BarItem? stackedItem = null)
     {
         var fileName = string.Empty;
 
         var chartId = string.Empty;
         var borderColor = "rgba(72, 149, 239, 1)";
+        
+        List<string> chartTitles = [];
+        var defaultChartTitle = "Poèmes au fil des saisons";
+        var firstChartTitle = defaultChartTitle;
 
         if (storageSubCategory is not null)
         {
@@ -191,6 +197,8 @@ public partial class ChartDataFileGenerator
             chartId = $"poems-{storageSubCategory.UnaccentedCleaned()}Bar";
             borderColor = StorageSettings.Categories
                 .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory)!.Color;
+            
+            firstChartTitle = char.ToUpper(storageSubCategory[0]) + storageSubCategory[1..];
 
             switch (borderColor)
             {
@@ -212,6 +220,8 @@ public partial class ChartDataFileGenerator
             chartId = $"poems-{storageCategory.UnaccentedCleaned()}Bar";
             borderColor = StorageSettings.Categories
                 .FirstOrDefault(x => x.Name == storageCategory)!.Color;
+            
+            firstChartTitle = char.ToUpper(storageCategory[0]) + storageCategory[1..];
         }
         else if (forAcrostiche)
         {
@@ -237,6 +247,7 @@ public partial class ChartDataFileGenerator
         {
             fileName = $"poems-{extraTag.UnaccentedCleaned().Replace('_', '-')}-bar.js";
             chartId = $"poems-{extraTag.UnaccentedCleaned()}Bar";
+            firstChartTitle = char.ToUpper(extraTag[0]) + extraTag[1..];
         }
 
         var backgroundColor = borderColor.Replace("1)", "0.5)");
@@ -246,13 +257,17 @@ public partial class ChartDataFileGenerator
             backgroundColor = borderColor;
         }
 
-        using var streamWriter = OpenChartWriter("taxonomy", fileName, ChartType.Bar, out var chartDataFileHelper);
+        using var streamWriter = OpenChartWriter("taxonomy", fileName, ChartType.Bar, out var chartDataFileHelper,
+            stackedItem is null ? 1 : 2);
 
         var dataLines = new List<DataLine>();
+        var stackedDataLines = new List<DataLine>();
 
         foreach (var season in data.Seasons.Where(x => x.Poems.Count > 0))
         {
             var poemCount = 0;
+            var stackedPoemCount = 0;
+
             if (storageSubCategory is not null)
             {
                 poemCount = season.Poems.Count(x =>
@@ -283,14 +298,42 @@ public partial class ChartDataFileGenerator
                 poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag));
             }
 
+            if (stackedItem is not null)
+            {
+                stackedPoemCount = stackedItem.Type switch
+                {
+                    BarItemType.Category => season.Poems.Count(x => x.Categories.Any(x => x.Name == stackedItem.Name)),
+                    BarItemType.SubCategory => season.Poems.Count(x =>
+                        x.Categories.Any(x => x.SubCategories.Contains(stackedItem.Name))),
+                    BarItemType.ExtraTag => season.Poems.Count(x =>
+                        x.ExtraTags != null && x.ExtraTags.Contains(stackedItem.Name)),
+                    _ => stackedPoemCount
+                };
+                poemCount -= stackedPoemCount;
+            }
+
             dataLines.Add(new ColoredDataLine(season.TitleForChartsWithYears,
                 poemCount,
                 backgroundColor));
+
+            if (stackedItem is not null)
+            {
+                stackedDataLines.Add(new ColoredDataLine(stackedItem.Name,
+                    stackedPoemCount,
+                    backgroundColor.Replace("0.5", "0.3")));
+            }
         }
 
-        chartDataFileHelper.WriteData(dataLines, true);
+        chartDataFileHelper.WriteData(dataLines, stackedItem is null);
+        chartTitles.Add(stackedItem is null ? defaultChartTitle : firstChartTitle);
 
-        chartDataFileHelper.WriteAfterData(chartId, ["Poèmes au fil des saisons"],
+        if (stackedItem is not null)
+        {
+            chartDataFileHelper.WriteData(stackedDataLines, true);
+            chartTitles.Add(char.ToUpper(stackedItem.Name[0]) + stackedItem.Name[1..]);
+        }
+
+        chartDataFileHelper.WriteAfterData(chartId, chartTitles.ToArray(),
             customScalesOptions: "scales: { y: { ticks: { stepSize: 1 } } }");
         streamWriter.Close();
     }
