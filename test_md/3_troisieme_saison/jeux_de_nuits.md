@@ -36,6 +36,6 @@ Qui me ressemble
 
 S'enfuit.
 
-{{% notice style="primary" %}}
+{{% callout style="primary" %}}
 Métrique variable : 8, 6, 4, 2
-{{% /notice %}}
+{{% /callout %}}

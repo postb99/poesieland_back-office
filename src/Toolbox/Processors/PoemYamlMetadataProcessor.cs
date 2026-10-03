@@ -159,8 +159,8 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
                 break;
             case MultilineMetadataProcessingType.InfoLines:
                 lineValue = lineValue.TrimStart(' ');
-                if (lineValue == "{{% notice style=\"primary\" %}}") return;
-                if (lineValue == "{{% /notice %}}") return;
+                if (lineValue == "{{% callout style=\"primary\" %}}") return;
+                if (lineValue == "{{% /callout %}}") return;
                 if (lineValue.StartsWith("Acrostiche :")) return;
                 _infoLines.Add(lineValue);
                 break;

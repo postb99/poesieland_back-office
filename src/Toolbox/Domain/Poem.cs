@@ -302,7 +302,7 @@ public class Poem
         if ((noticeInfo is not null && !noticeInfo.StartsWith("[^")) || Acrostiche is not null || DoubleAcrostiche is not null)
         {
             s.Append(Environment.NewLine);
-            s.Append("{{% notice style=\"primary\" %}}");
+            s.Append("{{% callout style=\"primary\" %}}");
             s.Append(Environment.NewLine);
 
             if (noticeInfo is not null)
@@ -334,7 +334,7 @@ public class Poem
             }
 
             s.Append(Environment.NewLine);
-            s.Append("{{% /notice %}}");
+            s.Append("{{% /callout %}}");
             s.Append(Environment.NewLine);
         }
 

@@ -12,7 +12,7 @@ Une Saison qui révèle, dans un nouveau "moule" qui l'exacerbe, mes sentiments 
 De 1994 à septembre 1996
 
 ---
-{{% children  %}}
+{{% pages %}}
 
 {{% include "./includes/season_1.md" true %}}
 

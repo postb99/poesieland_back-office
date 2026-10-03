@@ -36,6 +36,6 @@ Instant magique d'être ensemble,
 
 N'es-tu qu'un chat, pour me charmer ?
 
-{{% notice style="primary" %}}
+{{% callout style="primary" %}}
 Acrostiche : Un chat voisin
-{{% /notice %}}
+{{% /callout %}}

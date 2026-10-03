@@ -91,7 +91,7 @@ public class Season
         s.Append(Environment.NewLine);
         s.Append("---");
         s.Append(Environment.NewLine);
-        s.Append("{{% children  %}}");
+        s.Append("{{% pages %}}");
         s.Append(Environment.NewLine);
         s.Append(Environment.NewLine);
         s.Append($"{{{{% include \"./includes/season_{Id}.md\" true %}}}}");

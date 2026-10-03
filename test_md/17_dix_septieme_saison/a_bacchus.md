@@ -85,7 +85,7 @@ Rassemble variété.
 A Bacchus obéissent !
 
 <!-- FM:Snippet:Start data:{"id":"_simpleNotice","fields":[{"name":"content","value":"Reprise d'un poème-chanson de 1994"}]} -->
-{{% notice style="primary" %}}
+{{% callout style="primary" %}}
 Reprise d'un poème-chanson de 1994
-{{% /notice %}}
+{{% /callout %}}
 <!-- FM:Snippet:End -->

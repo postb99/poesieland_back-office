@@ -36,6 +36,6 @@ Une ombre à plus tard
 
 De peine.
 
-{{% notice style="primary" %}}
+{{% callout style="primary" %}}
 Métrique variable : 5, 2
-{{% /notice %}}
+{{% /callout %}}

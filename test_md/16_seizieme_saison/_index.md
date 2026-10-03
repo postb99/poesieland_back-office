@@ -11,7 +11,7 @@ Heureusement, la vie n'est pas statique. Quitter Paris pour Bordeaux m'a fait re
 De mars 2002 à octobre 2004
 
 ---
-{{% children  %}}
+{{% pages %}}
 
 {{% include "./includes/season_16.md" true %}}
 
