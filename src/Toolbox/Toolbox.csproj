@@ -27,10 +27,4 @@
         </None>
     </ItemGroup>
 
-    <ItemGroup>
-        <None Update="allowed_reuses.txt">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-    </ItemGroup>
-
 </Project>

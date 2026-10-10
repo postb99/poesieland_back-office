@@ -60,7 +60,7 @@ Because CMS editor gives indications (fields descriptions) but a miss or typo ca
 ### Helper functions
 
 - Output a Season's duration (used on a specific page).
-- Report reused titles — titles should generally be unique, but reuse is allowed after review and recorded in a control file. When a title is updated, the poem ID remains unchanged.
+- Report reused titles. When a title is updated, the poem ID remains unchanged.
 
 ## How
 
