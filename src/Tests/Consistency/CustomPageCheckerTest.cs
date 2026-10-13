@@ -1,4 +1,3 @@
-using Shouldly;
 using Tests.Customizations;
 using Toolbox.Consistency;
 using Toolbox.Domain;
@@ -20,8 +19,7 @@ public class CustomPageCheckerTest(BasicFixture fixture) : IClassFixture<BasicFi
 
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var act = () => customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(null, data);
-        act.ShouldThrow<CustomPageConsistencyException>().Message.ShouldBe(
-            $"Poem {data.Seasons.First().Poems.First().Id} should be listed on 'saisons' tag index page!");
+        Assert.Equal($"Poem {data.Seasons.First().Poems.First().Id} should be listed on 'saisons' tag index page!", Assert.Throws<CustomPageConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -33,7 +31,6 @@ public class CustomPageCheckerTest(BasicFixture fixture) : IClassFixture<BasicFi
 
         var customPageChecker = new CustomPageChecker(fixture.Configuration);
         var act = () => customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(poem, data);
-        act.ShouldThrow<CustomPageConsistencyException>().Message
-            .ShouldBe($"Poem {poem.Id} should be listed on 'saisons' tag index page!");
+        Assert.Equal($"Poem {poem.Id} should be listed on 'saisons' tag index page!", Assert.Throws<CustomPageConsistencyException>(act).Message);
     }
 }

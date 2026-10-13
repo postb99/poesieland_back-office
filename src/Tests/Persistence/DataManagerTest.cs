@@ -1,4 +1,3 @@
-using Shouldly;
 using Xunit;
 
 namespace Tests.Persistence;
@@ -10,8 +9,8 @@ public class DataManagerTest(WithRealDataFixture fixture, ITestOutputHelper test
     [Trait("UnitTest", "Persistence")]
     public void ShouldLoad()
     {
-        fixture.Data.ShouldNotBeNull();
-        fixture.DataEn.ShouldNotBeNull();
+        Assert.NotNull(fixture.Data);
+        Assert.NotNull(fixture.DataEn);
     }
     
      [Fact]
@@ -19,8 +18,8 @@ public class DataManagerTest(WithRealDataFixture fixture, ITestOutputHelper test
     public void ShouldLoadAcrostiche()
     {
         var poemWithAcrostiche = fixture.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "resurrection_14");
-        poemWithAcrostiche.ShouldNotBeNull();
-        poemWithAcrostiche!.Acrostiche.ShouldBe("Résurrection");
+        Assert.NotNull(poemWithAcrostiche);
+        Assert.Equal("Résurrection", poemWithAcrostiche!.Acrostiche);
     }
 
     [Fact]
@@ -29,10 +28,10 @@ public class DataManagerTest(WithRealDataFixture fixture, ITestOutputHelper test
     {
         var poemWithFirstAndSecondAcrostiche =
             fixture.Data.Seasons[13].Poems.FirstOrDefault(x => x.Id == "l_air_cree_14");
-        poemWithFirstAndSecondAcrostiche.ShouldNotBeNull();
-        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche.ShouldNotBeNull();
-        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First.ShouldBe("L'air");
-        poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.Second.ShouldBe("créé");
+        Assert.NotNull(poemWithFirstAndSecondAcrostiche);
+        Assert.NotNull(poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche);
+        Assert.Equal("L'air", poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.First);
+        Assert.Equal("créé", poemWithFirstAndSecondAcrostiche!.DoubleAcrostiche!.Second);
     }
 
     [Theory]
@@ -43,13 +42,13 @@ public class DataManagerTest(WithRealDataFixture fixture, ITestOutputHelper test
     public void ShouldHaveVersesCount(string poemId, int seasonId, int expectedCount)
     {
         var poem = fixture.Data.Seasons[seasonId - 1].Poems.FirstOrDefault(x => x.Id == poemId);
-        poem.VersesCount.ShouldBe(expectedCount);
+        Assert.Equal(expectedCount, poem.VersesCount);
     }
 
     [Fact]
     [Trait("UnitTest", "XmlRead")]
     public void ShouldBePoemSeasonId()
     {
-        fixture.Data.Seasons[0].Poems[0].SeasonId.ShouldBe(1);
+        Assert.Equal(1, fixture.Data.Seasons[0].Poems[0].SeasonId);
     }
 }

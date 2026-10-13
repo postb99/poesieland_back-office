@@ -1,5 +1,4 @@
-﻿using Toolbox;
-using Toolbox.Domain;
+﻿using Toolbox.Domain;
 using Toolbox.Persistence;
 
 namespace Tests;

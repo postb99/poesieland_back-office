@@ -1,5 +1,4 @@
 using System.Text;
-using Shouldly;
 using Microsoft.Extensions.Configuration;
 using Tests.Customizations;
 using Toolbox;
@@ -42,7 +41,7 @@ public sealed class SecurityRegressionTest : IDisposable
     [InlineData("1")]
     public void ShouldRejectPathIdentifiersUsedAsIdOfPoemToImport(string id)
     {
-        Should.Throw<MetadataConsistencyException>(() => new PoemImporter(_configuration).ImportPoem(id, new Root()));
+        Assert.Throws<MetadataConsistencyException>(() => new PoemImporter(_configuration).ImportPoem(id, new Root()));
     }
 
     [Fact]
@@ -55,8 +54,8 @@ public sealed class SecurityRegressionTest : IDisposable
         manager.SaveEn(new Root());
         manager.SaveEn(new Root { Seasons = [new Season { Id = 2 }] });
         manager.Load(out var french, out var english);
-        french.Seasons.ShouldHaveSingleItem().Name.ShouldBe("Été");
-        english.Seasons.ShouldHaveSingleItem().Id.ShouldBe(2);
+        Assert.Equal("Été", Assert.Single(french.Seasons).Name);
+        Assert.Equal(2, Assert.Single(english.Seasons).Id);
     }
 
     [Fact]
@@ -71,9 +70,9 @@ public sealed class SecurityRegressionTest : IDisposable
         var english = new Root();
         var originalFrench = french;
         var originalEnglish = english;
-        Should.Throw<InvalidOperationException>(() => manager.Load(out french, out english));
-        french.ShouldBeSameAs(originalFrench);
-        english.ShouldBeSameAs(originalEnglish);
+        Assert.Throws<InvalidOperationException>(() => manager.Load(out french, out english));
+        Assert.Same(originalFrench, french);
+        Assert.Same(originalEnglish, english);
     }
 
     [Theory]
@@ -84,9 +83,9 @@ public sealed class SecurityRegressionTest : IDisposable
     {
         poem.Id = "test_1";
         var data = new Root { Seasons = [new Season { Id = 1, Poems = [poem] }] };
-        Should.Throw<MetadataConsistencyException>(() => new PoemImporter(_configuration)
+        Assert.Throws<MetadataConsistencyException>(() => new PoemImporter(_configuration)
             .ImportPoemToSeason(data, new Poem { Id = poem.Id, ContentFileIndex = index }));
-        data.Seasons[0].Poems.ShouldHaveSingleItem().ShouldBeSameAs(poem);
+        Assert.Same(poem, Assert.Single(data.Seasons[0].Poems));
     }
 
     [Theory]
@@ -99,8 +98,8 @@ public sealed class SecurityRegressionTest : IDisposable
         File.WriteAllText(Path.Combine(directory, "broken.md"), "---\ndate: not-a-date\n---");
         poem.Id = "old_1";
         var data = new Root { Seasons = [new Season { Id = 1, Poems = [poem] }] };
-        Should.Throw<FormatException>(() => new PoemImporter(_configuration).ImportPoemsEn(data));
-        data.Seasons[0].Poems.ShouldHaveSingleItem().ShouldBeSameAs(poem);
+        Assert.Throws<FormatException>(() => new PoemImporter(_configuration).ImportPoemsEn(data));
+        Assert.Same(poem, Assert.Single(data.Seasons[0].Poems));
     }
 
     [Fact]
@@ -109,24 +108,24 @@ public sealed class SecurityRegressionTest : IDisposable
     {
         var input = string.Join(',', Enumerable.Repeat(" 12 ", 100_000));
         var result = input.ToIntArray();
-        result.Length.ShouldBe(100_000);
-        result.ShouldAllBe(value => value == 12);
+        Assert.Equal(100_000, result.Length);
+        Assert.All(result, value => Assert.True(value == 12));
     }
 
     [Fact]
     [Trait("UnitTest", "Security")]
     public void ShouldPreserveDataAndBlocksCodeBoundariesWhenEscapingStringForCharts()
     {
-        "\\';alert(1);//\n</script>\u2028".JavaScriptString().ShouldBe("\\\\\\';alert(1);//\\u000a\\u003c/script\\u003e\\u2028");
+        Assert.Equal("\\\\\\';alert(1);//\\u000a\\u003c/script\\u003e\\u2028","\\';alert(1);//\n</script>\u2028".JavaScriptString());
         using var stream = new MemoryStream();
         using var writer = new StreamWriter(stream, new UTF8Encoding(false), leaveOpen: true);
         var helper = new ChartDataFileHelper(writer, ChartType.Bar);
         helper.WriteData(new List<ColoredDataLine> { new("l'été\n", 1, "red") });
         helper.WriteAfterData("id'", ["l'été"]);
         var output = Encoding.UTF8.GetString(stream.ToArray());
-        output.ShouldContain("label: 'l\\'été\\u000a'");
-        output.ShouldContain("color: 'red'");
-        output.ShouldContain("addBarChart('id\\'', ['l\\'été']");
+        Assert.Contains("label: 'l\\'été\\u000a'", output);
+        Assert.Contains("color: 'red'", output);
+        Assert.Contains("addBarChart('id\\'', ['l\\'été']", output);
     }
 
     [Fact]
@@ -136,7 +135,7 @@ public sealed class SecurityRegressionTest : IDisposable
         using var stream = new MemoryStream();
         using var writer = new StreamWriter(stream);
         var helper = new ChartDataFileHelper(writer, ChartType.Bubble);
-        Should.Throw<FormatException>(() => helper.WriteData(
+        Assert.Throws<FormatException>(() => helper.WriteData(
             new List<BubbleChartDataLine> { new(1, 2, "1};alert(1)//", "red") }, true));
     }
 
@@ -151,9 +150,9 @@ public sealed class SecurityRegressionTest : IDisposable
         secondPoem.Title = "Ete";
         var data = new Root { Seasons = [new Season { Id = 1, Poems = [firstPoem, secondPoem] }] };
         var generator = new ContentFileGenerator(_configuration);
-        Should.NotThrow(() => generator.GenerateSeasonAllPoemFiles(data, 1).ToList());
-        Should.NotThrow(() => generator.GeneratePoemFile(data, firstPoem));
-        Directory.Exists(_configuration[Constants.CONTENT_ROOT_DIR]).ShouldBeTrue();
+        generator.GenerateSeasonAllPoemFiles(data, 1);
+        generator.GeneratePoemFile(data, firstPoem);
+        Assert.True(Directory.Exists(_configuration[Constants.CONTENT_ROOT_DIR]));
     }
 
     [Theory]
@@ -174,8 +173,8 @@ public sealed class SecurityRegressionTest : IDisposable
         var generator = new WordCloudTextGenerator(_configuration);
         generator.GenerateWordCloudFiles(data);
         generator.GenerateWordCloudFiles(data);
-        File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "janvier", "wordcloud.txt")).ShouldBe("été" + Environment.NewLine + Environment.NewLine);
-        File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "février", "wordcloud.txt")).ShouldBeEmpty();
+        Assert.Equal("été" + Environment.NewLine + Environment.NewLine, File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "janvier", "wordcloud.txt")));
+        Assert.Empty(File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "février", "wordcloud.txt")));
     }
 
     [Fact]
@@ -185,8 +184,8 @@ public sealed class SecurityRegressionTest : IDisposable
         var path = Path.Combine(_directory, "poem.md");
         File.WriteAllText(path, "+++\nid = \"original_1\"\ndate = 2026-09-08\nverseLength = 8\n+++\n---\nid = \"forged_2\"\n---");
         var importer = new PoemImporter(_configuration);
-        importer.Import(path).Id.ShouldBe("original_1");
-        importer.GetPartialImport(path).PoemId.ShouldBe("original_1");
+        Assert.Equal("original_1", importer.Import(path).Id);
+        Assert.Equal("original_1", importer.GetPartialImport(path).PoemId);
     }
 
     [Theory]
@@ -198,7 +197,7 @@ public sealed class SecurityRegressionTest : IDisposable
     {
         var path = Path.Combine(_directory, "poem.md");
         File.WriteAllText(path, content);
-        Should.Throw<InvalidDataException>(() => new PoemImporter(_configuration).Import(path));
+        Assert.Throws<InvalidDataException>(() => new PoemImporter(_configuration).Import(path));
     }
 
     [Fact]
@@ -208,9 +207,9 @@ public sealed class SecurityRegressionTest : IDisposable
         var path = Path.Combine(_directory, "season.md");
         var importer = new SeasonIndexImporter();
         File.WriteAllText(path, "+++\ndescription = \"first\"\n+++");
-        importer.Import(path).Description.ShouldBe("first");
+        Assert.Equal("first", importer.Import(path).Description);
         File.WriteAllText(path, "+++\ndescription = \"second\"\n+++");
-        importer.Import(path).Description.ShouldBe("second");
+        Assert.Equal("second", importer.Import(path).Description);
     }
 
     [Fact]
@@ -230,7 +229,7 @@ public sealed class SecurityRegressionTest : IDisposable
             }).Build();
         var data = new Root();
         new PoemImporter(configuration).ImportPoemsOfSeason(1, data);
-        data.Seasons.ShouldHaveSingleItem().Poems.ShouldHaveSingleItem().ContentFileIndex.ShouldBe(50);
+        Assert.Equal(50, Assert.Single(Assert.Single(data.Seasons).Poems).ContentFileIndex);
     }
 
     [Fact]
@@ -243,7 +242,7 @@ public sealed class SecurityRegressionTest : IDisposable
         var poem = new Poem { Id = "a.b_1", Categories = [new() { Name = "Saisons", SubCategories = ["été", "hiver"] }] };
         var checker = new CustomPageChecker(_configuration);
         File.WriteAllText(page, "../../seasons/1_first/axb");
-        Should.Throw<CustomPageConsistencyException>(() => checker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(poem, new Root()));
+        Assert.Throws<CustomPageConsistencyException>(() => checker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(poem, new Root()));
         File.WriteAllText(page, "../../seasons/1_first/a.b");
         checker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(poem, new Root());
     }

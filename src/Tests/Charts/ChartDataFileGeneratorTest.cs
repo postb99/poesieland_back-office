@@ -1,4 +1,3 @@
-using Shouldly;
 using Toolbox.Charts;
 using Xunit;
 
@@ -19,6 +18,6 @@ public class ChartDataFileGeneratorTest(BasicFixture fixture): IClassFixture<Bas
         };
 
         var generator = new ChartDataFileGenerator(fixture.Configuration);
-        generator.GetTopMostMonths(dict).ShouldBeEquivalentTo(new List<string> { "mars", "mai", "janvier" });
+        Assert.Equal(new List<string> { "mars", "mai", "janvier" }, generator.GetTopMostMonths(dict));
     }
 }

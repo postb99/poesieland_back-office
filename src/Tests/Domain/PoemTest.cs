@@ -1,6 +1,5 @@
-using System.Text;
 using Microsoft.Extensions.Configuration;
-using Shouldly;
+using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Settings;
 using Xunit;
@@ -25,7 +24,7 @@ public class PoemTest : IClassFixture<BasicFixture>
             VerseLength = "8"
         };
 
-        poem.DetailedMetric.ShouldBe("8");
+        Assert.Equal("8", poem.DetailedMetric);
     }
 
     [Theory]
@@ -41,7 +40,7 @@ public class PoemTest : IClassFixture<BasicFixture>
             Info = info
         };
 
-        poem.DetailedMetric.ShouldBe("6, 3");
+        Assert.Equal("6, 3", poem.DetailedMetric);
     }
 
     [Theory]
@@ -57,7 +56,7 @@ public class PoemTest : IClassFixture<BasicFixture>
             VerseLength = verseLength
         };
 
-        poem.HasMetric(metric).ShouldBe(expected);
+        Assert.Equal(expected, poem.HasMetric(metric));
     }
 
     [Fact]
@@ -71,7 +70,7 @@ public class PoemTest : IClassFixture<BasicFixture>
         };
 
         var func = () => poem.DetailedMetric;
-        func.ShouldThrow<InvalidOperationException>();
+        Assert.Throws<MetadataConsistencyException>(func);
     }
 
     [Fact]
@@ -85,7 +84,7 @@ public class PoemTest : IClassFixture<BasicFixture>
         };
 
         var func = () => poem.DetailedMetric;
-        func.ShouldThrow<InvalidOperationException>();
+        Assert.Throws<MetadataConsistencyException>(func);
     }
 
     [Fact]
@@ -100,8 +99,7 @@ public class PoemTest : IClassFixture<BasicFixture>
             ExtraTags = ["wonderful"],
             VerseLength = "12"
         };
-        poem.FileContent(-1, _metricSettings)
-            .ShouldContain("tags = [\"wonderful\", \"2025\", \"acrostiche\", \"alexandrin\"]");
+        Assert.Contains("tags = [\"wonderful\", \"2025\", \"acrostiche\", \"alexandrin\"]", poem.FileContent(-1, _metricSettings));
     }
 
     [Fact]
@@ -114,8 +112,7 @@ public class PoemTest : IClassFixture<BasicFixture>
             TextDate = "01.01.2025",
             VerseLength = "6, 3"
         };
-        poem.FileContent(-1, _metricSettings)
-            .ShouldContain("tags = [\"2025\", \"métrique variable\", \"hexasyllabe\", \"trisyllabe\"]");
+        Assert.Contains("tags = [\"2025\", \"métrique variable\", \"hexasyllabe\", \"trisyllabe\"]", poem.FileContent(-1, _metricSettings));
     }
 
     [Fact]
@@ -129,7 +126,6 @@ public class PoemTest : IClassFixture<BasicFixture>
             VerseLength = "8",
             Locations = ["Ici", "Là", "ailleurs"]
         };
-        poem.FileContent(-1, _metricSettings)
-            .ShouldContain("locations = [\"Ici\", \"Là\", \"ailleurs\"]");
+        Assert.Contains("locations = [\"Ici\", \"Là\", \"ailleurs\"]", poem.FileContent(-1, _metricSettings));
     }
 }

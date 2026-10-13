@@ -1,4 +1,3 @@
-using Shouldly;
 using Toolbox.Domain;
 using Xunit;
 
@@ -24,7 +23,7 @@ public class SeasonTest
             ]
         };
 
-        season.Years.ShouldBe(expectedYears);
+        Assert.Equal(expectedYears, season.Years);
     }
 
     [Theory]
@@ -47,6 +46,6 @@ public class SeasonTest
             ]
         };
 
-        season.Period.ShouldBe(expectedPeriod);
+        Assert.Equal(expectedPeriod, season.Period);
     }
 }

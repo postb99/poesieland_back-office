@@ -1,5 +1,4 @@
-﻿using System.Text;
-using Shouldly;
+using System.Text;
 using Tests.Customizations;
 using Toolbox.Consistency;
 using Toolbox.Domain;
@@ -19,8 +18,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var act = () => poemContentImporter.ImportPoem(poemId, data);
-        var ex = act.ShouldThrow<MetadataConsistencyException>();
-        ex.Message.ShouldBe($"'{poemId}' does not end with season id");
+        var ex = Assert.Throws<MetadataConsistencyException>(act);
+        Assert.Equal($"'{poemId}' does not end with season id", ex.Message);
     }
 
     [Theory]
@@ -30,9 +29,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var act = () => poemContentImporter.ImportPoem("some_poem_99", data);
-        var ex = act.ShouldThrow<MetadataConsistencyException>();
-        ex.Message.ShouldBe(
-            $"No such season content directory for id '99'. Create season directory before importing poem");
+        var ex = Assert.Throws<MetadataConsistencyException>(act);
+        Assert.Equal($"No such season content directory for id '99'. Create season directory before importing poem", ex.Message);
     }
 
     [Theory]
@@ -42,8 +40,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var act = () => poemContentImporter.ImportPoem("some_poem_16", data);
-        var ex = act.ShouldThrow<MetadataConsistencyException>();
-        ex.Message.ShouldStartWith($"Poem content file not found: ");
+        var ex = Assert.Throws<MetadataConsistencyException>(act);
+        Assert.StartsWith($"Poem content file not found: ", ex.Message);
     }
 
     [Theory]
@@ -58,8 +56,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemToSeason(data, poem);
 
-        data.Seasons.Count.ShouldBe(seasonCount + 1);
-        data.Seasons.First(x => x.Id == seasonId).Poems.Count.ShouldBe(1);
+        Assert.Equal(seasonCount + 1, data.Seasons.Count);
+        Assert.Equal(1, data.Seasons.First(x => x.Id == seasonId).Poems.Count);
     }
 
     [Theory]
@@ -75,8 +73,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemToSeason(data, poem);
 
-        data.Seasons.First(x => x.Id == season.Id).Poems.Count.ShouldBe(poemCount + 1);
-        data.Seasons.First(x => x.Id == season.Id).Poems.Last().Id.ShouldBe(poem.Id);
+        Assert.Equal(poemCount + 1, data.Seasons.First(x => x.Id == season.Id).Poems.Count);
+        Assert.Equal(poem.Id, data.Seasons.First(x => x.Id == season.Id).Poems.Last().Id);
     }
     
     [Theory]
@@ -99,8 +97,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemToSeason(data, poem);
 
-        data.Seasons.First(x => x.Id == season.Id).Poems.Count.ShouldBe(poemCount + 1);
-        data.Seasons.First(x => x.Id == season.Id).Poems[1].Id.ShouldBe(poem.Id);
+        Assert.Equal(poemCount + 1, data.Seasons.First(x => x.Id == season.Id).Poems.Count);
+        Assert.Equal(poem.Id, data.Seasons.First(x => x.Id == season.Id).Poems[1].Id);
     }
 
     [Theory]
@@ -124,8 +122,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemToSeason(data, poemToUpdate);
 
-        data.Seasons.First(x => x.Id == season.Id).Poems.Count.ShouldBe(poemCount);
-        data.Seasons.First(x => x.Id == season.Id).Poems[1].Id.ShouldBe(poemToUpdate.Id);
+        Assert.Equal(poemCount, data.Seasons.First(x => x.Id == season.Id).Poems.Count);
+        Assert.Equal(poemToUpdate.Id, data.Seasons.First(x => x.Id == season.Id).Poems[1].Id);
     }
 
     [Theory]
@@ -135,8 +133,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         poemContentImporter.ImportPoemsOfSeason(16, data);
-        data.Seasons.FirstOrDefault(x => x.Id == 16).ShouldNotBeNull();
-        data.Seasons.FirstOrDefault(x => x.Id == 16).Poems.ShouldNotBeEmpty();
+        Assert.NotNull(data.Seasons.FirstOrDefault(x => x.Id == 16));
+        Assert.NotEmpty(data.Seasons.FirstOrDefault(x => x.Id == 16).Poems);
     }
 
     [Fact]
@@ -147,10 +145,10 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/jeux_de_nuits.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poem.Info.ShouldBe("Métrique variable : 8, 6, 4, 2");
-        poem.DetailedMetric.ShouldBe("8, 6, 4, 2");
+        Assert.Equal("Métrique variable : 8, 6, 4, 2", poem.Info);
+        Assert.Equal("8, 6, 4, 2", poem.DetailedMetric);
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
-        poem.VerseLength.ShouldBe("8, 6, 4, 2");
+        Assert.Equal("8, 6, 4, 2", poem.VerseLength);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -164,10 +162,10 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
         var poem = poemContentImporter.Import(poemContentFilePath);
         var expectedInfo = new StringBuilder("Métrique variable : 5, 2.").Append(Environment.NewLine)
             .Append(Environment.NewLine).Append("{{% include").ToString();
-        poem.Info.ShouldStartWith(expectedInfo);
-        poem.DetailedMetric.ShouldBe("5, 2");
+        Assert.StartsWith(expectedInfo, poem.Info);
+        Assert.Equal("5, 2", poem.DetailedMetric);
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
-        poem.VerseLength.ShouldBe("5, 2");
+        Assert.Equal("5, 2", poem.VerseLength);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -176,9 +174,7 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
     public void ShouldFindExtraTags()
     {
         var poemContentImporter = new PoemImporter(fixture.Configuration);
-        poemContentImporter
-            .FindExtraTags(["lovecat", "2025", "nature", "sonnet", "métrique variable", "other", "octosyllabe"])
-            .ShouldBe(["lovecat", "other"]);
+        Assert.Equal(["lovecat", "other"], poemContentImporter.FindExtraTags(["lovecat", "2025", "nature", "sonnet", "métrique variable", "other", "octosyllabe"]));
     }
 
     [Fact]
@@ -189,8 +185,8 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR_EN]!, "2024", "wisdom.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.ImportEnYaml(poemContentFilePath);
-        poem.ShouldNotBeNull();
-        poem.Categories.FirstOrDefault()?.Name.ShouldBe("Philosophie");
-        poem.Categories.FirstOrDefault()?.SubCategories.FirstOrDefault().ShouldBe("Etre");
+        Assert.NotNull(poem);
+        Assert.Equal("Philosophie", poem.Categories.FirstOrDefault()?.Name);
+        Assert.Equal("Etre", poem.Categories.FirstOrDefault()?.SubCategories.FirstOrDefault());
     }
 }

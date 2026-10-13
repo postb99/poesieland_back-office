@@ -104,6 +104,16 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
             _infoLines.Add(inlineInfo!);
         }
     }
+    
+    public void BuildPictureLines(string line)
+    {
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Pictures;
+        var inlinePicture = GetPicture(line);
+        if (AddInlineValue(inlinePicture))
+        {
+            _pictures.Add(inlinePicture!);
+        }
+    }
 
     public void BuildDescriptionLines(string line)
     {

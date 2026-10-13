@@ -1,6 +1,4 @@
-using Shouldly;
 using Toolbox.Charts;
-using Toolbox.Domain;
 using Xunit;
 
 namespace Tests.Charts;
@@ -20,6 +18,6 @@ public class ChartDataFileHelperTestWithRealData(WithRealDataFixture fixture, IT
             $"Computed values for last season: {string.Join('-', dataDict.Values.Select(x => x.Last()))}");
         var sum = dataDict.Values.Sum(x => x.Last());
         testOutputHelper.WriteLine($"Computed values sum: {sum}");
-        sum.ShouldBeInRange(49m, 59m);
+        Assert.InRange(sum, 49m, 59m);
     }
 }

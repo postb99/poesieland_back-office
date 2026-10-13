@@ -1,5 +1,3 @@
-using Shouldly;
-using Tests.Customizations;
 using Toolbox.Consistency;
 using Toolbox.Domain;
 using Xunit;
@@ -49,9 +47,9 @@ public class SeasonCheckerTest : IClassFixture<BasicFixture>
         data.Seasons[1].Poems = data.Seasons[1].Poems.Take(secondSeasonPoemCount).ToList();
 
         var act = () => SeasonChecker.VerifySeasonHaveCorrectPoemCount(data);
-        var ex = act.ShouldThrow<Exception>();
-        ex.Message.ShouldBe(expectedErrorMessage.Replace("{desc}",
-            $"[{data.Seasons[expectedInErrorSeasonIndex].Id} - {data.Seasons[expectedInErrorSeasonIndex].Name}]: {data.Seasons[expectedInErrorSeasonIndex].Poems.Count}"));
+        var ex = Assert.Throws<Exception>(act);
+        Assert.Equal(expectedErrorMessage.Replace("{desc}",
+            $"[{data.Seasons[expectedInErrorSeasonIndex].Id} - {data.Seasons[expectedInErrorSeasonIndex].Name}]: {data.Seasons[expectedInErrorSeasonIndex].Poems.Count}"), ex.Message);
     }
 
     private static IEnumerable<Poem> Get(int count)

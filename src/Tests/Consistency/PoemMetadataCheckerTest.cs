@@ -1,4 +1,3 @@
-using Shouldly;
 using Tests.Customizations;
 using Toolbox.Consistency;
 using Toolbox.Domain;
@@ -46,8 +45,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "";
         var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(data);
-        act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe($"First poem with unspecified metric or equal to '0': {poem.Id}");
+        Assert.Equal($"First poem with unspecified metric or equal to '0': {poem.Id}", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -58,8 +56,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         var poem = data.Seasons.First().Poems.First();
         poem.VerseLength = "0";
         var act = () => PoemMetadataChecker.CheckPoemsWithoutMetricValueSpecified(data);
-        act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe($"First poem with unspecified metric or equal to '0': {poem.Id}");
+        Assert.Equal($"First poem with unspecified metric or equal to '0': {poem.Id}", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -84,8 +81,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         poem.VerseLength = "4, 2";
         poem.Info = info;
         var act = () => PoemMetadataChecker.CheckPoemsWithVariableMetricNotPresentInInfo(data);
-        act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe($"First poem with variable metric unspecified in Info: {poem.Id}");
+        Assert.Equal($"First poem with variable metric unspecified in Info: {poem.Id}", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -97,7 +93,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
     {
         ArrangePartialImport(partialImport, 2000, metric, "Info");
         var act = () => PoemMetadataChecker.VerifyMetricValueIsSpecified(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Poem metric is unspecified");
+        Assert.Equal($"[{partialImport.PoemId}] Poem metric is unspecified", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -108,7 +104,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         ArrangePartialImport(partialImport, 2000, "4", "Info");
         partialImport.Tags.Remove("2000");
         var act = () => PoemMetadataChecker.VerifyYearTagIsPresent(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing year tag: {partialImport.Year}");
+        Assert.Equal($"[{partialImport.PoemId}] Missing year tag: {partialImport.Year}", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -120,7 +116,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         partialImport.HasVariableMetric = true;
         partialImport.Tags.Remove("métrique variable");
         var act = () => PoemMetadataChecker.VerifyVariableMetricTagIsPresent(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing 'métrique variable' tag");
+        Assert.Equal($"[{partialImport.PoemId}] Missing 'métrique variable' tag", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -131,7 +127,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         ArrangePartialImport(partialImport, 2000, "4, 2", "Info");
         partialImport.HasVariableMetric = true;
         var act = () => PoemMetadataChecker.VerifyVariableMetricInfoIsPresent(partialImport);
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing 'Métrique variable : ' in Info");
+        Assert.Equal($"[{partialImport.PoemId}] Missing 'Métrique variable : ' in Info", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -142,7 +138,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         ArrangePartialImport(partialImport, 2000, "4", "Info");
         partialImport.Tags.Remove("testmetric4");
         var act = () => PoemMetadataChecker.VerifyMetricTagsArePresent(partialImport, CreateMetrics());
-        act.ShouldThrow<MetadataConsistencyException>().Message.ShouldBe($"[{partialImport.PoemId}] Missing 'testmetric4' tag");
+        Assert.Equal($"[{partialImport.PoemId}] Missing 'testmetric4' tag", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -154,8 +150,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         partialImport.Description = "";
         var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport,
             [new RequiredDescription { ExtraTag = extraTag, Bold = false }]);
-        act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe($"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'");
+        Assert.Equal($"Poem {partialImport.PoemId} is missing description because of extra tag '{extraTag}'", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]
@@ -168,9 +163,7 @@ public class PoemMetadataCheckerTest : IClassFixture<BasicFixture>
         partialImport.Description = "Not bold text";
         var act = () => PoemMetadataChecker.VerifyRequiredDescription(partialImport,
             [new RequiredDescription { ExtraTag = extraTag, Bold = true }]);
-        act.ShouldThrow<MetadataConsistencyException>().Message
-            .ShouldBe(
-                $"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'");
+        Assert.Equal($"Poem {partialImport.PoemId} description is missing bold formatting because of extra tag '{extraTag}'", Assert.Throws<MetadataConsistencyException>(act).Message);
     }
 
     [Theory]

@@ -1,4 +1,3 @@
-﻿using Shouldly;
 using Toolbox.Importers;
 using Toolbox.Processors;
 using Toolbox.Settings;
@@ -17,19 +16,19 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             "1_premiere_saison/j_avais_l_heur_de_m_asseoir.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Title.ShouldBe("J'avais l'heur de m'asseoir...");
-        poem.Id.ShouldBe("j_avais_l_heur_de_m_asseoir_1");
-        poem.TextDate.ShouldBe("07.12.1995");
-        poem.Categories.Count.ShouldBe(1);
-        poem.Categories.First().Name.ShouldBe("Amour");
-        poem.Categories.First().SubCategories.Count.ShouldBe(1);
-        poem.Categories.First().SubCategories.First().ShouldBe("Amour platonique");
-        poem.PoemType.ShouldBe("sonnet");
-        poem.VerseLength.ShouldBe("12");
-        poem.Info.ShouldBeNull();
-        poem.ContentFileIndex.ShouldBe(0);
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal("J'avais l'heur de m'asseoir...", poem.Title);
+        Assert.Equal("j_avais_l_heur_de_m_asseoir_1", poem.Id);
+        Assert.Equal("07.12.1995", poem.TextDate);
+        Assert.Equal(1, poem.Categories.Count);
+        Assert.Equal("Amour", poem.Categories.First().Name);
+        Assert.Equal(1, poem.Categories.First().SubCategories.Count);
+        Assert.Equal("Amour platonique", poem.Categories.First().SubCategories.First());
+        Assert.Equal("sonnet", poem.PoemType);
+        Assert.Equal("12", poem.VerseLength);
+        Assert.Null(poem.Info);
+        Assert.Equal(0, poem.ContentFileIndex);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -41,10 +40,10 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "10_dixieme_saison/cathedrale_de_lumieres.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.DoubleAcrostiche!.First.ShouldBe("Cathédrale");
-        poem.DoubleAcrostiche.Second.ShouldBe("de lumières");
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal("Cathédrale", poem.DoubleAcrostiche!.First);
+        Assert.Equal("de lumières", poem.DoubleAcrostiche.Second);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -56,15 +55,15 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "15_quinzieme_saison/du_gris_au_noir.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Acrostiche.ShouldBe("Du gris au noir");
-        poem.Categories.Count.ShouldBe(2);
-        poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.Count.ShouldBe(1);
-        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count.ShouldBe(2);
-        poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.FirstOrDefault().ShouldBe("Automne");
-        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.ShouldContain("Ville");
-        poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.ShouldContain("Crépuscule");
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal("Du gris au noir", poem.Acrostiche);
+        Assert.Equal(2, poem.Categories.Count);
+        Assert.Equal(1, poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.Count);
+        Assert.Equal(2, poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count);
+        Assert.Equal("Automne", poem.Categories.FirstOrDefault(x => x.Name == "Saisons").SubCategories.FirstOrDefault());
+        Assert.Contains("Ville", poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories);
+        Assert.Contains("Crépuscule", poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -76,9 +75,9 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison/pelerinage.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Locations.ShouldBe(["Reims"]);
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal(["Reims"], poem.Locations);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -90,7 +89,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
     {
         var processor = new PoemTomlMetadataProcessor();
         processor.BuildCategories(categoriesLine);
-        processor.GetCategories().ShouldBeEquivalentTo(new List<string> { "First", "Here and there" });
+        Assert.Equal(new List<string> { "First", "Here and there" }, processor.GetCategories());
     }
 
     [Fact]
@@ -100,7 +99,7 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         var info = "info = \"It is a \\\"quoted text\\\"\"";
         var processor = new PoemTomlMetadataProcessor();
         var readInfo = processor.GetInfo(info);
-        readInfo.ShouldBe("It is a \"quoted text\"");
+        Assert.Equal("It is a \"quoted text\"", readInfo);
     }
 
     [Fact]
@@ -111,11 +110,11 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/une_derniere_visite.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Pictures.ShouldNotBeNull();
-        poem.Pictures.Count.ShouldBe(4);
-        poem.Pictures[0].ShouldBe("Le puits du château de Ham-sous-Varsberg");
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.NotNull(poem.Pictures);
+        Assert.Equal(4, poem.Pictures.Count);
+        Assert.Equal("Le puits du château de Ham-sous-Varsberg", poem.Pictures[0]);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -127,12 +126,12 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "17_dix_septieme_saison/a_quai.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Info.ShouldBe("Métrique variable : 5, 2");
-        poem.DetailedMetric.ShouldBe("5, 2");
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal("Métrique variable : 5, 2", poem.Info);
+        Assert.Equal("5, 2", poem.DetailedMetric);
         // Because it has been copied from DetailedVerseLength by poemContentImporter.
-        poem.VerseLength.ShouldBe("5, 2");
+        Assert.Equal("5, 2", poem.VerseLength);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -144,9 +143,9 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/le_jour_decroit.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.ExtraTags.ShouldBeEquivalentTo(new List<string> { "refrain", "les mois", "août" });
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal(new List<string> { "refrain", "les mois", "août" }, poem.ExtraTags);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -158,9 +157,9 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "22_vingt_deuxieme_saison/est_ce_un_automne.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Info.ShouldBeNull();
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Null(poem.Info);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -172,12 +171,12 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "12_douzieme_saison/barcarolle.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Categories.Count.ShouldBe(1);
-        poem.Categories.First().SubCategories.Count.ShouldBe(1);
-        poem.Categories.First().SubCategories.First().ShouldBe("Musique et chant");
-        poem.Info.ShouldBe("Inspiré par l'air homonyme d'Offenbach.");
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal(1, poem.Categories.Count);
+        Assert.Equal(1, poem.Categories.First().SubCategories.Count);
+        Assert.Equal("Musique et chant", poem.Categories.First().SubCategories.First());
+        Assert.Equal("Inspiré par l'air homonyme d'Offenbach.", poem.Info);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
     
@@ -189,17 +188,16 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "19_dix_neuvieme_saison/je_te_promets_les_quatre_saisons.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
         /*
         [Cette chanson de Johnny Hallyday](https://www.google.com/search?q=je+te+promets+johnny+hallyday) dans ma tête ce matin... Deux grands artistes qui me sont chers.
 
         Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-)
         */
-        poem.Info.ShouldStartWith($"[Cette chanson de Johnny Hallyday]");
-        poem.Info.ShouldEndWith("(../../tags/saisons/_index#les-quatre-saisons-)");
-        poem.Info.ShouldBe(
-            $"[Cette chanson de Johnny Hallyday](https://www.google.com/search?q=je+te+promets+johnny+hallyday) dans ma tête ce matin... Deux grands artistes qui me sont chers.{Environment.NewLine}{Environment.NewLine}Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-)");
+        Assert.StartsWith($"[Cette chanson de Johnny Hallyday]", poem.Info);
+        Assert.EndsWith("(../../tags/saisons/_index#les-quatre-saisons-)", poem.Info);
+        Assert.Equal($"[Cette chanson de Johnny Hallyday](https://www.google.com/search?q=je+te+promets+johnny+hallyday) dans ma tête ce matin... Deux grands artistes qui me sont chers.{Environment.NewLine}{Environment.NewLine}Vers [les poèmes qui évoquent les quatre saisons](../../tags/saisons/_index#les-quatre-saisons-)", poem.Info);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -211,9 +209,9 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "3_troisieme_saison/est_ce_un_automne.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Description.ShouldBe("Est-ce un automne, est-ce un printemps / Qui dans mon cœur se renouvelle");
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal("Est-ce un automne, est-ce un printemps / Qui dans mon cœur se renouvelle", poem.Description);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 
@@ -225,12 +223,10 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/juillet_aout.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poemContentImporter.HasTomlMetadata.ShouldBeTrue();
-        poemContentImporter.HasYamlMetadata.ShouldBeFalse();
-        poem.Description.ShouldBe(
-            $"Aux portes de juillet, c'est le mois des langueurs / [...] avant qu'août le sauvage");
-        poem.WordCloud.ShouldBe(
-            $"Aux portes de juillet, c'est le mois des langueurs{Environment.NewLine}C'est le mois le plus pur avant qu'août le sauvage{Environment.NewLine}juillet tout neuf a comme un air fragile");
+        Assert.True(poemContentImporter.HasTomlMetadata);
+        Assert.False(poemContentImporter.HasYamlMetadata);
+        Assert.Equal($"Aux portes de juillet, c'est le mois des langueurs / [...] avant qu'août le sauvage", poem.Description);
+        Assert.Equal($"Aux portes de juillet, c'est le mois des langueurs{Environment.NewLine}C'est le mois le plus pur avant qu'août le sauvage{Environment.NewLine}juillet tout neuf a comme un air fragile", poem.WordCloud);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 }

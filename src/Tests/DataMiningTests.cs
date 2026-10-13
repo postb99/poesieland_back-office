@@ -1,7 +1,6 @@
-﻿using System.Text;
+using System.Text;
 using System.Text.RegularExpressions;
 using Toolbox.Charts;
-using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Generators;
 using Xunit;

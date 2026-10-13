@@ -281,7 +281,7 @@ public class Poem
             for (var i = 0; i < Pictures.Count; i++)
             {
                 s.Append(Environment.NewLine);
-                s.Append($"{{{{< figure src=\"/images/{Id}_{i}.jpg\" title=\"{Pictures[i].Escaped()}\" >}}}}");
+                s.Append($"{{{{< figure src=\"/images/{Id}_{i}.jpg\" caption=\"{Pictures[i].Escaped()}\" >}}}}");
                 s.Append(Environment.NewLine);
             }
         }

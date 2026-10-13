@@ -1,5 +1,3 @@
-﻿using System.Text;
-using Shouldly;
 using Toolbox;
 using Xunit;
 
@@ -27,7 +25,7 @@ public class StringExtensionsTest
     [InlineData("Sur un air, souffles", "sur_un_air_souffles")]
     public void ShouldBeUnaccentedCleaned(string input, string expected)
     {
-        input.UnaccentedCleaned().ShouldBe(expected);
+        Assert.Equal(expected, input.UnaccentedCleaned());
     }
 
     [Theory]
@@ -38,7 +36,7 @@ public class StringExtensionsTest
     public void ShouldBeEscaped(string input, string expected)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
-        input.Escaped().ShouldBe(expected);
+        Assert.Equal(expected, input.Escaped());
     }
     
     [Theory]
@@ -50,7 +48,7 @@ public class StringExtensionsTest
     public void ShouldBeUnescaped(string expected, string input)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
-        input.Unescaped().ShouldBe(expected);
+        Assert.Equal(expected, input.Unescaped());
     }
     
     [Theory]
@@ -62,7 +60,7 @@ public class StringExtensionsTest
     public void ShouldBeCleanedContent(string input, string expected)
     {
         _testOutputHelper.WriteLine("{0} => {1}", input, expected);
-        input.CleanedContent().ShouldBe(expected);
+        Assert.Equal(expected, input.CleanedContent());
     }
 
     [Theory]
@@ -70,12 +68,12 @@ public class StringExtensionsTest
     [InlineData("Automne", "[Automne](/categories/automne)")]
     [InlineData("Enfance et adolescence", "[Enfance et adolescence](/categories/enfance-et-adolescence)")]
     public void ShouldBeMarkdownLink(string input, string expected) =>
-        input.MarkdownLink("categories").ShouldBe(expected);
+        Assert.Equal(expected, input.MarkdownLink("categories"));
     
     [Theory]
     [Trait("UnitTest", "Computation")]
     [InlineData("1", 1)]
     [InlineData("1, 2", 1, 2)]
     public void ShouldBeIntArray(string input, params int[] expected) =>
-        input.ToIntArray().ShouldBe(expected);
+        Assert.Equal(expected, input.ToIntArray());
 }

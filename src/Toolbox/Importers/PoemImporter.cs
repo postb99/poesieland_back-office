@@ -524,7 +524,7 @@ public class PoemImporter : IPoemImporter
         }
         else if (line.StartsWith("pictures"))
         {
-            _metadataProcessor!.BuildPictures(line);
+            _metadataProcessor!.BuildPictureLines(line);
         }
         else if (line.StartsWith("info"))
         {

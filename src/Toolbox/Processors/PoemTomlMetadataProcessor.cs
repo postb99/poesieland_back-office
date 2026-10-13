@@ -41,6 +41,11 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
         return line.Substring(14).CleanedContent();
     }
     
+    public string? GetPicture(string line)
+    {
+        return line.Substring(10).CleanedContent();
+    }
+    
     public string? GetWordCloud(string line)
     {
         return line.Substring(12).CleanedContent();
@@ -94,12 +99,11 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
         }
     }
 
-    public void BuildPictures(string line)
+    public void BuildPictureLines(string line)
     {
-        // Always single-line
-        _pictures = line.Substring(11).Trim('[').Trim(']').Trim(' ').Split('"')
-            .Where(x => x != "" && x != ", ")
-            .ToList();
+        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Pictures;
+        var pictureLine = GetPicture(line);
+        ProcessInlineValue(pictureLine);
     }
 
     public void BuildInfoLines(string line)
@@ -138,7 +142,6 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
             case MultilineMetadataProcessingType.None :
                 break;
             case MultilineMetadataProcessingType.InfoLines:
-
                 if (lineValue.EndsWith("\"\"\""))
                 {
                     // Encountered """ end marker
@@ -162,7 +165,6 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 }
                 break;
             case MultilineMetadataProcessingType.DescriptionLines:
-
                 if (lineValue.EndsWith("\"\"\""))
                 {
                     // Encountered """ end marker
@@ -175,7 +177,6 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 }
                 break;
             case MultilineMetadataProcessingType.WordCloudLines:
-
                 if (lineValue.EndsWith("\"\"\""))
                 {
                     // Encountered """ end marker
@@ -185,6 +186,18 @@ public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
                 else
                 {
                     _wordCloudLines.Add(lineValue);
+                }
+                break;
+            case MultilineMetadataProcessingType.Pictures:
+                if (lineValue.EndsWith("\"\"\""))
+                {
+                    // Encountered """ end marker
+                    _pictures.Add(lineValue.Substring(0, lineValue.Length - 3));
+                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+                }
+                else
+                {
+                    _pictures.Add(lineValue);
                 }
                 break;
             default :

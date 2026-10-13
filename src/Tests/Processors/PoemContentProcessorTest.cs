@@ -1,4 +1,3 @@
-﻿using Shouldly;
 using Toolbox.Importers;
 using Toolbox.Settings;
 using Xunit;
@@ -17,8 +16,8 @@ public class PoemContentProcessorTest(BasicFixture fixture) : IClassFixture<Basi
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, poemContentPath);
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
-        poem.Paragraphs.Count.ShouldBe(paragraphs);
-        poem.Paragraphs.ForEach(p => p.Verses.Count.ShouldBe(verses));
+        Assert.Equal(paragraphs, poem.Paragraphs.Count);
+        poem.Paragraphs.ForEach(p => Assert.Equal(verses, p.Verses.Count));
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 }

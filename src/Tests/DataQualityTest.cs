@@ -1,4 +1,3 @@
-﻿using Shouldly;
 using Toolbox.Domain;
 using Xunit;
 
@@ -19,29 +18,29 @@ public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper test
             testOutputHelper.WriteLine($"[{season.Id} - {season.Name}]: {season.Poems.Count}");
         }
 
-        notEmptySeasons.Take(notEmptySeasons.Count - 1).All(x => x.Poems.Count == 50).ShouldBeTrue();
-        notEmptySeasons.Skip(notEmptySeasons.Count - 1).Single(x => x.Poems.Count <= 50).ShouldNotBeNull();
+        Assert.True(notEmptySeasons.Take(notEmptySeasons.Count - 1).All(x => x.Poems.Count == 50));
+        Assert.NotNull(notEmptySeasons.Skip(notEmptySeasons.Count - 1).Single(x => x.Poems.Count <= 50));
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void SeasonShouldHaveDescription()
     {
-        _data.Seasons.Count(x => string.IsNullOrEmpty(x.Description)).ShouldBe(0);
+        Assert.Equal(0, _data.Seasons.Count(x => string.IsNullOrEmpty(x.Description)));
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveTitle()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.Title)).ShouldBeTrue();
+        Assert.True(_data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.Title)));
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveDate()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.TextDate)).ShouldBeTrue();
+        Assert.True(_data.Seasons.SelectMany(x => x.Poems).All(x => !string.IsNullOrEmpty(x.TextDate)));
     }
 
     [Fact]
@@ -55,28 +54,28 @@ public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper test
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveCategory()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Categories.Count > 0).ShouldBeTrue();
+        Assert.True(_data.Seasons.SelectMany(x => x.Poems).All(x => x.Categories.Count > 0));
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemShouldHaveParagraphs()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0).ShouldBeTrue();
+        Assert.True(_data.Seasons.SelectMany(x => x.Poems).All(x => x.Paragraphs.Count > 0));
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void PoemIdShouldEndWithSeasonId()
     {
-        _data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0).ShouldBeTrue();
+        Assert.True(_data.Seasons.SelectMany(x => x.Poems).All(x => x.SeasonId > 0));
     }
 
     [Fact]
     [Trait("UnitTest", "Quality")]
     public void ParagraphShouldHaveVerses()
     {
-        _data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0).ShouldBeTrue();
+        Assert.True(_data.Seasons.SelectMany(x => x.Poems).SelectMany(x => x.Paragraphs).All(x => x.Verses.Count > 0));
     }
 
     [Fact]
@@ -88,7 +87,7 @@ public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper test
         poems.ForEach(x => testOutputHelper.WriteLine("[{0}] {1}", x.Id,
             string.Join(',', x.Categories.Where(x => x.SubCategories.Count == 0).Select(x => x.Name))));
 
-        poems.Count.ShouldBe(0);
+        Assert.Equal(0, poems.Count);
     }
 
     [Fact]
@@ -97,7 +96,7 @@ public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper test
     {
         _data.Seasons.SelectMany(x => x.Poems).Where(x => x.DoubleAcrostiche is not null).All(x =>
                 !string.IsNullOrEmpty(x.DoubleAcrostiche!.First) &&
-                !string.IsNullOrEmpty(x.DoubleAcrostiche.Second)).ShouldBeTrue();
+                !string.IsNullOrEmpty(x.DoubleAcrostiche.Second));
     }
 
     [Theory]
@@ -109,6 +108,6 @@ public class DataQualityTest(WithRealDataFixture fixture, ITestOutputHelper test
     public void ShouldGetYears(int seasonId, string expectedValue)
     {
         var season = _data.Seasons.First(x => x.Id == seasonId);
-        season.Years.ShouldBe(expectedValue);
+        Assert.Equal(expectedValue, season.Years);
     }
 }

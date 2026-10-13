@@ -1,4 +1,3 @@
-using Shouldly;
 using Toolbox.Importers;
 using Toolbox.Settings;
 using Xunit;
@@ -15,9 +14,9 @@ public class SeasonIndexImporterTest(BasicFixture fixture): IClassFixture<BasicF
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "7_septieme_saison/_index.md");
         var seasonIndexImporter = new SeasonIndexImporter();
         var season = seasonIndexImporter.Import(seasonIndexContentFilePath);
-        season.Id.ShouldBe(7);
-        season.Name.ShouldBe("Croire");
-        season.NumberedName.ShouldBe("Septième");
-        season.Description.ShouldBe($"Mois obsédés où la création m'a envahie, sur fond d'art musical, de dispute entre angoisse et condition humaine, tandis qu'un amour éperdu se partageait entre romantisme et passion. La saison qui a le plus alimenté mon recueil.{Environment.NewLine}{Environment.NewLine}Juin et juillet 1998");
+        Assert.Equal(7, season.Id);
+        Assert.Equal("Croire", season.Name);
+        Assert.Equal("Septième", season.NumberedName);
+        Assert.Equal($"Mois obsédés où la création m'a envahie, sur fond d'art musical, de dispute entre angoisse et condition humaine, tandis qu'un amour éperdu se partageait entre romantisme et passion. La saison qui a le plus alimenté mon recueil.{Environment.NewLine}{Environment.NewLine}Juin et juillet 1998", season.Description);
     }
 }

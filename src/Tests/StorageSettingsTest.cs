@@ -1,5 +1,4 @@
 using Microsoft.Extensions.Configuration;
-using Shouldly;
 using Toolbox.Settings;
 using Xunit;
 
@@ -20,6 +19,6 @@ public class StorageSettingsTest : IClassFixture<BasicFixture>
     [Trait("UnitTest", "Computation")]
     public void ShouldGetCorrectSubcategorieNames()
     {
-        StorageSettings.SubcategorieNames.Count.ShouldBe(36);
+        Assert.Equal(36, StorageSettings.SubcategorieNames.Count);
     }
 }
