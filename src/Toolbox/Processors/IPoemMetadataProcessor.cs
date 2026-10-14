@@ -15,7 +15,7 @@ public interface IPoemMetadataProcessor
     DoubleAcrostiche GetDoubleAcrostiche(string line);
     void BuildCategories(string line);
     void BuildTags(string line);
-    void BuildPictureLines(string line);
+    void BuildPictures(string line);
     void BuildInfoLines(string line);
     void BuildDescriptionLines(string line);
     void BuildLocations(string line);

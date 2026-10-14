@@ -6,18 +6,18 @@ date: 2024-07-30
 verseLength: 6
 divider: ""
 categories:
-    - Crépuscule
-    - Ciel
+  - Crépuscule
+  - Ciel
 tags:
-    - "2024"
-    - ombres et lumières
-    - nature
-    - hexasyllabe
+  - "2024"
+  - nature
+  - ombres et lumières
+  - hexasyllabe
 locations:
-    - Mont des Cats
+  - Mont des Cats
 info: ""
 pictures:
-    - Mont des Cats - 30.07.2024
+  - Mont des Cats - 30.07.2024
 type: default
 acrostiche: ""
 doubleAcrostiche: ""
@@ -31,7 +31,7 @@ Un reflet fait le tour,
 
 L'espace montré ploie,
 
- \
+\
 Le ciel libère un chant
 
 Calme sans escarmouche,
@@ -40,7 +40,7 @@ De nouveau le couchant
 
 Me laisse sur la touche.
 
- \
+\
 Et l'ombre et la tiédeur
 
 Règneront sur la terre,

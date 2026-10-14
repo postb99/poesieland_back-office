@@ -13,76 +13,78 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
     private readonly List<string> _descriptionLines = [];
     private readonly List<string> _locations = [];
     private readonly List<string> _wordCloudLines = [];
+    
+    private int NumberOfCharsToIgnore(string metadataFieldName) => metadataFieldName.Length + 2;
 
     public string GetTitle(string line)
     {
-        return line.Substring(7);
+        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.TITLE));
     }
 
     public string GetId(string line)
     {
-        return line.Substring(4);
+        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.ID));
     }
 
     public string GetTextDate(string line)
     {
-        return DateTime.ParseExact(line.Substring(6), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None)
+        return DateTime.ParseExact(line.Substring(NumberOfCharsToIgnore(MetadataConstants.DATE)), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None)
             .ToString("dd.MM.yyyy");
     }
 
     public string? GetInfo(string line)
     {
-        var value = line?.Substring(6).Trim('"');
+        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.INFO)).Trim('"');
         return string.IsNullOrEmpty(value) ? null : value;
     }
 
     public string? GetPicture(string line)
     {
-        var value = line?.Substring(9).Trim('"');
+        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.PICTURES)).Trim('"');
         return string.IsNullOrEmpty(value) ? null : value;
     }
 
     public string? GetType(string line)
     {
-        var value = line?.Substring(10);
-        return value == "\"\"" ? null : value;
+        var value = line?.Substring(NumberOfCharsToIgnore(MetadataConstants.POEM_TYPE));
+        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value;
     }
 
     public string? GetAcrostiche(string line)
     {
-        var value = line?.Substring(12);
-        return value == "\"\"" ? null : value;
+        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.ACROSTICHE));
+        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value;
     }
 
-    public string GetVerseLength(string line)
+    public string? GetVerseLength(string line)
     {
-        var value = line.Substring(13);
-        return value == "\"\"" ? null : value;
+        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.VERSE_LENGTH));
+        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value;
     }
 
     public string? GetDescription(string line)
     {
-        var value = line?.Substring(13);
-        return value == "\"\"" ? null : value.Trim('"');
+        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.DESCRIPTION));
+        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value.Trim('"');
     }
 
     public string? GetWordCloud(string line)
     {
-        var value = line?.Substring(11);
-        return value == "\"\"" ? null : value.Trim('"');
+        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.WORDCLOUD));
+        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value.Trim('"');
     }
 
     public int GetWeight(string line)
     {
-        return int.Parse(line.Substring(8));
+        return int.Parse(line.Substring(NumberOfCharsToIgnore(MetadataConstants.WEIGHT)));
     }
 
     public DoubleAcrostiche GetDoubleAcrostiche(string line)
     {
-        var splitted = line?.Substring(18).Split('|');
-        return splitted.Length < 2
+        var splitted = line.Substring(NumberOfCharsToIgnore(MetadataConstants.DOUBLE_ACROSTICHE)).Split('|');
+        return (splitted.Length < 2
             ? null
-            : new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() };
+            : new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() })!;
     }
 
     public void BuildCategories(string line)
@@ -105,14 +107,9 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
         }
     }
     
-    public void BuildPictureLines(string line)
+    public void BuildPictures(string line)
     {
         MultilineMetadataProcessingType = MultilineMetadataProcessingType.Pictures;
-        var inlinePicture = GetPicture(line);
-        if (AddInlineValue(inlinePicture))
-        {
-            _pictures.Add(inlinePicture!);
-        }
     }
 
     public void BuildDescriptionLines(string line)
@@ -133,11 +130,6 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
         {
             _wordCloudLines.Add(inlineWordCloud!);
         }
-    }
-
-    public void BuildPictures(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Pictures;
     }
 
     public void BuildLocations(string line)
@@ -162,7 +154,7 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
                 _categories.Add(lineValue);
                 break;
             case MultilineMetadataProcessingType.Tags:
-                _tags.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
+                _tags.Add((lineValue.StartsWith(MetadataConstants.DOUBLE_QUOTE) ? lineValue.CleanedContent() : lineValue)!);
                 break;
             case MultilineMetadataProcessingType.Pictures:
                 _pictures.Add(lineValue);
@@ -183,7 +175,7 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
                 _wordCloudLines.Add(lineValue);
                 break;
             case MultilineMetadataProcessingType.Locations:
-                _locations.Add(lineValue.StartsWith("\"") ? lineValue.CleanedContent() : lineValue);
+                _locations.Add((lineValue.StartsWith(MetadataConstants.DOUBLE_QUOTE) ? lineValue.CleanedContent() : lineValue)!);
                 break;
             default:
                 throw new InvalidOperationException("AddValue not implemented for type " + MultilineMetadataProcessingType);
@@ -227,7 +219,7 @@ public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
 
     private bool AddInlineValue(string? inlineValue)
     {
-        if (inlineValue is null || inlineValue == "|-") return false;
+        if (inlineValue is null || inlineValue == MetadataConstants.PIPE_HYPHEN) return false;
         MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
         return true;
     }

@@ -128,7 +128,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
 
     [Fact]
     [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportMultipleCategories()
+    public void ShouldImportMultipleCategoriesAndSinglePicture()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
             fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/soir_parfait.md");
@@ -141,6 +141,7 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         Assert.Equal(1, poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.Count);
         Assert.Equal("Ciel", poem.Categories.FirstOrDefault(x => x.Name == "Nature").SubCategories.FirstOrDefault());
         Assert.Equal("Crépuscule", poem.Categories.FirstOrDefault(x => x.Name == "Ombres et lumières").SubCategories.FirstOrDefault());
+        Assert.Equal("Mont des Cats - 30.07.2024", poem.Pictures[0]);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 

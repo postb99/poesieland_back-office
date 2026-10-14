@@ -1,11 +1,10 @@
 ﻿using Toolbox.Domain;
-using Toolbox.Importers;
 
 namespace Toolbox.Processors;
 
 public class PoemContentProcessor
 {
-    private List<Paragraph> _paragraphs = new();
+    private List<Paragraph> _paragraphs = [];
     private bool _isNewParagraph = true;
     private bool _done;
 
@@ -16,18 +15,22 @@ public class PoemContentProcessor
             return;
         }
 
-        if (line == PoemImporter.YamlMarker || line == PoemImporter.TomlMarker)
+        if (line == MetadataConstants.YAML_MARKER || line == MetadataConstants.TOML_MARKER)
         {
             return;
         }
 
-        if (line.StartsWith("{{% callout") || line.StartsWith("<!-- FM:Snippet:") || line.StartsWith("![") || line.StartsWith("{{<") || line.StartsWith("[^"))
+        if (line.StartsWith(MetadataConstants.CALLOUT_START)
+            || line.StartsWith(MetadataConstants.FM_SNIPPET_START)
+            || line.StartsWith(MetadataConstants.MARKDOWN_IMAGE_START)
+            || line.StartsWith(MetadataConstants.HUGO_SHORTCODE_START)
+            || line.StartsWith(MetadataConstants.FOOTNOTE_REFERENCE_START))
         {
             _done = true;
             return;
         }
         
-        if (line.Trim() == "\\")
+        if (line.Trim() == MetadataConstants.PARAGRAPH_BREAK_MARKER)
         {
             _isNewParagraph = true;
             return;
@@ -35,7 +38,7 @@ public class PoemContentProcessor
 
         if (_isNewParagraph)
         {
-            var paragraph = new Paragraph { Verses = new() };
+            var paragraph = new Paragraph { Verses = [] };
             _paragraphs.Add(paragraph);
             _isNewParagraph = false;
         }

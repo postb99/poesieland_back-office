@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Toolbox.Consistency;
 using Toolbox.Domain;
 using Toolbox.Processors;
@@ -36,9 +32,6 @@ public class PoemImporter : IPoemImporter
         configuration.GetSection(Constants.REQUIRED_DESCRIPTION_SETTINGS).Bind(_requiredDescriptionSettings);
         configuration.GetSection(Constants.STORAGE_SETTINGS).Bind(_storageSettings);
     }
-
-    public const string YamlMarker = "---";
-    public const string TomlMarker = "+++";
 
     public bool HasTomlMetadata { get; private set; }
 
@@ -343,7 +336,7 @@ public class PoemImporter : IPoemImporter
 
         foreach (var season in dataEn.Seasons)
             season.Poems = staged.Seasons.FirstOrDefault(x => x.Id == season.Id)?.Poems ?? [];
-        
+
         dataEn.Seasons.AddRange(staged.Seasons.Where(x => dataEn.Seasons.All(existing => existing.Id != x.Id))
             .ToList());
     }
@@ -473,7 +466,7 @@ public class PoemImporter : IPoemImporter
         // Le front matter est un bloc unique. Une règle Markdown "---" dans le corps
         // ne doit pas rouvrir l'en-tête et permettre de remplacer l'id ou les catégories.
         // Exiger le marqueur exact évite aussi de traiter un vers "---texte" comme borne.
-        if (!_metadataComplete && line == TomlMarker)
+        if (!_metadataComplete && line == MetadataConstants.TOML_MARKER)
         {
             if (HasYamlMetadata) throw new InvalidDataException("Mixed metadata markers");
             HasTomlMetadata = true;
@@ -481,7 +474,7 @@ public class PoemImporter : IPoemImporter
             _metadataComplete = _isInMetadata;
             _isInMetadata = !_isInMetadata;
         }
-        else if (!_metadataComplete && line == YamlMarker)
+        else if (!_metadataComplete && line == MetadataConstants.YAML_MARKER)
         {
             if (HasTomlMetadata) throw new InvalidDataException("Mixed metadata markers");
             HasYamlMetadata = true;
@@ -502,71 +495,71 @@ public class PoemImporter : IPoemImporter
     /// <param name="line">The metadata line to process. This line could define various attributes of the poem such as title, id, categories, tags, or other properties.</param>
     private void ProcessMetadataLine(string line)
     {
-        if (line.StartsWith("title"))
+        if (line.StartsWith(MetadataConstants.TITLE))
         {
             _poem.Title = _metadataProcessor!.GetTitle(line);
         }
-        else if (line.StartsWith("id"))
+        else if (line.StartsWith(MetadataConstants.ID))
         {
             _poem.Id = _metadataProcessor!.GetId(line);
         }
-        else if (line.StartsWith("date"))
+        else if (line.StartsWith(MetadataConstants.DATE))
         {
             _poem.TextDate = _metadataProcessor!.GetTextDate(line);
         }
-        else if (line.StartsWith("categories"))
+        else if (line.StartsWith(MetadataConstants.CATEGORIES))
         {
             _metadataProcessor!.BuildCategories(line);
         }
-        else if (line.StartsWith("tags"))
+        else if (line.StartsWith(MetadataConstants.TAGS))
         {
             _metadataProcessor!.BuildTags(line);
         }
-        else if (line.StartsWith("pictures"))
+        else if (line.StartsWith(MetadataConstants.PICTURES))
         {
-            _metadataProcessor!.BuildPictureLines(line);
+            _metadataProcessor!.BuildPictures(line);
         }
-        else if (line.StartsWith("info"))
+        else if (line.StartsWith(MetadataConstants.INFO))
         {
             _metadataProcessor!.BuildInfoLines(line);
         }
-        else if (line.StartsWith("description"))
+        else if (line.StartsWith(MetadataConstants.DESCRIPTION))
         {
             _metadataProcessor!.BuildDescriptionLines(line);
         }
-        else if (line.StartsWith("acrostiche"))
+        else if (line.StartsWith(MetadataConstants.ACROSTICHE))
         {
             _poem.Acrostiche = _metadataProcessor!.GetAcrostiche(line);
         }
-        else if (line.StartsWith("doubleAcrostiche"))
+        else if (line.StartsWith(MetadataConstants.DOUBLE_ACROSTICHE))
         {
             _poem.DoubleAcrostiche = _metadataProcessor!.GetDoubleAcrostiche(line);
         }
-        else if (line.StartsWith("verseLength"))
+        else if (line.StartsWith(MetadataConstants.VERSE_LENGTH))
         {
             _poem.VerseLength = _metadataProcessor!.GetVerseLength(line);
         }
-        else if (line.StartsWith("poemType"))
+        else if (line.StartsWith(MetadataConstants.POEM_TYPE))
         {
             _poem.PoemType = _metadataProcessor!.GetType(line);
         }
-        else if (line.StartsWith("weight"))
+        else if (line.StartsWith(MetadataConstants.WEIGHT))
         {
             _poem.ContentFileIndex = _metadataProcessor!.GetWeight(line) - 1;
         }
-        else if (line.StartsWith("locations"))
+        else if (line.StartsWith(MetadataConstants.LOCATIONS))
         {
             _metadataProcessor!.BuildLocations(line);
         }
-        else if (line.StartsWith("wordcloud"))
+        else if (line.StartsWith(MetadataConstants.WORDCLOUD))
         {
             _metadataProcessor!.BuildWordCloudLines(line);
         }
-        else if (line.StartsWith("    - "))
+        else if (line.StartsWith(MetadataConstants.FOUR_SPACES_DASH))
         {
             _metadataProcessor!.AddValue(line, 4);
         }
-        else if (line.StartsWith("  - "))
+        else if (line.StartsWith(MetadataConstants.TWO_SPACES_DASH))
         {
             _metadataProcessor!.AddValue(line, 2);
         }
