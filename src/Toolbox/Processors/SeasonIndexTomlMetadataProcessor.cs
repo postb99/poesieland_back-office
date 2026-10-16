@@ -26,7 +26,7 @@ public sealed class SeasonIndexTomlMetadataProcessor : PoemMetadataProcessorBase
     {
         if (StartsWithField(line, MetadataConstants.DESCRIPTION))
         {
-            ProcessTextField(line, MetadataConstants.DESCRIPTION, MultilineMetadataProcessingType.DescriptionLines, isMultiline: true);
+            ProcessTextField(line, MetadataConstants.DESCRIPTION, MultilineMetadataProcessingType.DescriptionLines, isMultiline: false);
             return true;
         }
         return false;
