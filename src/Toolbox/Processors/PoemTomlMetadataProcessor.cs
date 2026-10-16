@@ -67,4 +67,7 @@ public sealed class PoemTomlMetadataProcessor : PoemMetadataProcessorBase
 
     /// <summary>Recognizes TOML triple quotes as the opener for a multiline string.</summary>
     protected override bool IsMultilineTextField(string fieldValue) => fieldValue.StartsWith(MetadataConstants.TRIPLE_DOUBLE_QUOTE, StringComparison.Ordinal);
+
+    /// <summary>Preserves TOML verse lengths as raw numeric or comma-separated values.</summary>
+    protected override string? ParseVerseLength(string value) => value;
 }

@@ -157,21 +157,27 @@ public abstract class PoemMetadataProcessorBase : IPoemMetadataProcessor
         else if (StartsWithField(line, MetadataConstants.DATE)) update = CreateUpdate(PoemMetadataField.TextDate, FormatDate(ExtractFieldValue(line, MetadataConstants.DATE)));
         else if (StartsWithField(line, MetadataConstants.ACROSTICHE)) update = CreateUpdate(PoemMetadataField.Acrostiche, ParseOptionalString(ExtractFieldValue(line, MetadataConstants.ACROSTICHE)));
         else if (StartsWithField(line, MetadataConstants.DOUBLE_ACROSTICHE)) update = CreateUpdate(PoemMetadataField.DoubleAcrostiche, ParseDoubleAcrostiche(ExtractFieldValue(line, MetadataConstants.DOUBLE_ACROSTICHE)));
-        else if (StartsWithField(line, MetadataConstants.VERSE_LENGTH)) update = CreateUpdate(PoemMetadataField.VerseLength, ParseOptionalString(ExtractFieldValue(line, MetadataConstants.VERSE_LENGTH)));
+        else if (StartsWithField(line, MetadataConstants.VERSE_LENGTH)) update = CreateUpdate(PoemMetadataField.VerseLength, ParseVerseLength(ExtractFieldValue(line, MetadataConstants.VERSE_LENGTH)));
         else if (StartsWithField(line, MetadataConstants.POEM_TYPE)) update = CreateUpdate(PoemMetadataField.PoemType, ParseOptionalString(ExtractFieldValue(line, MetadataConstants.POEM_TYPE)));
         else if (StartsWithField(line, MetadataConstants.WEIGHT)) update = CreateUpdate(PoemMetadataField.Weight, ParseWeight(ExtractFieldValue(line, MetadataConstants.WEIGHT)));
         else { update = null; return false; }
         return true;
     }
 
-    /// <summary>Checks a field name followed by one of the supported YAML or TOML separators.</summary>
-    protected static bool StartsWithField(string line, string field) => line.StartsWith(field + " ", StringComparison.Ordinal) || line.StartsWith(field + " =", StringComparison.Ordinal) || line.StartsWith(field + "=", StringComparison.Ordinal);
+    /// <summary>Checks a field name followed by a YAML colon or a TOML equals sign.</summary>
+    protected static bool StartsWithField(string line, string field) =>
+        line.StartsWith(field + ":", StringComparison.Ordinal)
+        || line.StartsWith(field + " =", StringComparison.Ordinal)
+        || line.StartsWith(field + "=", StringComparison.Ordinal);
 
     /// <summary>Normalizes a non-empty string according to the active metadata format.</summary>
     protected string ParseString(string value) => value.CleanedContent()!;
 
     /// <summary>Normalizes an optional string according to the active metadata format.</summary>
     protected virtual string? ParseOptionalString(string value) => ParseString(value);
+
+    /// <summary>Parses the verse-length field, whose representation may be numeric and unquoted.</summary>
+    protected virtual string? ParseVerseLength(string value) => ParseOptionalString(value);
 
     /// <summary>Parses the first two pipe-separated components of a double-acrostic value.</summary>
     protected virtual DoubleAcrostiche? ParseDoubleAcrostiche(string value)
