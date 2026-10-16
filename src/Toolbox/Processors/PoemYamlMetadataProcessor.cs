@@ -44,9 +44,6 @@ public sealed class PoemYamlMetadataProcessor : PoemMetadataProcessorBase
     /// <summary>Recognizes YAML's pipe marker as the start of a multiline text block.</summary>
     protected override bool IsMultilineTextField(string fieldValue) => fieldValue.TrimStart().StartsWith("|", StringComparison.Ordinal);
 
-    /// <summary>Gets YAML's explicit empty scalar marker used by text fields.</summary>
-    protected override string? EmptyTextFieldMarker => MetadataConstants.PIPE_HYPHEN;
-
     /// <summary>Splits the YAML double-acrostic value at its first pipe separator.</summary>
     protected override DoubleAcrostiche? ParseDoubleAcrostiche(string value)
     {
