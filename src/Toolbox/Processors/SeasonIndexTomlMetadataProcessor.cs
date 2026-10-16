@@ -8,6 +8,19 @@ public sealed class SeasonIndexTomlMetadataProcessor : PoemMetadataProcessorBase
     /// <summary>Season index entries contain descriptions, but not poem-specific metadata fields.</summary>
     protected override bool IncludesPoemFields => false;
 
+    /// <summary>Parses the season index weight without enabling poem-only scalar fields.</summary>
+    protected override bool TryProcessFormatSpecificScalarField(string line, out MetadataFieldUpdate? update)
+    {
+        if (!StartsWithField(line, MetadataConstants.WEIGHT))
+        {
+            update = null;
+            return false;
+        }
+
+        update = CreateUpdate(PoemMetadataField.Weight, ParseWeight(ExtractFieldValue(line, MetadataConstants.WEIGHT)));
+        return true;
+    }
+
     /// <summary>Recognizes and initializes a TOML season description field.</summary>
     protected override bool TryProcessFormatSpecificField(string line)
     {

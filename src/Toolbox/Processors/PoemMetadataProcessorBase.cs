@@ -179,6 +179,9 @@ public abstract class PoemMetadataProcessorBase : IPoemMetadataProcessor
     /// <summary>Parses the verse-length field, whose representation may be numeric and unquoted.</summary>
     protected virtual string? ParseVerseLength(string value) => ParseOptionalString(value);
 
+    /// <summary>Creates a line result for a scalar field parsed by a format-specific processor.</summary>
+    protected static MetadataFieldUpdate CreateUpdate(PoemMetadataField field, object? value) => new(field, value);
+
     /// <summary>Parses the first two pipe-separated components of a double-acrostic value.</summary>
     protected virtual DoubleAcrostiche? ParseDoubleAcrostiche(string value)
     {
@@ -190,9 +193,6 @@ public abstract class PoemMetadataProcessorBase : IPoemMetadataProcessor
     protected void AddCurrentValue(string value) => _values[CurrentMultilineType].Add(value);
 
     /// <summary>Routes a line to common poem fields or the concrete format parser.</summary>
-    /// <summary>Creates a result for a parsed scalar without retaining it in processor state.</summary>
-    private static MetadataFieldUpdate CreateUpdate(PoemMetadataField field, object? value) => new(field, value);
-
     /// <summary>Routes scalar declarations to the shared parser and collection declarations to the active format.</summary>
     private bool TryProcessField(string line, out MetadataFieldUpdate? update)
     {
@@ -204,7 +204,18 @@ public abstract class PoemMetadataProcessorBase : IPoemMetadataProcessor
             update = CreateUpdate(PoemMetadataField.Title, ParseString(ExtractFieldValue(line, MetadataConstants.TITLE)));
             return true;
         }
+        if (TryProcessFormatSpecificScalarField(line, out update)) return true;
         return TryProcessFormatSpecificField(line);
+    }
+
+    /// <summary>Processes scalar fields that are specific to the concrete metadata document.</summary>
+    /// <param name="line">The complete metadata line.</param>
+    /// <param name="update">The parsed scalar result, if this processor recognized the line.</param>
+    /// <returns>True when a scalar field was recognized and consumed.</returns>
+    protected virtual bool TryProcessFormatSpecificScalarField(string line, out MetadataFieldUpdate? update)
+    {
+        update = null;
+        return false;
     }
 
     /// <summary>Appends a continuation line to the active field after shared normalization rules.</summary>
