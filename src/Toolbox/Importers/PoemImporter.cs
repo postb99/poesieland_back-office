@@ -218,22 +218,22 @@ public class PoemImporter : IPoemImporter
 
         if (!_metadataComplete)
             throw new InvalidDataException($"Missing or unterminated poem metadata: {contentFilePath}");
-        _poem.Categories = GetCategories(_metadataProcessor!.GetCategories(), _poem.Id);
-        _poem.Pictures = _metadataProcessor.GetPictures();
-        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
+        _poem.Categories = GetCategories(_metadataProcessor!.Categories, _poem.Id);
+        _poem.Pictures = _metadataProcessor.Pictures;
+        var poemInfo = _metadataProcessor.InfoLines.Count == 0
             ? null
-            : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+            : string.Join(Environment.NewLine, _metadataProcessor.InfoLines);
         _poem.Info = poemInfo;
-        var poemDescription = _metadataProcessor.GetDescriptionLines().Count == 0
+        var poemDescription = _metadataProcessor.DescriptionLines.Count == 0
             ? null
-            : string.Join(Environment.NewLine, _metadataProcessor.GetDescriptionLines());
+            : string.Join(Environment.NewLine, _metadataProcessor.DescriptionLines);
         _poem.Description = poemDescription;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
-        _poem.ExtraTags = FindExtraTags(_metadataProcessor.GetTags());
-        _poem.Locations = _metadataProcessor.GetLocations();
-        _poem.WordCloud = _metadataProcessor.GetWordCloudLines().Count == 0
+        _poem.ExtraTags = FindExtraTags(_metadataProcessor.Tags);
+        _poem.Locations = _metadataProcessor.Locations;
+        _poem.WordCloud = _metadataProcessor.WordCloudLines.Count == 0
             ? null
-            : string.Join(Environment.NewLine, _metadataProcessor.GetWordCloudLines());
+            : string.Join(Environment.NewLine, _metadataProcessor.WordCloudLines);
 
         // Copy for XML save
         _poem.VerseLength = _poem.DetailedMetric;
@@ -264,13 +264,13 @@ public class PoemImporter : IPoemImporter
 
         if (!_metadataComplete)
             throw new InvalidDataException($"Missing or unterminated poem metadata: {contentFilePath}");
-        _poem.Categories = GetCategoriesEn(_metadataProcessor!.GetCategories(), _poem.Id);
-        var poemInfo = _metadataProcessor.GetInfoLines().Count == 0
+        _poem.Categories = GetCategoriesEn(_metadataProcessor!.Categories, _poem.Id);
+        var poemInfo = _metadataProcessor.InfoLines.Count == 0
             ? null
-            : string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines());
+            : string.Join(Environment.NewLine, _metadataProcessor.InfoLines);
         _poem.Info = poemInfo;
         _poem.Paragraphs = _contentProcessor!.Paragraphs;
-        _poem.Locations = _metadataProcessor.GetLocations();
+        _poem.Locations = _metadataProcessor.Locations;
 
         // Copy for XML save
         _poem.VerseLength = _poem.DetailedMetric;
@@ -376,7 +376,7 @@ public class PoemImporter : IPoemImporter
         {
             DetailedMetric = _poem.DetailedMetric,
             HasVariableMetric = _poem.HasVariableMetric,
-            Tags = _metadataProcessor!.GetTags(),
+            Tags = _metadataProcessor!.Tags,
             PoemId = _poem.Id,
             Year = _poem.Date.Year,
             Info = _poem.Info,
@@ -409,16 +409,16 @@ public class PoemImporter : IPoemImporter
             throw new InvalidDataException($"Missing or unterminated poem metadata: {contentFilePath}");
 
         // Necessary for _poem.DetailedMetric not to crash
-        _poem.Info = string.Join(Environment.NewLine, _metadataProcessor!.GetInfoLines());
+        _poem.Info = string.Join(Environment.NewLine, _metadataProcessor!.InfoLines);
         return new()
         {
-            Tags = _metadataProcessor.GetTags(),
+            Tags = _metadataProcessor.Tags,
             PoemId = _poem.Id,
             Year = _poem.Date.Year,
             HasVariableMetric = _poem.HasVariableMetric,
             DetailedMetric = _poem.DetailedMetric,
-            Info = string.Join(Environment.NewLine, _metadataProcessor.GetInfoLines()),
-            Description = string.Join(Environment.NewLine, _metadataProcessor.GetDescriptionLines())
+            Info = string.Join(Environment.NewLine, _metadataProcessor.InfoLines),
+            Description = string.Join(Environment.NewLine, _metadataProcessor.DescriptionLines)
         };
     }
 
@@ -495,81 +495,26 @@ public class PoemImporter : IPoemImporter
     /// <param name="line">The metadata line to process. This line could define various attributes of the poem such as title, id, categories, tags, or other properties.</param>
     private void ProcessMetadataLine(string line)
     {
-        if (line.StartsWith(MetadataConstants.TITLE))
+        // Convert the two supported YAML list prefixes to the indentation width expected by the processor.
+        var indentation = line.StartsWith(MetadataConstants.FOUR_SPACES_DASH, StringComparison.Ordinal) ? 4
+            : line.StartsWith(MetadataConstants.TWO_SPACES_DASH, StringComparison.Ordinal) ? 2
+            : -2;
+        var update = _metadataProcessor!.ProcessLine(line, indentation);
+        if (update is null) return;
+
+        // Apply only the scalar field produced by this line; collection fields remain in the processor.
+        switch (update.Field)
         {
-            _poem.Title = _metadataProcessor!.GetTitle(line);
-        }
-        else if (line.StartsWith(MetadataConstants.ID))
-        {
-            _poem.Id = _metadataProcessor!.GetId(line);
-        }
-        else if (line.StartsWith(MetadataConstants.DATE))
-        {
-            _poem.TextDate = _metadataProcessor!.GetTextDate(line);
-        }
-        else if (line.StartsWith(MetadataConstants.CATEGORIES))
-        {
-            _metadataProcessor!.BuildCategories(line);
-        }
-        else if (line.StartsWith(MetadataConstants.TAGS))
-        {
-            _metadataProcessor!.BuildTags(line);
-        }
-        else if (line.StartsWith(MetadataConstants.PICTURES))
-        {
-            _metadataProcessor!.BuildPictures(line);
-        }
-        else if (line.StartsWith(MetadataConstants.INFO))
-        {
-            _metadataProcessor!.BuildInfoLines(line);
-        }
-        else if (line.StartsWith(MetadataConstants.DESCRIPTION))
-        {
-            _metadataProcessor!.BuildDescriptionLines(line);
-        }
-        else if (line.StartsWith(MetadataConstants.ACROSTICHE))
-        {
-            _poem.Acrostiche = _metadataProcessor!.GetAcrostiche(line);
-        }
-        else if (line.StartsWith(MetadataConstants.DOUBLE_ACROSTICHE))
-        {
-            _poem.DoubleAcrostiche = _metadataProcessor!.GetDoubleAcrostiche(line);
-        }
-        else if (line.StartsWith(MetadataConstants.VERSE_LENGTH))
-        {
-            _poem.VerseLength = _metadataProcessor!.GetVerseLength(line);
-        }
-        else if (line.StartsWith(MetadataConstants.POEM_TYPE))
-        {
-            _poem.PoemType = _metadataProcessor!.GetType(line);
-        }
-        else if (line.StartsWith(MetadataConstants.WEIGHT))
-        {
-            _poem.ContentFileIndex = _metadataProcessor!.GetWeight(line) - 1;
-        }
-        else if (line.StartsWith(MetadataConstants.LOCATIONS))
-        {
-            _metadataProcessor!.BuildLocations(line);
-        }
-        else if (line.StartsWith(MetadataConstants.WORDCLOUD))
-        {
-            _metadataProcessor!.BuildWordCloudLines(line);
-        }
-        else if (line.StartsWith(MetadataConstants.FOUR_SPACES_DASH))
-        {
-            _metadataProcessor!.AddValue(line, 4);
-        }
-        else if (line.StartsWith(MetadataConstants.TWO_SPACES_DASH))
-        {
-            _metadataProcessor!.AddValue(line, 2);
-        }
-        else
-        {
-            // blank line or any text line, starting with spaces or not
-            _metadataProcessor!.AddValue(line, -2);
+            case PoemMetadataField.Title: _poem.Title = (string?)update.Value ?? string.Empty; break;
+            case PoemMetadataField.Id: _poem.Id = (string?)update.Value ?? string.Empty; break;
+            case PoemMetadataField.TextDate: _poem.TextDate = (string?)update.Value ?? string.Empty; break;
+            case PoemMetadataField.Acrostiche: _poem.Acrostiche = (string?)update.Value; break;
+            case PoemMetadataField.DoubleAcrostiche: _poem.DoubleAcrostiche = (DoubleAcrostiche?)update.Value; break;
+            case PoemMetadataField.VerseLength: _poem.VerseLength = (string?)update.Value; break;
+            case PoemMetadataField.PoemType: _poem.PoemType = (string?)update.Value; break;
+            case PoemMetadataField.Weight: _poem.ContentFileIndex = (int)update.Value! - 1; break;
         }
     }
-
     /// <summary>
     /// Maps the provided metadata categories to their corresponding storage categories and organizes them
     /// based on the storage settings configuration.

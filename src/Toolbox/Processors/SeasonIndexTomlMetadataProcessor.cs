@@ -1,58 +1,38 @@
 namespace Toolbox.Processors;
 
-public class SeasonIndexTomlMetadataProcessor
+public sealed class SeasonIndexTomlMetadataProcessor : PoemMetadataProcessorBase
 {
-    public MultilineMetadataProcessingType MultilineMetadataProcessingType { get; private set; }
-    public List<string> DescriptionLines { get; } = [];
-    
-    private int NumberOfCharsToIgnore(string metadataFieldName) => metadataFieldName.Length + 3;
-    
-    private string RemoveTrailingDelimiter(string lineValue) => lineValue.Substring(0, lineValue.Length - 3);
-    
-    public string GetTitle(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.TITLE)).CleanedContent()!;
-    }
-    
-    public int GetWeight(string line)
-    {
-        return int.Parse(line.Substring(NumberOfCharsToIgnore(MetadataConstants.WEIGHT)));
-    }
+    /// <summary>Uses TOML's equals sign and following space as the field separator.</summary>
+    protected override int FieldSuffixLength => 3;
 
-    private string? GetDescription(string line)
+    /// <summary>Season index entries contain descriptions, but not poem-specific metadata fields.</summary>
+    protected override bool IncludesPoemFields => false;
+
+    /// <summary>Recognizes and initializes a TOML season description field.</summary>
+    protected override bool TryProcessFormatSpecificField(string line)
     {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.DESCRIPTION)).CleanedContent();
-    }
-    
-    public void BuildDescriptionLines(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
-        var inlineInfo = GetDescription(line);
-        if (inlineInfo != null && inlineInfo != MetadataConstants.DOUBLE_QUOTE)
+        if (StartsWithField(line, MetadataConstants.DESCRIPTION))
         {
-            AddValue(inlineInfo, -2);
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+            ProcessTextField(line, MetadataConstants.DESCRIPTION, MultilineMetadataProcessingType.DescriptionLines, isMultiline: true);
+            return true;
         }
+        return false;
     }
 
-    public void AddValue(string line, int nbSpaces)
+    /// <summary>Collects description lines until the TOML triple-quote terminator is found.</summary>
+    protected override bool TryAddFormatSpecificValue(string lineValue)
     {
-        var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
-        switch (MultilineMetadataProcessingType)
-        {
-            case MultilineMetadataProcessingType.InfoLines:
+        if (CurrentMultilineType != MultilineMetadataProcessingType.DescriptionLines) return false;
+        if (TryConsumeTripleQuoteTerminator(lineValue)) return true;
 
-                if (lineValue.EndsWith(MetadataConstants.TRIPLE_DOUBLE_QUOTE))
-                {
-                    // Encountered """ end marker
-                    DescriptionLines.Add(RemoveTrailingDelimiter(lineValue));
-                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-                }
-                else
-                {
-                    DescriptionLines.Add(lineValue);
-                }
-                break;
-        }
+        // Season descriptions preserve their TOML indentation just like poem text blocks.
+        AddCurrentValue(lineValue);
+        return true;
     }
+
+    /// <summary>Removes TOML quotes and escapes from a season description field.</summary>
+    protected override string? DecodeTextFieldValue(string value) => value.CleanedContent();
+
+    /// <summary>Recognizes TOML triple quotes as the opener for a multiline description.</summary>
+    protected override bool IsMultilineTextField(string fieldValue) => fieldValue.StartsWith(MetadataConstants.TRIPLE_DOUBLE_QUOTE, StringComparison.Ordinal);
 }

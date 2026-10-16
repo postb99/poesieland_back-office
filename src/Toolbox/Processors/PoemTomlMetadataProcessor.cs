@@ -1,263 +1,70 @@
-﻿using System.Globalization;
-using Toolbox.Domain;
-
 namespace Toolbox.Processors;
 
-public class PoemTomlMetadataProcessor : IPoemMetadataProcessor
+/// <summary>Parses poem metadata written in the project's TOML front matter format.</summary>
+public sealed class PoemTomlMetadataProcessor : PoemMetadataProcessorBase
 {
-    public MultilineMetadataProcessingType MultilineMetadataProcessingType { get; private set; }
+    /// <summary>TOML field values begin after an equals sign and one following space.</summary>
+    protected override int FieldSuffixLength => 3;
 
-    private List<string> _categories = [];
-    private List<string> _tags = [];
-    private List<string> _pictures = [];
-    private List<string> _infoLines = [];
-    private List<string> _descriptionLines = [];
-    private List<string> _locations = [];
-    private List<string> _wordCloudLines = [];
-
-    private int NumberOfCharsToIgnore(string metadataFieldName) => metadataFieldName.Length + 3;
-    
-    private string ToArrayDeclaration(string metadataFieldName) => $"{metadataFieldName} = [";
-    
-    private string RemoveTrailingDelimiter(string lineValue) => lineValue.Substring(0, lineValue.Length - 3);
-
-    private string[] ExtractArrayValues(string lineValue) => lineValue.Trim('[').Trim(']').Trim(' ').Split('"');
-
-    public string GetTitle(string line)
+    /// <summary>Recognizes TOML arrays, scalar fields, and multiline string declarations.</summary>
+    protected override bool TryProcessFormatSpecificField(string line)
     {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.TITLE)).CleanedContent()!;
+        if (StartsWithField(line, MetadataConstants.CATEGORIES))
+            SetValues(MultilineMetadataProcessingType.Categories, ExtractArrayValues(ExtractFieldValue(line, MetadataConstants.CATEGORIES)));
+        else if (StartsWithField(line, MetadataConstants.TAGS))
+            ProcessArrayField(line, MetadataConstants.TAGS, MultilineMetadataProcessingType.Tags);
+        else if (StartsWithField(line, MetadataConstants.PICTURES))
+            ProcessArrayField(line, MetadataConstants.PICTURES, MultilineMetadataProcessingType.Pictures);
+        else if (StartsWithField(line, MetadataConstants.LOCATIONS))
+            SetValues(MultilineMetadataProcessingType.Locations, ExtractArrayValues(ExtractFieldValue(line, MetadataConstants.LOCATIONS)));
+        else if (StartsWithField(line, MetadataConstants.INFO))
+            ProcessTextField(line, MetadataConstants.INFO, MultilineMetadataProcessingType.InfoLines, isMultiline: true);
+        else if (StartsWithField(line, MetadataConstants.DESCRIPTION))
+            ProcessTextField(line, MetadataConstants.DESCRIPTION, MultilineMetadataProcessingType.DescriptionLines, isMultiline: true);
+        else if (StartsWithField(line, MetadataConstants.WORDCLOUD))
+            ProcessTextField(line, MetadataConstants.WORDCLOUD, MultilineMetadataProcessingType.WordCloudLines, isMultiline: true);
+        else return false;
+        return true;
     }
 
-    public string GetId(string line)
+    /// <summary>Consumes TOML continuation lines and closes arrays or multiline strings at their terminators.</summary>
+    protected override bool TryAddFormatSpecificValue(string lineValue)
     {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.ID)).CleanedContent()!;
-    }
-
-    public string GetTextDate(string line)
-    {
-        return DateTime.ParseExact(line.Substring(NumberOfCharsToIgnore(MetadataConstants.DATE)), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None)
-            .ToString("dd.MM.yyyy");
-    }
-
-    public string? GetInfo(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.INFO)).CleanedContent();
-    }
-
-    public string? GetDescription(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.DESCRIPTION)).CleanedContent();
-    }
-    
-    public string? GetWordCloud(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.WORDCLOUD)).CleanedContent();
-    }
-
-    public string? GetAcrostiche(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.ACROSTICHE)).CleanedContent();
-    }
-
-    public string GetVerseLength(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.VERSE_LENGTH));
-    }
-
-    public int GetWeight(string line)
-    {
-        return int.Parse(line.Substring(NumberOfCharsToIgnore(MetadataConstants.WEIGHT)));
-    }
-
-    public string? GetType(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.POEM_TYPE)).CleanedContent();
-    }
-
-    public DoubleAcrostiche GetDoubleAcrostiche(string line)
-    {
-        var splitted = line.Substring(NumberOfCharsToIgnore(MetadataConstants.DOUBLE_ACROSTICHE)).CleanedContent().Split('|');
-        return new() { First = splitted[0].Trim(), Second = splitted[1].Trim() };
-    }
-
-    public void BuildCategories(string line)
-    {
-        _categories =
-        [
-            .. ExtractArrayValues(line.Substring(NumberOfCharsToIgnore(MetadataConstants.CATEGORIES)))
-                .Where(x => x != string.Empty && x != ", ")
-        ];
-    }
-
-    public void BuildTags(string line)
-    {
-        if (line == ToArrayDeclaration(MetadataConstants.TAGS))
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.Tags;
-        else
-            _tags =
-            [
-                .. ExtractArrayValues(line.Substring(NumberOfCharsToIgnore(MetadataConstants.TAGS)))
-                    .Where(x => x != string.Empty && x != ", ")
-            ];
-    }
-
-    public void BuildPictures(string line)
-    {
-        if (line == ToArrayDeclaration(MetadataConstants.PICTURES))
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.Pictures;
-        else
-            _pictures =
-            [
-                .. ExtractArrayValues(line.Substring(NumberOfCharsToIgnore(MetadataConstants.PICTURES)))
-                    .Where(x => x != string.Empty && x != ", ")
-            ];
-    }
-
-    public void BuildInfoLines(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
-        var inlineInfo = GetInfo(line);
-        ProcessInlineValue(inlineInfo);
-    }
-
-    public void BuildDescriptionLines(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.DescriptionLines;
-        var inlineDescription = GetDescription(line);
-        ProcessInlineValue(inlineDescription);
-    }
-    
-    public void BuildWordCloudLines(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.WordCloudLines;
-        var inlineWordCloud = GetWordCloud(line);
-        ProcessInlineValue(inlineWordCloud);
-    }
-
-    public void BuildLocations(string line)
-    {
-        _locations =
-        [
-            .. ExtractArrayValues(line.Substring(NumberOfCharsToIgnore(MetadataConstants.LOCATIONS)))
-                .Where(x => x != string.Empty && x != ", ")
-        ];
-    }
-
-    public void AddValue(string line, int nbSpaces)
-    {
-        var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
-        switch (MultilineMetadataProcessingType)
+        if (CurrentMultilineType is MultilineMetadataProcessingType.InfoLines or MultilineMetadataProcessingType.DescriptionLines or MultilineMetadataProcessingType.WordCloudLines)
         {
-            case MultilineMetadataProcessingType.None :
-                break;
-            case MultilineMetadataProcessingType.InfoLines:
-                if (lineValue.EndsWith(MetadataConstants.TRIPLE_DOUBLE_QUOTE))
-                {
-                    // Encountered """ end marker
-                    _infoLines.Add(RemoveTrailingDelimiter(lineValue));
-                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-                }
-                else
-                {
-                    _infoLines.Add(lineValue);
-                }
-                break;
-            case MultilineMetadataProcessingType.Tags:
-                if (lineValue == MetadataConstants.CLOSING_BRACKET)
-                {
-                    // Encountered ] end marker
-                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-                }
-                else
-                {
-                    _tags.Add(lineValue.TrimStart(' ').TrimEnd(',').Trim('"'));
-                }
-                break;
-            case MultilineMetadataProcessingType.DescriptionLines:
-                if (lineValue.EndsWith(MetadataConstants.TRIPLE_DOUBLE_QUOTE))
-                {
-                    // Encountered """ end marker
-                    _descriptionLines.Add(RemoveTrailingDelimiter(lineValue));
-                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-                }
-                else
-                {
-                    _descriptionLines.Add(lineValue);
-                }
-                break;
-            case MultilineMetadataProcessingType.WordCloudLines:
-                if (lineValue.EndsWith(MetadataConstants.TRIPLE_DOUBLE_QUOTE))
-                {
-                    // Encountered """ end marker
-                    _wordCloudLines.Add(RemoveTrailingDelimiter(lineValue));
-                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-                }
-                else
-                {
-                    _wordCloudLines.Add(lineValue);
-                }
-                break;
-            case MultilineMetadataProcessingType.Pictures:
-                if (lineValue == MetadataConstants.CLOSING_BRACKET)
-                {
-                    // Encountered ] end marker
-                    MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-                }
-                else
-                {
-                    _pictures.Add(lineValue.TrimStart(' ').TrimEnd(',').Trim('"'));
-                }
-                break;
-            default :
-                throw new InvalidOperationException("AddValue not implemented for type " + MultilineMetadataProcessingType);
+            if (TryConsumeTripleQuoteTerminator(lineValue)) return true;
+
+            // Preserve the indentation that is part of the TOML multiline string.
+            AddCurrentValue(lineValue);
+            return true;
         }
-    }
-
-    public List<string> GetCategories()
-    {
-        return _categories;
-    }
-
-    public List<string> GetTags()
-    {
-        return _tags;
-    }
-
-    public List<string> GetPictures()
-    {
-        return _pictures;
-    }
-
-    public List<string> GetInfoLines()
-    {
-        return _infoLines;
-    }
-    
-    public List<string> GetDescriptionLines()
-    {
-        return _descriptionLines;
-    }
-    
-    public List<string> GetWordCloudLines()
-    {
-        return _wordCloudLines;
-    }
-
-    public List<string> GetLocations()
-    {
-        return _locations;
-    }
-    
-    private void ProcessInlineValue(string? inlineValue)
-    {
-        if (inlineValue is null)
+        else if (CurrentMultilineType is MultilineMetadataProcessingType.Tags or MultilineMetadataProcessingType.Pictures)
         {
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+            if (lineValue == MetadataConstants.CLOSING_BRACKET)
+            {
+                SetCurrentType(MultilineMetadataProcessingType.None);
+                return true;
+            }
+            // TOML arrays use one quoted item per continuation line in the supported content files.
+            AddCurrentValue(lineValue.TrimStart(' ').TrimEnd(',').Trim('"'));
+            return true;
         }
-        else if (inlineValue != MetadataConstants.DOUBLE_QUOTE)
-        {
-            AddValue(inlineValue, -2);
-            MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
-        }
+        return false;
     }
+
+    /// <summary>Extracts quoted array elements and drops separators and empty split segments.</summary>
+    private static IEnumerable<string> ExtractArrayValues(string value) => value.Trim('[', ']').Trim(' ').Split('"').Where(x => x != string.Empty && x != ", ");
+
+    /// <summary>Processes either an inline array or the opening line of a multiline array.</summary>
+    private void ProcessArrayField(string line, string field, MultilineMetadataProcessingType type)
+    {
+        if (line == $"{field} = [") SetCurrentType(type);
+        else SetValues(type, ExtractArrayValues(ExtractFieldValue(line, field)));
+    }
+
+    /// <summary>Removes TOML quotes and escape sequences from a text-field value.</summary>
+    protected override string? DecodeTextFieldValue(string value) => value.CleanedContent();
+
+    /// <summary>Recognizes TOML triple quotes as the opener for a multiline string.</summary>
+    protected override bool IsMultilineTextField(string fieldValue) => fieldValue.StartsWith(MetadataConstants.TRIPLE_DOUBLE_QUOTE, StringComparison.Ordinal);
 }

@@ -1,226 +1,54 @@
-﻿using System.Globalization;
 using Toolbox.Domain;
 
 namespace Toolbox.Processors;
 
-public class PoemYamlMetadataProcessor : IPoemMetadataProcessor
+/// <summary>Parses poem metadata written in the project's YAML front matter format.</summary>
+public sealed class PoemYamlMetadataProcessor : PoemMetadataProcessorBase
 {
-    public MultilineMetadataProcessingType MultilineMetadataProcessingType { get; private set; }
-    private readonly List<string> _categories = [];
-    private readonly List<string> _tags = [];
-    private readonly List<string> _pictures = [];
-    private readonly List<string> _infoLines = [];
-    private readonly List<string> _descriptionLines = [];
-    private readonly List<string> _locations = [];
-    private readonly List<string> _wordCloudLines = [];
-    
-    private int NumberOfCharsToIgnore(string metadataFieldName) => metadataFieldName.Length + 2;
+    /// <summary>YAML field values begin after a colon and one following space.</summary>
+    protected override int FieldSuffixLength => 2;
 
-    public string GetTitle(string line)
-    {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.TITLE));
-    }
+    /// <summary>YAML continuation values use the shared processing rules without extra format-specific handling.</summary>
+    protected override bool TryAddFormatSpecificValue(string lineValue) => false;
 
-    public string GetId(string line)
+    /// <summary>Recognizes YAML list fields and inline scalar or block fields.</summary>
+    protected override bool TryProcessFormatSpecificField(string line)
     {
-        return line.Substring(NumberOfCharsToIgnore(MetadataConstants.ID));
-    }
-
-    public string GetTextDate(string line)
-    {
-        return DateTime.ParseExact(line.Substring(NumberOfCharsToIgnore(MetadataConstants.DATE)), "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None)
-            .ToString("dd.MM.yyyy");
-    }
-
-    public string? GetInfo(string line)
-    {
-        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.INFO)).Trim('"');
-        return string.IsNullOrEmpty(value) ? null : value;
-    }
-
-    public string? GetPicture(string line)
-    {
-        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.PICTURES)).Trim('"');
-        return string.IsNullOrEmpty(value) ? null : value;
-    }
-
-    public string? GetType(string line)
-    {
-        var value = line?.Substring(NumberOfCharsToIgnore(MetadataConstants.POEM_TYPE));
-        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value;
-    }
-
-    public string? GetAcrostiche(string line)
-    {
-        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.ACROSTICHE));
-        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value;
-    }
-
-    public string? GetVerseLength(string line)
-    {
-        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.VERSE_LENGTH));
-        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value;
-    }
-
-    public string? GetDescription(string line)
-    {
-        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.DESCRIPTION));
-        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value.Trim('"');
-    }
-
-    public string? GetWordCloud(string line)
-    {
-        var value = line.Substring(NumberOfCharsToIgnore(MetadataConstants.WORDCLOUD));
-        return value == MetadataConstants.DOUBLE_QUOTE_PAIR ? null : value.Trim('"');
-    }
-
-    public int GetWeight(string line)
-    {
-        return int.Parse(line.Substring(NumberOfCharsToIgnore(MetadataConstants.WEIGHT)));
-    }
-
-    public DoubleAcrostiche GetDoubleAcrostiche(string line)
-    {
-        var splitted = line.Substring(NumberOfCharsToIgnore(MetadataConstants.DOUBLE_ACROSTICHE)).Split('|');
-        return (splitted.Length < 2
-            ? null
-            : new DoubleAcrostiche { First = splitted[0].Trim(), Second = splitted[1].Trim() })!;
-    }
-
-    public void BuildCategories(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Categories;
-    }
-
-    public void BuildTags(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Tags;
-    }
-
-    public void BuildInfoLines(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.InfoLines;
-        var inlineInfo = GetInfo(line);
-        if (AddInlineValue(inlineInfo))
-        {
-            _infoLines.Add(inlineInfo!);
-        }
-    }
-    
-    public void BuildPictures(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Pictures;
-    }
-
-    public void BuildDescriptionLines(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.DescriptionLines;
-        var inlineDescription = GetDescription(line);
-        if (AddInlineValue(inlineDescription))
-        {
-            _descriptionLines.Add(inlineDescription!);
-        }
-    }
-
-    public void BuildWordCloudLines(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.WordCloudLines;
-        var inlineWordCloud = GetWordCloud(line);
-        if (AddInlineValue(inlineWordCloud))
-        {
-            _wordCloudLines.Add(inlineWordCloud!);
-        }
-    }
-
-    public void BuildLocations(string line)
-    {
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.Locations;
-    }
-
-    public void AddValue(string line, int nbSpaces)
-    {
-        if (nbSpaces == -2 && line.Length > 0 && line[0] != ' ')
-        {
-            // A value in YAML cannot start at beginning of line so ignore lines not starting with at least a space
-            return;
-        }
-
-        var lineValue = line == "" ? line : line.Substring(nbSpaces + 2);
-        switch (MultilineMetadataProcessingType)
-        {
-            case MultilineMetadataProcessingType.None :
-                break;
-            case MultilineMetadataProcessingType.Categories:
-                _categories.Add(lineValue);
-                break;
-            case MultilineMetadataProcessingType.Tags:
-                _tags.Add((lineValue.StartsWith(MetadataConstants.DOUBLE_QUOTE) ? lineValue.CleanedContent() : lineValue)!);
-                break;
-            case MultilineMetadataProcessingType.Pictures:
-                _pictures.Add(lineValue);
-                break;
-            case MultilineMetadataProcessingType.InfoLines:
-                lineValue = lineValue.TrimStart(' ');
-                if (lineValue == "{{% callout style=\"primary\" %}}") return;
-                if (lineValue == "{{% /callout %}}") return;
-                if (lineValue.StartsWith("Acrostiche :")) return;
-                _infoLines.Add(lineValue);
-                break;
-            case MultilineMetadataProcessingType.DescriptionLines:
-                lineValue = lineValue.TrimStart(' ');
-                _descriptionLines.Add(lineValue);
-                break;
-            case MultilineMetadataProcessingType.WordCloudLines:
-                lineValue = lineValue.TrimStart(' ');
-                _wordCloudLines.Add(lineValue);
-                break;
-            case MultilineMetadataProcessingType.Locations:
-                _locations.Add((lineValue.StartsWith(MetadataConstants.DOUBLE_QUOTE) ? lineValue.CleanedContent() : lineValue)!);
-                break;
-            default:
-                throw new InvalidOperationException("AddValue not implemented for type " + MultilineMetadataProcessingType);
-        }
-    }
-
-    public List<string> GetCategories()
-    {
-        return _categories;
-    }
-
-    public List<string> GetTags()
-    {
-        return _tags;
-    }
-
-    public List<string> GetPictures()
-    {
-        return _pictures;
-    }
-
-    public List<string> GetInfoLines()
-    {
-        return _infoLines;
-    }
-
-    public List<string> GetDescriptionLines()
-    {
-        return _descriptionLines;
-    }
-
-    public List<string> GetWordCloudLines()
-    {
-        return _wordCloudLines;
-    }
-
-    public List<string> GetLocations()
-    {
-        return _locations;
-    }
-
-    private bool AddInlineValue(string? inlineValue)
-    {
-        if (inlineValue is null || inlineValue == MetadataConstants.PIPE_HYPHEN) return false;
-        MultilineMetadataProcessingType = MultilineMetadataProcessingType.None;
+        if (StartsWithField(line, MetadataConstants.CATEGORIES)) SetCurrentType(MultilineMetadataProcessingType.Categories);
+        else if (StartsWithField(line, MetadataConstants.TAGS)) SetCurrentType(MultilineMetadataProcessingType.Tags);
+        else if (StartsWithField(line, MetadataConstants.PICTURES)) SetCurrentType(MultilineMetadataProcessingType.Pictures);
+        else if (StartsWithField(line, MetadataConstants.INFO))
+            ProcessTextField(line, MetadataConstants.INFO, MultilineMetadataProcessingType.InfoLines, isMultiline: false);
+        else if (StartsWithField(line, MetadataConstants.DESCRIPTION))
+            ProcessTextField(line, MetadataConstants.DESCRIPTION, MultilineMetadataProcessingType.DescriptionLines, isMultiline: false);
+        else if (StartsWithField(line, MetadataConstants.WORDCLOUD))
+            ProcessTextField(line, MetadataConstants.WORDCLOUD, MultilineMetadataProcessingType.WordCloudLines, isMultiline: false);
+        else if (StartsWithField(line, MetadataConstants.LOCATIONS)) SetCurrentType(MultilineMetadataProcessingType.Locations);
+        else return false;
         return true;
     }
+
+    /// <summary>Treats an empty YAML scalar or a pair of quotes as an absent optional value.</summary>
+    protected override string? ParseOptionalString(string value)
+    {
+        var parsed = value.Trim('"');
+        return parsed is "" or MetadataConstants.DOUBLE_QUOTE_PAIR ? null : parsed;
+    }
+
+    /// <summary>Decodes an inline YAML text-field scalar using YAML's optional-value rules.</summary>
+    protected override string? DecodeTextFieldValue(string value) => ParseOptionalString(value);
+
+    /// <summary>Recognizes YAML's pipe marker as the start of a multiline text block.</summary>
+    protected override bool IsMultilineTextField(string fieldValue) => fieldValue.TrimStart().StartsWith("|", StringComparison.Ordinal);
+
+    /// <summary>Gets YAML's explicit empty scalar marker used by text fields.</summary>
+    protected override string? EmptyTextFieldMarker => MetadataConstants.PIPE_HYPHEN;
+
+    /// <summary>Splits the YAML double-acrostic value at its first pipe separator.</summary>
+    protected override DoubleAcrostiche? ParseDoubleAcrostiche(string value)
+    {
+        var parts = value.Split('|');
+        return parts.Length < 2 ? null : new() { First = parts[0].Trim(), Second = parts[1].Trim() };
+    }
+
 }

@@ -10,8 +10,6 @@ public class SeasonIndexImporter()
     private bool _isInMetadata;
     private SeasonIndexTomlMetadataProcessor _metadataProcessor = new();
 
-    private const string TomlMarker = "+++";
-
     /// <summary>
     /// Imports season metadata (TOML format only) from a specified content file into a Season object.
     /// </summary>
@@ -49,7 +47,7 @@ public class SeasonIndexImporter()
         if (line == null)
             return;
 
-        if (line.StartsWith(TomlMarker))
+        if (line.StartsWith(MetadataConstants.TOML_MARKER, StringComparison.Ordinal))
         {
             _isInMetadata = !_isInMetadata;
         }
@@ -64,24 +62,17 @@ public class SeasonIndexImporter()
     /// <param name="line">The metadata line to be processed.</param>
     private void ProcessMetadataLine(string line)
     {
-        if (line.StartsWith("title"))
+        // The processor owns TOML parsing; the importer only maps parsed fields to season-specific properties.
+        var update = _metadataProcessor.ProcessLine(line);
+        if (update?.Field == PoemMetadataField.Title)
         {
-            var longTitleParts = _metadataProcessor.GetTitle(line).Split(':');
+            var longTitleParts = ((string)update.Value!).Split(':');
             _season.NumberedName = longTitleParts[0][..^8];
             _season.Name = longTitleParts[1].TrimStart();
         }
-        else if (line.StartsWith("description"))
+        else if (update?.Field == PoemMetadataField.Weight)
         {
-            _metadataProcessor.BuildDescriptionLines(line);
-        }
-        else if (line.StartsWith("weight"))
-        {
-            _season.Id = _metadataProcessor.GetWeight(line);
-        }
-        else
-        {
-            // blank line or any text line, starting with spaces or not
-            _metadataProcessor.AddValue(line, -2);
+            _season.Id = (int)update.Value!;
         }
     }
 }

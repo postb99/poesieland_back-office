@@ -87,9 +87,10 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
     [InlineData("categories = [ \"First\", \"Here and there\" ]")]
     public void ShouldProperlyParseCategories(string categoriesLine)
     {
+        // Processing a field declaration populates the public collection exposed by the parser.
         var processor = new PoemTomlMetadataProcessor();
-        processor.BuildCategories(categoriesLine);
-        Assert.Equal(new List<string> { "First", "Here and there" }, processor.GetCategories());
+        processor.ProcessLine(categoriesLine);
+        Assert.Equal(new List<string> { "First", "Here and there" }, processor.Categories);
     }
 
     [Fact]
@@ -98,7 +99,9 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
     {
         var info = "info = \"It is a \\\"quoted text\\\"\"";
         var processor = new PoemTomlMetadataProcessor();
-        var readInfo = processor.GetInfo(info);
+        // Inline info is collected as a one-item multiline field after TOML unescaping.
+        processor.ProcessLine(info);
+        var readInfo = processor.InfoLines.Single();
         Assert.Equal("It is a \"quoted text\"", readInfo);
     }
 
