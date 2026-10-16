@@ -171,7 +171,7 @@ public abstract class PoemMetadataProcessorBase : IPoemMetadataProcessor
         || line.StartsWith(field + "=", StringComparison.Ordinal);
 
     /// <summary>Normalizes a non-empty string according to the active metadata format.</summary>
-    protected string ParseString(string value) => value.CleanedContent()!;
+    protected virtual string ParseString(string value) => value.CleanedContent()!;
 
     /// <summary>Normalizes an optional string according to the active metadata format.</summary>
     protected virtual string? ParseOptionalString(string value) => ParseString(value);

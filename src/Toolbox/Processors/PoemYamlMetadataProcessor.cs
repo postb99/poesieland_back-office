@@ -11,6 +11,9 @@ public sealed class PoemYamlMetadataProcessor : PoemMetadataProcessorBase
     /// <summary>YAML continuation values use the shared processing rules without extra format-specific handling.</summary>
     protected override bool TryAddFormatSpecificValue(string lineValue) => false;
 
+    /// <summary>Returns YAML scalar text unchanged because YAML titles and identifiers are commonly unquoted.</summary>
+    protected override string ParseString(string value) => value;
+
     /// <summary>Recognizes YAML list fields and inline scalar or block fields.</summary>
     protected override bool TryProcessFormatSpecificField(string line)
     {
