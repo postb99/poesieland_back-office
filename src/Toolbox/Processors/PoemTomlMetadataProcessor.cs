@@ -18,11 +18,11 @@ public sealed class PoemTomlMetadataProcessor : PoemMetadataProcessorBase
         else if (StartsWithField(line, MetadataConstants.LOCATIONS))
             SetValues(MultilineMetadataProcessingType.Locations, ExtractArrayValues(ExtractFieldValue(line, MetadataConstants.LOCATIONS)));
         else if (StartsWithField(line, MetadataConstants.INFO))
-            ProcessTextField(line, MetadataConstants.INFO, MultilineMetadataProcessingType.InfoLines, isMultiline: true);
+            ProcessTextField(line, MetadataConstants.INFO, MultilineMetadataProcessingType.InfoLines, isMultiline: false);
         else if (StartsWithField(line, MetadataConstants.DESCRIPTION))
-            ProcessTextField(line, MetadataConstants.DESCRIPTION, MultilineMetadataProcessingType.DescriptionLines, isMultiline: true);
+            ProcessTextField(line, MetadataConstants.DESCRIPTION, MultilineMetadataProcessingType.DescriptionLines, isMultiline: false);
         else if (StartsWithField(line, MetadataConstants.WORDCLOUD))
-            ProcessTextField(line, MetadataConstants.WORDCLOUD, MultilineMetadataProcessingType.WordCloudLines, isMultiline: true);
+            ProcessTextField(line, MetadataConstants.WORDCLOUD, MultilineMetadataProcessingType.WordCloudLines, isMultiline: false);
         else return false;
         return true;
     }
