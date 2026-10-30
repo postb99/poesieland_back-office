@@ -87,13 +87,13 @@ public class WordCloudImageGenerator(IConfiguration configuration)
     private sealed class FrequencyBlueColorizer(int minCount, int maxCount) : IColorizer
     {
         private static readonly System.Drawing.Color LightBlue = System.Drawing.Color.FromArgb(164, 218, 255);
-        private static readonly System.Drawing.Color DarkBlue = System.Drawing.Color.FromArgb(5, 128, 255);
+        private static readonly System.Drawing.Color DarkBlue = System.Drawing.Color.FromArgb(0, 80, 168);
 
         public System.Drawing.Color? GetColor(KnowledgePicker.WordCloud.Primitives.LayoutItem item)
         {
             var range = maxCount - minCount;
             var intensity = range == 0 ? 1d : (item.Entry.Count - minCount) / (double)range;
-            intensity = Math.Pow(intensity, 0.6);
+            intensity = Math.Pow(intensity, 0.5);
             return System.Drawing.Color.FromArgb(
                 Interpolate(LightBlue.R, DarkBlue.R, intensity),
                 Interpolate(LightBlue.G, DarkBlue.G, intensity),
