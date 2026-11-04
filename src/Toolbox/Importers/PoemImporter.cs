@@ -361,7 +361,9 @@ public class PoemImporter : IPoemImporter
         tagsToIgnore.AddRange(Enumerable.Range(1994, DateTime.Now.Year - 1993).Select(x => x.ToString()));
 
         // Nor a specific tag
-        tagsToIgnore.AddRange(["pantoun", "sonnet", "haïku", "acrostiche", "doubleAcrostiche"]);
+        // tagsToIgnore.AddRange(["pantoun", "sonnet", "haïku", "acrostiche", "doubleAcrostiche"]);
+        // For now allow haïku to be an extra tag to generate by day radar chart
+        tagsToIgnore.AddRange(["pantoun", "sonnet", "acrostiche", "doubleAcrostiche"]);
 
         return tags.Where(x => !tagsToIgnore.Contains(x)).ToList();
     }
