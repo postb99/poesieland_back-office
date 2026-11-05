@@ -369,9 +369,38 @@ public partial class ChartDataFileGenerator
             datesList.AddRange(enDatesList);
         datesList.Sort();
 
+         var poemsPerDay = datesList
+            .GroupBy(date => date)
+            .ToDictionary(group => group.Key, group => group.Count());
+        var poemDates = poemsPerDay.Keys.Order().ToList();
+
         var intervalDict = new Dictionary<DateTime, int>(); // end date, duration
-        var intervalLengthDict = new Dictionary<int, int>(); // duration, occurrence
-        var seriesDict = new Dictionary<DateTime, int>(); // end date, duration
+        var intervalLengthDict = new Dictionary<int, int>(); // duration, number of occurrences
+        var poemSeries = new List<(DateTime StartDate, DateTime EndDate, int DurationInDays, int PoemCount)>();
+
+        var seriesStartDate = poemDates[0];
+        var previousPoemDate = poemDates[0];
+        var seriesPoemCount = poemsPerDay[seriesStartDate];
+        for (var i = 1; i < poemDates.Count; i++)
+        {
+            var currentPoemDate = poemDates[i];
+            if ((currentPoemDate - previousPoemDate).TotalDays == 1)
+            {
+                seriesPoemCount += poemsPerDay[currentPoemDate];
+            }
+            else
+            {
+                poemSeries.Add((seriesStartDate, previousPoemDate,
+                    (previousPoemDate - seriesStartDate).Days + 1, seriesPoemCount));
+                seriesStartDate = currentPoemDate;
+                seriesPoemCount = poemsPerDay[currentPoemDate];
+            }
+
+            previousPoemDate = currentPoemDate;
+        }
+
+        poemSeries.Add((seriesStartDate, previousPoemDate,
+            (previousPoemDate - seriesStartDate).Days + 1, seriesPoemCount));
 
         int dateCount = datesList.Count();
         for (var i = 1; i < dateCount; i++)
@@ -387,13 +416,6 @@ public partial class ChartDataFileGenerator
 
             intervalDict.TryAdd(current, dayDiff);
 
-            seriesDict.TryAdd(previous, 1);
-
-            if (dayDiff != 1) continue;
-
-            var duration = seriesDict[previous];
-            seriesDict.Remove(previous);
-            seriesDict[current] = ++duration;
         }
 
         // Interval length charts
@@ -504,23 +526,27 @@ public partial class ChartDataFileGenerator
 
         WriteMarkdownListFile("longest_intervals.md", "Les plus longs intervalles", markdownLines);
 
-        // Series length chart (general chart)
+        // Series poem count chart (general chart)
 
-        var seriesLengthDict = new Dictionary<int, int>();
-        foreach (var seriesLength in seriesDict.Values)
+        var chartSeries = poemSeries.Where(series => series.PoemCount > 1).ToList();
+        var seriesLabelDict = new Dictionary<int, SortedSet<int>>();
+        foreach (var series in chartSeries)
         {
-            if (!seriesLengthDict.TryAdd(seriesLength, 1))
-            {
-                seriesLengthDict[seriesLength]++;
-            }
+            if (!seriesLabelDict.TryGetValue(series.PoemCount, out var durations))
+                seriesLabelDict[series.PoemCount] = durations = [];
+
+            durations.Add(series.DurationInDays);
         }
 
         var seriesDataLines = new List<ColoredDataLine>();
-        var sortedKeys = seriesLengthDict.Keys.Order().ToList();
+        var sortedKeys = seriesLabelDict.Keys.Order().ToList();
 
-        foreach (var key in sortedKeys.Skip(1))
+        foreach (var key in sortedKeys)
         {
-            seriesDataLines.Add(new($"{key}j", seriesLengthDict[key],
+            var durations = seriesLabelDict[key];
+            var durationLabel = string.Join(", ", durations.Select(duration => $"{duration} jours"));
+            var seriesCount = chartSeries.Count(series => series.PoemCount == key);
+            seriesDataLines.Add(new($"{key} poèmes (en {durationLabel})", seriesCount,
                 "rgba(72, 149, 239, 1)"));
         }
 
@@ -535,14 +561,15 @@ public partial class ChartDataFileGenerator
 
         // longest series content file
 
-        var longestSeriesKeys = sortedKeys.OrderDescending().Take(5);
+        var longestSeriesKeys = poemSeries.Select(series => series.DurationInDays).Distinct()
+            .OrderDescending().Take(6);
         var longestSeriesMarkdownLines = new List<string>();
         foreach (var key in longestSeriesKeys)
         {
-            var matchingSeries = seriesDict.Where(x => x.Value == key);
+            var matchingSeries = poemSeries.Where(series => series.DurationInDays == key);
             longestSeriesMarkdownLines.Add($"- {key} jours :");
-            longestSeriesMarkdownLines.AddRange(matchingSeries.Select(pair =>
-                $"  - Du {pair.Key.AddDays(-key):dd.MM.yyyy} au {pair.Key:dd.MM.yyyy}"));
+            longestSeriesMarkdownLines.AddRange(matchingSeries.Select(series =>
+                $"  - Du {series.StartDate:dd.MM.yyyy} au {series.EndDate:dd.MM.yyyy} ({series.PoemCount} poème{(series.PoemCount > 1 ? "s" : string.Empty)})"));
         }
 
         WriteMarkdownListFile("longest_series.md", "Les plus longues séries", longestSeriesMarkdownLines);
