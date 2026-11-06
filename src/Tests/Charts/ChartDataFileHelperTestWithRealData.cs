@@ -11,7 +11,7 @@ public class ChartDataFileHelperTestWithRealData(WithRealDataFixture fixture, IT
     public void ShouldCorrectlyComputeVerseLengthDataDict()
     {
         var data = fixture.Data;
-        var dataDict = ChartDataFileHelper.FillMetricDataDict(data, out var _);
+        var dataDict = ChartDataFileDataHelper.FillMetricDataDict(data, out var _);
         testOutputHelper.WriteLine(
             $"Last non-empty season poem count: {data.Seasons.Last(x => x.Poems.Count > 0).Poems.Count}");
         testOutputHelper.WriteLine(

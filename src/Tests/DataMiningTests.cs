@@ -448,7 +448,7 @@ public class DataMiningTests(WithRealDataFixture fixture, ITestOutputHelper test
 
         // Would better add EN poems...
 
-        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
+        var dataDict = ChartDataFileDataHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {

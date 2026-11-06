@@ -60,7 +60,7 @@ public partial class ChartDataFileGenerator
             poemStringDates.AddRange(dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
         }
 
-        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
+        var dataDict = ChartDataFileDataHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -132,7 +132,7 @@ public partial class ChartDataFileGenerator
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
-            dataLines.Add(new(ChartDataFileHelper.GetRadarChartLabel(monthDay), value
+            dataLines.Add(new(ChartDataFileDataHelper.GetRadarChartLabel(monthDay), value
             ));
             if (isGeneral && value == 0)
             {
@@ -158,7 +158,7 @@ public partial class ChartDataFileGenerator
             {
                 var splitted = monthDay.Split('-');
                 return
-                    $"- {splitted[1].TrimStart('0')} {ChartDataFileHelper.GetRadarChartLabel($"{splitted[0]}-01").ToLower()}";
+                    $"- {splitted[1].TrimStart('0')} {ChartDataFileDataHelper.GetRadarChartLabel($"{splitted[0]}-01").ToLower()}";
             }));
     }
 
@@ -173,7 +173,7 @@ public partial class ChartDataFileGenerator
     {
         var poemStringDates = dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate).ToList();
 
-        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
+        var dataDict = ChartDataFileDataHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -195,7 +195,7 @@ public partial class ChartDataFileGenerator
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
-            dataLines.Add(new(ChartDataFileHelper.GetRadarEnChartLabel(monthDay), value
+            dataLines.Add(new(ChartDataFileDataHelper.GetRadarEnChartLabel(monthDay), value
             ));
         }
 
@@ -219,7 +219,7 @@ public partial class ChartDataFileGenerator
             .Where(x => x.Date.Year == year).Select(x => x.TextDate)
             .ToList();
 
-        var dataDict = ChartDataFileHelper.InitMonthDayDictionary();
+        var dataDict = ChartDataFileDataHelper.InitMonthDayDictionary();
 
         foreach (var poemStringDate in poemStringDates)
         {
@@ -237,7 +237,7 @@ public partial class ChartDataFileGenerator
         foreach (var monthDay in dataDict.Keys)
         {
             var value = dataDict[monthDay];
-            dataLines.Add(new(ChartDataFileHelper.GetRadarChartLabel(monthDay), value));
+            dataLines.Add(new(ChartDataFileDataHelper.GetRadarChartLabel(monthDay), value));
         }
 
         chartDataFileHelper.WriteData(dataLines, true);
@@ -269,6 +269,6 @@ public partial class ChartDataFileGenerator
         }
 
         return monthDict.OrderByDescending(x => x.Value).Take(4).Select(x => x.Key)
-            .Select(ChartDataFileHelper.GetMonthLabel).ToList();
+            .Select(ChartDataFileDataHelper.GetMonthLabel).ToList();
     }
 }

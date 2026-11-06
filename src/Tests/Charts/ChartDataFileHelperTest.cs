@@ -18,7 +18,7 @@ public class ChartDataFileHelperTest
     {
         // https://www.chartjs.org/docs/latest/axes/labelling.html
         var formattedString =
-            new ChartDataFileHelper(default!, default).FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"], ["A", "B", "C"]);
+            ChartDataFileDataHelper.FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"], ["A", "B", "C"]);
 
         Assert.Equal(formattedString.Count(x => x == '}'), formattedString.Count(x => x == '{'));
         Assert.Equal("scales: { x: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','D'][index]; } } }, y: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','C'][index]; } } } }", formattedString);
@@ -36,7 +36,7 @@ public class ChartDataFileHelperTest
     {
         // https://www.chartjs.org/docs/latest/axes/labelling.html
         var formattedString =
-            new ChartDataFileHelper(default!, default).FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"]);
+            ChartDataFileDataHelper.FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"]);
 
         Assert.Equal(formattedString.Count(x => x == '}'), formattedString.Count(x => x == '{'));
         Assert.Equal("scales: { x: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','D'][index]; } } }, y: { ticks: { stepSize: 1, autoSkip: false } } }", formattedString);
@@ -54,7 +54,7 @@ public class ChartDataFileHelperTest
     {
         // https://www.chartjs.org/docs/latest/axes/labelling.html
         var formattedString =
-            new ChartDataFileHelper(default!, default).FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"], xAxisTitle: "X", yAxisTitle: "Y");
+            ChartDataFileDataHelper.FormatCategoriesBubbleChartLabelOptions(["A", "B", "D"], xAxisTitle: "X", yAxisTitle: "Y");
 
         Assert.Equal(formattedString.Count(x => x == '}'), formattedString.Count(x => x == '{'));
         Assert.Equal("scales: { x: { ticks: { stepSize: 1, autoSkip: false, callback: function(value, index, ticks) { return ['A','B','D'][index]; } }, title: {display:true, text:'X'} }, y: { ticks: { stepSize: 1, autoSkip: false }, title: {display:true, text:'Y'} } }", formattedString);
@@ -70,7 +70,7 @@ public class ChartDataFileHelperTest
 
         // Poem with single subcategory
         var poem = new Poem { Categories = [new() { SubCategories = ["A"] }] };
-        ChartDataFileHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
         Assert.Empty(xAxisLabels);
         Assert.Empty(yAxisLabels);
 
@@ -78,7 +78,7 @@ public class ChartDataFileHelperTest
 
         // Poem with two categories
         poem = new() { Categories = [new() { SubCategories = ["A", "B"] }] };
-        ChartDataFileHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
         var expectedKey = new KeyValuePair<string, string>("A", "B");
         Assert.True(dict.TryGetValue(expectedKey, out var counter));
@@ -92,7 +92,7 @@ public class ChartDataFileHelperTest
 
         // Poem with three categories
         poem = new() { Categories = [new() { SubCategories = ["A", "B", "C"] }] };
-        ChartDataFileHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
         expectedKey = new("A", "B");
         Assert.True(dict.TryGetValue(expectedKey, out var counter2));
@@ -120,7 +120,7 @@ public class ChartDataFileHelperTest
 
         // Poem with two categories, one per category
         poem = new() { Categories = [new() { SubCategories = ["A"] }, new() { SubCategories = ["B"] }] };
-        ChartDataFileHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoriesBubbleChartDataDict(dict, xAxisLabels, yAxisLabels, poem);
 
         expectedKey = new("A", "B");
         Assert.True(dict.TryGetValue(expectedKey, out var counter5));
@@ -142,7 +142,7 @@ public class ChartDataFileHelperTest
 
         // Poem with single subcategory
         var poem = new Poem { VerseLength = "6", Categories = [new() { SubCategories = ["A"] }] };
-        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
         var expectedKey = new KeyValuePair<string, int>("A", 6);
         Assert.True(dict.TryGetValue(expectedKey, out var counter));
         Assert.Equal(1, counter);
@@ -150,7 +150,7 @@ public class ChartDataFileHelperTest
         
         // Poem with two categories
         poem = new() { VerseLength = "8", Categories = [new() { SubCategories = ["A", "B"] }] };
-        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
         expectedKey = new("A", 8);
         Assert.True(dict.TryGetValue(expectedKey, out var counter2));
         Assert.Equal(1, counter2);
@@ -163,7 +163,7 @@ public class ChartDataFileHelperTest
         
         // Poem with reused metric
         poem = new() { VerseLength = "8", Categories = [new() { SubCategories = ["A"] }] };
-        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
         expectedKey = new("A", 8);
         Assert.True(dict.TryGetValue(expectedKey, out var counter4));
         Assert.Equal(2, counter4);
@@ -171,10 +171,11 @@ public class ChartDataFileHelperTest
         
         // Variable metric
         poem = new() { VerseLength = "-1", Categories = [new() { SubCategories = ["A"] }] };
-        ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
+        ChartDataFileDataHelper.FillCategoryMetricBubbleChartDataDict(dict, xAxisLabels, poem);
         expectedKey = new("A", 0);
         Assert.True(dict.TryGetValue(expectedKey, out var counter5));
         Assert.Equal(1, counter5);
         Assert.Equal(new List<string> { "A", "B" }, xAxisLabels.ToList());
     }
 }
+

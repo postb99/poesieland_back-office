@@ -494,4 +494,4 @@ FodyWeavers.xsd
 src/.idea/**
 
 # Work plans
-/plans
+# /plans

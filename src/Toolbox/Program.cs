@@ -249,7 +249,7 @@ public class Program
                 _customPageChecker.VerifyPoemOfMoreThanOneSeasonIsListedOnCustomPage(null, _data);
 
                 Console.WriteLine(
-                    $"Metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_data, out var _).Values.Sum(x => x.Last())}");
+                    $"Metric last season computed values sum: {ChartDataFileDataHelper.FillMetricDataDict(_data, out var _).Values.Sum(x => x.Last())}");
 
                 Console.WriteLine("Content metadata quality OK");
                 break;
@@ -631,7 +631,7 @@ public class Program
         }
 
         Console.WriteLine(
-            $"Content metadata quality OK. Info: metric last season computed values sum: {ChartDataFileHelper.FillMetricDataDict(_data, out _).Values.Sum(x => x.Last())}");
+            $"Content metadata quality OK. Info: metric last season computed values sum: {ChartDataFileDataHelper.FillMetricDataDict(_data, out _).Values.Sum(x => x.Last())}");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)

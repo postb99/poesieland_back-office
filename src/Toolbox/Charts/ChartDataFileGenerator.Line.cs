@@ -18,7 +18,7 @@ public partial class ChartDataFileGenerator
     /// <param name="data">The primary source of French poems data.</param>
     public void GenerateOverSeasonsMetricLineChartDataFile(Root data)
     {
-        var dataDict = ChartDataFileHelper.FillMetricDataDict(data, out var xLabels);
+        var dataDict = ChartDataFileDataHelper.FillMetricDataDict(data, out var xLabels);
 
         var fileName = "poems-verseLength-line.js";
 

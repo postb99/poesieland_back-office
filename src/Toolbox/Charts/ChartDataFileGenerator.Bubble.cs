@@ -57,14 +57,14 @@ public partial class ChartDataFileGenerator
 
         foreach (var dataKey in poemLengthByVerseLength.Keys)
         {
-            ChartDataFileHelper.AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
+            ChartDataFileDataHelper.AddDataLine(dataKey.Key, dataKey.Value, poemLengthByVerseLength[dataKey],
                 [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 30);
         }
 
         foreach (var dataKey in variableMetric.Keys)
         {
-            ChartDataFileHelper.AddDataLine(0, dataKey, variableMetric[dataKey],
+            ChartDataFileDataHelper.AddDataLine(0, dataKey, variableMetric[dataKey],
                 [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 30);
         }
@@ -104,7 +104,7 @@ public partial class ChartDataFileGenerator
 
         foreach (var poem in poems)
         {
-            ChartDataFileHelper.FillCategoriesBubbleChartDataDict(categoriesDataDictionary, xAxisLabels, yAxisLabels,
+            ChartDataFileDataHelper.FillCategoriesBubbleChartDataDict(categoriesDataDictionary, xAxisLabels, yAxisLabels,
                 poem);
         }
 
@@ -130,7 +130,7 @@ public partial class ChartDataFileGenerator
         {
             var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
             var yAxisValue = yAxisKeys.IndexOf(dataKey.Value);
-            ChartDataFileHelper.AddDataLine(xAxisValue, yAxisValue, categoriesDataDictionary[dataKey],
+            ChartDataFileDataHelper.AddDataLine(xAxisValue, yAxisValue, categoriesDataDictionary[dataKey],
                 [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 10);
         }
@@ -160,7 +160,7 @@ public partial class ChartDataFileGenerator
                 "Troisième quart (taille fois 1.5)",
                 "Quatrième quart"
             ],
-            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisTitles,
+            customScalesOptions: ChartDataFileDataHelper.FormatCategoriesBubbleChartLabelOptions(xAxisTitles,
                 yAxisTitles));
         streamWriter.Close();
 
@@ -184,7 +184,7 @@ public partial class ChartDataFileGenerator
 
         foreach (var poem in poems)
         {
-            ChartDataFileHelper.FillCategoryMetricBubbleChartDataDict(categoryMetricDataDictionary, xAxisLabels, poem);
+            ChartDataFileDataHelper.FillCategoryMetricBubbleChartDataDict(categoryMetricDataDictionary, xAxisLabels, poem);
         }
 
         // Find max value
@@ -206,7 +206,7 @@ public partial class ChartDataFileGenerator
         {
             var xAxisValue = xAxisKeys.IndexOf(dataKey.Key);
             var yAxisValue = dataKey.Value;
-            ChartDataFileHelper.AddDataLine(xAxisValue, yAxisValue, categoryMetricDataDictionary[dataKey],
+            ChartDataFileDataHelper.AddDataLine(xAxisValue, yAxisValue, categoryMetricDataDictionary[dataKey],
                 [firstQuarterDataLines, secondQuarterDataLines, thirdQuarterDataLines, fourthQuarterDataLines],
                 maxValue, 10);
         }
@@ -232,7 +232,7 @@ public partial class ChartDataFileGenerator
                 "Troisième quart (taille fois 1.5)",
                 "Quatrième quart"
             ],
-            customScalesOptions: chartDataFileHelper.FormatCategoriesBubbleChartLabelOptions(xAxisTitles,
+            customScalesOptions: ChartDataFileDataHelper.FormatCategoriesBubbleChartLabelOptions(xAxisTitles,
                 xAxisTitle: "Catégorie", yAxisTitle: "Métrique (0 = variable)"));
         streamWriter.Close();
     }
