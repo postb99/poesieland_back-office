@@ -36,8 +36,7 @@ public class MainMenuSettings
         ImportEnPoems = 600,
         OutputSeasonsDuration = 700,
         OutputReusedTitles = 800,
-        GenerateWordCloudTextFiles = 900,
-        GenerateWordCloudSourceImages = 910,
+        GenerateWordCloudTextFilesAndPictures = 900,
         ExitProgram = 99
     }
 

@@ -1,6 +1,6 @@
 ﻿namespace Toolbox.Settings;
 
-public class Constants
+public static class Constants
 {
     public const string XML_STORAGE_FILE = "XmlStorageFile";
     public const string XML_STORAGE_FILE_EN = "XmlStorageFileEn";
@@ -15,6 +15,4 @@ public class Constants
     public const string METRIC_SETTINGS = "MetricSettings";
     public const string REQUIRED_DESCRIPTION_SETTINGS = "RequiredDescriptionSettings";
     public const string CHARTS_SETTINGS = "ChartsSettings";
-    public const string WORD_CLOUD_SETTINGS = "WordCloudSettings";
-
 }

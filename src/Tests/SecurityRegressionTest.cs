@@ -170,9 +170,9 @@ public sealed class SecurityRegressionTest : IDisposable
         poems[2].ExtraTags = ["janvier"];
         poems[2].WordCloud = null;
         var data = new Root { Seasons = [new Season { Poems = poems }] };
-        var generator = new WordCloudTextGenerator(_configuration);
-        generator.GenerateWordCloudFiles(data);
-        generator.GenerateWordCloudFiles(data);
+        var generator = new WordCloudGenerator(_configuration);
+        generator.GenerateTextFiles(data);
+        generator.GenerateTextFiles(data);
         Assert.Equal("été" + Environment.NewLine + Environment.NewLine, File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "janvier", "wordcloud.txt")));
         Assert.Empty(File.ReadAllText(Path.Combine(_directory, "other-perspectives", "les-mois", "février", "wordcloud.txt")));
     }

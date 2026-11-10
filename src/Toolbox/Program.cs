@@ -272,11 +272,10 @@ public class Program
                 Console.WriteLine($"Done checking reused titles.");
 
                 break;
-            case MainMenuSettings.MenuChoices.GenerateWordCloudTextFiles:
-                new WordCloudTextGenerator(_configuration!).GenerateWordCloudFiles(_data);
-                break;
-            case MainMenuSettings.MenuChoices.GenerateWordCloudSourceImages:
-                await new WordCloudImageGenerator(_configuration!).GenerateAllAsync();
+            case MainMenuSettings.MenuChoices.GenerateWordCloudTextFilesAndPictures:
+                var wordCloudGenerator = new WordCloudGenerator(_configuration!);
+                wordCloudGenerator.GenerateTextFiles(_data);
+                await wordCloudGenerator.GeneratePicturesAsync();
                 Console.WriteLine("Word cloud source images OK");
                 break;
             case MainMenuSettings.MenuChoices.ExitProgram:
