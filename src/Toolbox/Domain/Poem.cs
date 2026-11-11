@@ -18,6 +18,8 @@ public class Poem
 
     [XmlElement("date")] public string TextDate { get; set; } = string.Empty;
 
+    [XmlIgnore] public const string TextDateToIgnore = "01.01.1994";
+
     [XmlElement("categorie")] public List<Category> Categories { get; set; } = [];
 
     /// <summary>

@@ -501,8 +501,7 @@ public class Program
             }
 
             // Year categories' pie
-            var currentYear = DateTime.Now.Year;
-            for (var y = 1994; y < currentYear + 1; y++)
+            foreach (var y in Season.YearsWithPoems)
             {
                 _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_data, y);
             }

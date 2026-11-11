@@ -354,7 +354,7 @@ public partial class ChartDataFileGenerator
     {
         var frDatesList =
             (seasonId is null ? data.Seasons.SelectMany(x => x.Poems) : data.Seasons.First(x => x.Id == seasonId).Poems)
-            .Where(x => x.TextDate != "01.01.1994")
+            .Where(x => x.TextDate != Poem.TextDateToIgnore)
             .Select(x => x.Date);
 
         // Add EN poems

@@ -217,7 +217,7 @@ public partial class ChartDataFileGenerator
         var dataDict = new Dictionary<string, int>();
 
         var fullDates = data.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate)
-            .Where(x => x != "01.01.1994").ToList();
+            .Where(x => x != Poem.TextDateToIgnore).ToList();
 
         // Add EN poems
         fullDates.AddRange(dataEn.Seasons.SelectMany(x => x.Poems).Select(x => x.TextDate));
@@ -275,7 +275,7 @@ public partial class ChartDataFileGenerator
     {
         var dataDict = new Dictionary<int, int>();
 
-        var dayOfWeekData = data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != "01.01.1994")
+        var dayOfWeekData = data.Seasons.SelectMany(x => x.Poems).Where(x => x.TextDate != Poem.TextDateToIgnore)
             .Select(x => x.Date.DayOfWeek).ToList();
 
         // Add EN poems
@@ -338,7 +338,7 @@ public partial class ChartDataFileGenerator
     {
         // Get poems grouped by TextDate when there are more than 2 poems for a given date
         var poems = data.Seasons.SelectMany(x => x.Poems)
-            .Where(x => x.TextDate != "01.01.1994")
+            .Where(x => x.TextDate != Poem.TextDateToIgnore)
             .ToList();
         poems.AddRange(dataEn.Seasons.SelectMany(x => x.Poems));
         var groups = poems.GroupBy(x => x.TextDate)

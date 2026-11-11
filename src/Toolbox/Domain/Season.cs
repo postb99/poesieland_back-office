@@ -16,6 +16,10 @@ public class Season
 
     [XmlElement("poeme")] public List<Poem> Poems { get; set; } = [];
 
+    [XmlIgnore]
+    public static IEnumerable<int> YearsWithPoems => Enumerable.Range(1995, DateTime.Today.Year - 1995 + 1)
+        .Except([2010, 2011, 2012, 2014, 2015, 2017, 2018, 2019, 2021, 2022]);
+    
     [XmlIgnore] public string ContentDirectoryName => $"{Id}_{NumberedName.UnaccentedCleaned()}_saison";
 
     [XmlIgnore] public string LongTitle => $"{NumberedName} Saison : {Name}";
