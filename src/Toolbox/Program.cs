@@ -501,6 +501,7 @@ public class Program
             }
 
             // Year categories' pie
+            _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_data, 1994);
             foreach (var y in Season.YearsWithPoems)
             {
                 _chartDataFileGenerator.GenerateYearCategoriesPieChartDataFile(_data, y);

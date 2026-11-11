@@ -199,20 +199,6 @@ public partial class ChartDataFileGenerator
                 .SelectMany(x => x.Subcategories).FirstOrDefault(x => x.Name == storageSubCategory)!.Color;
             
             firstChartTitle = char.ToUpper(storageSubCategory[0]) + storageSubCategory[1..];
-
-            switch (borderColor)
-            {
-                // Use some not too light colors
-                case "rgba(254, 231, 240, 1)": // Amitié
-                    borderColor = "rgba(255, 194, 209, 1)";
-                    break;
-                case "rgba(247, 235, 253, 1)": // Enfance et adolescance
-                    borderColor = "rgba(234, 191, 250, 1)";
-                    break;
-                case "rgba(244, 254, 254, 1)": // Neige
-                    borderColor = "rgba(119, 181, 254, 1)";
-                    break;
-            }
         }
         else if (storageCategory is not null)
         {
