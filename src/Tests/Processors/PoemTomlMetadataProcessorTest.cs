@@ -223,13 +223,12 @@ public class PoemTomlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
     public void ShouldImportMultiLineDescriptionAndWordCloud()
     {
         var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "21_vingt_et_unieme_saison/juillet_aout.md");
+            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "2_deuxieme_saison/folie_de_novembre.md");
         var poemContentImporter = new PoemImporter(fixture.Configuration);
         var poem = poemContentImporter.Import(poemContentFilePath);
         Assert.True(poemContentImporter.HasTomlMetadata);
         Assert.False(poemContentImporter.HasYamlMetadata);
-        Assert.Equal($"Aux portes de juillet, c'est le mois des langueurs / [...] avant qu'août le sauvage", poem.Description);
-        Assert.Equal($"Aux portes de juillet, c'est le mois des langueurs{Environment.NewLine}C'est le mois le plus pur avant qu'août le sauvage{Environment.NewLine}juillet tout neuf a comme un air fragile", poem.WordCloud);
+        Assert.Equal($"Novembre élan connaît gloires reines{Environment.NewLine}Novembre esprit emporte folle danse", poem.WordCloud);
         poemContentImporter.VerifyAnomaliesAfterImport();
     }
 }

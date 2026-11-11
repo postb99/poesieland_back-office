@@ -215,6 +215,6 @@ public class PoemYamlMetadataProcessorTest(BasicFixture fixture) : IClassFixture
         var poem = poemContentImporter.Import(poemContentFilePath);
         Assert.True(poemContentImporter.HasYamlMetadata);
         Assert.False(poemContentImporter.HasTomlMetadata);
-        Assert.StartsWith($"Le mois d'août centrifuge{Environment.NewLine}Le mois d'août est spectacles", poem.WordCloud);
+        Assert.StartsWith($"mois août centrifuge{Environment.NewLine}mois août spectacles", poem.WordCloud);
     }
 }

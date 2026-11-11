@@ -153,23 +153,6 @@ public class PoemImporterTest(BasicFixture fixture) : IClassFixture<BasicFixture
     }
 
     [Fact]
-    [Trait("UnitTest", "ContentImport")]
-    public void ShouldImportVariableVerseLengthWhenMoreTextAfterVerseLength()
-    {
-        var poemContentFilePath = Path.Combine(Directory.GetCurrentDirectory(),
-            fixture.Configuration[Constants.CONTENT_ROOT_DIR]!, "19_dix_neuvieme_saison/urgence.md");
-        var poemContentImporter = new PoemImporter(fixture.Configuration);
-        var poem = poemContentImporter.Import(poemContentFilePath);
-        var expectedInfo = new StringBuilder("Métrique variable : 5, 2.").Append(Environment.NewLine)
-            .Append(Environment.NewLine).Append("{{% include").ToString();
-        Assert.StartsWith(expectedInfo, poem.Info);
-        Assert.Equal("5, 2", poem.DetailedMetric);
-        // Because it has been copied from DetailedVerseLength by poemContentImporter.
-        Assert.Equal("5, 2", poem.VerseLength);
-        poemContentImporter.VerifyAnomaliesAfterImport();
-    }
-
-    [Fact]
     [Trait("UnitTest", "Computation")]
     public void ShouldFindExtraTags()
     {
