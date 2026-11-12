@@ -65,7 +65,7 @@ L'option A garde l'algorithme près du générateur et évite d'élargir l'API p
 - La première étape de clarification du helper ne comprendra ni build ni génération de fichiers.
 - Ajouter les tests unitaires dans une deuxième phase distincte, après le refactoring, en commençant par les agrégations et conversions de données.
 - Au moment de l'étape de tests, choisir une stratégie permettant de tester les calculs privés sans rendre publique une API uniquement pour les tests ; une classe dédiée de calculs ne sera créée que si elle apporte une vraie frontière réutilisable.
-
+- ChartDataFileGenerator.bar : rendre internal ces méthodes de calcul et leur ajouter un test unitaire : CollectMetricCounts, CalculateIntervalsAndSeries.
 ## Questions restantes
 
 Aucune décision bloquante pour l'étape 1. Le choix entre méthodes privées dans le générateur et classe de calcul dédiée sera réévalué lorsque la structure du projet de tests et son accès aux unités de calcul seront examinés.

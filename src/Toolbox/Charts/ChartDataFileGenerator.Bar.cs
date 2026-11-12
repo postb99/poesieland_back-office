@@ -1,5 +1,3 @@
-using System.Globalization;
-using Microsoft.Extensions.Configuration;
 using Toolbox.Domain;
 using Toolbox.Settings;
 
@@ -36,89 +34,22 @@ public partial class ChartDataFileGenerator
         Directory.CreateDirectory(Path.Combine(rootDir, subDir));
         using var streamWriter = OpenChartWriter(subDir, fileName,
             seasonId is not null ? ChartType.Bar : ChartType.Pie, out var chartDataFileHelper, 1);
-        var regularMetricData = new Dictionary<int, int>();
-        var variableMetricData = new Dictionary<string, int>();
         var poems = seasonId is not null
             ? data.Seasons.First(x => x.Id == seasonId).Poems
             : forSonnet == true
                 ? data.Seasons.SelectMany(x => x.Poems).Where(x => x.PoemType == "sonnet")
                 : data.Seasons.SelectMany(x => x.Poems);
 
-        foreach (var poem in poems)
-        {
-            if (poem.HasVariableMetric)
-            {
-                if (isGeneral)
-                {
-                    foreach (var metric in poem.VerseLength.Split(','))
-                    {
-                        // Standard metrics defined in variable metrics go to general metric pie chart
-                        if (!int.TryParse(metric.Trim(), out var verseLength)) continue;
-                        if (regularMetricData.TryGetValue(verseLength, out _))
-                        {
-                            regularMetricData[verseLength]++;
-                        }
-                        else
-                        {
-                            regularMetricData[verseLength] = 1;
-                        }
-                    }
-                }
-
-                // Detailed variable metric go to general metric bar chart
-                if (variableMetricData.TryGetValue(poem.DetailedMetric, out _))
-                {
-                    variableMetricData[poem.DetailedMetric]++;
-                }
-                else
-                {
-                    variableMetricData[poem.DetailedMetric] = 1;
-                }
-            }
-            else
-            {
-                var verseLength = int.Parse(poem.VerseLength);
-                if (regularMetricData.TryGetValue(verseLength, out _))
-                {
-                    regularMetricData[verseLength]++;
-                }
-                else
-                {
-                    regularMetricData[verseLength] = 1;
-                }
-            }
-        }
-
-        var regularMetricRange = regularMetricData.Keys.Order().ToList();
-        var variableMetricRange = variableMetricData.Keys.Order().ToList();
-
-        var regularMetricChartData = new List<DataLine>();
-        var variableMetricChartData = new List<ColoredDataLine>();
-
-        foreach (var metricValue in regularMetricRange)
-        {
-            regularMetricChartData.Add(new(
-                metricValue.ToString(), regularMetricData[metricValue]));
-        }
-
-        foreach (var verseLength in variableMetricRange)
-        {
-            variableMetricChartData.Add(new(verseLength, variableMetricData[verseLength], "rgba(72, 149, 239, 1)"));
-        }
+        var (regularMetricData, variableMetricData) = CollectMetricCounts(poems, isGeneral);
+        var regularMetricChartData = CreateRegularMetricDataLines(regularMetricData);
+        var variableMetricChartData = CreateVariableMetricDataLines(variableMetricData);
 
         // General/for sonnet pie chart vs Season's bar chart
         var dataLines = new List<DataLine>();
 
         if (seasonId is null || forSonnet == true)
         {
-            var coloredDataLines = new List<ColoredDataLine>();
-
-            foreach (var metricValue in regularMetricRange)
-            {
-                var term = metricValue == 1 ? "syllabe" : "syllabes";
-                coloredDataLines.Add(new($"{metricValue} {term}",
-                    regularMetricData[metricValue], MetricSettings.Metrics.First(m => m.Length == metricValue).Color));
-            }
+            var coloredDataLines = CreateMetricPieDataLines(regularMetricData);
 
             chartDataFileHelper.WriteData(coloredDataLines, true);
 
@@ -246,69 +177,8 @@ public partial class ChartDataFileGenerator
         using var streamWriter = OpenChartWriter("taxonomy", fileName, ChartType.Bar, out var chartDataFileHelper,
             stackedItem is null ? 1 : 2);
 
-        var dataLines = new List<DataLine>();
-        var stackedDataLines = new List<DataLine>();
-
-        foreach (var season in data.Seasons.Where(x => x.Poems.Count > 0))
-        {
-            var poemCount = 0;
-            var stackedPoemCount = 0;
-
-            if (storageSubCategory is not null)
-            {
-                poemCount = season.Poems.Count(x =>
-                    x.Categories.Any(x => x.SubCategories.Contains(storageSubCategory)));
-            }
-            else if (storageCategory is not null)
-            {
-                poemCount = season.Poems.Count(x => x.Categories.Any(x => x.Name == storageCategory));
-            }
-            else if (forAcrostiche)
-            {
-                poemCount = season.Poems.Count(x => x.Acrostiche is not null || x.DoubleAcrostiche is not null);
-            }
-            else if (poemType is not null)
-            {
-                poemCount = season.Poems.Count(x => x.HasType(poemType.Value));
-            }
-            else if (forVariableMetric)
-            {
-                poemCount = season.Poems.Count(x => x.HasVariableMetric);
-            }
-            else if (forMetric is not null)
-            {
-                poemCount = season.Poems.Count(x => x.HasMetric(forMetric.Value));
-            }
-            else if (extraTag is not null)
-            {
-                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag));
-            }
-
-            if (stackedItem is not null)
-            {
-                stackedPoemCount = stackedItem.Type switch
-                {
-                    BarItemType.Category => season.Poems.Count(x => x.Categories.Any(x => x.Name == stackedItem.Name)),
-                    BarItemType.SubCategory => season.Poems.Count(x =>
-                        x.Categories.Any(x => x.SubCategories.Contains(stackedItem.Name))),
-                    BarItemType.ExtraTag => season.Poems.Count(x =>
-                        x.ExtraTags != null && x.ExtraTags.Contains(stackedItem.Name)),
-                    _ => stackedPoemCount
-                };
-                poemCount -= stackedPoemCount;
-            }
-
-            dataLines.Add(new ColoredDataLine(season.TitleForChartsWithYears,
-                poemCount,
-                backgroundColor));
-
-            if (stackedItem is not null)
-            {
-                stackedDataLines.Add(new ColoredDataLine(stackedItem.Name,
-                    stackedPoemCount,
-                    backgroundColor.Replace("0.5", "0.3")));
-            }
-        }
+        var (dataLines, stackedDataLines) = CreateSeasonalDataLines(data, storageSubCategory, storageCategory,
+            forAcrostiche, poemType, forVariableMetric, forMetric, extraTag, stackedItem, backgroundColor);
 
         chartDataFileHelper.WriteData(dataLines, stackedItem is null);
         chartTitles.Add(stackedItem is null ? defaultChartTitle : firstChartTitle);
@@ -349,122 +219,9 @@ public partial class ChartDataFileGenerator
                 : dataEn.Seasons.FirstOrDefault(x => x.Id == seasonId)?.Poems)?
             .Select(x => x.Date);
 
-        var datesList = new List<DateTime>();
-        datesList.AddRange(frDatesList);
-        if (enDatesList is not null)
-            datesList.AddRange(enDatesList);
-        datesList.Sort();
-
-         var poemsPerDay = datesList
-            .GroupBy(date => date)
-            .ToDictionary(group => group.Key, group => group.Count());
-        var poemDates = poemsPerDay.Keys.Order().ToList();
-
-        var intervalDict = new Dictionary<DateTime, int>(); // end date, duration
-        var intervalLengthDict = new Dictionary<int, int>(); // duration, number of occurrences
-        var poemSeries = new List<(DateTime StartDate, DateTime EndDate, int DurationInDays, int PoemCount)>();
-
-        var seriesStartDate = poemDates[0];
-        var previousPoemDate = poemDates[0];
-        var seriesPoemCount = poemsPerDay[seriesStartDate];
-        for (var i = 1; i < poemDates.Count; i++)
-        {
-            var currentPoemDate = poemDates[i];
-            if ((currentPoemDate - previousPoemDate).TotalDays == 1)
-            {
-                seriesPoemCount += poemsPerDay[currentPoemDate];
-            }
-            else
-            {
-                poemSeries.Add((seriesStartDate, previousPoemDate,
-                    (previousPoemDate - seriesStartDate).Days + 1, seriesPoemCount));
-                seriesStartDate = currentPoemDate;
-                seriesPoemCount = poemsPerDay[currentPoemDate];
-            }
-
-            previousPoemDate = currentPoemDate;
-        }
-
-        poemSeries.Add((seriesStartDate, previousPoemDate,
-            (previousPoemDate - seriesStartDate).Days + 1, seriesPoemCount));
-
-        int dateCount = datesList.Count();
-        for (var i = 1; i < dateCount; i++)
-        {
-            var current = datesList[i];
-            var previous = datesList[i - 1];
-            var dayDiff = (int)(current - previous).TotalDays;
-
-            if (!intervalLengthDict.TryAdd(dayDiff, 1))
-            {
-                intervalLengthDict[dayDiff]++;
-            }
-
-            intervalDict.TryAdd(current, dayDiff);
-
-        }
-
-        // Interval length charts
-
-        var dataLines = new List<ColoredDataLine>();
-        var orderedIntervalKeys = intervalLengthDict.Keys.Order().ToList();
-        var zeroDayColor = "rgba(72, 149, 239, 1)";
-        var oneDayColor = "rgba(72, 149, 239, 0.9)";
-        var upToSevenDayColor = "rgba(72, 149, 239, 0.7)";
-        var upToOneMonthColor = "rgba(72, 149, 239, 0.5)";
-        var upToThreeMonthsColor = "rgba(72, 149, 239, 0.3)";
-        var upToOneYearColor = "rgba(72, 149, 239, 0.2)";
-        var moreThanOneYearColor = "rgba(72, 149, 239, 0.1)";
-        var moreThanOneMonthCount = 0;
-        var moreThanThreeMonthsCount = 0;
-        var moreThanOneYearCount = 0;
-        foreach (var key in orderedIntervalKeys)
-        {
-            if (key == 0)
-            {
-                dataLines.Add(
-                    new("Moins d'un jour", intervalLengthDict[key],
-                        zeroDayColor));
-            }
-            else if (key == 1)
-            {
-                dataLines.Add(new("Un jour", intervalLengthDict[key], oneDayColor));
-            }
-            else if (key < 8)
-            {
-                dataLines.Add(
-                    new($"{key}j", intervalLengthDict[key], upToSevenDayColor));
-            }
-            else if (key < 31)
-            {
-                dataLines.Add(new($"{key}j", intervalLengthDict[key],
-                    upToOneMonthColor));
-            }
-            else if (key < 91)
-            {
-                moreThanOneMonthCount++;
-            }
-            else if (key < 366)
-            {
-                moreThanThreeMonthsCount++;
-            }
-            else
-            {
-                moreThanOneYearCount++;
-            }
-        }
-
-        if (moreThanOneMonthCount > 0)
-            dataLines.Add(new("Entre un et trois mois", moreThanOneMonthCount,
-                upToThreeMonthsColor));
-
-        if (moreThanThreeMonthsCount > 0)
-            dataLines.Add(new("Entre trois mois et un an", moreThanThreeMonthsCount,
-                upToOneYearColor));
-
-        if (moreThanOneYearCount > 0)
-            dataLines.Add(new("Plus d'un an", moreThanOneYearCount,
-                moreThanOneYearColor));
+        var datesList = CollectPoemDates(frDatesList, enDatesList);
+        var (intervalDict, intervalLengthDict, poemSeries) = CalculateIntervalsAndSeries(datesList);
+        var (dataLines, orderedIntervalKeys) = CreateIntervalDataLines(intervalLengthDict);
 
         var fileName = "poem-interval-bar.js";
         var subDir = seasonId is not null ? $"season-{seasonId}" : "general";
@@ -479,62 +236,13 @@ public partial class ChartDataFileGenerator
 
         // Longest intervals content file
 
-        var longestIntervalKeys = orderedIntervalKeys.OrderDescending().ToList();
-        var markdownLines = new List<string>();
-
-        var moreThanOneYearDates = new List<KeyValuePair<DateTime, DateTime>>();
-        var moreThanThreeMonthsDates = new List<KeyValuePair<DateTime, DateTime>>();
-
-        foreach (var key in longestIntervalKeys)
-        {
-            if (key < 91) break;
-            var matchingSeries = intervalDict.Where(x => x.Value == key).ToList();
-            foreach (var pair in matchingSeries)
-            {
-                if (key < 366)
-                {
-                    moreThanThreeMonthsDates.Add(
-                        new(pair.Key.AddDays(-key), pair.Key));
-                }
-                else
-                {
-                    moreThanOneYearDates.Add(new(pair.Key.AddDays(-key), pair.Key));
-                }
-            }
-        }
-
-        markdownLines.Add("- Plus d'un an, du plus long au plus court :");
-        markdownLines.AddRange(moreThanOneYearDates.Select(date =>
-            $"  - Du {date.Key:dd.MM.yyyy} au {date.Value:dd.MM.yyyy}"));
-        markdownLines.Add("- Plus de trois mois, du plus long au plus court :");
-        markdownLines.AddRange(moreThanThreeMonthsDates.Select(date =>
-            $"  - Du {date.Key:dd.MM.yyyy} au {date.Value:dd.MM.yyyy}"));
+        var markdownLines = CreateLongestIntervalMarkdownLines(intervalDict, orderedIntervalKeys);
 
         WriteMarkdownListFile("longest_intervals.md", "Les plus longs intervalles", markdownLines);
 
         // Series poem count chart (general chart)
 
-        var chartSeries = poemSeries.Where(series => series.PoemCount > 1).ToList();
-        var seriesLabelDict = new Dictionary<int, SortedSet<int>>();
-        foreach (var series in chartSeries)
-        {
-            if (!seriesLabelDict.TryGetValue(series.PoemCount, out var durations))
-                seriesLabelDict[series.PoemCount] = durations = [];
-
-            durations.Add(series.DurationInDays);
-        }
-
-        var seriesDataLines = new List<ColoredDataLine>();
-        var sortedKeys = seriesLabelDict.Keys.Order().ToList();
-
-        foreach (var key in sortedKeys)
-        {
-            var durations = seriesLabelDict[key];
-            var durationLabel = string.Join(", ", durations.Select(duration => $"{duration} jours"));
-            var seriesCount = chartSeries.Count(series => series.PoemCount == key);
-            seriesDataLines.Add(new($"{key} poèmes (en {durationLabel})", seriesCount,
-                "rgba(72, 149, 239, 1)"));
-        }
+        var seriesDataLines = CreateSeriesDataLines(poemSeries);
 
         fileName = "poem-series-bar.js";
         subDir = "general";
@@ -547,18 +255,242 @@ public partial class ChartDataFileGenerator
 
         // longest series content file
 
+        var longestSeriesMarkdownLines = CreateLongestSeriesMarkdownLines(poemSeries);
+
+        WriteMarkdownListFile("longest_series.md", "Les plus longues séries", longestSeriesMarkdownLines);
+    }
+
+    /// <summary>
+    /// Counts regular verse lengths and detailed variable metrics from the supplied poems.
+    /// When requested, verse lengths listed on variable-metric poems are also included in the regular counts.
+    /// </summary>
+    /// <param name="poems">The poems whose metrics are collected.</param>
+    /// <param name="includeVariableValuesInRegular">Whether to count the individual verse lengths of variable-metric poems as regular metrics.</param>
+    /// <returns>Regular verse-length counts and detailed variable-metric counts.</returns>
+    private static (Dictionary<int, int> Regular, Dictionary<string, int> Variable) CollectMetricCounts(
+        IEnumerable<Poem> poems, bool includeVariableValuesInRegular)
+    {
+        var regular = new Dictionary<int, int>();
+        var variable = new Dictionary<string, int>();
+        foreach (var poem in poems)
+        {
+            if (poem.HasVariableMetric)
+            {
+                if (includeVariableValuesInRegular)
+                {
+                    foreach (var metric in poem.VerseLength.Split(','))
+                    {
+                        if (!int.TryParse(metric.Trim(), out var verseLength)) continue;
+                        regular[verseLength] = regular.GetValueOrDefault(verseLength) + 1;
+                    }
+                }
+                variable[poem.DetailedMetric] = variable.GetValueOrDefault(poem.DetailedMetric) + 1;
+            }
+            else
+            {
+                var verseLength = int.Parse(poem.VerseLength);
+                regular[verseLength] = regular.GetValueOrDefault(verseLength) + 1;
+            }
+        }
+        return (regular, variable);
+    }
+
+    private static List<DataLine> CreateRegularMetricDataLines(Dictionary<int, int> counts) =>
+        counts.OrderBy(x => x.Key).Select(x => new DataLine(x.Key.ToString(), x.Value)).ToList();
+
+    private static List<ColoredDataLine> CreateVariableMetricDataLines(Dictionary<string, int> counts) =>
+        counts.OrderBy(x => x.Key).Select(x => new ColoredDataLine(x.Key, x.Value, "rgba(72, 149, 239, 1)")).ToList();
+
+    private static List<ColoredDataLine> CreateMetricPieDataLines(Dictionary<int, int> counts) =>
+        counts.OrderBy(x => x.Key).Select(x => new ColoredDataLine(
+            $"{x.Key} {(x.Key == 1 ? "syllabe" : "syllabes")}", x.Value,
+            MetricSettings.Metrics.First(m => m.Length == x.Key).Color)).ToList();
+
+    /// <summary>
+    /// Counts poems per non-empty season for the selected filter and optionally separates a stacked category.
+    /// The first matching filter is applied in the same priority order as the chart generator.
+    /// </summary>
+    /// <param name="data">The seasons and poems to aggregate.</param>
+    /// <param name="storageSubCategory">An optional storage subcategory filter.</param>
+    /// <param name="storageCategory">An optional storage category filter.</param>
+    /// <param name="forAcrostiche">Whether to count poems with an acrostic.</param>
+    /// <param name="poemType">An optional poem type filter.</param>
+    /// <param name="forVariableMetric">Whether to count poems with a variable metric.</param>
+    /// <param name="forMetric">An optional verse metric filter.</param>
+    /// <param name="extraTag">An optional extra-tag filter.</param>
+    /// <param name="stackedItem">An optional item whose count is returned separately and subtracted from the main count.</param>
+    /// <param name="backgroundColor">The color applied to the main and stacked data lines.</param>
+    /// <returns>The main seasonal data lines and, when requested, the stacked data lines.</returns>
+    private static (List<DataLine> Main, List<DataLine> Stacked) CreateSeasonalDataLines(Root data,
+        string? storageSubCategory, string? storageCategory, bool forAcrostiche, PoemType? poemType,
+        bool forVariableMetric, int? forMetric, string? extraTag, BarItem? stackedItem, string backgroundColor)
+    {
+        var main = new List<DataLine>();
+        var stacked = new List<DataLine>();
+        foreach (var season in data.Seasons.Where(x => x.Poems.Count > 0))
+        {
+            var poemCount = 0;
+            if (storageSubCategory is not null)
+                poemCount = season.Poems.Count(x => x.Categories.Any(c => c.SubCategories.Contains(storageSubCategory)));
+            else if (storageCategory is not null)
+                poemCount = season.Poems.Count(x => x.Categories.Any(c => c.Name == storageCategory));
+            else if (forAcrostiche)
+                poemCount = season.Poems.Count(x => x.Acrostiche is not null || x.DoubleAcrostiche is not null);
+            else if (poemType is not null)
+                poemCount = season.Poems.Count(x => x.HasType(poemType.Value));
+            else if (forVariableMetric)
+                poemCount = season.Poems.Count(x => x.HasVariableMetric);
+            else if (forMetric is not null)
+                poemCount = season.Poems.Count(x => x.HasMetric(forMetric.Value));
+            else if (extraTag is not null)
+                poemCount = season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains(extraTag));
+
+            var stackedCount = stackedItem?.Type switch
+            {
+                BarItemType.Category => season.Poems.Count(x => x.Categories.Any(c => c.Name == stackedItem.Name)),
+                BarItemType.SubCategory => season.Poems.Count(x => x.Categories.Any(c => c.SubCategories.Contains(stackedItem.Name))),
+                BarItemType.ExtraTag => season.Poems.Count(x => x.ExtraTags != null && x.ExtraTags.Contains(stackedItem.Name)),
+                _ => 0
+            };
+            main.Add(new ColoredDataLine(season.TitleForChartsWithYears, poemCount - stackedCount, backgroundColor));
+            if (stackedItem is not null)
+                stacked.Add(new ColoredDataLine(stackedItem.Name, stackedCount, backgroundColor.Replace("0.5", "0.3")));
+        }
+        return (main, stacked);
+    }
+
+    private static List<DateTime> CollectPoemDates(IEnumerable<DateTime> frDates, IEnumerable<DateTime>? enDates)
+    {
+        var dates = frDates.ToList();
+        if (enDates is not null) dates.AddRange(enDates);
+        dates.Sort();
+        return dates;
+    }
+
+    private static (Dictionary<DateTime, int> Intervals, Dictionary<int, int> IntervalCounts,
+        List<(DateTime StartDate, DateTime EndDate, int DurationInDays, int PoemCount)> PoemSeries)
+        CalculateIntervalsAndSeries(List<DateTime> dates)
+    {
+        var poemsPerDay = dates.GroupBy(date => date).ToDictionary(group => group.Key, group => group.Count());
+        var poemDates = poemsPerDay.Keys.Order().ToList();
+        var intervals = new Dictionary<DateTime, int>();
+        var intervalCounts = new Dictionary<int, int>();
+        var series = new List<(DateTime StartDate, DateTime EndDate, int DurationInDays, int PoemCount)>();
+        if (poemDates.Count > 0)
+        {
+            var seriesStart = poemDates[0];
+            var previous = poemDates[0];
+            var seriesPoemCount = poemsPerDay[seriesStart];
+            for (var i = 1; i < poemDates.Count; i++)
+            {
+                var current = poemDates[i];
+                if ((current - previous).TotalDays == 1)
+                    seriesPoemCount += poemsPerDay[current];
+                else
+                {
+                    series.Add((seriesStart, previous, (previous - seriesStart).Days + 1, seriesPoemCount));
+                    seriesStart = current;
+                    seriesPoemCount = poemsPerDay[current];
+                }
+                previous = current;
+            }
+            series.Add((seriesStart, previous, (previous - seriesStart).Days + 1, seriesPoemCount));
+        }
+        for (var i = 1; i < dates.Count; i++)
+        {
+            var dayDiff = (int)(dates[i] - dates[i - 1]).TotalDays;
+            intervalCounts[dayDiff] = intervalCounts.GetValueOrDefault(dayDiff) + 1;
+            intervals.TryAdd(dates[i], dayDiff);
+        }
+        return (intervals, intervalCounts, series);
+    }
+
+    private static (List<ColoredDataLine> Lines, List<int> OrderedKeys) CreateIntervalDataLines(
+        Dictionary<int, int> intervalLengthCounts)
+    {
+        var dataLines = new List<ColoredDataLine>();
+        var orderedKeys = intervalLengthCounts.Keys.Order().ToList();
+        const string zeroDayColor = "rgba(72, 149, 239, 1)";
+        const string oneDayColor = "rgba(72, 149, 239, 0.9)";
+        const string upToSevenDayColor = "rgba(72, 149, 239, 0.7)";
+        const string upToOneMonthColor = "rgba(72, 149, 239, 0.5)";
+        const string upToThreeMonthsColor = "rgba(72, 149, 239, 0.3)";
+        const string upToOneYearColor = "rgba(72, 149, 239, 0.2)";
+        const string moreThanOneYearColor = "rgba(72, 149, 239, 0.1)";
+        var moreThanOneMonthCount = 0;
+        var moreThanThreeMonthsCount = 0;
+        var moreThanOneYearCount = 0;
+        foreach (var key in orderedKeys)
+        {
+            if (key == 0) dataLines.Add(new("Moins d'un jour", intervalLengthCounts[key], zeroDayColor));
+            else if (key == 1) dataLines.Add(new("Un jour", intervalLengthCounts[key], oneDayColor));
+            else if (key < 8) dataLines.Add(new($"{key}j", intervalLengthCounts[key], upToSevenDayColor));
+            else if (key < 31) dataLines.Add(new($"{key}j", intervalLengthCounts[key], upToOneMonthColor));
+            else if (key < 91) moreThanOneMonthCount++;
+            else if (key < 366) moreThanThreeMonthsCount++;
+            else moreThanOneYearCount++;
+        }
+        if (moreThanOneMonthCount > 0) dataLines.Add(new("Entre un et trois mois", moreThanOneMonthCount, upToThreeMonthsColor));
+        if (moreThanThreeMonthsCount > 0) dataLines.Add(new("Entre trois mois et un an", moreThanThreeMonthsCount, upToOneYearColor));
+        if (moreThanOneYearCount > 0) dataLines.Add(new("Plus d'un an", moreThanOneYearCount, moreThanOneYearColor));
+        return (dataLines, orderedKeys);
+    }
+
+    private static List<string> CreateLongestIntervalMarkdownLines(Dictionary<DateTime, int> intervals,
+        List<int> orderedIntervalKeys)
+    {
+        var moreThanOneYearDates = new List<KeyValuePair<DateTime, DateTime>>();
+        var moreThanThreeMonthsDates = new List<KeyValuePair<DateTime, DateTime>>();
+        foreach (var key in orderedIntervalKeys.OrderDescending())
+        {
+            if (key < 91) break;
+            foreach (var pair in intervals.Where(x => x.Value == key))
+            {
+                var dates = new KeyValuePair<DateTime, DateTime>(pair.Key.AddDays(-key), pair.Key);
+                if (key < 366) moreThanThreeMonthsDates.Add(dates);
+                else moreThanOneYearDates.Add(dates);
+            }
+        }
+        var lines = new List<string> { "- Plus d'un an, du plus long au plus court :" };
+        lines.AddRange(moreThanOneYearDates.Select(date => $"  - Du {date.Key:dd.MM.yyyy} au {date.Value:dd.MM.yyyy}"));
+        lines.Add("- Plus de trois mois, du plus long au plus court :");
+        lines.AddRange(moreThanThreeMonthsDates.Select(date => $"  - Du {date.Key:dd.MM.yyyy} au {date.Value:dd.MM.yyyy}"));
+        return lines;
+    }
+
+    private static List<ColoredDataLine> CreateSeriesDataLines(
+        List<(DateTime StartDate, DateTime EndDate, int DurationInDays, int PoemCount)> poemSeries)
+    {
+        var chartSeries = poemSeries.Where(series => series.PoemCount > 1).ToList();
+        var seriesByPoemCount = new Dictionary<int, SortedSet<int>>();
+        foreach (var series in chartSeries)
+        {
+            if (!seriesByPoemCount.TryGetValue(series.PoemCount, out var durations))
+                seriesByPoemCount[series.PoemCount] = durations = [];
+            durations.Add(series.DurationInDays);
+        }
+        return seriesByPoemCount.Keys.Order().Select(key =>
+        {
+            var durationLabel = string.Join(", ", seriesByPoemCount[key].Select(duration => $"{duration} jours"));
+            var count = chartSeries.Count(series => series.PoemCount == key);
+            return new ColoredDataLine($"{key} poèmes (en {durationLabel})", count, "rgba(72, 149, 239, 1)");
+        }).ToList();
+    }
+
+    private static List<string> CreateLongestSeriesMarkdownLines(
+        List<(DateTime StartDate, DateTime EndDate, int DurationInDays, int PoemCount)> poemSeries)
+    {
+        var lines = new List<string>();
         var longestSeriesKeys = poemSeries.Select(series => series.DurationInDays).Distinct()
             .OrderDescending().Take(6);
-        var longestSeriesMarkdownLines = new List<string>();
         foreach (var key in longestSeriesKeys)
         {
             var matchingSeries = poemSeries.Where(series => series.DurationInDays == key);
-            longestSeriesMarkdownLines.Add($"- {key} jours :");
-            longestSeriesMarkdownLines.AddRange(matchingSeries.Select(series =>
+            lines.Add($"- {key} jours :");
+            lines.AddRange(matchingSeries.Select(series =>
                 $"  - Du {series.StartDate:dd.MM.yyyy} au {series.EndDate:dd.MM.yyyy} ({series.PoemCount} poème{(series.PoemCount > 1 ? "s" : string.Empty)})"));
         }
-
-        WriteMarkdownListFile("longest_series.md", "Les plus longues séries", longestSeriesMarkdownLines);
+        return lines;
     }
 
     /// <summary>
@@ -568,7 +500,7 @@ public partial class ChartDataFileGenerator
     /// </summary>
     /// <param name="coloredDataLine">The data line whose color should be evaluated.</param>
     /// <returns>A data line with the calculated variable-metric color, or the original line when parsing fails.</returns>
-    private ColoredDataLine UpdateVariableMetricColor(ColoredDataLine coloredDataLine)
+    private static ColoredDataLine UpdateVariableMetricColor(ColoredDataLine coloredDataLine)
     {
         try
         {
