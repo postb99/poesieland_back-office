@@ -269,7 +269,7 @@ public class Program
                     Console.WriteLine(reusedTitle);
                 }
 
-                Console.WriteLine($"Done checking reused titles.");
+                Console.WriteLine("Done checking reused titles.");
 
                 break;
             case MainMenuSettings.MenuChoices.GenerateWordCloudTextFilesAndPictures:
@@ -631,6 +631,15 @@ public class Program
 
         Console.WriteLine(
             $"Content metadata quality OK. Info: metric last season computed values sum: {ChartDataFileDataHelper.FillMetricDataDict(_data, out _).Values.Sum(x => x.Last())}");
+
+        // Check reused titles
+        var reusedTitles = new ReusedTitlesChecker(_data).GetReusedTitles().ToList();
+        if (reusedTitles.Any())
+        {
+            throw new MetadataConsistencyException(string.Empty, reusedTitles);
+        }
+
+        Console.WriteLine("Done checking reused titles.");
     }
 
     private static void GeneratePoemsRadarChartDataFile(MenuItem menuChoice)
